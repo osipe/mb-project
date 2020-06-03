@@ -1,0 +1,13 @@
+table.table-border-all {  
+  border: 1px solid #ddd;
+  text-align: left;
+  td, th{
+	border: 1px solid #ddd;
+	text-align: left;
+	padding: 15px;
+  }
+}
+table.table-border-all{
+  border-collapse: collapse;
+  width: 100%;
+}

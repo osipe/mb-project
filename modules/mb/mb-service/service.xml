@@ -1,0 +1,400 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.1.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_1_0.dtd">
+
+<service-builder  package-path="com.mb">
+	<namespace>MB</namespace>
+	<entity local-service="true" name="Phieu" remote-service="true" uuid="false" table="ketoan_phieu" >
+		<column name="phieuId" primary="true" type="long" />
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		<column name="maCTV" type="String" />
+		<column name="hoTenCTV" type="String" />
+		<column name="soHopDong" type="String" />
+		<column name="ngayChungTu" type="Date" />
+		<column name="diaChi" type="String" />
+		<column name="soPhieu" type="String" />
+		<column name="ngayGhiSo" type="Date" />
+		<column name="maMSThuChi" type="String" />
+		<column name="soTien" type="Double" />
+		<column name="chungTuKemTheo" type="String" />
+		<column name="loai" type="int" />
+		<column name="hoatDong" type="Boolean" />
+		<order by="asc">
+			<order-column name="phieuId" />
+		</order>
+	</entity>
+	<entity local-service="true" name="LichSuTaiKhoanDauKy" remote-service="true" uuid="false" table="ketoan_lichsutaikhoandauky" >
+		<column name="lichSuTaiKhoanDauKyId" primary="true" type="long" />
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<column name="taiKhoanDoiUngId" type="long" />
+		<column name="thang" type="int" />
+		<column name="nam" type="int" />
+		<column name="soTienTon" type="Double" />
+		<column name="hoatDong" type="Boolean" />
+		<order by="asc">
+			<order-column name="lichSuTaiKhoanDauKyId" />
+		</order>
+		<finder name="TaiKhoanDoiUngId_Nam_Thang" return-type="LichSuTaiKhoanDauKy">
+			<finder-column name="taiKhoanDoiUngId" />
+			<finder-column name="nam" />
+			<finder-column name="thang" />
+		</finder>
+		<finder name="TaiKhoanDoiUngId" return-type="Collection">
+			<finder-column name="taiKhoanDoiUngId" />
+		</finder>
+	</entity>
+	<entity local-service="true" name="DsPhieuTaiKhoan" remote-service="true" uuid="false" table="ketoan_dsphieutaikhoan" >
+		<column name="dsPhieuTaiKhoanId" primary="true" type="long" />
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		<column name="phieuId" type="long" />
+		<column name="ngayChungTu" type="Date" />
+		<column name="taiKhoanDoiUngId" type="long" />
+		<column name="maTheoDoi" type="String" />
+		<column name="dienGiaiTheoDoi" type="String" />
+		<column name="soTien" type="Double" />
+		<column name="hoatDong" type="Boolean" />
+		<order by="asc">
+			<order-column name="dsPhieuTaiKhoanId" />
+		</order>
+		<finder name="TaiKhoanDoiUngId_HoatDong" return-type="Collection">
+			<finder-column name="taiKhoanDoiUngId" />
+			<finder-column name="hoatDong" />
+		</finder>
+		<finder name="PhieuId_HoatDong" return-type="Collection">
+			<finder-column name="phieuId" />
+			<finder-column name="hoatDong" />
+		</finder>
+		<finder name="PhieuId" return-type="Collection">
+			<finder-column name="phieuId" />
+		</finder>
+	</entity>
+	<entity local-service="true" name="LichSuThuPhatChi" remote-service="true" uuid="false" table="mb_lichsuthuphatchi" >
+		<column name="lichSuThuPhatChiId" primary="true" type="long" />
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<column name="phatVayId" type="long" />
+		<column name="maCTV" type="String" />
+		<column name="soTien" type="Double"/>
+		<column name="tongSoTienVonTra" type="Double" />
+		<column name="tongSoTienLaiTra" type="Double" />
+	<!-- 	1 : Phát vay,2 : Tất toán,3: thu hằng ngày,4 : thu trước -->
+		<column name="loai" type="int" />
+		<!-- TAT_CA(0), CHUA_THANH_TOAN(1), DA_THANH_TOAN(2), DA_TAT_TOAN(3),CO_THU_TIEN_TRUOC(4); -->
+		<column name="trangThaiPhatVayHienTai" type="int" />
+		<order by="asc">
+			<order-column name="lichSuThuPhatChiId" />
+		</order>
+		<finder name="MaCTV" return-type="Collection">
+			<finder-column name="maCTV" />
+		</finder>
+		<finder name="PhatVayId" return-type="Collection">
+			<finder-column name="phatVayId" />
+		</finder>
+		<finder name="PhatVayId_Loai" return-type="Collection">
+			<finder-column name="phatVayId" />
+			<finder-column name="loai" />
+		</finder>
+	</entity>
+	<entity local-service="true" name="PhatVay" remote-service="true" uuid="false" table="mb_phatvay" >
+		<column name="phatVayId" primary="true" type="long" />
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="ngayTao" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<column name="maCTV" type="String" />
+		<column name="maKhachHang" type="String" />
+		
+		<column name="soKU" type="String" />
+		<!-- Ngày vay -->
+		<column name="createDate" type="Date" />
+		<!-- Ngay bắt đầu thu lãi -->
+		<column name="ngayBatDau" type="Date" />
+		<column name="ngayKetThuc" type="Date" />
+		<column name="loaiPhatVay" type="int" />
+		<column name="soLanDaThu" type="int" />
+		<column name="ngayDaThuCuoi" type="Date" />
+		
+		<column name="soTienVay" type="Double" />
+		<column name="thoiHan" type="int" />
+		<column name="laiSuatVay" type="Double" />
+		<column name="gocNgay" type="Double" />
+		<column name="laiNgay" type="Double" />
+		<column name="gocNgayCuoi" type="Double" />
+		
+		<column name="soNgayThuTruoc" type="int" />
+		<column name="ngayThuTruocTu" type="Date" />
+		<column name="ngayThuTruocDen" type="Date" />
+		
+		<column name="ngayTatToan" type="Date" />
+		<!-- TAT_CA(0), CHUA_THANH_TOAN(1), DA_THANH_TOAN(2), DA_TAT_TOAN(3),CO_THU_TIEN_TRUOC(4); -->
+		<column name="trangThai" type="int" />
+		<order by="asc">
+			<order-column name="phatVayId" />
+		</order>
+		<finder name="MaCTV" return-type="Collection">
+			<finder-column name="maCTV" />
+		</finder>
+		<finder name="SoKU" return-type="PhatVay">
+			<finder-column name="soKU" />
+		</finder>
+	</entity>
+	<entity local-service="true" name="TaiSanThueChap" remote-service="true" uuid="false" table="mb_taisaithuechap" >
+		<column name="taiSanThueChapId" primary="true" type="long" />
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<column name="phatVayId" type="long" />
+		<column name="soKU" type="String" />
+		<column name="maKhachHang" type="String" />
+		<column name="loaiTaiSanId" type="long" />
+		<column name="giaTriTaiSan" type="Double" />
+		<column name="thongTinTaiSan" type="String" />
+		<column name="ten" type="String" />
+		<column name="ghiChu" type="String" />
+		
+		<order by="asc">
+			<order-column name="taiSanThueChapId" />
+		</order>
+		<finder name="PhatVayId" return-type="Collection">
+			<finder-column name="phatVayId" />
+		</finder>
+	</entity>
+	<!-- DANH MUC -->
+	<entity local-service="true" name="SoKheUoc" remote-service="true" uuid="false" table="dm_sokheuoc" >
+		<column name="soKheUocId" primary="true" type="long" />
+		<column name="cauTruc" type="String" />
+		<column name="so" type="int" />
+		<order by="asc">
+			<order-column name="soKheUocId" />
+		</order>
+		<finder name="CauTruc" return-type="SoKheUoc">
+			<finder-column name="cauTruc" />
+		</finder>
+	</entity>
+	
+	<entity local-service="true" name="LoaiTaiSan" remote-service="true" uuid="false" table="dm_loaiTaiSan" >
+		<column name="loaiTaiSanId" primary="true" type="long" />
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		<column name="ten" type="String" />
+		<column name="ma" type="String" />
+		<column name="ghiChu" type="String"/>
+		<column name="hoatDong" type="Boolean" />
+		<order by="asc">
+			<order-column name="loaiTaiSanId" />
+		</order>
+		<finder name="Ma" return-type="LoaiTaiSan">
+			<finder-column name="ma" />
+		</finder>
+	</entity>
+	
+	<entity local-service="true" name="LaiSuat" remote-service="true" uuid="false" table="dm_laisuat" >
+		<column name="laiSuatId" primary="true" type="long" />
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		<column name="soTienVay" type="Double" />
+		<column name="thoiHan" type="int" />
+		<column name="laiSuatVay" type="Double" />
+		<column name="gocNgay" type="Double" />
+		<column name="laiNgay" type="Double" />
+		<column name="gocNgayCuoi" type="Double" />
+		<column name="hoatDong" type="Boolean" />
+		<order by="asc">
+			<order-column name="laiSuatId" />
+		</order>
+		<finder name="SoTienVay_ThoiHan" return-type="LaiSuat">
+			<finder-column name="soTienVay" />
+			<finder-column name="thoiHan" />
+		</finder>
+	</entity>
+	<entity local-service="true" name="CongTacVien" remote-service="true" uuid="false" table="dm_congtacvien" >
+		<column name="congTacVienId" primary="true" type="long" />
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		<column name="ma" type="String" />
+		<column name="hoTen" type="String" />
+		<column name="soCMND" type="String" />
+		<column name="duNoToiDa" type="Double"/>
+		<column name="duNoToiDaTheChap" type="Double"/>
+		<column name="diaChi" type="String" />
+		<column name="ghiChu" type="String"/>
+		<column name="hoatDong" type="Boolean" />
+		<order by="asc">
+			<order-column name="congTacVienId" />
+		</order>
+		<finder name="Ma" return-type="CongTacVien">
+			<finder-column name="ma" />
+		</finder>
+		<finder name="SoCMND" return-type="CongTacVien">
+			<finder-column name="soCMND" />
+		</finder>
+	</entity>
+	<entity local-service="true" name="KhachHang" remote-service="true" uuid="false" table="dm_khachhang" >
+		<column name="khachHangId" primary="true" type="long" />
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		<column name="maCTV" type="String" />
+		<column name="ma" type="String" />
+		<column name="hoTen" type="String" />
+		<column name="soCMND" type="String" />
+		<column name="diaChi" type="String" />
+		<column name="hoatDong" type="Boolean" />
+		<order by="asc">
+			<order-column name="khachHangId" />
+		</order>
+		<finder name="Ma" return-type="KhachHang">
+			<finder-column name="ma" />
+		</finder>
+		<finder name="MaCTV" return-type="Collection">
+			<finder-column name="maCTV" />
+		</finder>
+		<finder name="SoCMND" return-type="KhachHang">
+			<finder-column name="soCMND" />
+		</finder>
+	</entity>
+	<entity local-service="true" name="MaSoThuChi" remote-service="true" uuid="false" table="dm_masothuchi" >
+		<column name="maSoThuChiId" primary="true" type="long" />
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		<column name="ma" type="String" />
+		<column name="dienGiai" type="String" />
+		<column name="dienGiaiTheoDoi" type="String" />
+		<column name="loai" type="int" />
+		<column name="hoatDong" type="Boolean" />
+		<order by="asc">
+			<order-column name="maSoThuChiId" />
+		</order>
+		<finder name="Ma_Loai_HoatDong" return-type="MaSoThuChi">
+			<finder-column name="ma" />
+			<finder-column name="loai" />
+			<finder-column name="hoatDong" />
+		</finder>
+		<finder name="Loai_HoatDong" return-type="Collection">
+			<finder-column name="loai" />
+			<finder-column name="hoatDong" />
+		</finder>
+	</entity>
+	<entity local-service="true" name="MaSoTheoDoi" remote-service="true" uuid="false" table="dm_masotheodoi" >
+		<column name="maSoTheoDoiId" primary="true" type="long" />
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		<column name="ma" type="String" />
+		<column name="dienGiai" type="String" />
+		<column name="hoatDong" type="Boolean" />
+		<order by="asc">
+			<order-column name="maSoTheoDoiId" />
+		</order>
+		<finder name="Ma" return-type="MaSoTheoDoi">
+			<finder-column name="ma" />
+		</finder>
+	</entity>
+	<entity local-service="true" name="QuanLyMaSo" remote-service="true" uuid="false" table="dm_quanlymaso" >
+		<column name="quanLyMaSoId" primary="true" type="long" />
+		<!-- LOAI_NGAY MaSoThuChi-->
+		<column name="key" type="String" />
+		<column name="so" type="int" />
+		<order by="asc">
+			<order-column name="quanLyMaSoId" />
+		</order>
+		<finder name="Key" return-type="QuanLyMaSo">
+			<finder-column name="key" />
+		</finder>
+	</entity>
+	<entity local-service="true" name="QuanLyMaSo" remote-service="true" uuid="false" table="dm_quanlymaso" >
+		<column name="quanLyMaSoId" primary="true" type="long" />
+		<!-- LOAI_NGAY MaSoThuChi-->
+		<column name="key" type="String" />
+		<column name="so" type="int" />
+		<order by="asc">
+			<order-column name="quanLyMaSoId" />
+		</order>
+		<finder name="Key" return-type="QuanLyMaSo">
+			<finder-column name="key" />
+		</finder>
+	</entity>
+	<entity local-service="true" name="TaiKhoanDoiUng" remote-service="true" uuid="false" table="dm_taikhoandoiung" >
+		<column name="taiKhoanDoiUngId" primary="true" type="long" />
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		<column name="taiKhoanDoiUngChaId" type="long" />
+		<column name="soHieu" type="String" />
+		<column name="ten" type="String" />
+		<column name="hoatDong" type="Boolean" />
+		<order by="asc">
+			<order-column name="taiKhoanDoiUngId" />
+		</order>
+		<finder name="SoHieu" return-type="TaiKhoanDoiUng">
+			<finder-column name="soHieu" />
+		</finder>
+			<finder name="HoatDong" return-type="Collection">
+			<finder-column name="hoatDong" />
+		</finder>
+		<finder name="TaiKhoanDoiUngChaId_HoatDong" return-type="Collection">
+			<finder-column name="taiKhoanDoiUngChaId" />
+			<finder-column name="hoatDong" />
+		</finder>
+	</entity>
+	<exceptions>
+		<exception>TrungDuLieuDauKy</exception>
+		<exception>TrungSoHieu</exception>
+		<exception>TrungSoKU</exception>
+		<exception>TrungLaiSuat</exception>
+		<exception>TrungMa</exception>
+		<exception>TrungSoCMND</exception>
+	</exceptions>
+</service-builder>

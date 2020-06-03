@@ -1,0 +1,227 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.mb.model.CongTacVien">
+		<field name="congTacVienId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="ma" type="String" />
+		<field name="hoTen" type="String" />
+		<field name="soCMND" type="String" />
+		<field name="duNoToiDa" type="Double" />
+		<field name="duNoToiDaTheChap" type="Double" />
+		<field name="diaChi" type="String" />
+		<field name="ghiChu" type="String" />
+		<field name="hoatDong" type="Boolean" />
+	</model>
+	<model name="com.mb.model.DsPhieuTaiKhoan">
+		<field name="dsPhieuTaiKhoanId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="phieuId" type="long" />
+		<field name="ngayChungTu" type="Date" />
+		<field name="taiKhoanDoiUngId" type="long" />
+		<field name="maTheoDoi" type="String" />
+		<field name="dienGiaiTheoDoi" type="String" />
+		<field name="soTien" type="Double" />
+		<field name="hoatDong" type="Boolean" />
+	</model>
+	<model name="com.mb.model.KhachHang">
+		<field name="khachHangId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="maCTV" type="String" />
+		<field name="ma" type="String" />
+		<field name="hoTen" type="String" />
+		<field name="soCMND" type="String" />
+		<field name="diaChi" type="String" />
+		<field name="hoatDong" type="Boolean" />
+	</model>
+	<model name="com.mb.model.LaiSuat">
+		<field name="laiSuatId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="soTienVay" type="Double" />
+		<field name="thoiHan" type="int" />
+		<field name="laiSuatVay" type="Double" />
+		<field name="gocNgay" type="Double" />
+		<field name="laiNgay" type="Double" />
+		<field name="gocNgayCuoi" type="Double" />
+		<field name="hoatDong" type="Boolean" />
+	</model>
+	<model name="com.mb.model.LichSuTaiKhoanDauKy">
+		<field name="lichSuTaiKhoanDauKyId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="taiKhoanDoiUngId" type="long" />
+		<field name="thang" type="int" />
+		<field name="nam" type="int" />
+		<field name="soTienTon" type="Double" />
+		<field name="hoatDong" type="Boolean" />
+	</model>
+	<model name="com.mb.model.LichSuThuPhatChi">
+		<field name="lichSuThuPhatChiId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="phatVayId" type="long" />
+		<field name="maCTV" type="String" />
+		<field name="soTien" type="Double" />
+		<field name="tongSoTienVonTra" type="Double" />
+		<field name="tongSoTienLaiTra" type="Double" />
+		<field name="loai" type="int" />
+		<field name="trangThaiPhatVayHienTai" type="int" />
+	</model>
+	<model name="com.mb.model.LoaiTaiSan">
+		<field name="loaiTaiSanId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="ten" type="String" />
+		<field name="ma" type="String" />
+		<field name="ghiChu" type="String" />
+		<field name="hoatDong" type="Boolean" />
+	</model>
+	<model name="com.mb.model.MaSoTheoDoi">
+		<field name="maSoTheoDoiId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="ma" type="String" />
+		<field name="dienGiai" type="String" />
+		<field name="hoatDong" type="Boolean" />
+	</model>
+	<model name="com.mb.model.MaSoThuChi">
+		<field name="maSoThuChiId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="ma" type="String" />
+		<field name="dienGiai" type="String" />
+		<field name="dienGiaiTheoDoi" type="String" />
+		<field name="loai" type="int" />
+		<field name="hoatDong" type="Boolean" />
+	</model>
+	<model name="com.mb.model.PhatVay">
+		<field name="phatVayId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="ngayTao" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="maCTV" type="String" />
+		<field name="maKhachHang" type="String" />
+		<field name="soKU" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="ngayBatDau" type="Date" />
+		<field name="ngayKetThuc" type="Date" />
+		<field name="loaiPhatVay" type="int" />
+		<field name="soLanDaThu" type="int" />
+		<field name="ngayDaThuCuoi" type="Date" />
+		<field name="soTienVay" type="Double" />
+		<field name="thoiHan" type="int" />
+		<field name="laiSuatVay" type="Double" />
+		<field name="gocNgay" type="Double" />
+		<field name="laiNgay" type="Double" />
+		<field name="gocNgayCuoi" type="Double" />
+		<field name="soNgayThuTruoc" type="int" />
+		<field name="ngayThuTruocTu" type="Date" />
+		<field name="ngayThuTruocDen" type="Date" />
+		<field name="ngayTatToan" type="Date" />
+		<field name="trangThai" type="int" />
+	</model>
+	<model name="com.mb.model.Phieu">
+		<field name="phieuId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="maCTV" type="String" />
+		<field name="hoTenCTV" type="String" />
+		<field name="soHopDong" type="String" />
+		<field name="ngayChungTu" type="Date" />
+		<field name="diaChi" type="String" />
+		<field name="soPhieu" type="String" />
+		<field name="ngayGhiSo" type="Date" />
+		<field name="maMSThuChi" type="String" />
+		<field name="soTien" type="Double" />
+		<field name="chungTuKemTheo" type="String" />
+		<field name="loai" type="int" />
+		<field name="hoatDong" type="Boolean" />
+	</model>
+	<model name="com.mb.model.QuanLyMaSo">
+		<field name="quanLyMaSoId" type="long" />
+		<field name="key" type="String" />
+		<field name="so" type="int" />
+	</model>
+	<model name="com.mb.model.SoKheUoc">
+		<field name="soKheUocId" type="long" />
+		<field name="cauTruc" type="String" />
+		<field name="so" type="int" />
+	</model>
+	<model name="com.mb.model.TaiKhoanDoiUng">
+		<field name="taiKhoanDoiUngId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="taiKhoanDoiUngChaId" type="long" />
+		<field name="soHieu" type="String" />
+		<field name="ten" type="String" />
+		<field name="hoatDong" type="Boolean" />
+	</model>
+	<model name="com.mb.model.TaiSanThueChap">
+		<field name="taiSanThueChapId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="phatVayId" type="long" />
+		<field name="soKU" type="String" />
+		<field name="maKhachHang" type="String" />
+		<field name="loaiTaiSanId" type="long" />
+		<field name="giaTriTaiSan" type="Double" />
+		<field name="thongTinTaiSan" type="String" />
+		<field name="ten" type="String" />
+		<field name="ghiChu" type="String" />
+	</model>
+</model-hints>

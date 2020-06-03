@@ -1,0 +1,157 @@
+/**
+ * Copyright 2000-present Liferay, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.listener;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Modified;
+import org.osgi.service.component.annotations.Reference;
+
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.BaseMessageListener;
+import com.liferay.portal.kernel.messaging.DestinationNames;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
+import com.liferay.portal.kernel.scheduler.SchedulerEngineHelper;
+import com.liferay.portal.kernel.scheduler.SchedulerEntry;
+import com.liferay.portal.kernel.scheduler.SchedulerEntryImpl;
+import com.liferay.portal.kernel.scheduler.SchedulerException;
+import com.liferay.portal.kernel.scheduler.TimeUnit;
+import com.liferay.portal.kernel.scheduler.Trigger;
+import com.liferay.portal.kernel.scheduler.TriggerFactory;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.util.CalendarUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.mb.model.DsPhieuTaiKhoan;
+import com.mb.model.LichSuTaiKhoanDauKy;
+import com.mb.model.TaiKhoanDoiUng;
+import com.mb.service.DsPhieuTaiKhoanLocalServiceUtil;
+import com.mb.service.LichSuTaiKhoanDauKyLocalServiceUtil;
+import com.mb.service.TaiKhoanDoiUngLocalServiceUtil;
+
+@Component(immediate = true, property = { "cron.expression=0 1 * * * ?" }, service = SampleScheduler.class)
+public class SampleScheduler extends BaseMessageListener {
+	private static final Log _log = LogFactoryUtil.getLog(SampleScheduler.class);
+
+	@Reference(target = ModuleServiceLifecycle.PORTAL_INITIALIZED, unbind = "-")
+	private volatile ModuleServiceLifecycle _moduleServiceLifecycle;
+
+	@Reference(unbind = "-")
+	private volatile SchedulerEngineHelper _schedulerEngineHelper;
+
+	@Reference(unbind = "-")
+	private volatile TriggerFactory _triggerFactory;
+	private static boolean ON_WORKING = false;
+
+	@Override
+	protected void doReceive(Message message) throws Exception {
+		if (ON_WORKING)
+			return;
+		try {
+			ON_WORKING = true;
+			capNhatDuLieu();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			ON_WORKING = false;
+		}
+	}
+
+	private void capNhatDuLieu() {
+		Calendar cal = Calendar.getInstance();
+		int namNow = cal.get(Calendar.YEAR);
+		int monthNow = cal.get(Calendar.MONTH) + 1;
+
+		_log.info("Thang :" + monthNow);
+		_log.info("nam :" + namNow);
+		Calendar calTu = Calendar.getInstance();
+		calTu.set(Calendar.DATE, 1);
+		Date ngayChungTuTu = calTu.getTime();
+		
+		Calendar calDen = Calendar.getInstance();
+		calDen.set(Calendar.DATE, CalendarUtil.getDaysInMonth(calDen));
+		Date ngayChungTuDen = calDen.getTime();
+
+		List<TaiKhoanDoiUng> taiKhoanDoiUngs = TaiKhoanDoiUngLocalServiceUtil.findBase(0, "", "", 1, -1, -1, null);
+		if (CollectionUtils.isNotEmpty(taiKhoanDoiUngs)) {
+			for (TaiKhoanDoiUng item : taiKhoanDoiUngs) {
+				try {
+					LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil
+							.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namNow, monthNow);
+					LichSuTaiKhoanDauKy cuoiKy = LichSuTaiKhoanDauKyLocalServiceUtil
+							.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namNow, monthNow + 1);
+					if (dauKy == null) {
+						dauKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
+					}
+					if (cuoiKy == null) {
+						cuoiKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
+						cuoiKy.setTaiKhoanDoiUngId(item.getTaiKhoanDoiUngId());
+						cuoiKy.setThang(monthNow + 1);
+						cuoiKy.setNam(namNow);
+					}
+					Double soTienTon = dauKy.getSoTienTon() != null ? dauKy.getSoTienTon() : GetterUtil.getDouble("0");
+					ServiceContext serviceContext = new ServiceContext();
+					serviceContext.setUserId(item.getUserId());
+					serviceContext.setCompanyId(item.getCompanyId());
+					serviceContext.setScopeGroupId(item.getGroupId());
+					List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil
+							.getDSThuChiByTaiKhoanNgayChungTu(item.getTaiKhoanDoiUngId(), ngayChungTuTu, ngayChungTuDen,
+									1, -1, -1, null);
+					for (DsPhieuTaiKhoan dsPhieuTaiKhoan : dsPhieuTaiKhoans) {
+						if (dsPhieuTaiKhoan.getPhieu() != null) {
+							if (dsPhieuTaiKhoan.getPhieu().getLoai() == 1) {
+								soTienTon += dsPhieuTaiKhoan.getSoTien();
+							} else if (dsPhieuTaiKhoan.getPhieu().getLoai() == 2) {
+								soTienTon -= dsPhieuTaiKhoan.getSoTien();
+							}
+						}
+					}
+					cuoiKy.setHoatDong(true);
+					cuoiKy.setSoTienTon(soTienTon != null ? soTienTon : GetterUtil.getDouble("0"));
+					LichSuTaiKhoanDauKyLocalServiceUtil.addOrUpdateLichSuTaiKhoanDauKy(cuoiKy, serviceContext);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			}
+		}
+	}
+
+	@Activate
+	@Modified
+	protected void activate(Map<String, Object> properties) throws SchedulerException {
+		Class<?> clazz = getClass();
+		String className = clazz.getName();
+		Trigger trigger = _triggerFactory.createTrigger(className, className, null, null, 10, TimeUnit.SECOND);
+		SchedulerEntry schedulerEntry = new SchedulerEntryImpl(className, trigger);
+		_schedulerEngineHelper.register(this, schedulerEntry, DestinationNames.SCHEDULER_DISPATCH);
+	}
+
+	@Deactivate
+	protected void deactivate() {
+		_schedulerEngineHelper.unregister(this);
+	}
+}

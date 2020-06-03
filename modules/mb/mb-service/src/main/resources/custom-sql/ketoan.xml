@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<custom-sql>
+	<sql id="com.mb.service.persistence.LichSuTaiKhoanDauKyFinder.findBase">
+			<![CDATA[
+				SELECT  ketoan_lichsutaikhoandauky.*
+				FROM ketoan_lichsutaikhoandauky
+				WHERE TRUE
+				AND (nam <= ?)
+				AND (thang = ?)
+				AND (taiKhoanDoiUngId = ?)
+			]]>
+	</sql>
+	<sql id="com.mb.service.persistence.LichSuTaiKhoanDauKyFinder.countBase">
+			<![CDATA[
+				SELECT  COUNT(1) AS COUNT_VALUE
+				FROM ketoan_lichsutaikhoandauky
+				WHERE TRUE
+				AND (nam <= ?)
+				AND (thang = ?)
+				AND (taiKhoanDoiUngId = ?)
+			]]>
+	</sql>
+	<sql id="com.mb.service.persistence.DsPhieuTaiKhoanFinder.getDSThuChiByTaiKhoanNgayChungTu">
+			<![CDATA[
+				SELECT  ketoan_dsphieutaikhoan.*
+				FROM ketoan_dsphieutaikhoan
+				WHERE TRUE
+				AND (hoatdong = ?)
+				AND (taiKhoanDoiUngId IN (SELECT taiKhoanDoiUngId FROM dm_taikhoandoiung WHERE taiKhoanDoiUngChaId = ? OR taiKhoanDoiUngId = ?))
+				AND (ngayChungTu >= ?)
+				AND (ngayChungTu <= ?)
+			]]>
+	</sql>
+	<sql id="com.mb.service.persistence.PhieuFinder.findBase">
+			<![CDATA[
+				SELECT  phieu.*
+				FROM ketoan_phieu phieu
+				WHERE TRUE
+				AND (hoatdong = ?)
+				AND (maCTV = ?)
+				AND (maMSThuChi = ?)
+				AND (soPhieu = ?)
+				AND (ngayChungTu >= ?)
+				AND (ngayChungTu <= ?)
+				AND (loai = ?)
+			]]>
+	</sql>
+	<sql id="com.mb.service.persistence.PhieuFinder.countBase">
+			<![CDATA[
+				SELECT  COUNT(1) as COUNT_VALUE
+				FROM ketoan_phieu phieu
+				WHERE TRUE
+				AND (hoatdong = ?)
+				AND (maCTV = ?)
+				AND (maMSThuChi = ?)
+				AND (soPhieu = ?)
+				AND (ngayChungTu >= ?)
+				AND (ngayChungTu <= ?)
+				AND (loai = ?)
+			]]>
+	</sql>
+</custom-sql>

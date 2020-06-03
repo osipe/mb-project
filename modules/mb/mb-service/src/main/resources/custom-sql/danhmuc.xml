@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<custom-sql>
+	<sql id="com.mb.service.persistence.MaSoTheoDoiFinder.findBase">
+			<![CDATA[
+				SELECT  mstc.*
+				FROM dm_masotheodoi mstc
+				WHERE TRUE
+				AND (hoatdong = ?)
+				AND (ma = ?)
+				AND (LOWER(dienGiai) LIKE ?)
+			]]>
+	</sql>
+	<sql id="com.mb.service.persistence.MaSoTheoDoiFinder.countBase">
+			<![CDATA[
+				SELECT  COUNT(1) as COUNT_VALUE
+				FROM dm_masotheodoi mstc
+				WHERE TRUE
+				AND (hoatdong = ?)
+				AND (ma = ?)
+				AND (LOWER(dienGiai) LIKE ?)
+			]]>
+	</sql>
+	<sql id="com.mb.service.persistence.TaiKhoanDoiUngFinder.findBase">
+			<![CDATA[
+				SELECT  tkdu.*
+				FROM dm_taikhoandoiung tkdu
+				WHERE TRUE
+				AND (hoatdong = ?)
+				AND (taiKhoanDoiUngChaId = ?)
+				AND (soHieu = ?)
+				AND (LOWER(ten) LIKE ?)
+			]]>
+	</sql>
+	<sql id="com.mb.service.persistence.TaiKhoanDoiUngFinder.countBase">
+			<![CDATA[
+				SELECT  COUNT(1) as COUNT_VALUE
+				FROM dm_taikhoandoiung tkdu
+				WHERE TRUE
+				AND (hoatdong = ?)
+				AND (taiKhoanDoiUngChaId = ?)
+				AND (soHieu = ?)
+				AND (LOWER(ten) LIKE ?)
+			]]>
+	</sql>
+	<sql id="com.mb.service.persistence.MaSoThuChiFinder.findBase">
+			<![CDATA[
+				SELECT  mstc.*
+				FROM dm_masothuchi mstc
+				WHERE TRUE
+				AND (hoatdong = ?)
+				AND (loai = ?)
+				AND (ma = ?)
+				AND (LOWER(dienGiai) LIKE ?)
+			]]>
+	</sql>
+	<sql id="com.mb.service.persistence.MaSoThuChiFinder.countBase">
+			<![CDATA[
+				SELECT  COUNT(1) as COUNT_VALUE
+				FROM dm_masothuchi mstc
+				WHERE TRUE
+				AND (hoatdong = ?)
+				AND (loai = ?)
+				AND (ma = ?)
+				AND (LOWER(dienGiai) LIKE ?)
+			]]>
+	</sql>
+	<sql id="com.mb.service.persistence.LoaiTaiSanFinder.findBase">
+		<![CDATA[
+			SELECT  lts.*
+			FROM dm_loaiTaiSan lts
+			WHERE TRUE
+			AND (hoatdong = ?)
+			AND (ma = ?)
+			AND (LOWER(ten) LIKE ?)
+			AND (LOWER(ghiChu) LIKE ?)
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.LoaiTaiSanFinder.countBase">
+		<![CDATA[
+			SELECT  COUNT(1) as COUNT_VALUE
+			FROM dm_loaiTaiSan lts
+			WHERE TRUE
+			AND (hoatdong = ?)
+			AND (ma = ?)
+			AND (LOWER(ten) LIKE ?)
+			AND (LOWER(ghiChu) LIKE ?)
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.LaiSuatFinder.findBase">
+		<![CDATA[
+			SELECT  ls.*
+			FROM dm_laisuat ls
+			WHERE TRUE
+			AND (hoatdong = ?)
+			AND (soTienVay = ?)
+			AND (laiSuatVay = ?)
+			AND (thoiHan = ?)
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.LaiSuatFinder.countBase">
+		<![CDATA[
+			SELECT  COUNT(1) as COUNT_VALUE
+			FROM dm_laisuat ls
+			WHERE TRUE
+			AND (hoatdong = ?)
+			AND (soTienVay = ?)
+			AND (laiSuatVay = ?)
+			AND (thoiHan = ?)
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.KhachHangFinder.findBase">
+		<![CDATA[
+			SELECT  kh.*
+			FROM dm_khachhang kh
+			WHERE TRUE
+			AND (hoatdong = ?)
+			AND (ma = ?)
+			AND (maCTV = ?)
+			AND (soCMND = ?)
+			AND (LOWER(hoTen) LIKE ?)
+			AND (LOWER(diaChi) LIKE ?)
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.KhachHangFinder.countBase">
+		<![CDATA[
+			SELECT  COUNT(1) as COUNT_VALUE
+			FROM dm_khachhang kh
+			WHERE TRUE
+			AND (hoatdong = ?)
+			AND (ma = ?)
+			AND (maCTV = ?)
+			AND (soCMND = ?)
+			AND (LOWER(hoTen) LIKE ?)
+			AND (LOWER(diaChi) LIKE ?)
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.CongTacVienFinder.getCTVPhatVayNgay">
+		<![CDATA[
+			SELECT * 
+			FROM dm_congtacvien 
+			WHERE 1 = 1
+			AND [QUERY_PHAVAYNGAY] 
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.CongTacVienFinder.getCTVSaoKe">
+		<![CDATA[
+			select * 
+			from dm_congtacvien 
+			where ma in ( select mactv 
+						from mb_phatvay 
+						where 1 = 1 
+						and mactv = ?
+						and ngayketthuc >= ? 
+						and createdate <= ?
+						and phatvayid not in ( select phatvayid 
+												from mb_lichsuthuphatchi 
+												where trangThaiPhatVayHienTai in (2,3) 
+												and createdate <= ?
+											)
+						)
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.CongTacVienFinder.findBase">
+		<![CDATA[
+			SELECT  ctv.*
+			FROM dm_congtacvien ctv
+			WHERE TRUE
+			AND (hoatdong = ?)
+			AND (ma = ?)
+			AND (soCMND = ?)
+			AND (LOWER(hoTen) LIKE ?)
+			AND (LOWER(diaChi) LIKE ?)
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.CongTacVienFinder.countBase">
+		<![CDATA[
+			SELECT  COUNT(1) as COUNT_VALUE
+			FROM dm_congtacvien ctv
+			WHERE TRUE
+			AND (hoatdong = ?)
+			AND (ma = ?)
+			AND (soCMND = ?)
+			AND (LOWER(hoTen) LIKE ?)
+			AND (LOWER(diaChi) LIKE ?)
+		]]>
+	</sql>
+</custom-sql>

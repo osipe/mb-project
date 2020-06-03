@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+
+<beans
+	default-destroy-method="destroy"
+	default-init-method="afterPropertiesSet"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+>
+	<bean class="com.mb.service.impl.CongTacVienLocalServiceImpl" id="com.mb.service.CongTacVienLocalService" />
+	<bean class="com.mb.service.impl.CongTacVienServiceImpl" id="com.mb.service.CongTacVienService" />
+	<bean class="com.mb.service.persistence.impl.CongTacVienPersistenceImpl" id="com.mb.service.persistence.CongTacVienPersistence" parent="basePersistence" />
+	<bean class="com.mb.service.persistence.impl.CongTacVienFinderImpl" id="com.mb.service.persistence.CongTacVienFinder" parent="basePersistence" />
+	<bean class="com.mb.service.impl.DsPhieuTaiKhoanLocalServiceImpl" id="com.mb.service.DsPhieuTaiKhoanLocalService" />
+	<bean class="com.mb.service.impl.DsPhieuTaiKhoanServiceImpl" id="com.mb.service.DsPhieuTaiKhoanService" />
+	<bean class="com.mb.service.persistence.impl.DsPhieuTaiKhoanPersistenceImpl" id="com.mb.service.persistence.DsPhieuTaiKhoanPersistence" parent="basePersistence" />
+	<bean class="com.mb.service.persistence.impl.DsPhieuTaiKhoanFinderImpl" id="com.mb.service.persistence.DsPhieuTaiKhoanFinder" parent="basePersistence" />
+	<bean class="com.mb.service.impl.KhachHangLocalServiceImpl" id="com.mb.service.KhachHangLocalService" />
+	<bean class="com.mb.service.impl.KhachHangServiceImpl" id="com.mb.service.KhachHangService" />
+	<bean class="com.mb.service.persistence.impl.KhachHangPersistenceImpl" id="com.mb.service.persistence.KhachHangPersistence" parent="basePersistence" />
+	<bean class="com.mb.service.persistence.impl.KhachHangFinderImpl" id="com.mb.service.persistence.KhachHangFinder" parent="basePersistence" />
+	<bean class="com.mb.service.impl.LaiSuatLocalServiceImpl" id="com.mb.service.LaiSuatLocalService" />
+	<bean class="com.mb.service.impl.LaiSuatServiceImpl" id="com.mb.service.LaiSuatService" />
+	<bean class="com.mb.service.persistence.impl.LaiSuatPersistenceImpl" id="com.mb.service.persistence.LaiSuatPersistence" parent="basePersistence" />
+	<bean class="com.mb.service.persistence.impl.LaiSuatFinderImpl" id="com.mb.service.persistence.LaiSuatFinder" parent="basePersistence" />
+	<bean class="com.mb.service.impl.LichSuTaiKhoanDauKyLocalServiceImpl" id="com.mb.service.LichSuTaiKhoanDauKyLocalService" />
+	<bean class="com.mb.service.impl.LichSuTaiKhoanDauKyServiceImpl" id="com.mb.service.LichSuTaiKhoanDauKyService" />
+	<bean class="com.mb.service.persistence.impl.LichSuTaiKhoanDauKyPersistenceImpl" id="com.mb.service.persistence.LichSuTaiKhoanDauKyPersistence" parent="basePersistence" />
+	<bean class="com.mb.service.persistence.impl.LichSuTaiKhoanDauKyFinderImpl" id="com.mb.service.persistence.LichSuTaiKhoanDauKyFinder" parent="basePersistence" />
+	<bean class="com.mb.service.impl.LichSuThuPhatChiLocalServiceImpl" id="com.mb.service.LichSuThuPhatChiLocalService" />
+	<bean class="com.mb.service.impl.LichSuThuPhatChiServiceImpl" id="com.mb.service.LichSuThuPhatChiService" />
+	<bean class="com.mb.service.persistence.impl.LichSuThuPhatChiPersistenceImpl" id="com.mb.service.persistence.LichSuThuPhatChiPersistence" parent="basePersistence" />
+	<bean class="com.mb.service.persistence.impl.LichSuThuPhatChiFinderImpl" id="com.mb.service.persistence.LichSuThuPhatChiFinder" parent="basePersistence" />
+	<bean class="com.mb.service.impl.LoaiTaiSanLocalServiceImpl" id="com.mb.service.LoaiTaiSanLocalService" />
+	<bean class="com.mb.service.impl.LoaiTaiSanServiceImpl" id="com.mb.service.LoaiTaiSanService" />
+	<bean class="com.mb.service.persistence.impl.LoaiTaiSanPersistenceImpl" id="com.mb.service.persistence.LoaiTaiSanPersistence" parent="basePersistence" />
+	<bean class="com.mb.service.persistence.impl.LoaiTaiSanFinderImpl" id="com.mb.service.persistence.LoaiTaiSanFinder" parent="basePersistence" />
+	<bean class="com.mb.service.impl.MaSoTheoDoiLocalServiceImpl" id="com.mb.service.MaSoTheoDoiLocalService" />
+	<bean class="com.mb.service.impl.MaSoTheoDoiServiceImpl" id="com.mb.service.MaSoTheoDoiService" />
+	<bean class="com.mb.service.persistence.impl.MaSoTheoDoiPersistenceImpl" id="com.mb.service.persistence.MaSoTheoDoiPersistence" parent="basePersistence" />
+	<bean class="com.mb.service.persistence.impl.MaSoTheoDoiFinderImpl" id="com.mb.service.persistence.MaSoTheoDoiFinder" parent="basePersistence" />
+	<bean class="com.mb.service.impl.MaSoThuChiLocalServiceImpl" id="com.mb.service.MaSoThuChiLocalService" />
+	<bean class="com.mb.service.impl.MaSoThuChiServiceImpl" id="com.mb.service.MaSoThuChiService" />
+	<bean class="com.mb.service.persistence.impl.MaSoThuChiPersistenceImpl" id="com.mb.service.persistence.MaSoThuChiPersistence" parent="basePersistence" />
+	<bean class="com.mb.service.persistence.impl.MaSoThuChiFinderImpl" id="com.mb.service.persistence.MaSoThuChiFinder" parent="basePersistence" />
+	<bean class="com.mb.service.impl.PhatVayLocalServiceImpl" id="com.mb.service.PhatVayLocalService" />
+	<bean class="com.mb.service.impl.PhatVayServiceImpl" id="com.mb.service.PhatVayService" />
+	<bean class="com.mb.service.persistence.impl.PhatVayPersistenceImpl" id="com.mb.service.persistence.PhatVayPersistence" parent="basePersistence" />
+	<bean class="com.mb.service.persistence.impl.PhatVayFinderImpl" id="com.mb.service.persistence.PhatVayFinder" parent="basePersistence" />
+	<bean class="com.mb.service.impl.PhieuLocalServiceImpl" id="com.mb.service.PhieuLocalService" />
+	<bean class="com.mb.service.impl.PhieuServiceImpl" id="com.mb.service.PhieuService" />
+	<bean class="com.mb.service.persistence.impl.PhieuPersistenceImpl" id="com.mb.service.persistence.PhieuPersistence" parent="basePersistence" />
+	<bean class="com.mb.service.persistence.impl.PhieuFinderImpl" id="com.mb.service.persistence.PhieuFinder" parent="basePersistence" />
+	<bean class="com.mb.service.impl.QuanLyMaSoLocalServiceImpl" id="com.mb.service.QuanLyMaSoLocalService" />
+	<bean class="com.mb.service.impl.QuanLyMaSoServiceImpl" id="com.mb.service.QuanLyMaSoService" />
+	<bean class="com.mb.service.persistence.impl.QuanLyMaSoPersistenceImpl" id="com.mb.service.persistence.QuanLyMaSoPersistence" parent="basePersistence" />
+	<bean class="com.mb.service.impl.SoKheUocLocalServiceImpl" id="com.mb.service.SoKheUocLocalService" />
+	<bean class="com.mb.service.impl.SoKheUocServiceImpl" id="com.mb.service.SoKheUocService" />
+	<bean class="com.mb.service.persistence.impl.SoKheUocPersistenceImpl" id="com.mb.service.persistence.SoKheUocPersistence" parent="basePersistence" />
+	<bean class="com.mb.service.impl.TaiKhoanDoiUngLocalServiceImpl" id="com.mb.service.TaiKhoanDoiUngLocalService" />
+	<bean class="com.mb.service.impl.TaiKhoanDoiUngServiceImpl" id="com.mb.service.TaiKhoanDoiUngService" />
+	<bean class="com.mb.service.persistence.impl.TaiKhoanDoiUngPersistenceImpl" id="com.mb.service.persistence.TaiKhoanDoiUngPersistence" parent="basePersistence" />
+	<bean class="com.mb.service.persistence.impl.TaiKhoanDoiUngFinderImpl" id="com.mb.service.persistence.TaiKhoanDoiUngFinder" parent="basePersistence" />
+	<bean class="com.mb.service.impl.TaiSanThueChapLocalServiceImpl" id="com.mb.service.TaiSanThueChapLocalService" />
+	<bean class="com.mb.service.impl.TaiSanThueChapServiceImpl" id="com.mb.service.TaiSanThueChapService" />
+	<bean class="com.mb.service.persistence.impl.TaiSanThueChapPersistenceImpl" id="com.mb.service.persistence.TaiSanThueChapPersistence" parent="basePersistence" />
+	<bean class="com.mb.service.persistence.impl.TaiSanThueChapFinderImpl" id="com.mb.service.persistence.TaiSanThueChapFinder" parent="basePersistence" />
+</beans>

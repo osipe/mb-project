@@ -1,0 +1,16 @@
+dependencies {
+	compileOnly group: "biz.aQute.bnd", name: "biz.aQute.bndlib"
+	compileOnly group: "com.liferay", name: "com.liferay.portal.spring.extender.api"
+	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel"
+	compileOnly group: "org.osgi", name: "org.osgi.core"
+	compileOnly group: "org.osgi", name: "org.osgi.service.component.annotations"
+	compileOnly group: "com.liferay", name: "com.liferay.portal.dao.orm.custom.sql.api"
+	compile group: "commons-collections", name: "commons-collections"
+	compileOnly project(":modules:mb:mb-api")
+}
+
+buildService {
+	apiDir = "../mb-api/src/main/java"
+}
+
+group = "com.mb"

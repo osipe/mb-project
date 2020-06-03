@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<custom-sql>
+	<sql id="com.mb.service.persistence.PhatVayFinder.getPhatVaySaoKe">
+		<![CDATA[
+			select * 
+			from mb_phatvay 
+			where 1 = 1
+			and mactv = ?
+			and ngayketthuc >= ? 
+			and createdate <= ?
+			and phatvayid not in ( select phatvayid 
+									from mb_lichsuthuphatchi 
+									where trangThaiPhatVayHienTai in (2,3) 
+									and createdate <= ?
+									)
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.LichSuThuPhatChiFinder.findByPhatVay_Createdate_Loai">
+		<![CDATA[
+			SELECT  mb_lichsuthuphatchi.*
+			FROM mb_lichsuthuphatchi
+			WHERE TRUE
+			AND (phatVayId = ?)
+			AND (createDate <= ?)
+			AND (createDate >= ?)
+			AND [$QUERY_LOAI$]
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.PhatVayFinder.getPhatVayByNgayThuTruocLast">
+		<![CDATA[
+			SELECT * 
+			FROM mb_phatvay
+			WHERE 1 = 1
+			AND ngaythutruocden IS NOT NULL
+			AND ngaythutruoctu IS NOT NULL
+			ORDER BY ngaythutruoctu DESC
+			LIMIT 1
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.LichSuThuPhatChiFinder.findByCTV_Loai_Createdate">
+		<![CDATA[
+			SELECT  mb_lichsuthuphatchi.*
+			FROM mb_lichsuthuphatchi
+			WHERE TRUE
+			AND (maCTV = ?)
+			AND (loai = ?)
+			AND (createDate <= ?)
+			AND (createDate >= ?)
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.TaiSanThueChapFinder.findBase">
+		<![CDATA[
+			SELECT  tstc.*
+			FROM mb_taisaithuechap tstc
+			WHERE TRUE
+			AND (soKU = ?)
+			AND (maKhachHang = ?)
+			AND (loaiTaiSanId = ?)
+			AND (lower(ten) like ?)
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.TaiSanThueChapFinder.countBase">
+		<![CDATA[
+			SELECT  COUNT(1) as COUNT_VALUE
+			FROM mb_taisaithuechap tstc
+			WHERE TRUE
+			AND (soKU = ?)
+			AND (maKhachHang = ?)
+			AND (loaiTaiSanId = ?)
+			AND (lower(ten) like ?)
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.PhatVayFinder.findBase">
+		<![CDATA[
+			SELECT  pv.*
+			FROM mb_phatvay pv
+			WHERE TRUE
+			AND (lower(soKU) like ?)
+			AND (maCTV = ?)
+			AND (maKhachHang = ?)
+			AND (createDate >= ?)
+			AND (createDate <= ?)
+			AND (ngayBatDau >= ?)
+			AND (ngayBatDau <= ?)
+			AND (ngayTatToan >= ?)
+			AND (ngayTatToan <= ?)
+			AND $QUERY_TRANGTHAI$
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.PhatVayFinder.countBase">
+		<![CDATA[
+			SELECT  COUNT(1) as COUNT_VALUE
+			FROM mb_phatvay pv
+			WHERE TRUE
+			AND (lower(soKU) like ?)
+			AND (maCTV = ?)
+			AND (maKhachHang = ?)
+			AND (createDate >= ?)
+			AND (createDate <= ?)
+			AND (ngayBatDau >= ?)
+			AND (ngayBatDau <= ?)
+			AND (ngayTatToan >= ?)
+			AND (ngayTatToan <= ?)
+			AND $QUERY_TRANGTHAI$
+		]]>
+	</sql>
+	<sql
+		id="com.mb.service.persistence.PhatVayFinder.findCTV_NgayThuTien">
+		<![CDATA[
+			SELECT  pv.*
+			FROM mb_phatvay pv
+			WHERE TRUE
+			AND (maCTV = ?)
+			AND (ngayBatDau <= ?)
+			AND (ngayDaThuCuoi < ? OR ngayDaThuCuoi IS NULL)
+			AND (ngayKetThuc >= ?)
+			AND (trangThai = 1 OR trangThai = 4)
+		]]>
+	</sql>
+	<sql
+		id="com.mb.service.persistence.PhatVayFinder.getPhatVayDeThuTienTruoc">
+		<![CDATA[
+			SELECT  pv.*
+			FROM mb_phatvay pv
+			WHERE TRUE
+			AND (maCTV = ?)
+			AND (ngayBatDau <= ?)
+			AND (ngayDaThuCuoi < ? OR ngayDaThuCuoi IS NULL)
+			AND (ngayKetThuc >= ?)
+			AND (trangThai = 1)
+		]]>
+	</sql>
+</custom-sql>

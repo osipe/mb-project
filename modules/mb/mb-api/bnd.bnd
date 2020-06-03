@@ -1,0 +1,10 @@
+Bundle-Name: mb-api
+Bundle-SymbolicName: com.mb.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.mb.exception,\
+	com.mb.model,\
+	com.mb.service,\
+	com.mb.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../mb-service/service.xml
