@@ -66,7 +66,7 @@ public class CongTacVienFinderImpl extends CongTacVienFinderBaseImpl implements 
 			if (ngayTaoTu == null || ngayTaoDen == null) {
 				sql = sql.replace("AND [QUERY_PHAVAYNGAY]","");
 			}else {
-				sql = sql.replace("AND [QUERY_PHAVAYNGAY]","AND ma IN (SELECT mactv FROM mb_phatvay  WHERE ngaytao >= ? and ngaytao <= ?)");
+				sql = sql.replace("AND [QUERY_PHAVAYNGAY]","AND ma IN (SELECT mactv FROM mb_phatvay  WHERE createdate >= ? and createdate <= ?)");
 			}
 			sql = _customSQL.replaceOrderBy(sql, null);
 			SQLQuery q = session.createSQLQuery(sql);
