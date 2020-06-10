@@ -277,6 +277,21 @@ public interface DsPhieuTaiKhoanModel
 	public void setSoTien(Double soTien);
 
 	/**
+	 * Returns the ten ctv of this ds phieu tai khoan.
+	 *
+	 * @return the ten ctv of this ds phieu tai khoan
+	 */
+	@AutoEscape
+	public String getTenCTV();
+
+	/**
+	 * Sets the ten ctv of this ds phieu tai khoan.
+	 *
+	 * @param tenCTV the ten ctv of this ds phieu tai khoan
+	 */
+	public void setTenCTV(String tenCTV);
+
+	/**
 	 * Returns the hoat dong of this ds phieu tai khoan.
 	 *
 	 * @return the hoat dong of this ds phieu tai khoan

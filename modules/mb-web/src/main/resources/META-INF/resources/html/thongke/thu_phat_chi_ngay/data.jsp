@@ -26,7 +26,7 @@
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     Double tongVon = GetterUtil.getDouble("0");
 	Double tongLai = GetterUtil.getDouble("0");
-	Double tongAll = GetterUtil.getDouble("0");
+	Double tongPhatVay = GetterUtil.getDouble("0");
 %>
 <liferay-portlet:renderURL varImpl="iteratorURL">
 	<portlet:param name="maCTVSearch" value="<%= String.valueOf(maCTVSearch)%>" />
@@ -43,7 +43,7 @@
 		 		orderByType = "asc";
 		 	}
 		 	if(Validator.isNull(orderByCol)){
-		 		orderByCol = "createdate";
+		 		orderByCol = "hoten";
 		 	}
 		 	boolean ascending = false;
 		 	if("asc".equals(orderByType)){
@@ -64,8 +64,6 @@
 			 	Double tongTienCTV = GetterUtil.getDouble("0");
 		 		List<LichSuThuPhatChi> lichSuThuPhatChis = LichSuThuPhatChiLocalServiceUtil.findByCTV_Loai_Createdate(congTacVien.getMa(), 0, ngayBatDauTu, ngayBatDauTu, -1, -1, comparator);
 		 		List<LichSuThuPhatChDTO> lichSuThuPhatChDTOs = new ArrayList<LichSuThuPhatChDTO>();
-		 		Double tienVonPV = GetterUtil.getDouble("0");
-			 	Double tienLaiPV = GetterUtil.getDouble("0");
 			 	Double tongTienPV = GetterUtil.getDouble("0");
 			 	
 			 	Double tienVonTT = GetterUtil.getDouble("0");
@@ -83,10 +81,7 @@
 		 		for(LichSuThuPhatChi item : lichSuThuPhatChis){
 		 			tienVonCTV += item.getTongSoTienVonTra();
 		 			tienLaiCTV += item.getTongSoTienLaiTra();
-		 			tongTienCTV += item.getSoTien();
 		 			if(item.getLoai() == 1){
-		 				tienVonPV += item.getTongSoTienVonTra();
-		 				tienLaiPV += item.getTongSoTienLaiTra();
 		 				tongTienPV += item.getSoTien();
 		 			}else if(item.getLoai() == 2){
 		 				tienVonTT += item.getTongSoTienVonTra();
@@ -103,24 +98,24 @@
 		 			}
 		 		}
 		 		if(tongTienPV > 0){
-		 			LichSuThuPhatChDTO phatVay = new LichSuThuPhatChDTO("","Phát vay", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienPV > 0 ? df.format(tongTienPV) : "0",tienVonPV > 0 ? df.format(tienVonPV) : "0",tienLaiPV > 0 ? df.format(tienLaiPV) : "0");
+		 			LichSuThuPhatChDTO phatVay = new LichSuThuPhatChDTO("","Phát vay", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienPV > 0 ? df.format(tongTienPV) : "0", "0", "0");
 			 		lichSuThuPhatChDTOs.add(phatVay);
 		 		}
 		 		if(tongTienTT > 0){
-			 		LichSuThuPhatChDTO tatToan = new LichSuThuPhatChDTO("","Tất toán", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienTT > 0 ? df.format(tongTienTT) : "0",tienVonTT > 0 ? df.format(tienVonTT) : "0",tienLaiTT > 0 ? df.format(tienLaiTT) : "0");
+			 		LichSuThuPhatChDTO tatToan = new LichSuThuPhatChDTO("","Tất toán", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", "0",tienVonTT > 0 ? df.format(tienVonTT) : "0",tienLaiTT > 0 ? df.format(tienLaiTT) : "0");
 			 		lichSuThuPhatChDTOs.add(tatToan);
 		 		}
 		 		if(tongTienTHN > 0){
-			 		LichSuThuPhatChDTO thuHangNgay = new LichSuThuPhatChDTO("","Thu hằng ngày", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienTHN > 0 ? df.format(tongTienTHN) : "0",tienVonTHN > 0 ? df.format(tienVonTHN) : "0",tienLaiTHN > 0 ? df.format(tienLaiTHN) : "0");
+			 		LichSuThuPhatChDTO thuHangNgay = new LichSuThuPhatChDTO("","Thu hằng ngày", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", "0",tienVonTHN > 0 ? df.format(tienVonTHN) : "0",tienLaiTHN > 0 ? df.format(tienLaiTHN) : "0");
 			 		lichSuThuPhatChDTOs.add(thuHangNgay);
 		 		}
 		 		if(tongTienThuTruoc > 0){
-			 		LichSuThuPhatChDTO thuTruoc = new LichSuThuPhatChDTO("","Thu tiền tết", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienThuTruoc > 0 ? df.format(tongTienThuTruoc) : "0",tienVonThuTruoc > 0 ? df.format(tienVonThuTruoc) : "0",tienLaiThuTruoc > 0 ? df.format(tienLaiThuTruoc) : "0");
+			 		LichSuThuPhatChDTO thuTruoc = new LichSuThuPhatChDTO("","Thu tiền tết", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "",  "0",tienVonThuTruoc > 0 ? df.format(tienVonThuTruoc) : "0",tienLaiThuTruoc > 0 ? df.format(tienLaiThuTruoc) : "0");
 			 		lichSuThuPhatChDTOs.add(thuTruoc);
 		 		}
-		 		tongAll += tongTienCTV;
-		 		tongLai += tienLaiCTV;
 		 		tongVon += tienVonCTV;
+		 		tongLai += tienLaiCTV;
+		 		tongPhatVay += tongTienPV;
 	 		%>
 			  <liferay-ui:search-container-column-text cssClass="aui-w10" name="STT">
 			 	<span style="color:#ff3d00e8;font-weight: bold;"><%=index + 1%></span>
@@ -155,7 +150,7 @@
 			 		}
 			 	%>
 			 </liferay-ui:search-container-column-text>
-			  <liferay-ui:search-container-column-text name="Tiền vốn">
+			  <liferay-ui:search-container-column-text name="Thu vốn">
 			 	<span style="color:#ff3d00e8;font-weight: bold;"><%=tienVonCTV > 0 ? df.format(tienVonCTV) : 0 %></span>
 			 	<%
 			 		for(LichSuThuPhatChDTO item : lichSuThuPhatChDTOs){
@@ -166,7 +161,7 @@
 			 		}
 			 	%>
 			 </liferay-ui:search-container-column-text>
-			  <liferay-ui:search-container-column-text name="Tiền lãi">
+			  <liferay-ui:search-container-column-text name="Thu lãi">
 			 	<span style="color:#ff3d00e8;font-weight: bold;"><%=tienLaiCTV > 0 ? df.format(tienLaiCTV) : 0 %> </span>
 			 	<%
 			 		for(LichSuThuPhatChDTO item : lichSuThuPhatChDTOs){
@@ -177,8 +172,8 @@
 			 		}
 			 	%>
 			 </liferay-ui:search-container-column-text>
-			  <liferay-ui:search-container-column-text name="Số tiền">
-			 	<span style="color:#ff3d00e8;font-weight: bold;"> <%=tongTienCTV > 0 ? df.format(tongTienCTV) : 0 %> </span>
+			  <liferay-ui:search-container-column-text name="Chi phát vay">
+			 	<span style="color:#ff3d00e8;font-weight: bold;"> <%=tongTienPV > 0 ? df.format(tongTienPV) : 0 %> </span>
 			 	<%
 			 		for(LichSuThuPhatChDTO item : lichSuThuPhatChDTOs){
 			 	%>
@@ -240,7 +235,7 @@ AUI().ready(['aui-base'], function(A) {
     	td3Node.append(A.Node.create('<span style="color:#ff3d00e8;font-weight: bold;"><%=tongLai > 0 ? df.format(tongLai) : "0" %></span>'));
     	
     	var td4Node = A.Node.create('<td class="table-cell text-right"/>');
-    	td4Node.append(A.Node.create('<span style="color:#ff3d00e8;font-weight: bold;"><%=tongAll > 0 ? df.format(tongAll) : "0" %></span>'));
+    	td4Node.append(A.Node.create('<span style="color:#ff3d00e8;font-weight: bold;"><%=tongPhatVay > 0 ? df.format(tongPhatVay) : "0" %></span>'));
     	
     	
     	trNode.append(td1Node);

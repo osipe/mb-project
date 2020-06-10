@@ -30,6 +30,7 @@
 				AND (taiKhoanDoiUngId IN (SELECT taiKhoanDoiUngId FROM dm_taikhoandoiung WHERE taiKhoanDoiUngChaId = ? OR taiKhoanDoiUngId = ?))
 				AND (ngayChungTu >= ?)
 				AND (ngayChungTu <= ?)
+				ORDER BY ngaychungtu,tenCTV ASC
 			]]>
 	</sql>
 	<sql id="com.mb.service.persistence.PhieuFinder.findBase">

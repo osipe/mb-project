@@ -71,6 +71,7 @@ public class DsPhieuTaiKhoanWrapper
 		attributes.put("maTheoDoi", getMaTheoDoi());
 		attributes.put("dienGiaiTheoDoi", getDienGiaiTheoDoi());
 		attributes.put("soTien", getSoTien());
+		attributes.put("tenCTV", getTenCTV());
 		attributes.put("hoatDong", getHoatDong());
 
 		return attributes;
@@ -154,6 +155,12 @@ public class DsPhieuTaiKhoanWrapper
 
 		if (soTien != null) {
 			setSoTien(soTien);
+		}
+
+		String tenCTV = (String)attributes.get("tenCTV");
+
+		if (tenCTV != null) {
+			setTenCTV(tenCTV);
 		}
 
 		Boolean hoatDong = (Boolean)attributes.get("hoatDong");
@@ -322,6 +329,16 @@ public class DsPhieuTaiKhoanWrapper
 	@Override
 	public long getTaiKhoanDoiUngId() {
 		return _dsPhieuTaiKhoan.getTaiKhoanDoiUngId();
+	}
+
+	/**
+	 * Returns the ten ctv of this ds phieu tai khoan.
+	 *
+	 * @return the ten ctv of this ds phieu tai khoan
+	 */
+	@Override
+	public String getTenCTV() {
+		return _dsPhieuTaiKhoan.getTenCTV();
 	}
 
 	/**
@@ -539,6 +556,16 @@ public class DsPhieuTaiKhoanWrapper
 	@Override
 	public void setTaiKhoanDoiUngId(long taiKhoanDoiUngId) {
 		_dsPhieuTaiKhoan.setTaiKhoanDoiUngId(taiKhoanDoiUngId);
+	}
+
+	/**
+	 * Sets the ten ctv of this ds phieu tai khoan.
+	 *
+	 * @param tenCTV the ten ctv of this ds phieu tai khoan
+	 */
+	@Override
+	public void setTenCTV(String tenCTV) {
+		_dsPhieuTaiKhoan.setTenCTV(tenCTV);
 	}
 
 	/**

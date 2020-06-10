@@ -79,7 +79,8 @@ public class DsPhieuTaiKhoanModelImpl
 		{"modifiedDate", Types.TIMESTAMP}, {"phieuId", Types.BIGINT},
 		{"ngayChungTu", Types.TIMESTAMP}, {"taiKhoanDoiUngId", Types.BIGINT},
 		{"maTheoDoi", Types.VARCHAR}, {"dienGiaiTheoDoi", Types.VARCHAR},
-		{"soTien", Types.DOUBLE}, {"hoatDong", Types.BOOLEAN}
+		{"soTien", Types.DOUBLE}, {"tenCTV", Types.VARCHAR},
+		{"hoatDong", Types.BOOLEAN}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -99,11 +100,12 @@ public class DsPhieuTaiKhoanModelImpl
 		TABLE_COLUMNS_MAP.put("maTheoDoi", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("dienGiaiTheoDoi", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("soTien", Types.DOUBLE);
+		TABLE_COLUMNS_MAP.put("tenCTV", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("hoatDong", Types.BOOLEAN);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ketoan_dsphieutaikhoan (dsPhieuTaiKhoanId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,phieuId LONG,ngayChungTu DATE null,taiKhoanDoiUngId LONG,maTheoDoi VARCHAR(75) null,dienGiaiTheoDoi VARCHAR(75) null,soTien DOUBLE,hoatDong BOOLEAN)";
+		"create table ketoan_dsphieutaikhoan (dsPhieuTaiKhoanId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,phieuId LONG,ngayChungTu DATE null,taiKhoanDoiUngId LONG,maTheoDoi VARCHAR(75) null,dienGiaiTheoDoi VARCHAR(75) null,soTien DOUBLE,tenCTV VARCHAR(75) null,hoatDong BOOLEAN)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table ketoan_dsphieutaikhoan";
@@ -169,6 +171,7 @@ public class DsPhieuTaiKhoanModelImpl
 		model.setMaTheoDoi(soapModel.getMaTheoDoi());
 		model.setDienGiaiTheoDoi(soapModel.getDienGiaiTheoDoi());
 		model.setSoTien(soapModel.getSoTien());
+		model.setTenCTV(soapModel.getTenCTV());
 		model.setHoatDong(soapModel.getHoatDong());
 
 		return model;
@@ -589,6 +592,28 @@ public class DsPhieuTaiKhoanModelImpl
 
 			});
 		attributeGetterFunctions.put(
+			"tenCTV",
+			new Function<DsPhieuTaiKhoan, Object>() {
+
+				@Override
+				public Object apply(DsPhieuTaiKhoan dsPhieuTaiKhoan) {
+					return dsPhieuTaiKhoan.getTenCTV();
+				}
+
+			});
+		attributeSetterBiConsumers.put(
+			"tenCTV",
+			new BiConsumer<DsPhieuTaiKhoan, Object>() {
+
+				@Override
+				public void accept(
+					DsPhieuTaiKhoan dsPhieuTaiKhoan, Object tenCTV) {
+
+					dsPhieuTaiKhoan.setTenCTV((String)tenCTV);
+				}
+
+			});
+		attributeGetterFunctions.put(
 			"hoatDong",
 			new Function<DsPhieuTaiKhoan, Object>() {
 
@@ -825,6 +850,22 @@ public class DsPhieuTaiKhoanModelImpl
 
 	@JSON
 	@Override
+	public String getTenCTV() {
+		if (_tenCTV == null) {
+			return "";
+		}
+		else {
+			return _tenCTV;
+		}
+	}
+
+	@Override
+	public void setTenCTV(String tenCTV) {
+		_tenCTV = tenCTV;
+	}
+
+	@JSON
+	@Override
 	public Boolean getHoatDong() {
 		return _hoatDong;
 	}
@@ -891,6 +932,7 @@ public class DsPhieuTaiKhoanModelImpl
 		dsPhieuTaiKhoanImpl.setMaTheoDoi(getMaTheoDoi());
 		dsPhieuTaiKhoanImpl.setDienGiaiTheoDoi(getDienGiaiTheoDoi());
 		dsPhieuTaiKhoanImpl.setSoTien(getSoTien());
+		dsPhieuTaiKhoanImpl.setTenCTV(getTenCTV());
 		dsPhieuTaiKhoanImpl.setHoatDong(getHoatDong());
 
 		dsPhieuTaiKhoanImpl.resetOriginalValues();
@@ -1052,6 +1094,14 @@ public class DsPhieuTaiKhoanModelImpl
 
 		dsPhieuTaiKhoanCacheModel.soTien = getSoTien();
 
+		dsPhieuTaiKhoanCacheModel.tenCTV = getTenCTV();
+
+		String tenCTV = dsPhieuTaiKhoanCacheModel.tenCTV;
+
+		if ((tenCTV != null) && (tenCTV.length() == 0)) {
+			dsPhieuTaiKhoanCacheModel.tenCTV = null;
+		}
+
 		dsPhieuTaiKhoanCacheModel.hoatDong = getHoatDong();
 
 		return dsPhieuTaiKhoanCacheModel;
@@ -1144,6 +1194,7 @@ public class DsPhieuTaiKhoanModelImpl
 	private String _maTheoDoi;
 	private String _dienGiaiTheoDoi;
 	private Double _soTien;
+	private String _tenCTV;
 	private Boolean _hoatDong;
 	private Boolean _originalHoatDong;
 	private boolean _setOriginalHoatDong;

@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.PropsUtil"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="com.liferay.portal.kernel.service.ServiceContext"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -48,6 +49,8 @@
 	cuoiKy.setNam(thangSearch == 12 ?  namSearch + 1 : namSearch);
 	cuoiKy.setThang(thangSearch == 12 ? 1 : thangSearch + 1);
 	Double soTien = lichSuTaiKhoanDauKy.getSoTienTon() != null ? lichSuTaiKhoanDauKy.getSoTienTon() : GetterUtil.getDouble("0");
+	Double soTienNo =  GetterUtil.getDouble("0");
+	Double soTienCo =  GetterUtil.getDouble("0");
 
 %>
 <h4 align="center"><b><u>TÊN TÀI KHOẢN :</u></b>   <%=taiKhoanDoiUng.getTen() %></h4>
@@ -71,6 +74,7 @@
 				<th rowspan="2">Ngày ghi sổ</th>
 			    <th  colspan="2">Chứng từ</th>
 			    <th rowspan="2">Diễn giải</th>
+			    <th rowspan="2">Tên CTV</th>
 			    <th rowspan="2">Tài khoản đối ứng</th>
 			    <th colspan="2">Số phát sinh</th>
 			 </tr>
@@ -87,6 +91,7 @@
 	 		<td/>
 	 		<td/>
 	 		<td><b><u>SỐ ĐẦU KỲ</u></b></td>
+	 		<td/>
 	 		<td/>
 	 		<td colspan="2" style="text-align: center;"><b><%=(lichSuTaiKhoanDauKy.getSoTienTon() != null && lichSuTaiKhoanDauKy.getSoTienTon() != 0)  ? df.format(lichSuTaiKhoanDauKy.getSoTienTon()) : ""%></b></td>
 	 	</tr>
@@ -105,19 +110,28 @@
 			String ngayGhiSo =  "";
 			for(DsPhieuTaiKhoan item : dsPhieuTaiKhoans){
 				String soPhieuDayDu = "";
-				String dienGiai = "";
 				String tenTaiKhoanDoiUng = "";
 				String soNo = "";
 				String soCo = "";
+				String tenCTV = "";
 				if(item.getPhieu() != null){
 					soPhieuDayDu = item.getPhieu().getSoPhieu() + "/" + sdfSo.format(item.getNgayChungTu()) + item.getPhieu().getMaMSThuChi();
-					if(item.getPhieu().getLoai() == 1){
-						soTien += item.getSoTien();
-					}else if(item.getPhieu().getLoai() == 2){
-						soTien -= item.getSoTien();
-					}
-					if(item.getPhieu().getMaSoThuChi() != null){
-						dienGiai = item.getPhieu().getMaSoThuChi().getDienGiai();
+					if(taiKhoanDoiUng.getSoHieu().equals(PropsUtil.get("config.taikhoanthuvon"))){
+						if(item.getPhieu().getLoai() == 1){
+							soTienNo += item.getSoTien();
+							soTien -= item.getSoTien();
+						}else if(item.getPhieu().getLoai() == 2){
+							soTienCo += item.getSoTien();
+							soTien += item.getSoTien();
+						}
+					}else{
+						if(item.getPhieu().getLoai() == 1){
+							soTienNo += item.getSoTien();
+							soTien += item.getSoTien();
+						}else if(item.getPhieu().getLoai() == 2){
+							soTienCo += item.getSoTien();
+							soTien -= item.getSoTien();
+						}
 					}
 					if(item.getPhieu().getLoai() == 1 && item.getSoTien() > 0){
 						soNo = df.format(item.getSoTien());
@@ -125,7 +139,6 @@
 					if(item.getPhieu().getLoai() == 2 && item.getSoTien() > 0){
 						soCo = df.format(item.getSoTien());
 					}
-
 				}
 				if(item.getTaiKhoanDoiUng() != null){
 					tenTaiKhoanDoiUng = item.getTaiKhoanDoiUng().getTen() + "( " + item.getTaiKhoanDoiUng().getSoHieu() + " )";
@@ -148,7 +161,8 @@
 				<td><%=inNgay ? ngayGhiSo : ""%></td>
 		 		<td><%=soPhieuDayDu%></td>
 		 		<td><%=inNgayChungTu ? ngayChungTu : ""%></td>
-		 		<td><%=dienGiai%></td>
+		 		<td><%=item.getDienGiaiTheoDoi()%></td>
+		 		<td><%=item.getTenCTV()%></td>
 		 		<td><%=tenTaiKhoanDoiUng%></td>
 		 		<td><%=soNo%></td>
 		 		<td><%=soCo%></td>
@@ -161,8 +175,19 @@
 		 		<td/>
 		 		<td/>
 		 		<td/>
+		 		<td><b><u>SỐ TRONG THÁNG</u></b></td>
+		 		<td/>
+	 			<td/>
+		 		<td style="text-align: center;"><b><%=df.format(soTienNo)%></b></td>
+		 		<td style="text-align: center;"><b><%=df.format(soTienCo)%></b></td>
+		 	</tr>
+			<tr>
+		 		<td/>
+		 		<td/>
+		 		<td/>
 		 		<td><b><u>SỐ CUỐI THÁNG</u></b></td>
 		 		<td/>
+	 			<td/>
 		 		<td colspan="2" style="text-align: center;"><b><%=df.format(cuoiKy.getSoTienTon())%></b></td>
 		 	</tr>
 		</c:when>

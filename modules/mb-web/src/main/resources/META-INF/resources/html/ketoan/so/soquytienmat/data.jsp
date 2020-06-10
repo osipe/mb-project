@@ -47,6 +47,8 @@
 			cuoiKySoQuyTienMat = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
 		}
 		Double soTien = dauKy.getSoTienTon() != null ? dauKy.getSoTienTon() : GetterUtil.getDouble("0");
+		Double soTienThuThang =  GetterUtil.getDouble("0");
+		Double soTienChiThang =  GetterUtil.getDouble("0");
 %>
 <h4 align="center"><b><u>TÊN TÀI KHOẢN :</u></b>   <%=taiKhoanTienMat.getTen() %></h4>
 <h4 align="center"><b><u>SỐ HIỆU :</u></b>  <%=taiKhoanTienMat.getSoHieu() %></h4>
@@ -109,12 +111,14 @@
 							soPhieuDayDu1 = item.getPhieu().getSoPhieu() + "/" + sdfSo.format(item.getNgayChungTu()) + item.getPhieu().getMaMSThuChi();
 							soTienTon = "+" + df.format(item.getSoTien());
 							soTienThu = df.format(item.getSoTien());
-							soTien += item.getPhieu().getSoTien();
+							soTien += item.getSoTien();
+							soTienThuThang += item.getSoTien();
 						}else if(item.getPhieu().getLoai() == 2){
 							soPhieuDayDu2 = item.getPhieu().getSoPhieu() + "/" + sdfSo.format(item.getNgayChungTu()) + item.getPhieu().getMaMSThuChi();
 							soTienTon = "-" + df.format(item.getSoTien());
-							soTien -= item.getPhieu().getSoTien();
+							soTien -= item.getSoTien();
 							soTienChi = df.format(item.getSoTien());
+							soTienChiThang += item.getSoTien();
 						}
 					}
 					if(item.getPhieu().getCtv() != null){
@@ -141,6 +145,15 @@
 		<%
 			}
 		%>
+			<tr>
+		 		<td/>
+		 		<td/>
+		 		<td/>
+		 		<td><b><u>SỐ TRONG THÁNG</u></b></td>
+		 		<td style="text-align: center;"><b><%=soTienThuThang != null  ? df.format(soTienThuThang) : ""%></b></td>
+		 		<td style="text-align: center;"><b><%=soTienChiThang != null  ? df.format(soTienChiThang) : ""%></b></td>
+		 		<td style="text-align: center;"><b><%=(soTienThuThang != null && soTienChiThang != null)  ? df.format(soTienThuThang - soTienChiThang) : ""%></b></td>
+	 		</tr>
 			<tr>
 		 		<td/>
 		 		<td/>

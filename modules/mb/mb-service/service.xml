@@ -67,6 +67,7 @@
 		<column name="maTheoDoi" type="String" />
 		<column name="dienGiaiTheoDoi" type="String" />
 		<column name="soTien" type="Double" />
+		<column name="tenCTV" type="String" />
 		<column name="hoatDong" type="Boolean" />
 		<order by="asc">
 			<order-column name="dsPhieuTaiKhoanId" />

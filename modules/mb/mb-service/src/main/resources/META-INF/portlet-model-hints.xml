@@ -32,6 +32,7 @@
 		<field name="maTheoDoi" type="String" />
 		<field name="dienGiaiTheoDoi" type="String" />
 		<field name="soTien" type="Double" />
+		<field name="tenCTV" type="String" />
 		<field name="hoatDong" type="Boolean" />
 	</model>
 	<model name="com.mb.model.KhachHang">

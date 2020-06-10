@@ -139,6 +139,7 @@ create table ketoan_dsphieutaikhoan (
 	maTheoDoi VARCHAR(75) null,
 	dienGiaiTheoDoi VARCHAR(75) null,
 	soTien DOUBLE,
+	tenCTV VARCHAR(75) null,
 	hoatDong BOOLEAN
 );
 

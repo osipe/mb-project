@@ -58,6 +58,7 @@ public class DsPhieuTaiKhoanLocalServiceImpl extends DsPhieuTaiKhoanLocalService
 				DsPhieuTaiKhoan dsPhieuTaiKhoan = DsPhieuTaiKhoanLocalServiceUtil.createDsPhieuTaiKhoan(0L);
 				dsPhieuTaiKhoan.setPhieuId(phieu.getPhieuId());
 				dsPhieuTaiKhoan.setNgayChungTu(phieu.getNgayChungTu());
+				dsPhieuTaiKhoan.setTenCTV(phieu.getHoTenCTV());
 				dsPhieuTaiKhoan.setTaiKhoanDoiUngId(item.getLong("taiKhoanDoiUngId"));
 				dsPhieuTaiKhoan.setMaTheoDoi(item.getString("maTheoDoi"));
 				dsPhieuTaiKhoan.setDienGiaiTheoDoi(item.getString("dienGiaiTheoDoi"));

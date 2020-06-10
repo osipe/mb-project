@@ -44,6 +44,7 @@ import com.liferay.portal.kernel.scheduler.TriggerFactory;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.CalendarUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.mb.model.DsPhieuTaiKhoan;
 import com.mb.model.LichSuTaiKhoanDauKy;
 import com.mb.model.TaiKhoanDoiUng;
@@ -51,9 +52,9 @@ import com.mb.service.DsPhieuTaiKhoanLocalServiceUtil;
 import com.mb.service.LichSuTaiKhoanDauKyLocalServiceUtil;
 import com.mb.service.TaiKhoanDoiUngLocalServiceUtil;
 
-@Component(immediate = true, property = { "cron.expression=0 1 * * * ?" }, service = SampleScheduler.class)
-public class SampleScheduler extends BaseMessageListener {
-	private static final Log _log = LogFactoryUtil.getLog(SampleScheduler.class);
+@Component(immediate = true, property = { "cron.expression=0 1 * * * ?" }, service = SoScheduler.class)
+public class SoScheduler extends BaseMessageListener {
+	private static final Log _log = LogFactoryUtil.getLog(SoScheduler.class);
 
 	@Reference(target = ModuleServiceLifecycle.PORTAL_INITIALIZED, unbind = "-")
 	private volatile ModuleServiceLifecycle _moduleServiceLifecycle;
@@ -97,43 +98,83 @@ public class SampleScheduler extends BaseMessageListener {
 		List<TaiKhoanDoiUng> taiKhoanDoiUngs = TaiKhoanDoiUngLocalServiceUtil.findBase(0, "", "", 1, -1, -1, null);
 		if (CollectionUtils.isNotEmpty(taiKhoanDoiUngs)) {
 			for (TaiKhoanDoiUng item : taiKhoanDoiUngs) {
-				try {
-					LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil
-							.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namNow, monthNow);
-					LichSuTaiKhoanDauKy cuoiKy = LichSuTaiKhoanDauKyLocalServiceUtil
-							.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namNow, monthNow + 1);
-					if (dauKy == null) {
-						dauKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
-					}
-					if (cuoiKy == null) {
-						cuoiKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
-						cuoiKy.setTaiKhoanDoiUngId(item.getTaiKhoanDoiUngId());
-						cuoiKy.setThang(monthNow + 1);
-						cuoiKy.setNam(namNow);
-					}
-					Double soTienTon = dauKy.getSoTienTon() != null ? dauKy.getSoTienTon() : GetterUtil.getDouble("0");
-					ServiceContext serviceContext = new ServiceContext();
-					serviceContext.setUserId(item.getUserId());
-					serviceContext.setCompanyId(item.getCompanyId());
-					serviceContext.setScopeGroupId(item.getGroupId());
-					List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil
-							.getDSThuChiByTaiKhoanNgayChungTu(item.getTaiKhoanDoiUngId(), ngayChungTuTu, ngayChungTuDen,
-									1, -1, -1, null);
-					for (DsPhieuTaiKhoan dsPhieuTaiKhoan : dsPhieuTaiKhoans) {
-						if (dsPhieuTaiKhoan.getPhieu() != null) {
-							if (dsPhieuTaiKhoan.getPhieu().getLoai() == 1) {
-								soTienTon += dsPhieuTaiKhoan.getSoTien();
-							} else if (dsPhieuTaiKhoan.getPhieu().getLoai() == 2) {
-								soTienTon -= dsPhieuTaiKhoan.getSoTien();
+				if(item.getSoHieu().equals(PropsUtil.get("config.taikhoanthuvon"))) {
+					try {
+						LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil
+								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namNow, monthNow);
+						LichSuTaiKhoanDauKy cuoiKy = LichSuTaiKhoanDauKyLocalServiceUtil
+								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namNow, monthNow + 1);
+						if (dauKy == null) {
+							dauKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
+						}
+						if (cuoiKy == null) {
+							cuoiKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
+							cuoiKy.setTaiKhoanDoiUngId(item.getTaiKhoanDoiUngId());
+							cuoiKy.setThang(monthNow + 1);
+							cuoiKy.setNam(namNow);
+						}
+						Double soTienTon = dauKy.getSoTienTon() != null ? dauKy.getSoTienTon() : GetterUtil.getDouble("0");
+						ServiceContext serviceContext = new ServiceContext();
+						serviceContext.setUserId(item.getUserId());
+						serviceContext.setCompanyId(item.getCompanyId());
+						serviceContext.setScopeGroupId(item.getGroupId());
+						List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil
+								.getDSThuChiByTaiKhoanNgayChungTu(item.getTaiKhoanDoiUngId(), ngayChungTuTu, ngayChungTuDen,
+										1, -1, -1, null);
+						for (DsPhieuTaiKhoan dsPhieuTaiKhoan : dsPhieuTaiKhoans) {
+							if (dsPhieuTaiKhoan.getPhieu() != null) {
+								if (dsPhieuTaiKhoan.getPhieu().getLoai() == 1) {
+									soTienTon -= dsPhieuTaiKhoan.getSoTien();
+								} else if (dsPhieuTaiKhoan.getPhieu().getLoai() == 2) {
+									soTienTon += dsPhieuTaiKhoan.getSoTien();
+								}
 							}
 						}
+						cuoiKy.setHoatDong(true);
+						cuoiKy.setSoTienTon(soTienTon != null ? soTienTon : GetterUtil.getDouble("0"));
+						LichSuTaiKhoanDauKyLocalServiceUtil.addOrUpdateLichSuTaiKhoanDauKy(cuoiKy, serviceContext);
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-					cuoiKy.setHoatDong(true);
-					cuoiKy.setSoTienTon(soTienTon != null ? soTienTon : GetterUtil.getDouble("0"));
-					LichSuTaiKhoanDauKyLocalServiceUtil.addOrUpdateLichSuTaiKhoanDauKy(cuoiKy, serviceContext);
+				}else {
+					try {
+						LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil
+								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namNow, monthNow);
+						LichSuTaiKhoanDauKy cuoiKy = LichSuTaiKhoanDauKyLocalServiceUtil
+								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namNow, monthNow + 1);
+						if (dauKy == null) {
+							dauKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
+						}
+						if (cuoiKy == null) {
+							cuoiKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
+							cuoiKy.setTaiKhoanDoiUngId(item.getTaiKhoanDoiUngId());
+							cuoiKy.setThang(monthNow + 1);
+							cuoiKy.setNam(namNow);
+						}
+						Double soTienTon = dauKy.getSoTienTon() != null ? dauKy.getSoTienTon() : GetterUtil.getDouble("0");
+						ServiceContext serviceContext = new ServiceContext();
+						serviceContext.setUserId(item.getUserId());
+						serviceContext.setCompanyId(item.getCompanyId());
+						serviceContext.setScopeGroupId(item.getGroupId());
+						List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil
+								.getDSThuChiByTaiKhoanNgayChungTu(item.getTaiKhoanDoiUngId(), ngayChungTuTu, ngayChungTuDen,
+										1, -1, -1, null);
+						for (DsPhieuTaiKhoan dsPhieuTaiKhoan : dsPhieuTaiKhoans) {
+							if (dsPhieuTaiKhoan.getPhieu() != null) {
+								if (dsPhieuTaiKhoan.getPhieu().getLoai() == 1) {
+									soTienTon += dsPhieuTaiKhoan.getSoTien();
+								} else if (dsPhieuTaiKhoan.getPhieu().getLoai() == 2) {
+									soTienTon -= dsPhieuTaiKhoan.getSoTien();
+								}
+							}
+						}
+						cuoiKy.setHoatDong(true);
+						cuoiKy.setSoTienTon(soTienTon != null ? soTienTon : GetterUtil.getDouble("0"));
+						LichSuTaiKhoanDauKyLocalServiceUtil.addOrUpdateLichSuTaiKhoanDauKy(cuoiKy, serviceContext);
 
-				} catch (Exception e) {
-					e.printStackTrace();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 
 			}
