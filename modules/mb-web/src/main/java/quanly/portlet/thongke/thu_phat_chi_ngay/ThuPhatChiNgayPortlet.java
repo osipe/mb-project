@@ -158,23 +158,23 @@ public class ThuPhatChiNgayPortlet extends MVCPortlet {
 				 			}
 						}
 				 		if(tongTienPV > 0){
-				 			LichSuThuPhatChDTO phatVay = new LichSuThuPhatChDTO("","phat-vay", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienPV > 0 ? df.format(tongTienPV) : "0",tienVonPV > 0 ? df.format(tienVonPV) : "0",tienLaiPV > 0 ? df.format(tienLaiPV) : "0");
+				 			LichSuThuPhatChDTO phatVay = new LichSuThuPhatChDTO("","phat-vay", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienPV > 0 ? df.format(tongTienPV) : "0",tienVonPV > 0 ? df.format(tienVonPV) : "0",tienLaiPV > 0 ? df.format(tienLaiPV) : "0","0");
 					 		lichSuThuPhatChDTOs.add(phatVay);
 				 		}
 				 		if(tongTienTT > 0){
-					 		LichSuThuPhatChDTO tatToan = new LichSuThuPhatChDTO("","tat-toan", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienTT > 0 ? df.format(tongTienTT) : "0",tienVonTT > 0 ? df.format(tienVonTT) : "0",tienLaiTT > 0 ? df.format(tienLaiTT) : "0");
+					 		LichSuThuPhatChDTO tatToan = new LichSuThuPhatChDTO("","tat-toan", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienTT > 0 ? df.format(tongTienTT) : "0",tienVonTT > 0 ? df.format(tienVonTT) : "0",tienLaiTT > 0 ? df.format(tienLaiTT) : "0",df.format(tienLaiTT + tienVonTT));
 					 		lichSuThuPhatChDTOs.add(tatToan);
 				 		}
 				 		if(tongTienTHN > 0){
-					 		LichSuThuPhatChDTO thuHangNgay = new LichSuThuPhatChDTO("","thu-hang-ngay", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienTHN > 0 ? df.format(tongTienTHN) : "0",tienVonTHN > 0 ? df.format(tienVonTHN) : "0",tienLaiTHN > 0 ? df.format(tienLaiTHN) : "0");
+					 		LichSuThuPhatChDTO thuHangNgay = new LichSuThuPhatChDTO("","thu-hang-ngay", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienTHN > 0 ? df.format(tongTienTHN) : "0",tienVonTHN > 0 ? df.format(tienVonTHN) : "0",tienLaiTHN > 0 ? df.format(tienLaiTHN) : "0",df.format(tienLaiTHN + tienVonTHN));
 					 		lichSuThuPhatChDTOs.add(thuHangNgay);
 				 		}
 				 		if(tongTienThuTruoc > 0){
-					 		LichSuThuPhatChDTO thuTruoc = new LichSuThuPhatChDTO("","thu-tien-tet", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienThuTruoc > 0 ? df.format(tongTienThuTruoc) : "0",tienVonThuTruoc > 0 ? df.format(tienVonThuTruoc) : "0",tienLaiThuTruoc > 0 ? df.format(tienLaiThuTruoc) : "0");
+					 		LichSuThuPhatChDTO thuTruoc = new LichSuThuPhatChDTO("","thu-tien-tet", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienThuTruoc > 0 ? df.format(tongTienThuTruoc) : "0",tienVonThuTruoc > 0 ? df.format(tienVonThuTruoc) : "0",tienLaiThuTruoc > 0 ? df.format(tienLaiThuTruoc) : "0",df.format(tienVonThuTruoc + tienLaiThuTruoc));
 					 		lichSuThuPhatChDTOs.add(thuTruoc);
 				 		}
 					}
-					LichSuThuPhatChDTO lsCTV = new LichSuThuPhatChDTO(String.valueOf(index), item.getHoTen(), "", tongTien > 0 ? df.format(tongTien) : "", tongTienVon > 0 ? df.format(tongTienVon) : "",tongTienLai > 0 ? df.format(tongTienLai) : "");
+					LichSuThuPhatChDTO lsCTV = new LichSuThuPhatChDTO(String.valueOf(index), item.getHoTen(), "", tongTien > 0 ? df.format(tongTien) : "", tongTienVon > 0 ? df.format(tongTienVon) : "",tongTienLai > 0 ? df.format(tongTienLai) : "",df.format(tongTienVon + tongTienLai));
 					collections.add(lsCTV);
 					collections.addAll(lichSuThuPhatChDTOs);
 					tongTienAll += tongTien;

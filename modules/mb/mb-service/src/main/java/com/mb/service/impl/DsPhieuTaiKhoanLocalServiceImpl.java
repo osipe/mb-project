@@ -59,6 +59,7 @@ public class DsPhieuTaiKhoanLocalServiceImpl extends DsPhieuTaiKhoanLocalService
 				dsPhieuTaiKhoan.setPhieuId(phieu.getPhieuId());
 				dsPhieuTaiKhoan.setNgayChungTu(phieu.getNgayChungTu());
 				dsPhieuTaiKhoan.setTenCTV(phieu.getHoTenCTV());
+				dsPhieuTaiKhoan.setMaCTV(phieu.getMaCTV());
 				dsPhieuTaiKhoan.setTaiKhoanDoiUngId(item.getLong("taiKhoanDoiUngId"));
 				dsPhieuTaiKhoan.setMaTheoDoi(item.getString("maTheoDoi"));
 				dsPhieuTaiKhoan.setDienGiaiTheoDoi(item.getString("dienGiaiTheoDoi"));
@@ -112,8 +113,11 @@ public class DsPhieuTaiKhoanLocalServiceImpl extends DsPhieuTaiKhoanLocalService
 		dsPhieuTaiKhoanPersistence.removeByPhieuId(phieuId);
 	}
 
-	public List<DsPhieuTaiKhoan> getDSThuChiByTaiKhoanNgayChungTu(long taiKhoanDoiUngId,Date ngayChungTuTu,Date ngayChungTuDen,int hoatDong,int start,int end,OrderByComparator obc) throws SystemException {
-		return dsPhieuTaiKhoanFinder.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanDoiUngId, ngayChungTuTu, ngayChungTuDen, hoatDong, start, end, obc);
+	public List<DsPhieuTaiKhoan> getDSThuChiByTaiKhoanNgayChungTu(long taiKhoanDoiUngId, String maCTV,
+			Date ngayChungTuTu, Date ngayChungTuDen, int hoatDong, int start, int end, OrderByComparator obc)
+			throws SystemException {
+		return dsPhieuTaiKhoanFinder.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanDoiUngId, maCTV, ngayChungTuTu,
+				ngayChungTuDen, hoatDong, start, end, obc);
 	}
 
 }

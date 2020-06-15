@@ -292,6 +292,21 @@ public interface DsPhieuTaiKhoanModel
 	public void setTenCTV(String tenCTV);
 
 	/**
+	 * Returns the ma ctv of this ds phieu tai khoan.
+	 *
+	 * @return the ma ctv of this ds phieu tai khoan
+	 */
+	@AutoEscape
+	public String getMaCTV();
+
+	/**
+	 * Sets the ma ctv of this ds phieu tai khoan.
+	 *
+	 * @param maCTV the ma ctv of this ds phieu tai khoan
+	 */
+	public void setMaCTV(String maCTV);
+
+	/**
 	 * Returns the hoat dong of this ds phieu tai khoan.
 	 *
 	 * @return the hoat dong of this ds phieu tai khoan

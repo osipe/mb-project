@@ -114,7 +114,7 @@ public class PhieuPortlet extends MVCPortlet {
 		JSONObject kq = JSONFactoryUtil.createJSONObject();
 		List<TaiKhoanDoiUng> taiKhoanDoiUngs = new ArrayList<TaiKhoanDoiUng>();
 		try {
-			taiKhoanDoiUngs = TaiKhoanDoiUngLocalServiceUtil.findBase(0, "", "", 1, -1, -1, null);
+			taiKhoanDoiUngs = TaiKhoanDoiUngLocalServiceUtil.findByLoaiTaiKhoan_HoatDong(1, true);
 			if (CollectionUtils.isNotEmpty(taiKhoanDoiUngs)) {
 				JSONArray array = JSONFactoryUtil.createJSONArray(JSONFactoryUtil.looseSerialize(taiKhoanDoiUngs));
 				kq.put("taiKhoanDoiUngs", array);

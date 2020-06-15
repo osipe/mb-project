@@ -34,7 +34,7 @@
 	}
 	List<MaSoThuChi> maSoThuChis = MaSoThuChiLocalServiceUtil.findByLoai_HoatDong(loai, true);
 	List<CongTacVien> congTacViens = CongTacVienLocalServiceUtil.findBase("", "", "", "", 1, -1, -1, null);
-	List<TaiKhoanDoiUng> taiKhoanDoiUngs = TaiKhoanDoiUngLocalServiceUtil.findBase(0, "", "", 1, -1, -1, null);
+	List<TaiKhoanDoiUng> taiKhoanDoiUngs = TaiKhoanDoiUngLocalServiceUtil.findByLoaiTaiKhoan_HoatDong(1, true);
 	Locale localeEn = new Locale("en", "EN");
     NumberFormat df = NumberFormat.getInstance(localeEn);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");

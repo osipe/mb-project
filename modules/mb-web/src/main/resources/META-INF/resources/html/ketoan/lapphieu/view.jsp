@@ -49,7 +49,7 @@
 		<table class="info table-pa5 aui-w100">
 			<tr>
 				<td colspan="2">
-					<aui:select name="maCTVSearch" label="Cộng tác viên" onchange="search();">
+					<aui:select cssClass="input-select2" name="maCTVSearch" label="Cộng tác viên" onchange="search();">
 						<aui:option value=" " label="Chọn" />
 						 <c:forEach items="<%= congTacViens%>" var="item">
 						 	<aui:option value="${item.ma}" label="${item.hoTen}"/>

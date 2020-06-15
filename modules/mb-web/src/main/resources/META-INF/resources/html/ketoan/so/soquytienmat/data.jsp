@@ -37,7 +37,7 @@
 		Date ngayChungTuDen = calDen.getTime();
 		DecimalFormat df = new DecimalFormat("###,###.###");
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		List<DsPhieuTaiKhoan> dsPhieus = DsPhieuTaiKhoanLocalServiceUtil.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanTienMat.getTaiKhoanDoiUngId(), ngayChungTuTu, ngayChungTuDen, 1, -1, -1, null);
+		List<DsPhieuTaiKhoan> dsPhieus = DsPhieuTaiKhoanLocalServiceUtil.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanTienMat.getTaiKhoanDoiUngId(),"", ngayChungTuTu, ngayChungTuDen, 1, -1, -1, null);
 		LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanTienMat.getTaiKhoanDoiUngId(), namSearch, thangSearch);
 		if(dauKy == null){
 			dauKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);

@@ -90,15 +90,20 @@ public class SoScheduler extends BaseMessageListener {
 		Calendar calTu = Calendar.getInstance();
 		calTu.set(Calendar.DATE, 1);
 		Date ngayChungTuTu = calTu.getTime();
-		
+
 		Calendar calDen = Calendar.getInstance();
 		calDen.set(Calendar.DATE, CalendarUtil.getDaysInMonth(calDen));
 		Date ngayChungTuDen = calDen.getTime();
 
-		List<TaiKhoanDoiUng> taiKhoanDoiUngs = TaiKhoanDoiUngLocalServiceUtil.findBase(0, "", "", 1, -1, -1, null);
-		if (CollectionUtils.isNotEmpty(taiKhoanDoiUngs)) {
-			for (TaiKhoanDoiUng item : taiKhoanDoiUngs) {
-				if(item.getSoHieu().equals(PropsUtil.get("config.taikhoanthuvon"))) {
+		List<TaiKhoanDoiUng> taiKhoanDoiUngCTVs = TaiKhoanDoiUngLocalServiceUtil.findByLoaiTaiKhoan_HoatDong(2, true);
+		if (CollectionUtils.isNotEmpty(taiKhoanDoiUngCTVs)) {
+			TaiKhoanDoiUng taiKhoanThuVon = TaiKhoanDoiUngLocalServiceUtil
+					.fetchBySoHieu(PropsUtil.get("config.taikhoanthuvon"));
+			if (taiKhoanThuVon != null) {
+				for (TaiKhoanDoiUng item : taiKhoanDoiUngCTVs) {
+					List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil
+							.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanThuVon.getTaiKhoanDoiUngId(), item.getSoHieu(),
+									ngayChungTuTu, ngayChungTuDen, 1, -1, -1, null);
 					try {
 						LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil
 								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namNow, monthNow);
@@ -113,14 +118,12 @@ public class SoScheduler extends BaseMessageListener {
 							cuoiKy.setThang(monthNow + 1);
 							cuoiKy.setNam(namNow);
 						}
-						Double soTienTon = dauKy.getSoTienTon() != null ? dauKy.getSoTienTon() : GetterUtil.getDouble("0");
+						Double soTienTon = dauKy.getSoTienTon() != null ? dauKy.getSoTienTon()
+								: GetterUtil.getDouble("0");
 						ServiceContext serviceContext = new ServiceContext();
 						serviceContext.setUserId(item.getUserId());
 						serviceContext.setCompanyId(item.getCompanyId());
 						serviceContext.setScopeGroupId(item.getGroupId());
-						List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil
-								.getDSThuChiByTaiKhoanNgayChungTu(item.getTaiKhoanDoiUngId(), ngayChungTuTu, ngayChungTuDen,
-										1, -1, -1, null);
 						for (DsPhieuTaiKhoan dsPhieuTaiKhoan : dsPhieuTaiKhoans) {
 							if (dsPhieuTaiKhoan.getPhieu() != null) {
 								if (dsPhieuTaiKhoan.getPhieu().getLoai() == 1) {
@@ -136,7 +139,15 @@ public class SoScheduler extends BaseMessageListener {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-				}else {
+
+				}
+
+			}
+		}
+		List<TaiKhoanDoiUng> taiKhoanDoiUngCtys = TaiKhoanDoiUngLocalServiceUtil.findByLoaiTaiKhoan_HoatDong(1, true);
+		if (CollectionUtils.isNotEmpty(taiKhoanDoiUngCtys)) {
+			for (TaiKhoanDoiUng item : taiKhoanDoiUngCtys) {
+				if (item.getSoHieu().equals(PropsUtil.get("config.taikhoanthuvon"))) {
 					try {
 						LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil
 								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namNow, monthNow);
@@ -151,14 +162,54 @@ public class SoScheduler extends BaseMessageListener {
 							cuoiKy.setThang(monthNow + 1);
 							cuoiKy.setNam(namNow);
 						}
-						Double soTienTon = dauKy.getSoTienTon() != null ? dauKy.getSoTienTon() : GetterUtil.getDouble("0");
+						Double soTienTon = dauKy.getSoTienTon() != null ? dauKy.getSoTienTon()
+								: GetterUtil.getDouble("0");
 						ServiceContext serviceContext = new ServiceContext();
 						serviceContext.setUserId(item.getUserId());
 						serviceContext.setCompanyId(item.getCompanyId());
 						serviceContext.setScopeGroupId(item.getGroupId());
 						List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil
-								.getDSThuChiByTaiKhoanNgayChungTu(item.getTaiKhoanDoiUngId(), ngayChungTuTu, ngayChungTuDen,
-										1, -1, -1, null);
+								.getDSThuChiByTaiKhoanNgayChungTu(item.getTaiKhoanDoiUngId(), "", ngayChungTuTu,
+										ngayChungTuDen, 1, -1, -1, null);
+						for (DsPhieuTaiKhoan dsPhieuTaiKhoan : dsPhieuTaiKhoans) {
+							if (dsPhieuTaiKhoan.getPhieu() != null) {
+								if (dsPhieuTaiKhoan.getPhieu().getLoai() == 1) {
+									soTienTon -= dsPhieuTaiKhoan.getSoTien();
+								} else if (dsPhieuTaiKhoan.getPhieu().getLoai() == 2) {
+									soTienTon += dsPhieuTaiKhoan.getSoTien();
+								}
+							}
+						}
+						cuoiKy.setHoatDong(true);
+						cuoiKy.setSoTienTon(soTienTon != null ? soTienTon : GetterUtil.getDouble("0"));
+						LichSuTaiKhoanDauKyLocalServiceUtil.addOrUpdateLichSuTaiKhoanDauKy(cuoiKy, serviceContext);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil
+								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namNow, monthNow);
+						LichSuTaiKhoanDauKy cuoiKy = LichSuTaiKhoanDauKyLocalServiceUtil
+								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namNow, monthNow + 1);
+						if (dauKy == null) {
+							dauKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
+						}
+						if (cuoiKy == null) {
+							cuoiKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
+							cuoiKy.setTaiKhoanDoiUngId(item.getTaiKhoanDoiUngId());
+							cuoiKy.setThang(monthNow + 1);
+							cuoiKy.setNam(namNow);
+						}
+						Double soTienTon = dauKy.getSoTienTon() != null ? dauKy.getSoTienTon()
+								: GetterUtil.getDouble("0");
+						ServiceContext serviceContext = new ServiceContext();
+						serviceContext.setUserId(item.getUserId());
+						serviceContext.setCompanyId(item.getCompanyId());
+						serviceContext.setScopeGroupId(item.getGroupId());
+						List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil
+								.getDSThuChiByTaiKhoanNgayChungTu(item.getTaiKhoanDoiUngId(), "", ngayChungTuTu,
+										ngayChungTuDen, 1, -1, -1, null);
 						for (DsPhieuTaiKhoan dsPhieuTaiKhoan : dsPhieuTaiKhoans) {
 							if (dsPhieuTaiKhoan.getPhieu() != null) {
 								if (dsPhieuTaiKhoan.getPhieu().getLoai() == 1) {

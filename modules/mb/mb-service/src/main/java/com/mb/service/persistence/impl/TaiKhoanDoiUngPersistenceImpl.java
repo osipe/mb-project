@@ -835,6 +835,569 @@ public class TaiKhoanDoiUngPersistenceImpl
 	private static final String _FINDER_COLUMN_HOATDONG_HOATDONG_2 =
 		"taiKhoanDoiUng.hoatDong = ?";
 
+	private FinderPath _finderPathWithPaginationFindByLoaiTaiKhoan_HoatDong;
+	private FinderPath _finderPathWithoutPaginationFindByLoaiTaiKhoan_HoatDong;
+	private FinderPath _finderPathCountByLoaiTaiKhoan_HoatDong;
+
+	/**
+	 * Returns all the tai khoan doi ungs where loaiTaiKhoan = &#63; and hoatDong = &#63;.
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 * @return the matching tai khoan doi ungs
+	 */
+	@Override
+	public List<TaiKhoanDoiUng> findByLoaiTaiKhoan_HoatDong(
+		int loaiTaiKhoan, Boolean hoatDong) {
+
+		return findByLoaiTaiKhoan_HoatDong(
+			loaiTaiKhoan, hoatDong, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the tai khoan doi ungs where loaiTaiKhoan = &#63; and hoatDong = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>TaiKhoanDoiUngModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 * @param start the lower bound of the range of tai khoan doi ungs
+	 * @param end the upper bound of the range of tai khoan doi ungs (not inclusive)
+	 * @return the range of matching tai khoan doi ungs
+	 */
+	@Override
+	public List<TaiKhoanDoiUng> findByLoaiTaiKhoan_HoatDong(
+		int loaiTaiKhoan, Boolean hoatDong, int start, int end) {
+
+		return findByLoaiTaiKhoan_HoatDong(
+			loaiTaiKhoan, hoatDong, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the tai khoan doi ungs where loaiTaiKhoan = &#63; and hoatDong = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>TaiKhoanDoiUngModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 * @param start the lower bound of the range of tai khoan doi ungs
+	 * @param end the upper bound of the range of tai khoan doi ungs (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching tai khoan doi ungs
+	 */
+	@Override
+	public List<TaiKhoanDoiUng> findByLoaiTaiKhoan_HoatDong(
+		int loaiTaiKhoan, Boolean hoatDong, int start, int end,
+		OrderByComparator<TaiKhoanDoiUng> orderByComparator) {
+
+		return findByLoaiTaiKhoan_HoatDong(
+			loaiTaiKhoan, hoatDong, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the tai khoan doi ungs where loaiTaiKhoan = &#63; and hoatDong = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>TaiKhoanDoiUngModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 * @param start the lower bound of the range of tai khoan doi ungs
+	 * @param end the upper bound of the range of tai khoan doi ungs (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @return the ordered range of matching tai khoan doi ungs
+	 */
+	@Override
+	public List<TaiKhoanDoiUng> findByLoaiTaiKhoan_HoatDong(
+		int loaiTaiKhoan, Boolean hoatDong, int start, int end,
+		OrderByComparator<TaiKhoanDoiUng> orderByComparator,
+		boolean retrieveFromCache) {
+
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			pagination = false;
+			finderPath =
+				_finderPathWithoutPaginationFindByLoaiTaiKhoan_HoatDong;
+			finderArgs = new Object[] {loaiTaiKhoan, hoatDong};
+		}
+		else {
+			finderPath = _finderPathWithPaginationFindByLoaiTaiKhoan_HoatDong;
+			finderArgs = new Object[] {
+				loaiTaiKhoan, hoatDong, start, end, orderByComparator
+			};
+		}
+
+		List<TaiKhoanDoiUng> list = null;
+
+		if (retrieveFromCache) {
+			list = (List<TaiKhoanDoiUng>)finderCache.getResult(
+				finderPath, finderArgs, this);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (TaiKhoanDoiUng taiKhoanDoiUng : list) {
+					if ((loaiTaiKhoan != taiKhoanDoiUng.getLoaiTaiKhoan()) ||
+						!Objects.equals(
+							hoatDong, taiKhoanDoiUng.getHoatDong())) {
+
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(
+					4 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_TAIKHOANDOIUNG_WHERE);
+
+			query.append(_FINDER_COLUMN_LOAITAIKHOAN_HOATDONG_LOAITAIKHOAN_2);
+
+			query.append(_FINDER_COLUMN_LOAITAIKHOAN_HOATDONG_HOATDONG_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					query, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else if (pagination) {
+				query.append(TaiKhoanDoiUngModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(loaiTaiKhoan);
+
+				qPos.add(hoatDong.booleanValue());
+
+				if (!pagination) {
+					list = (List<TaiKhoanDoiUng>)QueryUtil.list(
+						q, getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = Collections.unmodifiableList(list);
+				}
+				else {
+					list = (List<TaiKhoanDoiUng>)QueryUtil.list(
+						q, getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				finderCache.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				finderCache.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first tai khoan doi ung in the ordered set where loaiTaiKhoan = &#63; and hoatDong = &#63;.
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching tai khoan doi ung
+	 * @throws NoSuchTaiKhoanDoiUngException if a matching tai khoan doi ung could not be found
+	 */
+	@Override
+	public TaiKhoanDoiUng findByLoaiTaiKhoan_HoatDong_First(
+			int loaiTaiKhoan, Boolean hoatDong,
+			OrderByComparator<TaiKhoanDoiUng> orderByComparator)
+		throws NoSuchTaiKhoanDoiUngException {
+
+		TaiKhoanDoiUng taiKhoanDoiUng = fetchByLoaiTaiKhoan_HoatDong_First(
+			loaiTaiKhoan, hoatDong, orderByComparator);
+
+		if (taiKhoanDoiUng != null) {
+			return taiKhoanDoiUng;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("loaiTaiKhoan=");
+		msg.append(loaiTaiKhoan);
+
+		msg.append(", hoatDong=");
+		msg.append(hoatDong);
+
+		msg.append("}");
+
+		throw new NoSuchTaiKhoanDoiUngException(msg.toString());
+	}
+
+	/**
+	 * Returns the first tai khoan doi ung in the ordered set where loaiTaiKhoan = &#63; and hoatDong = &#63;.
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching tai khoan doi ung, or <code>null</code> if a matching tai khoan doi ung could not be found
+	 */
+	@Override
+	public TaiKhoanDoiUng fetchByLoaiTaiKhoan_HoatDong_First(
+		int loaiTaiKhoan, Boolean hoatDong,
+		OrderByComparator<TaiKhoanDoiUng> orderByComparator) {
+
+		List<TaiKhoanDoiUng> list = findByLoaiTaiKhoan_HoatDong(
+			loaiTaiKhoan, hoatDong, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last tai khoan doi ung in the ordered set where loaiTaiKhoan = &#63; and hoatDong = &#63;.
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching tai khoan doi ung
+	 * @throws NoSuchTaiKhoanDoiUngException if a matching tai khoan doi ung could not be found
+	 */
+	@Override
+	public TaiKhoanDoiUng findByLoaiTaiKhoan_HoatDong_Last(
+			int loaiTaiKhoan, Boolean hoatDong,
+			OrderByComparator<TaiKhoanDoiUng> orderByComparator)
+		throws NoSuchTaiKhoanDoiUngException {
+
+		TaiKhoanDoiUng taiKhoanDoiUng = fetchByLoaiTaiKhoan_HoatDong_Last(
+			loaiTaiKhoan, hoatDong, orderByComparator);
+
+		if (taiKhoanDoiUng != null) {
+			return taiKhoanDoiUng;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("loaiTaiKhoan=");
+		msg.append(loaiTaiKhoan);
+
+		msg.append(", hoatDong=");
+		msg.append(hoatDong);
+
+		msg.append("}");
+
+		throw new NoSuchTaiKhoanDoiUngException(msg.toString());
+	}
+
+	/**
+	 * Returns the last tai khoan doi ung in the ordered set where loaiTaiKhoan = &#63; and hoatDong = &#63;.
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching tai khoan doi ung, or <code>null</code> if a matching tai khoan doi ung could not be found
+	 */
+	@Override
+	public TaiKhoanDoiUng fetchByLoaiTaiKhoan_HoatDong_Last(
+		int loaiTaiKhoan, Boolean hoatDong,
+		OrderByComparator<TaiKhoanDoiUng> orderByComparator) {
+
+		int count = countByLoaiTaiKhoan_HoatDong(loaiTaiKhoan, hoatDong);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<TaiKhoanDoiUng> list = findByLoaiTaiKhoan_HoatDong(
+			loaiTaiKhoan, hoatDong, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the tai khoan doi ungs before and after the current tai khoan doi ung in the ordered set where loaiTaiKhoan = &#63; and hoatDong = &#63;.
+	 *
+	 * @param taiKhoanDoiUngId the primary key of the current tai khoan doi ung
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next tai khoan doi ung
+	 * @throws NoSuchTaiKhoanDoiUngException if a tai khoan doi ung with the primary key could not be found
+	 */
+	@Override
+	public TaiKhoanDoiUng[] findByLoaiTaiKhoan_HoatDong_PrevAndNext(
+			long taiKhoanDoiUngId, int loaiTaiKhoan, Boolean hoatDong,
+			OrderByComparator<TaiKhoanDoiUng> orderByComparator)
+		throws NoSuchTaiKhoanDoiUngException {
+
+		TaiKhoanDoiUng taiKhoanDoiUng = findByPrimaryKey(taiKhoanDoiUngId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			TaiKhoanDoiUng[] array = new TaiKhoanDoiUngImpl[3];
+
+			array[0] = getByLoaiTaiKhoan_HoatDong_PrevAndNext(
+				session, taiKhoanDoiUng, loaiTaiKhoan, hoatDong,
+				orderByComparator, true);
+
+			array[1] = taiKhoanDoiUng;
+
+			array[2] = getByLoaiTaiKhoan_HoatDong_PrevAndNext(
+				session, taiKhoanDoiUng, loaiTaiKhoan, hoatDong,
+				orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected TaiKhoanDoiUng getByLoaiTaiKhoan_HoatDong_PrevAndNext(
+		Session session, TaiKhoanDoiUng taiKhoanDoiUng, int loaiTaiKhoan,
+		Boolean hoatDong, OrderByComparator<TaiKhoanDoiUng> orderByComparator,
+		boolean previous) {
+
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(
+				5 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			query = new StringBundler(4);
+		}
+
+		query.append(_SQL_SELECT_TAIKHOANDOIUNG_WHERE);
+
+		query.append(_FINDER_COLUMN_LOAITAIKHOAN_HOATDONG_LOAITAIKHOAN_2);
+
+		query.append(_FINDER_COLUMN_LOAITAIKHOAN_HOATDONG_HOATDONG_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(TaiKhoanDoiUngModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(loaiTaiKhoan);
+
+		qPos.add(hoatDong.booleanValue());
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						taiKhoanDoiUng)) {
+
+				qPos.add(orderByConditionValue);
+			}
+		}
+
+		List<TaiKhoanDoiUng> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the tai khoan doi ungs where loaiTaiKhoan = &#63; and hoatDong = &#63; from the database.
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 */
+	@Override
+	public void removeByLoaiTaiKhoan_HoatDong(
+		int loaiTaiKhoan, Boolean hoatDong) {
+
+		for (TaiKhoanDoiUng taiKhoanDoiUng :
+				findByLoaiTaiKhoan_HoatDong(
+					loaiTaiKhoan, hoatDong, QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS, null)) {
+
+			remove(taiKhoanDoiUng);
+		}
+	}
+
+	/**
+	 * Returns the number of tai khoan doi ungs where loaiTaiKhoan = &#63; and hoatDong = &#63;.
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 * @return the number of matching tai khoan doi ungs
+	 */
+	@Override
+	public int countByLoaiTaiKhoan_HoatDong(
+		int loaiTaiKhoan, Boolean hoatDong) {
+
+		FinderPath finderPath = _finderPathCountByLoaiTaiKhoan_HoatDong;
+
+		Object[] finderArgs = new Object[] {loaiTaiKhoan, hoatDong};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_TAIKHOANDOIUNG_WHERE);
+
+			query.append(_FINDER_COLUMN_LOAITAIKHOAN_HOATDONG_LOAITAIKHOAN_2);
+
+			query.append(_FINDER_COLUMN_LOAITAIKHOAN_HOATDONG_HOATDONG_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(loaiTaiKhoan);
+
+				qPos.add(hoatDong.booleanValue());
+
+				count = (Long)q.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				finderCache.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String
+		_FINDER_COLUMN_LOAITAIKHOAN_HOATDONG_LOAITAIKHOAN_2 =
+			"taiKhoanDoiUng.loaiTaiKhoan = ? AND ";
+
+	private static final String
+		_FINDER_COLUMN_LOAITAIKHOAN_HOATDONG_HOATDONG_2 =
+			"taiKhoanDoiUng.hoatDong = ?";
+
 	private FinderPath
 		_finderPathWithPaginationFindByTaiKhoanDoiUngChaId_HoatDong;
 	private FinderPath
@@ -1726,6 +2289,16 @@ public class TaiKhoanDoiUngPersistenceImpl
 				_finderPathWithoutPaginationFindByHoatDong, args);
 
 			args = new Object[] {
+				taiKhoanDoiUngModelImpl.getLoaiTaiKhoan(),
+				taiKhoanDoiUngModelImpl.getHoatDong()
+			};
+
+			finderCache.removeResult(
+				_finderPathCountByLoaiTaiKhoan_HoatDong, args);
+			finderCache.removeResult(
+				_finderPathWithoutPaginationFindByLoaiTaiKhoan_HoatDong, args);
+
+			args = new Object[] {
 				taiKhoanDoiUngModelImpl.getTaiKhoanDoiUngChaId(),
 				taiKhoanDoiUngModelImpl.getHoatDong()
 			};
@@ -1758,6 +2331,33 @@ public class TaiKhoanDoiUngPersistenceImpl
 				finderCache.removeResult(_finderPathCountByHoatDong, args);
 				finderCache.removeResult(
 					_finderPathWithoutPaginationFindByHoatDong, args);
+			}
+
+			if ((taiKhoanDoiUngModelImpl.getColumnBitmask() &
+				 _finderPathWithoutPaginationFindByLoaiTaiKhoan_HoatDong.
+					 getColumnBitmask()) != 0) {
+
+				Object[] args = new Object[] {
+					taiKhoanDoiUngModelImpl.getOriginalLoaiTaiKhoan(),
+					taiKhoanDoiUngModelImpl.getOriginalHoatDong()
+				};
+
+				finderCache.removeResult(
+					_finderPathCountByLoaiTaiKhoan_HoatDong, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByLoaiTaiKhoan_HoatDong,
+					args);
+
+				args = new Object[] {
+					taiKhoanDoiUngModelImpl.getLoaiTaiKhoan(),
+					taiKhoanDoiUngModelImpl.getHoatDong()
+				};
+
+				finderCache.removeResult(
+					_finderPathCountByLoaiTaiKhoan_HoatDong, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByLoaiTaiKhoan_HoatDong,
+					args);
 			}
 
 			if ((taiKhoanDoiUngModelImpl.getColumnBitmask() &
@@ -2259,6 +2859,35 @@ public class TaiKhoanDoiUngPersistenceImpl
 			TaiKhoanDoiUngModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByHoatDong",
 			new String[] {Boolean.class.getName()});
+
+		_finderPathWithPaginationFindByLoaiTaiKhoan_HoatDong = new FinderPath(
+			TaiKhoanDoiUngModelImpl.ENTITY_CACHE_ENABLED,
+			TaiKhoanDoiUngModelImpl.FINDER_CACHE_ENABLED,
+			TaiKhoanDoiUngImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByLoaiTaiKhoan_HoatDong",
+			new String[] {
+				Integer.class.getName(), Boolean.class.getName(),
+				Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+
+		_finderPathWithoutPaginationFindByLoaiTaiKhoan_HoatDong =
+			new FinderPath(
+				TaiKhoanDoiUngModelImpl.ENTITY_CACHE_ENABLED,
+				TaiKhoanDoiUngModelImpl.FINDER_CACHE_ENABLED,
+				TaiKhoanDoiUngImpl.class,
+				FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+				"findByLoaiTaiKhoan_HoatDong",
+				new String[] {Integer.class.getName(), Boolean.class.getName()},
+				TaiKhoanDoiUngModelImpl.LOAITAIKHOAN_COLUMN_BITMASK |
+				TaiKhoanDoiUngModelImpl.HOATDONG_COLUMN_BITMASK);
+
+		_finderPathCountByLoaiTaiKhoan_HoatDong = new FinderPath(
+			TaiKhoanDoiUngModelImpl.ENTITY_CACHE_ENABLED,
+			TaiKhoanDoiUngModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByLoaiTaiKhoan_HoatDong",
+			new String[] {Integer.class.getName(), Boolean.class.getName()});
 
 		_finderPathWithPaginationFindByTaiKhoanDoiUngChaId_HoatDong =
 			new FinderPath(

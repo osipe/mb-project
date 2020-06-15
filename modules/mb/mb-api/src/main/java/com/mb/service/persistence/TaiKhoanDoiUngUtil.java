@@ -357,6 +357,200 @@ public class TaiKhoanDoiUngUtil {
 	}
 
 	/**
+	 * Returns all the tai khoan doi ungs where loaiTaiKhoan = &#63; and hoatDong = &#63;.
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 * @return the matching tai khoan doi ungs
+	 */
+	public static List<TaiKhoanDoiUng> findByLoaiTaiKhoan_HoatDong(
+		int loaiTaiKhoan, Boolean hoatDong) {
+
+		return getPersistence().findByLoaiTaiKhoan_HoatDong(
+			loaiTaiKhoan, hoatDong);
+	}
+
+	/**
+	 * Returns a range of all the tai khoan doi ungs where loaiTaiKhoan = &#63; and hoatDong = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>TaiKhoanDoiUngModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 * @param start the lower bound of the range of tai khoan doi ungs
+	 * @param end the upper bound of the range of tai khoan doi ungs (not inclusive)
+	 * @return the range of matching tai khoan doi ungs
+	 */
+	public static List<TaiKhoanDoiUng> findByLoaiTaiKhoan_HoatDong(
+		int loaiTaiKhoan, Boolean hoatDong, int start, int end) {
+
+		return getPersistence().findByLoaiTaiKhoan_HoatDong(
+			loaiTaiKhoan, hoatDong, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the tai khoan doi ungs where loaiTaiKhoan = &#63; and hoatDong = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>TaiKhoanDoiUngModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 * @param start the lower bound of the range of tai khoan doi ungs
+	 * @param end the upper bound of the range of tai khoan doi ungs (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching tai khoan doi ungs
+	 */
+	public static List<TaiKhoanDoiUng> findByLoaiTaiKhoan_HoatDong(
+		int loaiTaiKhoan, Boolean hoatDong, int start, int end,
+		OrderByComparator<TaiKhoanDoiUng> orderByComparator) {
+
+		return getPersistence().findByLoaiTaiKhoan_HoatDong(
+			loaiTaiKhoan, hoatDong, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the tai khoan doi ungs where loaiTaiKhoan = &#63; and hoatDong = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>TaiKhoanDoiUngModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 * @param start the lower bound of the range of tai khoan doi ungs
+	 * @param end the upper bound of the range of tai khoan doi ungs (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @return the ordered range of matching tai khoan doi ungs
+	 */
+	public static List<TaiKhoanDoiUng> findByLoaiTaiKhoan_HoatDong(
+		int loaiTaiKhoan, Boolean hoatDong, int start, int end,
+		OrderByComparator<TaiKhoanDoiUng> orderByComparator,
+		boolean retrieveFromCache) {
+
+		return getPersistence().findByLoaiTaiKhoan_HoatDong(
+			loaiTaiKhoan, hoatDong, start, end, orderByComparator,
+			retrieveFromCache);
+	}
+
+	/**
+	 * Returns the first tai khoan doi ung in the ordered set where loaiTaiKhoan = &#63; and hoatDong = &#63;.
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching tai khoan doi ung
+	 * @throws NoSuchTaiKhoanDoiUngException if a matching tai khoan doi ung could not be found
+	 */
+	public static TaiKhoanDoiUng findByLoaiTaiKhoan_HoatDong_First(
+			int loaiTaiKhoan, Boolean hoatDong,
+			OrderByComparator<TaiKhoanDoiUng> orderByComparator)
+		throws com.mb.exception.NoSuchTaiKhoanDoiUngException {
+
+		return getPersistence().findByLoaiTaiKhoan_HoatDong_First(
+			loaiTaiKhoan, hoatDong, orderByComparator);
+	}
+
+	/**
+	 * Returns the first tai khoan doi ung in the ordered set where loaiTaiKhoan = &#63; and hoatDong = &#63;.
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching tai khoan doi ung, or <code>null</code> if a matching tai khoan doi ung could not be found
+	 */
+	public static TaiKhoanDoiUng fetchByLoaiTaiKhoan_HoatDong_First(
+		int loaiTaiKhoan, Boolean hoatDong,
+		OrderByComparator<TaiKhoanDoiUng> orderByComparator) {
+
+		return getPersistence().fetchByLoaiTaiKhoan_HoatDong_First(
+			loaiTaiKhoan, hoatDong, orderByComparator);
+	}
+
+	/**
+	 * Returns the last tai khoan doi ung in the ordered set where loaiTaiKhoan = &#63; and hoatDong = &#63;.
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching tai khoan doi ung
+	 * @throws NoSuchTaiKhoanDoiUngException if a matching tai khoan doi ung could not be found
+	 */
+	public static TaiKhoanDoiUng findByLoaiTaiKhoan_HoatDong_Last(
+			int loaiTaiKhoan, Boolean hoatDong,
+			OrderByComparator<TaiKhoanDoiUng> orderByComparator)
+		throws com.mb.exception.NoSuchTaiKhoanDoiUngException {
+
+		return getPersistence().findByLoaiTaiKhoan_HoatDong_Last(
+			loaiTaiKhoan, hoatDong, orderByComparator);
+	}
+
+	/**
+	 * Returns the last tai khoan doi ung in the ordered set where loaiTaiKhoan = &#63; and hoatDong = &#63;.
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching tai khoan doi ung, or <code>null</code> if a matching tai khoan doi ung could not be found
+	 */
+	public static TaiKhoanDoiUng fetchByLoaiTaiKhoan_HoatDong_Last(
+		int loaiTaiKhoan, Boolean hoatDong,
+		OrderByComparator<TaiKhoanDoiUng> orderByComparator) {
+
+		return getPersistence().fetchByLoaiTaiKhoan_HoatDong_Last(
+			loaiTaiKhoan, hoatDong, orderByComparator);
+	}
+
+	/**
+	 * Returns the tai khoan doi ungs before and after the current tai khoan doi ung in the ordered set where loaiTaiKhoan = &#63; and hoatDong = &#63;.
+	 *
+	 * @param taiKhoanDoiUngId the primary key of the current tai khoan doi ung
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next tai khoan doi ung
+	 * @throws NoSuchTaiKhoanDoiUngException if a tai khoan doi ung with the primary key could not be found
+	 */
+	public static TaiKhoanDoiUng[] findByLoaiTaiKhoan_HoatDong_PrevAndNext(
+			long taiKhoanDoiUngId, int loaiTaiKhoan, Boolean hoatDong,
+			OrderByComparator<TaiKhoanDoiUng> orderByComparator)
+		throws com.mb.exception.NoSuchTaiKhoanDoiUngException {
+
+		return getPersistence().findByLoaiTaiKhoan_HoatDong_PrevAndNext(
+			taiKhoanDoiUngId, loaiTaiKhoan, hoatDong, orderByComparator);
+	}
+
+	/**
+	 * Removes all the tai khoan doi ungs where loaiTaiKhoan = &#63; and hoatDong = &#63; from the database.
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 */
+	public static void removeByLoaiTaiKhoan_HoatDong(
+		int loaiTaiKhoan, Boolean hoatDong) {
+
+		getPersistence().removeByLoaiTaiKhoan_HoatDong(loaiTaiKhoan, hoatDong);
+	}
+
+	/**
+	 * Returns the number of tai khoan doi ungs where loaiTaiKhoan = &#63; and hoatDong = &#63;.
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan
+	 * @param hoatDong the hoat dong
+	 * @return the number of matching tai khoan doi ungs
+	 */
+	public static int countByLoaiTaiKhoan_HoatDong(
+		int loaiTaiKhoan, Boolean hoatDong) {
+
+		return getPersistence().countByLoaiTaiKhoan_HoatDong(
+			loaiTaiKhoan, hoatDong);
+	}
+
+	/**
 	 * Returns all the tai khoan doi ungs where taiKhoanDoiUngChaId = &#63; and hoatDong = &#63;.
 	 *
 	 * @param taiKhoanDoiUngChaId the tai khoan doi ung cha ID

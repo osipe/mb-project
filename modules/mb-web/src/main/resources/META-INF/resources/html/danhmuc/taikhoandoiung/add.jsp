@@ -32,6 +32,12 @@
 					</c:forEach>
 				</aui:select>
 			</td>
+			<td>
+				<aui:select name="loaiTaiKhoan" label="Loại tài khoản">
+					<aui:option value="1" label="Công ty" selected = "${taiKhoanDoiUng.loaiTaiKhoan == 1}" />
+					<aui:option value="2" label="Cộng tác viên" selected = "${taiKhoanDoiUng.loaiTaiKhoan == 2}"/>
+				</aui:select>
+			</td>
 		</tr>
 		<tr>
 			<td>
@@ -83,7 +89,8 @@ AUI().ready(['aui-base'], function(A) {
 				<portlet:namespace />taiKhoanDoiUngId : '<%=taiKhoanDoiUngId %>',
 				<portlet:namespace />taiKhoanDoiUngChaId : form.one('#<portlet:namespace />taiKhoanDoiUngChaId').val(),
 				<portlet:namespace />ten : form.one('#<portlet:namespace />ten').val(),
-				<portlet:namespace />soHieu : form.one('#<portlet:namespace />soHieu').val()
+				<portlet:namespace />soHieu : form.one('#<portlet:namespace />soHieu').val(),
+				<portlet:namespace />loaiTaiKhoan : form.one('#<portlet:namespace />loaiTaiKhoan').val()
 			}
 			A.io.request('${addURL}', {
 	               method: 'post',

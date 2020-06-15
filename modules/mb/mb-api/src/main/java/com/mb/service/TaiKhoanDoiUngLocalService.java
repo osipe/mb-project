@@ -197,6 +197,10 @@ public interface TaiKhoanDoiUngLocalService
 			int start, int end, OrderByComparator obc)
 		throws SystemException;
 
+	public List<TaiKhoanDoiUng> findByLoaiTaiKhoan_HoatDong(
+			int loaiTaiKhoan, boolean hoatDong)
+		throws SystemException;
+
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 

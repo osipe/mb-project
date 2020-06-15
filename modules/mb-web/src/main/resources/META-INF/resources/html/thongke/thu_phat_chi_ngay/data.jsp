@@ -98,19 +98,19 @@
 		 			}
 		 		}
 		 		if(tongTienPV > 0){
-		 			LichSuThuPhatChDTO phatVay = new LichSuThuPhatChDTO("","Phát vay", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienPV > 0 ? df.format(tongTienPV) : "0", "0", "0");
+		 			LichSuThuPhatChDTO phatVay = new LichSuThuPhatChDTO("","Phát vay", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienPV > 0 ? df.format(tongTienPV) : "0", "0", "0","0");
 			 		lichSuThuPhatChDTOs.add(phatVay);
 		 		}
 		 		if(tongTienTT > 0){
-			 		LichSuThuPhatChDTO tatToan = new LichSuThuPhatChDTO("","Tất toán", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", "0",tienVonTT > 0 ? df.format(tienVonTT) : "0",tienLaiTT > 0 ? df.format(tienLaiTT) : "0");
+			 		LichSuThuPhatChDTO tatToan = new LichSuThuPhatChDTO("","Tất toán", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", "0",tienVonTT > 0 ? df.format(tienVonTT) : "0",tienLaiTT > 0 ? df.format(tienLaiTT) : "0",df.format(tienVonTT+ tienLaiTT) );
 			 		lichSuThuPhatChDTOs.add(tatToan);
 		 		}
 		 		if(tongTienTHN > 0){
-			 		LichSuThuPhatChDTO thuHangNgay = new LichSuThuPhatChDTO("","Thu hằng ngày", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", "0",tienVonTHN > 0 ? df.format(tienVonTHN) : "0",tienLaiTHN > 0 ? df.format(tienLaiTHN) : "0");
+			 		LichSuThuPhatChDTO thuHangNgay = new LichSuThuPhatChDTO("","Thu hằng ngày", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", "0",tienVonTHN > 0 ? df.format(tienVonTHN) : "0",tienLaiTHN > 0 ? df.format(tienLaiTHN) : "0",df.format(tienVonTHN+ tienLaiTHN));
 			 		lichSuThuPhatChDTOs.add(thuHangNgay);
 		 		}
 		 		if(tongTienThuTruoc > 0){
-			 		LichSuThuPhatChDTO thuTruoc = new LichSuThuPhatChDTO("","Thu tiền tết", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "",  "0",tienVonThuTruoc > 0 ? df.format(tienVonThuTruoc) : "0",tienLaiThuTruoc > 0 ? df.format(tienLaiThuTruoc) : "0");
+			 		LichSuThuPhatChDTO thuTruoc = new LichSuThuPhatChDTO("","Thu tiền tết", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "",  "0",tienVonThuTruoc > 0 ? df.format(tienVonThuTruoc) : "0",tienLaiThuTruoc > 0 ? df.format(tienLaiThuTruoc) : "0",df.format(tienVonThuTruoc+ tienLaiThuTruoc));
 			 		lichSuThuPhatChDTOs.add(thuTruoc);
 		 		}
 		 		tongVon += tienVonCTV;
@@ -172,13 +172,24 @@
 			 		}
 			 	%>
 			 </liferay-ui:search-container-column-text>
+			 <liferay-ui:search-container-column-text name="Tổng thu">
+			 	<span style="color:#ff3d00e8;font-weight: bold;"><%=df.format(tienLaiCTV + tienVonCTV) %> </span>
+			 	<%
+			 		for(LichSuThuPhatChDTO item : lichSuThuPhatChDTOs){
+			 	%>
+			 		<br/>
+			 		<span style="font-style: italic;"><%=item.getTongThu()%></span>
+			 	<%
+			 		}
+			 	%>
+			 </liferay-ui:search-container-column-text>
 			  <liferay-ui:search-container-column-text name="Chi phát vay">
 			 	<span style="color:#ff3d00e8;font-weight: bold;"> <%=tongTienPV > 0 ? df.format(tongTienPV) : 0 %> </span>
 			 	<%
 			 		for(LichSuThuPhatChDTO item : lichSuThuPhatChDTOs){
 			 	%>
 			 		<br/>
-			 		<span style="font-style: italic;"><%=item.getSoTien() %></span>
+			 		<span style="font-style: italic;"><%=item.getTienChi() %></span>
 			 	<%
 			 		}
 			 	%>
@@ -235,13 +246,17 @@ AUI().ready(['aui-base'], function(A) {
     	td3Node.append(A.Node.create('<span style="color:#ff3d00e8;font-weight: bold;"><%=tongLai > 0 ? df.format(tongLai) : "0" %></span>'));
     	
     	var td4Node = A.Node.create('<td class="table-cell text-right"/>');
-    	td4Node.append(A.Node.create('<span style="color:#ff3d00e8;font-weight: bold;"><%=tongPhatVay > 0 ? df.format(tongPhatVay) : "0" %></span>'));
+    	td4Node.append(A.Node.create('<span style="color:#ff3d00e8;font-weight: bold;"><%= df.format(tongVon + tongLai)%></span>'));
+    	
+    	var td5Node = A.Node.create('<td class="table-cell text-right"/>');
+    	td5Node.append(A.Node.create('<span style="color:#ff3d00e8;font-weight: bold;"><%=tongPhatVay > 0 ? df.format(tongPhatVay) : "0" %></span>'));
     	
     	
     	trNode.append(td1Node);
     	trNode.append(td2Node);
     	trNode.append(td3Node);
     	trNode.append(td4Node);
+    	trNode.append(td5Node);
     	tbody.append(trNode);
     }
 });	

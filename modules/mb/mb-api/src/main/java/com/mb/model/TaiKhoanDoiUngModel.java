@@ -235,6 +235,20 @@ public interface TaiKhoanDoiUngModel
 	public void setTen(String ten);
 
 	/**
+	 * Returns the loai tai khoan of this tai khoan doi ung.
+	 *
+	 * @return the loai tai khoan of this tai khoan doi ung
+	 */
+	public int getLoaiTaiKhoan();
+
+	/**
+	 * Sets the loai tai khoan of this tai khoan doi ung.
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan of this tai khoan doi ung
+	 */
+	public void setLoaiTaiKhoan(int loaiTaiKhoan);
+
+	/**
 	 * Returns the hoat dong of this tai khoan doi ung.
 	 *
 	 * @return the hoat dong of this tai khoan doi ung

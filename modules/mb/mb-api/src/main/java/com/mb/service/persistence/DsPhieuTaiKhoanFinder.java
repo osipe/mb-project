@@ -25,8 +25,9 @@ public interface DsPhieuTaiKhoanFinder {
 
 	public java.util.List<com.mb.model.DsPhieuTaiKhoan>
 			getDSThuChiByTaiKhoanNgayChungTu(
-				long taiKhoanDoiUngId, java.util.Date ngayChungTuTu,
-				java.util.Date ngayChungTuDen, int hoatDong, int start, int end,
+				long taiKhoanDoiUngId, String maCTV,
+				java.util.Date ngayChungTuTu, java.util.Date ngayChungTuDen,
+				int hoatDong, int start, int end,
 				com.liferay.portal.kernel.util.OrderByComparator obc)
 		throws com.liferay.portal.kernel.exception.SystemException;
 

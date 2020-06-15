@@ -7,16 +7,16 @@
 	pageEncoding="UTF-8"%>
 <portlet:renderURL var="searchURLSoCai"
 windowState="<%=LiferayWindowState.EXCLUSIVE.toString()%>">
-	<portlet:param name="mvcPath" value="/html/ketoan/so/socai/data.jsp" />
+	<portlet:param name="mvcPath" value="/html/ketoan/so/soCTV/data.jsp" />
 </portlet:renderURL>
 <%
-	List<TaiKhoanDoiUng> items = TaiKhoanDoiUngLocalServiceUtil.findByLoaiTaiKhoan_HoatDong(1, true);
+	List<TaiKhoanDoiUng> itemCTVs = TaiKhoanDoiUngLocalServiceUtil.findByLoaiTaiKhoan_HoatDong(2, true);
 %>
 <aui:form name="frm">
 <table class="aui-w100">
 		<tr>
 			<td style="width: 10%;">
-				<aui:select name="thangSoCaiSearch" label="Tháng" onchange="searchSoCai();">
+				<aui:select name="thangSoCTVSearch" label="Tháng" onchange="searchSoCTV();">
 					<%
 						for (int i = 1; i <= 12; i++) {
 					%>
@@ -28,7 +28,7 @@ windowState="<%=LiferayWindowState.EXCLUSIVE.toString()%>">
 				</aui:select>
 			</td>
 			<td style="width: 10%;">
-				<aui:select name="namSoCaiSearch" label="Năm" onchange="searchSoCai();">
+				<aui:select name="namSoCTVSearch" label="Năm" onchange="searchSoCTV();">
 					<%
 						for (int i = nam - 5; i <= nam; i++) {
 					%>
@@ -40,8 +40,8 @@ windowState="<%=LiferayWindowState.EXCLUSIVE.toString()%>">
 				</aui:select>
 			</td>
 			<td style="width: 10%;">
-				<aui:select name="taiKhoanDoiUngIdSoCaiSearch" label="Tài khoản" onchange="searchSoCai();" cssClass="input-select2">
-					 <c:forEach items="<%= items%>" var="item">
+				<aui:select name="taiKhoanDoiUngIdSoCTVSearch" label="Tài khoản" onchange="searchSoCTV();" cssClass="input-select2">
+					 <c:forEach items="<%= itemCTVs%>" var="item">
 						 	<aui:option value="${item.taiKhoanDoiUngId}" label="${item.ten}"/>
 					</c:forEach>
 				</aui:select>
@@ -49,22 +49,22 @@ windowState="<%=LiferayWindowState.EXCLUSIVE.toString()%>">
 			
 		</tr>
 </table>
-<div id="<portlet:namespace />contentDataTableSoCai" style="overflow-x: scroll;font-size: small;" name="<portlet:namespace />contentDataTableSoCai"></div>
+<div id="<portlet:namespace />contentDataTableSoCTV" style="overflow-x: scroll;font-size: small;" name="<portlet:namespace />contentDataTableSoCTV"></div>
 </aui:form>
 <aui:script use="aui-base,aui-io-plugin-deprecated,aui-loading-mask-deprecated">
 AUI().ready(['aui-base'], function(A) {
-	var contentDataTable = A.one('#<portlet:namespace />contentDataTableSoCai');
+	var contentDataTable = A.one('#<portlet:namespace />contentDataTableSoCTV');
 	var loadingMask = new A.LoadingMask(
 		{
 			target: A.getBody()
 		}
 	);
-	Liferay.provide(window,'searchSoCai', function(){
+	Liferay.provide(window,'searchSoCTV', function(){
 		loadingMask.show();
 		var data = {
-			'<portlet:namespace/>namSearch' : A.one('#<portlet:namespace />namSoCaiSearch').val(),
-			'<portlet:namespace/>thangSearch' : A.one('#<portlet:namespace />thangSoCaiSearch').val(),
-        	'<portlet:namespace/>taiKhoanDoiUngIdSearch' : A.one('#<portlet:namespace />taiKhoanDoiUngIdSoCaiSearch').val()
+			'<portlet:namespace/>namSearch' : A.one('#<portlet:namespace />namSoCTVSearch').val(),
+			'<portlet:namespace/>thangSearch' : A.one('#<portlet:namespace />thangSoCTVSearch').val(),
+        	'<portlet:namespace/>taiKhoanDoiUngIdSearch' : A.one('#<portlet:namespace />taiKhoanDoiUngIdSoCTVSearch').val()
         }
 		contentDataTable.plug(A.Plugin.IO,{
             autoLoad: false,
@@ -82,6 +82,6 @@ AUI().ready(['aui-base'], function(A) {
         }
         loadingMask.hide();
 	});
-	searchSoCai();
+	searchSoCTV();
 });
 </aui:script>

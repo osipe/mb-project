@@ -234,8 +234,9 @@ public interface DsPhieuTaiKhoanLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<DsPhieuTaiKhoan> getDSThuChiByTaiKhoanNgayChungTu(
-			long taiKhoanDoiUngId, Date ngayChungTuTu, Date ngayChungTuDen,
-			int hoatDong, int start, int end, OrderByComparator obc)
+			long taiKhoanDoiUngId, String maCTV, Date ngayChungTuTu,
+			Date ngayChungTuDen, int hoatDong, int start, int end,
+			OrderByComparator obc)
 		throws SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

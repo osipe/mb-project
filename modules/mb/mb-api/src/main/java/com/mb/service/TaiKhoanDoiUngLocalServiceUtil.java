@@ -237,6 +237,13 @@ public class TaiKhoanDoiUngLocalServiceUtil {
 			taiKhoanDoiUngChaId, soHieu, ten, hoatDong, start, end, obc);
 	}
 
+	public static java.util.List<com.mb.model.TaiKhoanDoiUng>
+			findByLoaiTaiKhoan_HoatDong(int loaiTaiKhoan, boolean hoatDong)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return getService().findByLoaiTaiKhoan_HoatDong(loaiTaiKhoan, hoatDong);
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 

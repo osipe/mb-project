@@ -78,7 +78,8 @@ public class TaiKhoanDoiUngModelImpl
 		{"userName", Types.VARCHAR}, {"createDate", Types.TIMESTAMP},
 		{"modifiedDate", Types.TIMESTAMP},
 		{"taiKhoanDoiUngChaId", Types.BIGINT}, {"soHieu", Types.VARCHAR},
-		{"ten", Types.VARCHAR}, {"hoatDong", Types.BOOLEAN}
+		{"ten", Types.VARCHAR}, {"loaiTaiKhoan", Types.INTEGER},
+		{"hoatDong", Types.BOOLEAN}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -95,11 +96,12 @@ public class TaiKhoanDoiUngModelImpl
 		TABLE_COLUMNS_MAP.put("taiKhoanDoiUngChaId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("soHieu", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("ten", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("loaiTaiKhoan", Types.INTEGER);
 		TABLE_COLUMNS_MAP.put("hoatDong", Types.BOOLEAN);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table dm_taikhoandoiung (taiKhoanDoiUngId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,taiKhoanDoiUngChaId LONG,soHieu VARCHAR(75) null,ten VARCHAR(75) null,hoatDong BOOLEAN)";
+		"create table dm_taikhoandoiung (taiKhoanDoiUngId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,taiKhoanDoiUngChaId LONG,soHieu VARCHAR(75) null,ten VARCHAR(75) null,loaiTaiKhoan INTEGER,hoatDong BOOLEAN)";
 
 	public static final String TABLE_SQL_DROP = "drop table dm_taikhoandoiung";
 
@@ -132,11 +134,13 @@ public class TaiKhoanDoiUngModelImpl
 
 	public static final long HOATDONG_COLUMN_BITMASK = 1L;
 
-	public static final long SOHIEU_COLUMN_BITMASK = 2L;
+	public static final long LOAITAIKHOAN_COLUMN_BITMASK = 2L;
 
-	public static final long TAIKHOANDOIUNGCHAID_COLUMN_BITMASK = 4L;
+	public static final long SOHIEU_COLUMN_BITMASK = 4L;
 
-	public static final long TAIKHOANDOIUNGID_COLUMN_BITMASK = 8L;
+	public static final long TAIKHOANDOIUNGCHAID_COLUMN_BITMASK = 8L;
+
+	public static final long TAIKHOANDOIUNGID_COLUMN_BITMASK = 16L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -161,6 +165,7 @@ public class TaiKhoanDoiUngModelImpl
 		model.setTaiKhoanDoiUngChaId(soapModel.getTaiKhoanDoiUngChaId());
 		model.setSoHieu(soapModel.getSoHieu());
 		model.setTen(soapModel.getTen());
+		model.setLoaiTaiKhoan(soapModel.getLoaiTaiKhoan());
 		model.setHoatDong(soapModel.getHoatDong());
 
 		return model;
@@ -512,6 +517,28 @@ public class TaiKhoanDoiUngModelImpl
 
 			});
 		attributeGetterFunctions.put(
+			"loaiTaiKhoan",
+			new Function<TaiKhoanDoiUng, Object>() {
+
+				@Override
+				public Object apply(TaiKhoanDoiUng taiKhoanDoiUng) {
+					return taiKhoanDoiUng.getLoaiTaiKhoan();
+				}
+
+			});
+		attributeSetterBiConsumers.put(
+			"loaiTaiKhoan",
+			new BiConsumer<TaiKhoanDoiUng, Object>() {
+
+				@Override
+				public void accept(
+					TaiKhoanDoiUng taiKhoanDoiUng, Object loaiTaiKhoan) {
+
+					taiKhoanDoiUng.setLoaiTaiKhoan((Integer)loaiTaiKhoan);
+				}
+
+			});
+		attributeGetterFunctions.put(
 			"hoatDong",
 			new Function<TaiKhoanDoiUng, Object>() {
 
@@ -713,6 +740,29 @@ public class TaiKhoanDoiUngModelImpl
 
 	@JSON
 	@Override
+	public int getLoaiTaiKhoan() {
+		return _loaiTaiKhoan;
+	}
+
+	@Override
+	public void setLoaiTaiKhoan(int loaiTaiKhoan) {
+		_columnBitmask |= LOAITAIKHOAN_COLUMN_BITMASK;
+
+		if (!_setOriginalLoaiTaiKhoan) {
+			_setOriginalLoaiTaiKhoan = true;
+
+			_originalLoaiTaiKhoan = _loaiTaiKhoan;
+		}
+
+		_loaiTaiKhoan = loaiTaiKhoan;
+	}
+
+	public int getOriginalLoaiTaiKhoan() {
+		return _originalLoaiTaiKhoan;
+	}
+
+	@JSON
+	@Override
 	public Boolean getHoatDong() {
 		return _hoatDong;
 	}
@@ -776,6 +826,7 @@ public class TaiKhoanDoiUngModelImpl
 		taiKhoanDoiUngImpl.setTaiKhoanDoiUngChaId(getTaiKhoanDoiUngChaId());
 		taiKhoanDoiUngImpl.setSoHieu(getSoHieu());
 		taiKhoanDoiUngImpl.setTen(getTen());
+		taiKhoanDoiUngImpl.setLoaiTaiKhoan(getLoaiTaiKhoan());
 		taiKhoanDoiUngImpl.setHoatDong(getHoatDong());
 
 		taiKhoanDoiUngImpl.resetOriginalValues();
@@ -855,6 +906,11 @@ public class TaiKhoanDoiUngModelImpl
 		taiKhoanDoiUngModelImpl._originalSoHieu =
 			taiKhoanDoiUngModelImpl._soHieu;
 
+		taiKhoanDoiUngModelImpl._originalLoaiTaiKhoan =
+			taiKhoanDoiUngModelImpl._loaiTaiKhoan;
+
+		taiKhoanDoiUngModelImpl._setOriginalLoaiTaiKhoan = false;
+
 		taiKhoanDoiUngModelImpl._originalHoatDong =
 			taiKhoanDoiUngModelImpl._hoatDong;
 
@@ -919,6 +975,8 @@ public class TaiKhoanDoiUngModelImpl
 		if ((ten != null) && (ten.length() == 0)) {
 			taiKhoanDoiUngCacheModel.ten = null;
 		}
+
+		taiKhoanDoiUngCacheModel.loaiTaiKhoan = getLoaiTaiKhoan();
 
 		taiKhoanDoiUngCacheModel.hoatDong = getHoatDong();
 
@@ -1008,6 +1066,9 @@ public class TaiKhoanDoiUngModelImpl
 	private String _soHieu;
 	private String _originalSoHieu;
 	private String _ten;
+	private int _loaiTaiKhoan;
+	private int _originalLoaiTaiKhoan;
+	private boolean _setOriginalLoaiTaiKhoan;
 	private Boolean _hoatDong;
 	private Boolean _originalHoatDong;
 	private boolean _setOriginalHoatDong;

@@ -33,6 +33,7 @@
 		<field name="dienGiaiTheoDoi" type="String" />
 		<field name="soTien" type="Double" />
 		<field name="tenCTV" type="String" />
+		<field name="maCTV" type="String" />
 		<field name="hoatDong" type="Boolean" />
 	</model>
 	<model name="com.mb.model.KhachHang">
@@ -206,6 +207,7 @@
 		<field name="taiKhoanDoiUngChaId" type="long" />
 		<field name="soHieu" type="String" />
 		<field name="ten" type="String" />
+		<field name="loaiTaiKhoan" type="int" />
 		<field name="hoatDong" type="Boolean" />
 	</model>
 	<model name="com.mb.model.TaiSanThueChap">

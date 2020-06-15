@@ -8,19 +8,51 @@ public class LichSuThuPhatChDTO {
 	private String stt;
 	private String ten;
 	private String ngay;
-	private String soTien;
+	//Chi phát vay
+	private String tienChi;
+	//thuVon
 	private String tienVon;
+	//thuLai
 	private String tienLai;
-	public LichSuThuPhatChDTO(String stt, String ten, String ngay, String soTien,String tienVon,String tienLai) {
+	//TongThu
+	private String tongThu;
+	public LichSuThuPhatChDTO(String stt, String ten, String ngay, String tienChi,String tienVon,String tienLai,String tongThu) {
 		super();
 		this.stt = stt;
 		this.ten = ten;
 		this.ngay = ngay;
-		this.soTien = soTien;
+		this.tienChi = tienChi;
 		this.tienVon = tienVon;
 		this.tienLai = tienLai;
+		this.tongThu = tongThu;
 	}
 	
+	
+	
+	public String getTienChi() {
+		return tienChi;
+	}
+
+
+
+	public void setTienChi(String tienChi) {
+		this.tienChi = tienChi;
+	}
+
+
+
+	public String getTongThu() {
+		return tongThu;
+	}
+
+
+
+	public void setTongThu(String tongThu) {
+		this.tongThu = tongThu;
+	}
+
+
+
 	public String getTienVon() {
 		return tienVon;
 	}
@@ -67,14 +99,6 @@ public class LichSuThuPhatChDTO {
 
 	public void setNgay(String ngay) {
 		this.ngay = ngay;
-	}
-
-	public String getSoTien() {
-		return soTien;
-	}
-
-	public void setSoTien(String soTien) {
-		this.soTien = soTien;
 	}
 
 }

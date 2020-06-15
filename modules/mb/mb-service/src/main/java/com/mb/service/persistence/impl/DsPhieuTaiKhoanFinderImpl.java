@@ -54,8 +54,9 @@ public class DsPhieuTaiKhoanFinderImpl extends DsPhieuTaiKhoanFinderBaseImpl imp
 			+ ".getDSThuChiByTaiKhoanNgayChungTu";
 
 	@SuppressWarnings("unchecked")
-	public List<DsPhieuTaiKhoan> getDSThuChiByTaiKhoanNgayChungTu(long taiKhoanDoiUngId, Date ngayChungTuTu,
-			Date ngayChungTuDen, int hoatDong, int start, int end, OrderByComparator obc) throws SystemException {
+	public List<DsPhieuTaiKhoan> getDSThuChiByTaiKhoanNgayChungTu(long taiKhoanDoiUngId, String maCTV,
+			Date ngayChungTuTu, Date ngayChungTuDen, int hoatDong, int start, int end, OrderByComparator obc)
+			throws SystemException {
 		Session session = null;
 		try {
 			session = openSession();
@@ -63,8 +64,13 @@ public class DsPhieuTaiKhoanFinderImpl extends DsPhieuTaiKhoanFinderBaseImpl imp
 			if (hoatDong == 0) {
 				sql = sql.replace("AND (hoatdong = ?)", "");
 			}
+			if (Validator.isNull(maCTV)) {
+				sql = sql.replace("AND (maCTV = ?)", "");
+			}
 			if (taiKhoanDoiUngId == 0) {
-				sql = sql.replace("AND (taiKhoanDoiUngId IN (SELECT taiKhoanDoiUngId FROM dm_taikhoandoiung WHERE taiKhoanDoiUngChaId = ? OR taiKhoanDoiUngId = ?)","");
+				sql = sql.replace(
+						"AND (taiKhoanDoiUngId IN (SELECT taiKhoanDoiUngId FROM dm_taikhoandoiung WHERE taiKhoanDoiUngChaId = ? OR taiKhoanDoiUngId = ?)",
+						"");
 			}
 			if (Validator.isNull(ngayChungTuTu)) {
 				sql = sql.replace("AND (ngayChungTu >= ?)", "");
@@ -79,6 +85,10 @@ public class DsPhieuTaiKhoanFinderImpl extends DsPhieuTaiKhoanFinderBaseImpl imp
 			if (hoatDong != 0) {
 				qPos.add(hoatDong == 1 ? true : false);
 			}
+			if (Validator.isNotNull(maCTV)) {
+				qPos.add(maCTV);
+			}
+
 			if (taiKhoanDoiUngId > 0) {
 				qPos.add(taiKhoanDoiUngId);
 				qPos.add(taiKhoanDoiUngId);

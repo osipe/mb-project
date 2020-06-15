@@ -130,8 +130,8 @@ public class SoPortlet extends MVCPortlet {
 				calDen.set(nam, thang - 1, CalendarUtil.getDaysInMonth(calTu));
 				Date ngayChungTuDen = calDen.getTime();
 				List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil
-						.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanDoiUngId, ngayChungTuTu, ngayChungTuDen, 1, -1, -1,
-								null);
+						.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanDoiUngId, "", ngayChungTuTu, ngayChungTuDen, 1, -1,
+								-1, null);
 				SimpleDateFormat sdfSo = new SimpleDateFormat("ddMMyyyy");
 				if (CollectionUtils.isNotEmpty(dsPhieuTaiKhoans)) {
 					boolean inNgay = true;
@@ -236,8 +236,8 @@ public class SoPortlet extends MVCPortlet {
 				calDen.set(nam, thang - 1, CalendarUtil.getDaysInMonth(calTu));
 				Date ngayChungTuDen = calDen.getTime();
 				List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil
-						.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanDoiUngId, ngayChungTuTu, ngayChungTuDen, 1, -1, -1,
-								null);
+						.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanDoiUngId, "", ngayChungTuTu, ngayChungTuDen, 1, -1,
+								-1, null);
 				SimpleDateFormat sdfSo = new SimpleDateFormat("ddMMyyyy");
 				if (CollectionUtils.isNotEmpty(dsPhieuTaiKhoans)) {
 					boolean inNgay = true;
@@ -313,99 +313,154 @@ public class SoPortlet extends MVCPortlet {
 		int thang = ParamUtil.getInteger(resourceRequest, "thang");
 		if (taiKhoanDoiUngId > 0) {
 			TaiKhoanDoiUng taiKhoanDoiUng = TaiKhoanDoiUngLocalServiceUtil.fetchTaiKhoanDoiUng(taiKhoanDoiUngId);
-			if (taiKhoanDoiUng.getSoHieu().equals(PropsUtil.get("config.taikhoanthuvon"))) {
-				try {
-					Calendar calTu = Calendar.getInstance();
-					calTu.set(nam, thang - 1, 1);
-					Date ngayChungTuTu = calTu.getTime();
-					Calendar calDen = Calendar.getInstance();
-					calDen.set(nam, thang - 1, CalendarUtil.getDaysInMonth(calTu));
-					Date ngayChungTuDen = calDen.getTime();
-					LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil
-							.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngId, nam, thang);
-					List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil
-							.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanDoiUngId, ngayChungTuTu, ngayChungTuDen, 1, -1,
-									-1, null);
-					if (dauKy != null) {
-						Double soTienTon = dauKy.getSoTienTon();
-						if (CollectionUtils.isNotEmpty(dsPhieuTaiKhoans)) {
-							if (thang == 12) {
-								nam++;
-								thang = 0;
-							}
-							for (DsPhieuTaiKhoan item : dsPhieuTaiKhoans) {
-								if (item.getPhieu() != null) {
-									if (item.getPhieu().getLoai() == 1) {
-										soTienTon -= item.getSoTien();
-									} else if (item.getPhieu().getLoai() == 2) {
-										soTienTon += item.getSoTien();
+			if (taiKhoanDoiUng != null) {
+				if (taiKhoanDoiUng.getLoaiTaiKhoan() == 2) {
+					try {
+						TaiKhoanDoiUng taiKhoanThuVon = TaiKhoanDoiUngLocalServiceUtil
+								.fetchBySoHieu(PropsUtil.get("config.taikhoanthuvon"));
+						if(taiKhoanThuVon != null) {
+							Calendar calTu = Calendar.getInstance();
+							calTu.set(nam, thang - 1, 1);
+							Date ngayChungTuTu = calTu.getTime();
+							Calendar calDen = Calendar.getInstance();
+							calDen.set(nam, thang - 1, CalendarUtil.getDaysInMonth(calTu));
+							Date ngayChungTuDen = calDen.getTime();
+							LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil
+									.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngId, nam, thang);
+							List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil
+									.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanThuVon.getTaiKhoanDoiUngId(), taiKhoanDoiUng.getSoHieu(), ngayChungTuTu,
+											ngayChungTuDen, 1, -1, -1, null);
+							if (dauKy != null) {
+								Double soTienTon = dauKy.getSoTienTon();
+								if (CollectionUtils.isNotEmpty(dsPhieuTaiKhoans)) {
+									if (thang == 12) {
+										nam++;
+										thang = 0;
 									}
+									for (DsPhieuTaiKhoan item : dsPhieuTaiKhoans) {
+										if (item.getPhieu() != null) {
+											if (item.getPhieu().getLoai() == 1) {
+												soTienTon -= item.getSoTien();
+											} else if (item.getPhieu().getLoai() == 2) {
+												soTienTon += item.getSoTien();
+											}
+										}
+									}
+									LichSuTaiKhoanDauKy cuoiThang = LichSuTaiKhoanDauKyLocalServiceUtil
+											.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngId, nam, thang + 1);
+									if (cuoiThang == null) {
+										cuoiThang = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
+									}
+									cuoiThang.setNam(nam);
+									cuoiThang.setTaiKhoanDoiUngId(taiKhoanDoiUngId);
+									cuoiThang.setThang(thang + 1);
+									cuoiThang.setSoTienTon(soTienTon);
+									cuoiThang.setHoatDong(true);
+									LichSuTaiKhoanDauKyLocalServiceUtil.addOrUpdateLichSuTaiKhoanDauKy(cuoiThang,
+											serviceContext);
 								}
 							}
-							LichSuTaiKhoanDauKy cuoiThang = LichSuTaiKhoanDauKyLocalServiceUtil
-									.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngId, nam, thang + 1);
-							if (cuoiThang == null) {
-								cuoiThang = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
-							}
-							cuoiThang.setNam(nam);
-							cuoiThang.setTaiKhoanDoiUngId(taiKhoanDoiUngId);
-							cuoiThang.setThang(thang + 1);
-							cuoiThang.setSoTienTon(soTienTon);
-							cuoiThang.setHoatDong(true);
-							LichSuTaiKhoanDauKyLocalServiceUtil.addOrUpdateLichSuTaiKhoanDauKy(cuoiThang,
-									serviceContext);
 						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						kq.putException(e);
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					kq.putException(e);
-				}
-			} else {
-				try {
-					Calendar calTu = Calendar.getInstance();
-					calTu.set(nam, thang - 1, 1);
-					Date ngayChungTuTu = calTu.getTime();
-					Calendar calDen = Calendar.getInstance();
-					calDen.set(nam, thang - 1, CalendarUtil.getDaysInMonth(calTu));
-					Date ngayChungTuDen = calDen.getTime();
-					LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil
-							.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngId, nam, thang);
-					List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil
-							.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanDoiUngId, ngayChungTuTu, ngayChungTuDen, 1, -1,
-									-1, null);
-					if (dauKy != null) {
-						Double soTienTon = dauKy.getSoTienTon();
-						if (CollectionUtils.isNotEmpty(dsPhieuTaiKhoans)) {
-							if (thang == 12) {
-								nam++;
-								thang = 0;
-							}
-							for (DsPhieuTaiKhoan item : dsPhieuTaiKhoans) {
-								if (item.getPhieu() != null) {
-									if (item.getPhieu().getLoai() == 1) {
-										soTienTon += item.getSoTien();
-									} else if (item.getPhieu().getLoai() == 2) {
-										soTienTon -= item.getSoTien();
+				} else if (taiKhoanDoiUng.getLoaiTaiKhoan() == 1) {
+					if (taiKhoanDoiUng.getSoHieu().equals(PropsUtil.get("config.taikhoanthuvon"))) {
+						try {
+							Calendar calTu = Calendar.getInstance();
+							calTu.set(nam, thang - 1, 1);
+							Date ngayChungTuTu = calTu.getTime();
+							Calendar calDen = Calendar.getInstance();
+							calDen.set(nam, thang - 1, CalendarUtil.getDaysInMonth(calTu));
+							Date ngayChungTuDen = calDen.getTime();
+							LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil
+									.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngId, nam, thang);
+							List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil
+									.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanDoiUngId, "", ngayChungTuTu,
+											ngayChungTuDen, 1, -1, -1, null);
+							if (dauKy != null) {
+								Double soTienTon = dauKy.getSoTienTon();
+								if (CollectionUtils.isNotEmpty(dsPhieuTaiKhoans)) {
+									if (thang == 12) {
+										nam++;
+										thang = 0;
 									}
+									for (DsPhieuTaiKhoan item : dsPhieuTaiKhoans) {
+										if (item.getPhieu() != null) {
+											if (item.getPhieu().getLoai() == 1) {
+												soTienTon -= item.getSoTien();
+											} else if (item.getPhieu().getLoai() == 2) {
+												soTienTon += item.getSoTien();
+											}
+										}
+									}
+									LichSuTaiKhoanDauKy cuoiThang = LichSuTaiKhoanDauKyLocalServiceUtil
+											.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngId, nam, thang + 1);
+									if (cuoiThang == null) {
+										cuoiThang = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
+									}
+									cuoiThang.setNam(nam);
+									cuoiThang.setTaiKhoanDoiUngId(taiKhoanDoiUngId);
+									cuoiThang.setThang(thang + 1);
+									cuoiThang.setSoTienTon(soTienTon);
+									cuoiThang.setHoatDong(true);
+									LichSuTaiKhoanDauKyLocalServiceUtil.addOrUpdateLichSuTaiKhoanDauKy(cuoiThang,
+											serviceContext);
 								}
 							}
-							LichSuTaiKhoanDauKy cuoiThang = LichSuTaiKhoanDauKyLocalServiceUtil
-									.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngId, nam, thang + 1);
-							if (cuoiThang == null) {
-								cuoiThang = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
+						} catch (Exception e) {
+							e.printStackTrace();
+							kq.putException(e);
+						}
+					} else {
+						try {
+							Calendar calTu = Calendar.getInstance();
+							calTu.set(nam, thang - 1, 1);
+							Date ngayChungTuTu = calTu.getTime();
+							Calendar calDen = Calendar.getInstance();
+							calDen.set(nam, thang - 1, CalendarUtil.getDaysInMonth(calTu));
+							Date ngayChungTuDen = calDen.getTime();
+							LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil
+									.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngId, nam, thang);
+							List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil
+									.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanDoiUngId, "", ngayChungTuTu,
+											ngayChungTuDen, 1, -1, -1, null);
+							if (dauKy != null) {
+								Double soTienTon = dauKy.getSoTienTon();
+								if (CollectionUtils.isNotEmpty(dsPhieuTaiKhoans)) {
+									if (thang == 12) {
+										nam++;
+										thang = 0;
+									}
+									for (DsPhieuTaiKhoan item : dsPhieuTaiKhoans) {
+										if (item.getPhieu() != null) {
+											if (item.getPhieu().getLoai() == 1) {
+												soTienTon += item.getSoTien();
+											} else if (item.getPhieu().getLoai() == 2) {
+												soTienTon -= item.getSoTien();
+											}
+										}
+									}
+									LichSuTaiKhoanDauKy cuoiThang = LichSuTaiKhoanDauKyLocalServiceUtil
+											.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngId, nam, thang + 1);
+									if (cuoiThang == null) {
+										cuoiThang = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
+									}
+									cuoiThang.setNam(nam);
+									cuoiThang.setTaiKhoanDoiUngId(taiKhoanDoiUngId);
+									cuoiThang.setThang(thang + 1);
+									cuoiThang.setSoTienTon(soTienTon);
+									cuoiThang.setHoatDong(true);
+									LichSuTaiKhoanDauKyLocalServiceUtil.addOrUpdateLichSuTaiKhoanDauKy(cuoiThang,
+											serviceContext);
+								}
 							}
-							cuoiThang.setNam(nam);
-							cuoiThang.setTaiKhoanDoiUngId(taiKhoanDoiUngId);
-							cuoiThang.setThang(thang + 1);
-							cuoiThang.setSoTienTon(soTienTon);
-							cuoiThang.setHoatDong(true);
-							LichSuTaiKhoanDauKyLocalServiceUtil.addOrUpdateLichSuTaiKhoanDauKy(cuoiThang,
-									serviceContext);
+						} catch (Exception e) {
+							e.printStackTrace();
+							kq.putException(e);
 						}
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					kq.putException(e);
 				}
 			}
 

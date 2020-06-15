@@ -27,6 +27,7 @@
 				FROM ketoan_dsphieutaikhoan
 				WHERE TRUE
 				AND (hoatdong = ?)
+				AND (maCTV = ?)
 				AND (taiKhoanDoiUngId IN (SELECT taiKhoanDoiUngId FROM dm_taikhoandoiung WHERE taiKhoanDoiUngChaId = ? OR taiKhoanDoiUngId = ?))
 				AND (ngayChungTu >= ?)
 				AND (ngayChungTu <= ?)

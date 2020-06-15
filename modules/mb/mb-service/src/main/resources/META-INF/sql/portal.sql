@@ -122,6 +122,7 @@ create table dm_taikhoandoiung (
 	taiKhoanDoiUngChaId LONG,
 	soHieu VARCHAR(75) null,
 	ten VARCHAR(75) null,
+	loaiTaiKhoan INTEGER,
 	hoatDong BOOLEAN
 );
 
@@ -139,6 +140,8 @@ create table ketoan_dsphieutaikhoan (
 	maTheoDoi VARCHAR(75) null,
 	dienGiaiTheoDoi VARCHAR(75) null,
 	soTien DOUBLE,
+	tenCTV VARCHAR(75) null,
+	maCTV VARCHAR(75) null,
 	hoatDong BOOLEAN
 );
 

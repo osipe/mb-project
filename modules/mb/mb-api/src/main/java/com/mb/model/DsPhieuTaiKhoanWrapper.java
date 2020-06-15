@@ -72,6 +72,7 @@ public class DsPhieuTaiKhoanWrapper
 		attributes.put("dienGiaiTheoDoi", getDienGiaiTheoDoi());
 		attributes.put("soTien", getSoTien());
 		attributes.put("tenCTV", getTenCTV());
+		attributes.put("maCTV", getMaCTV());
 		attributes.put("hoatDong", getHoatDong());
 
 		return attributes;
@@ -163,6 +164,12 @@ public class DsPhieuTaiKhoanWrapper
 			setTenCTV(tenCTV);
 		}
 
+		String maCTV = (String)attributes.get("maCTV");
+
+		if (maCTV != null) {
+			setMaCTV(maCTV);
+		}
+
 		Boolean hoatDong = (Boolean)attributes.get("hoatDong");
 
 		if (hoatDong != null) {
@@ -244,6 +251,16 @@ public class DsPhieuTaiKhoanWrapper
 	@Override
 	public Boolean getHoatDong() {
 		return _dsPhieuTaiKhoan.getHoatDong();
+	}
+
+	/**
+	 * Returns the ma ctv of this ds phieu tai khoan.
+	 *
+	 * @return the ma ctv of this ds phieu tai khoan
+	 */
+	@Override
+	public String getMaCTV() {
+		return _dsPhieuTaiKhoan.getMaCTV();
 	}
 
 	/**
@@ -476,6 +493,16 @@ public class DsPhieuTaiKhoanWrapper
 	@Override
 	public void setHoatDong(Boolean hoatDong) {
 		_dsPhieuTaiKhoan.setHoatDong(hoatDong);
+	}
+
+	/**
+	 * Sets the ma ctv of this ds phieu tai khoan.
+	 *
+	 * @param maCTV the ma ctv of this ds phieu tai khoan
+	 */
+	@Override
+	public void setMaCTV(String maCTV) {
+		_dsPhieuTaiKhoan.setMaCTV(maCTV);
 	}
 
 	/**

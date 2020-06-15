@@ -108,4 +108,8 @@ public class TaiKhoanDoiUngLocalServiceImpl extends TaiKhoanDoiUngLocalServiceBa
 
 	}
 
+	public List<TaiKhoanDoiUng> findByLoaiTaiKhoan_HoatDong(int loaiTaiKhoan, boolean hoatDong) throws SystemException {
+		return taiKhoanDoiUngPersistence.findByLoaiTaiKhoan_HoatDong(loaiTaiKhoan, hoatDong);
+	}
+
 }

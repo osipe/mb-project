@@ -25,9 +25,13 @@
 	int thangSearch = ParamUtil.getInteger(request, "thangSearch");
 	long taiKhoanDoiUngIdSearch = ParamUtil.getLong(request, "taiKhoanDoiUngIdSearch");
 	TaiKhoanDoiUng taiKhoanDoiUng = TaiKhoanDoiUngLocalServiceUtil.createTaiKhoanDoiUng(0L);
+	TaiKhoanDoiUng taiKhoanThuVon = TaiKhoanDoiUngLocalServiceUtil.createTaiKhoanDoiUng(0L);
 	if(taiKhoanDoiUngIdSearch > 0){ 
 		taiKhoanDoiUng = TaiKhoanDoiUngLocalServiceUtil.fetchTaiKhoanDoiUng(taiKhoanDoiUngIdSearch);
 	}
+	try{
+		taiKhoanThuVon = TaiKhoanDoiUngLocalServiceUtil.fetchBySoHieu(PropsUtil.get("config.taikhoanthuvon"));
+	}catch(Exception e){}
 	Calendar calTu = Calendar.getInstance();
 	calTu.set(namSearch, thangSearch - 1 ,1);
 	Date ngayChungTuTu = calTu.getTime();
@@ -36,7 +40,9 @@
 	Date ngayChungTuDen = calDen.getTime();
 	DecimalFormat df = new DecimalFormat("###,###.###");
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanDoiUngIdSearch,"", ngayChungTuTu, ngayChungTuDen, 1, -1, -1, null);
+	
+	
+	List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanThuVon.getTaiKhoanDoiUngId(),taiKhoanDoiUng.getSoHieu(), ngayChungTuTu, ngayChungTuDen, 1, -1, -1, null);
 	LichSuTaiKhoanDauKy lichSuTaiKhoanDauKy = LichSuTaiKhoanDauKyLocalServiceUtil.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngIdSearch, namSearch, thangSearch);
 	if(lichSuTaiKhoanDauKy == null){
 		lichSuTaiKhoanDauKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
@@ -108,8 +114,6 @@
 			serviceContext.setUserId(themeDisplay.getUserId());
 			String ngayChungTu = "";
 			String ngayGhiSo =  "";
-			String dauNo =  "";
-			String dauCo =  "";
 			for(DsPhieuTaiKhoan item : dsPhieuTaiKhoans){
 				String soPhieuDayDu = "";
 				String tenTaiKhoanDoiUng = "";
@@ -118,31 +122,14 @@
 				String tenCTV = "";
 				if(item.getPhieu() != null){
 					soPhieuDayDu = item.getPhieu().getSoPhieu() + "/" + sdfSo.format(item.getNgayChungTu()) + item.getPhieu().getMaMSThuChi();
-					soPhieuDayDu = item.getPhieu().getSoPhieu() + "/" + sdfSo.format(item.getNgayChungTu()) + item.getPhieu().getMaMSThuChi();
-					if(taiKhoanDoiUng.getSoHieu().equals(PropsUtil.get("config.taikhoanthuvon"))){
-						dauNo = "+";
-						dauCo = "-";		
-						//1 Thu
-						if(item.getPhieu().getLoai() == 1){
-							soTienCo += item.getSoTien();
-							soTien -= item.getSoTien();
-						//2 Chi
-						}else if(item.getPhieu().getLoai() == 2){
-							soTienNo += item.getSoTien();
-							soTien += item.getSoTien();
-						}
-					}else{
-						dauNo = "-";
-						dauCo = "+";	
-						//1 Thu
-						if(item.getPhieu().getLoai() == 1){
-							soTienCo += item.getSoTien();
-							soTien += item.getSoTien();
-						//2 Chi
-						}else if(item.getPhieu().getLoai() == 2){
-							soTienNo += item.getSoTien();
-							soTien -= item.getSoTien();
-						}
+					//1 Thu
+					if(item.getPhieu().getLoai() == 1){
+						soTienCo += item.getSoTien();
+						soTien -= item.getSoTien();
+					//2 Chi
+					}else if(item.getPhieu().getLoai() == 2){
+						soTienNo += item.getSoTien();
+						soTien += item.getSoTien();
 					}
 					if(item.getPhieu().getLoai() == 1 && item.getSoTien() > 0){
 						soCo = df.format(item.getSoTien());
@@ -189,8 +176,8 @@
 		 		<td><b><u>SỐ TRONG THÁNG</u></b></td>
 		 		<td/>
 	 			<td/>
-		 		<td style="text-align: center;"><b><%=dauNo + df.format(soTienNo)%></b></td>
-		 		<td style="text-align: center;"><b><%=dauCo +df.format(soTienCo)%></b></td>
+		 		<td style="text-align: center;"><b><%="+" + df.format(soTienNo)%></b></td>
+		 		<td style="text-align: center;"><b><%="-" + df.format(soTienCo)%></b></td>
 		 	</tr>
 			<tr>
 		 		<td/>

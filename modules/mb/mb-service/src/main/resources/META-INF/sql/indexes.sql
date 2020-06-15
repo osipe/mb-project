@@ -22,6 +22,7 @@ create index IX_4E67C51E on dm_quanlymaso (key_[$COLUMN_LENGTH:75$]);
 create index IX_27CFEFDA on dm_sokheuoc (cauTruc[$COLUMN_LENGTH:75$]);
 
 create index IX_6AD2CFC1 on dm_taikhoandoiung (hoatDong);
+create index IX_4DE60BA3 on dm_taikhoandoiung (loaiTaiKhoan, hoatDong);
 create index IX_9D2A69A2 on dm_taikhoandoiung (soHieu[$COLUMN_LENGTH:75$], hoatDong);
 create index IX_B54D00B7 on dm_taikhoandoiung (taiKhoanDoiUngChaId, hoatDong);
 

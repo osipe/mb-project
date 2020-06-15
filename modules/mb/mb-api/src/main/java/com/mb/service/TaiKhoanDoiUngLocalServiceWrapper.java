@@ -254,6 +254,15 @@ public class TaiKhoanDoiUngLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<com.mb.model.TaiKhoanDoiUng>
+			findByLoaiTaiKhoan_HoatDong(int loaiTaiKhoan, boolean hoatDong)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return _taiKhoanDoiUngLocalService.findByLoaiTaiKhoan_HoatDong(
+			loaiTaiKhoan, hoatDong);
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 

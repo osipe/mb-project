@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
 <!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.1.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_1_0.dtd">
 
-<service-builder  package-path="com.mb">
+<service-builder package-path="com.mb">
 	<namespace>MB</namespace>
-	<entity local-service="true" name="Phieu" remote-service="true" uuid="false" table="ketoan_phieu" >
+	<entity local-service="true" name="Phieu" remote-service="true"
+		uuid="false" table="ketoan_phieu">
 		<column name="phieuId" primary="true" type="long" />
 		<column name="companyId" type="long" />
 		<column name="groupId" type="long" />
@@ -27,7 +28,8 @@
 			<order-column name="phieuId" />
 		</order>
 	</entity>
-	<entity local-service="true" name="LichSuTaiKhoanDauKy" remote-service="true" uuid="false" table="ketoan_lichsutaikhoandauky" >
+	<entity local-service="true" name="LichSuTaiKhoanDauKy"
+		remote-service="true" uuid="false" table="ketoan_lichsutaikhoandauky">
 		<column name="lichSuTaiKhoanDauKyId" primary="true" type="long" />
 		<column name="companyId" type="long" />
 		<column name="groupId" type="long" />
@@ -35,7 +37,7 @@
 		<column name="userName" type="String" />
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
-		
+
 		<column name="taiKhoanDoiUngId" type="long" />
 		<column name="thang" type="int" />
 		<column name="nam" type="int" />
@@ -44,7 +46,8 @@
 		<order by="asc">
 			<order-column name="lichSuTaiKhoanDauKyId" />
 		</order>
-		<finder name="TaiKhoanDoiUngId_Nam_Thang" return-type="LichSuTaiKhoanDauKy">
+		<finder name="TaiKhoanDoiUngId_Nam_Thang"
+			return-type="LichSuTaiKhoanDauKy">
 			<finder-column name="taiKhoanDoiUngId" />
 			<finder-column name="nam" />
 			<finder-column name="thang" />
@@ -53,7 +56,8 @@
 			<finder-column name="taiKhoanDoiUngId" />
 		</finder>
 	</entity>
-	<entity local-service="true" name="DsPhieuTaiKhoan" remote-service="true" uuid="false" table="ketoan_dsphieutaikhoan" >
+	<entity local-service="true" name="DsPhieuTaiKhoan"
+		remote-service="true" uuid="false" table="ketoan_dsphieutaikhoan">
 		<column name="dsPhieuTaiKhoanId" primary="true" type="long" />
 		<column name="companyId" type="long" />
 		<column name="groupId" type="long" />
@@ -68,11 +72,13 @@
 		<column name="dienGiaiTheoDoi" type="String" />
 		<column name="soTien" type="Double" />
 		<column name="tenCTV" type="String" />
+		<column name="maCTV" type="String" />
 		<column name="hoatDong" type="Boolean" />
 		<order by="asc">
 			<order-column name="dsPhieuTaiKhoanId" />
 		</order>
-		<finder name="TaiKhoanDoiUngId_HoatDong" return-type="Collection">
+		<finder name="TaiKhoanDoiUngId_HoatDong"
+			return-type="Collection">
 			<finder-column name="taiKhoanDoiUngId" />
 			<finder-column name="hoatDong" />
 		</finder>
@@ -84,7 +90,8 @@
 			<finder-column name="phieuId" />
 		</finder>
 	</entity>
-	<entity local-service="true" name="LichSuThuPhatChi" remote-service="true" uuid="false" table="mb_lichsuthuphatchi" >
+	<entity local-service="true" name="LichSuThuPhatChi"
+		remote-service="true" uuid="false" table="mb_lichsuthuphatchi">
 		<column name="lichSuThuPhatChiId" primary="true" type="long" />
 		<column name="companyId" type="long" />
 		<column name="groupId" type="long" />
@@ -92,13 +99,13 @@
 		<column name="userName" type="String" />
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
-		
+
 		<column name="phatVayId" type="long" />
 		<column name="maCTV" type="String" />
-		<column name="soTien" type="Double"/>
+		<column name="soTien" type="Double" />
 		<column name="tongSoTienVonTra" type="Double" />
 		<column name="tongSoTienLaiTra" type="Double" />
-	<!-- 	1 : Phát vay,2 : Tất toán,3: thu hằng ngày,4 : thu trước -->
+		<!-- 1 : Phát vay,2 : Tất toán,3: thu hằng ngày,4 : thu trước -->
 		<column name="loai" type="int" />
 		<!-- TAT_CA(0), CHUA_THANH_TOAN(1), DA_THANH_TOAN(2), DA_TAT_TOAN(3),CO_THU_TIEN_TRUOC(4); -->
 		<column name="trangThaiPhatVayHienTai" type="int" />
@@ -116,7 +123,8 @@
 			<finder-column name="loai" />
 		</finder>
 	</entity>
-	<entity local-service="true" name="PhatVay" remote-service="true" uuid="false" table="mb_phatvay" >
+	<entity local-service="true" name="PhatVay"
+		remote-service="true" uuid="false" table="mb_phatvay">
 		<column name="phatVayId" primary="true" type="long" />
 		<column name="companyId" type="long" />
 		<column name="groupId" type="long" />
@@ -124,10 +132,10 @@
 		<column name="userName" type="String" />
 		<column name="ngayTao" type="Date" />
 		<column name="modifiedDate" type="Date" />
-		
+
 		<column name="maCTV" type="String" />
 		<column name="maKhachHang" type="String" />
-		
+
 		<column name="soKU" type="String" />
 		<!-- Ngày vay -->
 		<column name="createDate" type="Date" />
@@ -137,18 +145,18 @@
 		<column name="loaiPhatVay" type="int" />
 		<column name="soLanDaThu" type="int" />
 		<column name="ngayDaThuCuoi" type="Date" />
-		
+
 		<column name="soTienVay" type="Double" />
 		<column name="thoiHan" type="int" />
 		<column name="laiSuatVay" type="Double" />
 		<column name="gocNgay" type="Double" />
 		<column name="laiNgay" type="Double" />
 		<column name="gocNgayCuoi" type="Double" />
-		
+
 		<column name="soNgayThuTruoc" type="int" />
 		<column name="ngayThuTruocTu" type="Date" />
 		<column name="ngayThuTruocDen" type="Date" />
-		
+
 		<column name="ngayTatToan" type="Date" />
 		<!-- TAT_CA(0), CHUA_THANH_TOAN(1), DA_THANH_TOAN(2), DA_TAT_TOAN(3),CO_THU_TIEN_TRUOC(4); -->
 		<column name="trangThai" type="int" />
@@ -162,7 +170,8 @@
 			<finder-column name="soKU" />
 		</finder>
 	</entity>
-	<entity local-service="true" name="TaiSanThueChap" remote-service="true" uuid="false" table="mb_taisaithuechap" >
+	<entity local-service="true" name="TaiSanThueChap"
+		remote-service="true" uuid="false" table="mb_taisaithuechap">
 		<column name="taiSanThueChapId" primary="true" type="long" />
 		<column name="companyId" type="long" />
 		<column name="groupId" type="long" />
@@ -170,7 +179,7 @@
 		<column name="userName" type="String" />
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
-		
+
 		<column name="phatVayId" type="long" />
 		<column name="soKU" type="String" />
 		<column name="maKhachHang" type="String" />
@@ -179,7 +188,7 @@
 		<column name="thongTinTaiSan" type="String" />
 		<column name="ten" type="String" />
 		<column name="ghiChu" type="String" />
-		
+
 		<order by="asc">
 			<order-column name="taiSanThueChapId" />
 		</order>
@@ -188,7 +197,8 @@
 		</finder>
 	</entity>
 	<!-- DANH MUC -->
-	<entity local-service="true" name="SoKheUoc" remote-service="true" uuid="false" table="dm_sokheuoc" >
+	<entity local-service="true" name="SoKheUoc"
+		remote-service="true" uuid="false" table="dm_sokheuoc">
 		<column name="soKheUocId" primary="true" type="long" />
 		<column name="cauTruc" type="String" />
 		<column name="so" type="int" />
@@ -199,8 +209,9 @@
 			<finder-column name="cauTruc" />
 		</finder>
 	</entity>
-	
-	<entity local-service="true" name="LoaiTaiSan" remote-service="true" uuid="false" table="dm_loaiTaiSan" >
+
+	<entity local-service="true" name="LoaiTaiSan"
+		remote-service="true" uuid="false" table="dm_loaiTaiSan">
 		<column name="loaiTaiSanId" primary="true" type="long" />
 		<column name="companyId" type="long" />
 		<column name="groupId" type="long" />
@@ -210,7 +221,7 @@
 		<column name="modifiedDate" type="Date" />
 		<column name="ten" type="String" />
 		<column name="ma" type="String" />
-		<column name="ghiChu" type="String"/>
+		<column name="ghiChu" type="String" />
 		<column name="hoatDong" type="Boolean" />
 		<order by="asc">
 			<order-column name="loaiTaiSanId" />
@@ -219,8 +230,9 @@
 			<finder-column name="ma" />
 		</finder>
 	</entity>
-	
-	<entity local-service="true" name="LaiSuat" remote-service="true" uuid="false" table="dm_laisuat" >
+
+	<entity local-service="true" name="LaiSuat"
+		remote-service="true" uuid="false" table="dm_laisuat">
 		<column name="laiSuatId" primary="true" type="long" />
 		<column name="companyId" type="long" />
 		<column name="groupId" type="long" />
@@ -243,7 +255,8 @@
 			<finder-column name="thoiHan" />
 		</finder>
 	</entity>
-	<entity local-service="true" name="CongTacVien" remote-service="true" uuid="false" table="dm_congtacvien" >
+	<entity local-service="true" name="CongTacVien"
+		remote-service="true" uuid="false" table="dm_congtacvien">
 		<column name="congTacVienId" primary="true" type="long" />
 		<column name="companyId" type="long" />
 		<column name="groupId" type="long" />
@@ -254,10 +267,10 @@
 		<column name="ma" type="String" />
 		<column name="hoTen" type="String" />
 		<column name="soCMND" type="String" />
-		<column name="duNoToiDa" type="Double"/>
-		<column name="duNoToiDaTheChap" type="Double"/>
+		<column name="duNoToiDa" type="Double" />
+		<column name="duNoToiDaTheChap" type="Double" />
 		<column name="diaChi" type="String" />
-		<column name="ghiChu" type="String"/>
+		<column name="ghiChu" type="String" />
 		<column name="hoatDong" type="Boolean" />
 		<order by="asc">
 			<order-column name="congTacVienId" />
@@ -269,7 +282,8 @@
 			<finder-column name="soCMND" />
 		</finder>
 	</entity>
-	<entity local-service="true" name="KhachHang" remote-service="true" uuid="false" table="dm_khachhang" >
+	<entity local-service="true" name="KhachHang"
+		remote-service="true" uuid="false" table="dm_khachhang">
 		<column name="khachHangId" primary="true" type="long" />
 		<column name="companyId" type="long" />
 		<column name="groupId" type="long" />
@@ -296,7 +310,8 @@
 			<finder-column name="soCMND" />
 		</finder>
 	</entity>
-	<entity local-service="true" name="MaSoThuChi" remote-service="true" uuid="false" table="dm_masothuchi" >
+	<entity local-service="true" name="MaSoThuChi"
+		remote-service="true" uuid="false" table="dm_masothuchi">
 		<column name="maSoThuChiId" primary="true" type="long" />
 		<column name="companyId" type="long" />
 		<column name="groupId" type="long" />
@@ -322,7 +337,8 @@
 			<finder-column name="hoatDong" />
 		</finder>
 	</entity>
-	<entity local-service="true" name="MaSoTheoDoi" remote-service="true" uuid="false" table="dm_masotheodoi" >
+	<entity local-service="true" name="MaSoTheoDoi"
+		remote-service="true" uuid="false" table="dm_masotheodoi">
 		<column name="maSoTheoDoiId" primary="true" type="long" />
 		<column name="companyId" type="long" />
 		<column name="groupId" type="long" />
@@ -340,9 +356,10 @@
 			<finder-column name="ma" />
 		</finder>
 	</entity>
-	<entity local-service="true" name="QuanLyMaSo" remote-service="true" uuid="false" table="dm_quanlymaso" >
+	<entity local-service="true" name="QuanLyMaSo"
+		remote-service="true" uuid="false" table="dm_quanlymaso">
 		<column name="quanLyMaSoId" primary="true" type="long" />
-		<!-- LOAI_NGAY MaSoThuChi-->
+		<!-- LOAI_NGAY MaSoThuChi -->
 		<column name="key" type="String" />
 		<column name="so" type="int" />
 		<order by="asc">
@@ -352,9 +369,10 @@
 			<finder-column name="key" />
 		</finder>
 	</entity>
-	<entity local-service="true" name="QuanLyMaSo" remote-service="true" uuid="false" table="dm_quanlymaso" >
+	<entity local-service="true" name="QuanLyMaSo"
+		remote-service="true" uuid="false" table="dm_quanlymaso">
 		<column name="quanLyMaSoId" primary="true" type="long" />
-		<!-- LOAI_NGAY MaSoThuChi-->
+		<!-- LOAI_NGAY MaSoThuChi -->
 		<column name="key" type="String" />
 		<column name="so" type="int" />
 		<order by="asc">
@@ -364,7 +382,8 @@
 			<finder-column name="key" />
 		</finder>
 	</entity>
-	<entity local-service="true" name="TaiKhoanDoiUng" remote-service="true" uuid="false" table="dm_taikhoandoiung" >
+	<entity local-service="true" name="TaiKhoanDoiUng"
+		remote-service="true" uuid="false" table="dm_taikhoandoiung">
 		<column name="taiKhoanDoiUngId" primary="true" type="long" />
 		<column name="companyId" type="long" />
 		<column name="groupId" type="long" />
@@ -375,6 +394,8 @@
 		<column name="taiKhoanDoiUngChaId" type="long" />
 		<column name="soHieu" type="String" />
 		<column name="ten" type="String" />
+		<!-- 1 : Cty - 2 : CTV -->
+		<column name="loaiTaiKhoan" type="int" />
 		<column name="hoatDong" type="Boolean" />
 		<order by="asc">
 			<order-column name="taiKhoanDoiUngId" />
@@ -382,10 +403,15 @@
 		<finder name="SoHieu" return-type="TaiKhoanDoiUng">
 			<finder-column name="soHieu" />
 		</finder>
-			<finder name="HoatDong" return-type="Collection">
+		<finder name="HoatDong" return-type="Collection">
 			<finder-column name="hoatDong" />
 		</finder>
-		<finder name="TaiKhoanDoiUngChaId_HoatDong" return-type="Collection">
+		<finder name="LoaiTaiKhoan_HoatDong" return-type="Collection">
+			<finder-column name="loaiTaiKhoan" />
+			<finder-column name="hoatDong" />
+		</finder>
+		<finder name="TaiKhoanDoiUngChaId_HoatDong"
+			return-type="Collection">
 			<finder-column name="taiKhoanDoiUngChaId" />
 			<finder-column name="hoatDong" />
 		</finder>

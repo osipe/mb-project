@@ -17,12 +17,18 @@
 			<a class="nav-link active" id="soCai-tab" data-toggle="tab" href="#<portlet:namespace />soCai" role="tab" aria-controls="<portlet:namespace />soCai" aria-selected="false">Sổ cái</a>
 		</li>
 		<li class="nav-item">
+			<a class="nav-link" id="soDuNoCTV-tab" data-toggle="tab" href="#<portlet:namespace />soDuNoCTV" role="tab" aria-controls="<portlet:namespace />soDuNoCTV" aria-selected="false">Sổ dư nợ CTV</a>
+		</li
+		<li class="nav-item">
 			<a class="nav-link" id="soQuyTienMat-tab" data-toggle="tab" href="#<portlet:namespace />soQuyTienMat" role="tab" aria-controls="<portlet:namespace />soQuyTienMat" aria-selected="false">Sổ quỷ tiền mặt</a>
 		</li>		
 	</ul>
 	<div class="tab-content" id="myTabContent">
 		<div class="tab-pane fade show active" id="<portlet:namespace />soCai" role="tabpanel" aria-labelledby="soCai-tab">
 			<%@ include file="/html/ketoan/so/socai/view.jsp"%>
+		</div>
+		<div class="tab-pane" id="<portlet:namespace />soDuNoCTV" role="tabpanel" aria-labelledby="soDuNoCTV-tab">
+			<%@ include file="/html/ketoan/so/soCTV/view.jsp"%>
 		</div>
 		<div class="tab-pane" id="<portlet:namespace />soQuyTienMat" role="tabpanel" aria-labelledby="soQuyTienMat-tab">
 			<%@ include file="/html/ketoan/so/soquytienmat/view.jsp"%>

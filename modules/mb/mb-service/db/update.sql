@@ -1,4 +1,5 @@
-
+ALTER TABLE public.dm_taikhoandoiung ADD COLUMN loaiTaiKhoan integer;
+ALTER TABLE public.ketoan_dsphieutaikhoan ADD COLUMN maCTV  character varying(255);
 ALTER TABLE public.ketoan_dsphieutaikhoan ADD COLUMN tenCTV  character varying(255);
 CREATE OR REPLACE FUNCTION public.capNhatTenCTV()
   RETURNS character varying AS

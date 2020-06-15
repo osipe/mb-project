@@ -68,6 +68,7 @@ public class TaiKhoanDoiUngWrapper
 		attributes.put("taiKhoanDoiUngChaId", getTaiKhoanDoiUngChaId());
 		attributes.put("soHieu", getSoHieu());
 		attributes.put("ten", getTen());
+		attributes.put("loaiTaiKhoan", getLoaiTaiKhoan());
 		attributes.put("hoatDong", getHoatDong());
 
 		return attributes;
@@ -135,6 +136,12 @@ public class TaiKhoanDoiUngWrapper
 			setTen(ten);
 		}
 
+		Integer loaiTaiKhoan = (Integer)attributes.get("loaiTaiKhoan");
+
+		if (loaiTaiKhoan != null) {
+			setLoaiTaiKhoan(loaiTaiKhoan);
+		}
+
 		Boolean hoatDong = (Boolean)attributes.get("hoatDong");
 
 		if (hoatDong != null) {
@@ -196,6 +203,16 @@ public class TaiKhoanDoiUngWrapper
 	@Override
 	public Boolean getHoatDong() {
 		return _taiKhoanDoiUng.getHoatDong();
+	}
+
+	/**
+	 * Returns the loai tai khoan of this tai khoan doi ung.
+	 *
+	 * @return the loai tai khoan of this tai khoan doi ung
+	 */
+	@Override
+	public int getLoaiTaiKhoan() {
+		return _taiKhoanDoiUng.getLoaiTaiKhoan();
 	}
 
 	/**
@@ -378,6 +395,16 @@ public class TaiKhoanDoiUngWrapper
 	@Override
 	public void setHoatDong(Boolean hoatDong) {
 		_taiKhoanDoiUng.setHoatDong(hoatDong);
+	}
+
+	/**
+	 * Sets the loai tai khoan of this tai khoan doi ung.
+	 *
+	 * @param loaiTaiKhoan the loai tai khoan of this tai khoan doi ung
+	 */
+	@Override
+	public void setLoaiTaiKhoan(int loaiTaiKhoan) {
+		_taiKhoanDoiUng.setLoaiTaiKhoan(loaiTaiKhoan);
 	}
 
 	/**

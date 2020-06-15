@@ -66,7 +66,7 @@ public class DsPhieuTaiKhoanCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(33);
 
 		sb.append("{dsPhieuTaiKhoanId=");
 		sb.append(dsPhieuTaiKhoanId);
@@ -96,6 +96,8 @@ public class DsPhieuTaiKhoanCacheModel
 		sb.append(soTien);
 		sb.append(", tenCTV=");
 		sb.append(tenCTV);
+		sb.append(", maCTV=");
+		sb.append(maCTV);
 		sb.append(", hoatDong=");
 		sb.append(hoatDong);
 		sb.append("}");
@@ -167,6 +169,13 @@ public class DsPhieuTaiKhoanCacheModel
 			dsPhieuTaiKhoanImpl.setTenCTV(tenCTV);
 		}
 
+		if (maCTV == null) {
+			dsPhieuTaiKhoanImpl.setMaCTV("");
+		}
+		else {
+			dsPhieuTaiKhoanImpl.setMaCTV(maCTV);
+		}
+
 		dsPhieuTaiKhoanImpl.setHoatDong(hoatDong);
 
 		dsPhieuTaiKhoanImpl.resetOriginalValues();
@@ -196,6 +205,7 @@ public class DsPhieuTaiKhoanCacheModel
 
 		soTien = objectInput.readDouble();
 		tenCTV = objectInput.readUTF();
+		maCTV = objectInput.readUTF();
 
 		hoatDong = objectInput.readBoolean();
 	}
@@ -248,6 +258,13 @@ public class DsPhieuTaiKhoanCacheModel
 			objectOutput.writeUTF(tenCTV);
 		}
 
+		if (maCTV == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(maCTV);
+		}
+
 		objectOutput.writeBoolean(hoatDong);
 	}
 
@@ -265,6 +282,7 @@ public class DsPhieuTaiKhoanCacheModel
 	public String dienGiaiTheoDoi;
 	public double soTien;
 	public String tenCTV;
+	public String maCTV;
 	public boolean hoatDong;
 
 }
