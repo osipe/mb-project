@@ -17,7 +17,7 @@
 	<portlet:param name="mvcPath" value="/html/thongke/phat_vay_ngay/data.jsp" />
 </portlet:renderURL>
 <aui:form name="frm">
-<h3 style="text-align: center;">BẢNG KÊ CHI PHÁT VAY NGÀY</h3>
+<h3 style="text-align: center;">BẢNG KÊ PHÁT VAY NGÀY</h3>
 <table class="info table-pa5 aui-w100">
 	<tr>
 		<td>

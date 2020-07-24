@@ -320,6 +320,15 @@ public class CongTacVienLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<com.mb.model.CongTacVien> getCTVThuPhatChi(
+			String maCTV, java.util.Date ngayTaoTu, java.util.Date ngayTaoDen)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return _congTacVienLocalService.getCTVThuPhatChi(
+			maCTV, ngayTaoTu, ngayTaoDen);
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery
 		getIndexableActionableDynamicQuery() {
 

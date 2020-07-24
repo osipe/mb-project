@@ -47,6 +47,8 @@ public class LichSuTaiKhoanDauKySoap implements Serializable {
 		soapModel.setThang(model.getThang());
 		soapModel.setNam(model.getNam());
 		soapModel.setSoTienTon(model.getSoTienTon());
+		soapModel.setSoTienThu(model.getSoTienThu());
+		soapModel.setSoTienChi(model.getSoTienChi());
 		soapModel.setHoatDong(model.getHoatDong());
 
 		return soapModel;
@@ -198,6 +200,22 @@ public class LichSuTaiKhoanDauKySoap implements Serializable {
 		_soTienTon = soTienTon;
 	}
 
+	public Double getSoTienThu() {
+		return _soTienThu;
+	}
+
+	public void setSoTienThu(Double soTienThu) {
+		_soTienThu = soTienThu;
+	}
+
+	public Double getSoTienChi() {
+		return _soTienChi;
+	}
+
+	public void setSoTienChi(Double soTienChi) {
+		_soTienChi = soTienChi;
+	}
+
 	public Boolean getHoatDong() {
 		return _hoatDong;
 	}
@@ -217,6 +235,8 @@ public class LichSuTaiKhoanDauKySoap implements Serializable {
 	private int _thang;
 	private int _nam;
 	private Double _soTienTon;
+	private Double _soTienThu;
+	private Double _soTienChi;
 	private Boolean _hoatDong;
 
 }

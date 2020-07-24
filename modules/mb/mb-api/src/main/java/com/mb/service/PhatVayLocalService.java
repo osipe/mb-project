@@ -263,7 +263,8 @@ public interface PhatVayLocalService
 		String maCTV, Date ngayThuTienTu);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<PhatVay> getPhatVaySaoKe(String maCTV, Date createDate)
+	public List<PhatVay> getPhatVaySaoKe(
+			String maCTV, int loaiPhatVay, Date createDate)
 		throws SystemException;
 
 	/**

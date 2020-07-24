@@ -66,7 +66,7 @@ public class TaiKhoanDoiUngCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(27);
 
 		sb.append("{taiKhoanDoiUngId=");
 		sb.append(taiKhoanDoiUngId);
@@ -88,6 +88,8 @@ public class TaiKhoanDoiUngCacheModel
 		sb.append(soHieu);
 		sb.append(", ten=");
 		sb.append(ten);
+		sb.append(", dienGiaiTheoDoi=");
+		sb.append(dienGiaiTheoDoi);
 		sb.append(", loaiTaiKhoan=");
 		sb.append(loaiTaiKhoan);
 		sb.append(", hoatDong=");
@@ -143,6 +145,13 @@ public class TaiKhoanDoiUngCacheModel
 			taiKhoanDoiUngImpl.setTen(ten);
 		}
 
+		if (dienGiaiTheoDoi == null) {
+			taiKhoanDoiUngImpl.setDienGiaiTheoDoi("");
+		}
+		else {
+			taiKhoanDoiUngImpl.setDienGiaiTheoDoi(dienGiaiTheoDoi);
+		}
+
 		taiKhoanDoiUngImpl.setLoaiTaiKhoan(loaiTaiKhoan);
 		taiKhoanDoiUngImpl.setHoatDong(hoatDong);
 
@@ -167,6 +176,7 @@ public class TaiKhoanDoiUngCacheModel
 		taiKhoanDoiUngChaId = objectInput.readLong();
 		soHieu = objectInput.readUTF();
 		ten = objectInput.readUTF();
+		dienGiaiTheoDoi = objectInput.readUTF();
 
 		loaiTaiKhoan = objectInput.readInt();
 
@@ -209,6 +219,13 @@ public class TaiKhoanDoiUngCacheModel
 			objectOutput.writeUTF(ten);
 		}
 
+		if (dienGiaiTheoDoi == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(dienGiaiTheoDoi);
+		}
+
 		objectOutput.writeInt(loaiTaiKhoan);
 
 		objectOutput.writeBoolean(hoatDong);
@@ -224,6 +241,7 @@ public class TaiKhoanDoiUngCacheModel
 	public long taiKhoanDoiUngChaId;
 	public String soHieu;
 	public String ten;
+	public String dienGiaiTheoDoi;
 	public int loaiTaiKhoan;
 	public boolean hoatDong;
 

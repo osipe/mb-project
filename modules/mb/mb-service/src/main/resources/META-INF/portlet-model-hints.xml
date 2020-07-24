@@ -34,6 +34,7 @@
 		<field name="soTien" type="Double" />
 		<field name="tenCTV" type="String" />
 		<field name="maCTV" type="String" />
+		<field name="soPhieu" type="String" />
 		<field name="hoatDong" type="Boolean" />
 	</model>
 	<model name="com.mb.model.KhachHang">
@@ -79,6 +80,8 @@
 		<field name="thang" type="int" />
 		<field name="nam" type="int" />
 		<field name="soTienTon" type="Double" />
+		<field name="soTienThu" type="Double" />
+		<field name="soTienChi" type="Double" />
 		<field name="hoatDong" type="Boolean" />
 	</model>
 	<model name="com.mb.model.LichSuThuPhatChi">
@@ -132,7 +135,6 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="ma" type="String" />
 		<field name="dienGiai" type="String" />
-		<field name="dienGiaiTheoDoi" type="String" />
 		<field name="loai" type="int" />
 		<field name="hoatDong" type="Boolean" />
 	</model>
@@ -207,6 +209,7 @@
 		<field name="taiKhoanDoiUngChaId" type="long" />
 		<field name="soHieu" type="String" />
 		<field name="ten" type="String" />
+		<field name="dienGiaiTheoDoi" type="String" />
 		<field name="loaiTaiKhoan" type="int" />
 		<field name="hoatDong" type="Boolean" />
 	</model>

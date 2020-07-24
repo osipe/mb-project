@@ -78,8 +78,8 @@ public class TaiKhoanDoiUngModelImpl
 		{"userName", Types.VARCHAR}, {"createDate", Types.TIMESTAMP},
 		{"modifiedDate", Types.TIMESTAMP},
 		{"taiKhoanDoiUngChaId", Types.BIGINT}, {"soHieu", Types.VARCHAR},
-		{"ten", Types.VARCHAR}, {"loaiTaiKhoan", Types.INTEGER},
-		{"hoatDong", Types.BOOLEAN}
+		{"ten", Types.VARCHAR}, {"dienGiaiTheoDoi", Types.VARCHAR},
+		{"loaiTaiKhoan", Types.INTEGER}, {"hoatDong", Types.BOOLEAN}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -96,12 +96,13 @@ public class TaiKhoanDoiUngModelImpl
 		TABLE_COLUMNS_MAP.put("taiKhoanDoiUngChaId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("soHieu", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("ten", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("dienGiaiTheoDoi", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("loaiTaiKhoan", Types.INTEGER);
 		TABLE_COLUMNS_MAP.put("hoatDong", Types.BOOLEAN);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table dm_taikhoandoiung (taiKhoanDoiUngId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,taiKhoanDoiUngChaId LONG,soHieu VARCHAR(75) null,ten VARCHAR(75) null,loaiTaiKhoan INTEGER,hoatDong BOOLEAN)";
+		"create table dm_taikhoandoiung (taiKhoanDoiUngId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,taiKhoanDoiUngChaId LONG,soHieu VARCHAR(75) null,ten VARCHAR(75) null,dienGiaiTheoDoi VARCHAR(75) null,loaiTaiKhoan INTEGER,hoatDong BOOLEAN)";
 
 	public static final String TABLE_SQL_DROP = "drop table dm_taikhoandoiung";
 
@@ -165,6 +166,7 @@ public class TaiKhoanDoiUngModelImpl
 		model.setTaiKhoanDoiUngChaId(soapModel.getTaiKhoanDoiUngChaId());
 		model.setSoHieu(soapModel.getSoHieu());
 		model.setTen(soapModel.getTen());
+		model.setDienGiaiTheoDoi(soapModel.getDienGiaiTheoDoi());
 		model.setLoaiTaiKhoan(soapModel.getLoaiTaiKhoan());
 		model.setHoatDong(soapModel.getHoatDong());
 
@@ -517,6 +519,28 @@ public class TaiKhoanDoiUngModelImpl
 
 			});
 		attributeGetterFunctions.put(
+			"dienGiaiTheoDoi",
+			new Function<TaiKhoanDoiUng, Object>() {
+
+				@Override
+				public Object apply(TaiKhoanDoiUng taiKhoanDoiUng) {
+					return taiKhoanDoiUng.getDienGiaiTheoDoi();
+				}
+
+			});
+		attributeSetterBiConsumers.put(
+			"dienGiaiTheoDoi",
+			new BiConsumer<TaiKhoanDoiUng, Object>() {
+
+				@Override
+				public void accept(
+					TaiKhoanDoiUng taiKhoanDoiUng, Object dienGiaiTheoDoi) {
+
+					taiKhoanDoiUng.setDienGiaiTheoDoi((String)dienGiaiTheoDoi);
+				}
+
+			});
+		attributeGetterFunctions.put(
 			"loaiTaiKhoan",
 			new Function<TaiKhoanDoiUng, Object>() {
 
@@ -740,6 +764,22 @@ public class TaiKhoanDoiUngModelImpl
 
 	@JSON
 	@Override
+	public String getDienGiaiTheoDoi() {
+		if (_dienGiaiTheoDoi == null) {
+			return "";
+		}
+		else {
+			return _dienGiaiTheoDoi;
+		}
+	}
+
+	@Override
+	public void setDienGiaiTheoDoi(String dienGiaiTheoDoi) {
+		_dienGiaiTheoDoi = dienGiaiTheoDoi;
+	}
+
+	@JSON
+	@Override
 	public int getLoaiTaiKhoan() {
 		return _loaiTaiKhoan;
 	}
@@ -826,6 +866,7 @@ public class TaiKhoanDoiUngModelImpl
 		taiKhoanDoiUngImpl.setTaiKhoanDoiUngChaId(getTaiKhoanDoiUngChaId());
 		taiKhoanDoiUngImpl.setSoHieu(getSoHieu());
 		taiKhoanDoiUngImpl.setTen(getTen());
+		taiKhoanDoiUngImpl.setDienGiaiTheoDoi(getDienGiaiTheoDoi());
 		taiKhoanDoiUngImpl.setLoaiTaiKhoan(getLoaiTaiKhoan());
 		taiKhoanDoiUngImpl.setHoatDong(getHoatDong());
 
@@ -976,6 +1017,14 @@ public class TaiKhoanDoiUngModelImpl
 			taiKhoanDoiUngCacheModel.ten = null;
 		}
 
+		taiKhoanDoiUngCacheModel.dienGiaiTheoDoi = getDienGiaiTheoDoi();
+
+		String dienGiaiTheoDoi = taiKhoanDoiUngCacheModel.dienGiaiTheoDoi;
+
+		if ((dienGiaiTheoDoi != null) && (dienGiaiTheoDoi.length() == 0)) {
+			taiKhoanDoiUngCacheModel.dienGiaiTheoDoi = null;
+		}
+
 		taiKhoanDoiUngCacheModel.loaiTaiKhoan = getLoaiTaiKhoan();
 
 		taiKhoanDoiUngCacheModel.hoatDong = getHoatDong();
@@ -1066,6 +1115,7 @@ public class TaiKhoanDoiUngModelImpl
 	private String _soHieu;
 	private String _originalSoHieu;
 	private String _ten;
+	private String _dienGiaiTheoDoi;
 	private int _loaiTaiKhoan;
 	private int _originalLoaiTaiKhoan;
 	private boolean _setOriginalLoaiTaiKhoan;

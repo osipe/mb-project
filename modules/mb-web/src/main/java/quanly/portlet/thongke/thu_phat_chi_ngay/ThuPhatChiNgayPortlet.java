@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
@@ -28,16 +29,26 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.mb.model.CongTacVien;
 import com.mb.model.LichSuThuPhatChi;
+import com.mb.model.PhatVay;
 import com.mb.service.CongTacVienLocalServiceUtil;
 import com.mb.service.LichSuThuPhatChiLocalServiceUtil;
+import com.mb.service.PhatVayLocalServiceUtil;
 
+import fr.opensagres.xdocreport.document.IXDocReport;
+import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
+import fr.opensagres.xdocreport.template.IContext;
+import fr.opensagres.xdocreport.template.TemplateEngineKind;
+import fr.opensagres.xdocreport.template.formatter.FieldsMetadata;
 import quanly.constants.FileType;
 import quanly.constants.QuanlyPortletKeys;
+import quanly.dto.CongTacVienDTO;
 import quanly.dto.LichSuThuPhatChDTO;
-import quanly.portlet.danhmuc.ctv.CongTacVienComparator;
+import quanly.util.DocSo;
 import quanly.util.JasperReportUtil;
 
 /**
@@ -60,6 +71,8 @@ import quanly.util.JasperReportUtil;
 		"javax.portlet.security-role-ref=power-user,user",
 		"com.liferay.portlet.footer-portlet-javascript=/js/main.js", }, service = Portlet.class)
 public class ThuPhatChiNgayPortlet extends MVCPortlet {
+	private static ResourceBundle resourceBundle = ResourceBundle.getBundle("content.Language");
+
 	@Override
 	public void serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws IOException, PortletException {
@@ -72,12 +85,101 @@ public class ThuPhatChiNgayPortlet extends MVCPortlet {
 		serviceContext.setUserId(themeDisplay.getUserId());
 		if (resourceId.equals("inThuPhatChiNgay")) {
 			kq = inThuPhatChiNgay(resourceRequest, resourceResponse, serviceContext);
+		} else if (resourceId.equals("printPhieuThuTienHangNgay")) {
+			kq = printPhieuThuTienHangNgay(resourceRequest, resourceResponse, serviceContext);
 		}
 		PrintWriter writer = resourceResponse.getWriter();
 		writer.print(kq.toString());
 		writer.flush();
 		writer.close();
 
+	}
+
+	public JSONObject printPhieuThuTienHangNgay(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
+			ServiceContext serviceContext) throws IOException {
+		JSONObject kq = JSONFactoryUtil.createJSONObject();
+		long ngayThuTienTime = ParamUtil.getLong(resourceRequest, "ngayThuTien");
+		Date ngayThuTien = ngayThuTienTime != 0 ? new Date(ngayThuTienTime) : null;
+		String maCTV = ParamUtil.getString(resourceRequest, "maCTV");
+		InputStream in = null;
+		OutputStream outStream = resourceResponse.getPortletOutputStream();
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			DecimalFormat df = new DecimalFormat("###,###.###");
+			List<CongTacVienDTO> congTacVienDTOs = new ArrayList<CongTacVienDTO>();
+			LichSuThuPhatChiComparator comparator = new LichSuThuPhatChiComparator("createdate", true);
+			List<CongTacVien> items = CongTacVienLocalServiceUtil.getCTVThuPhatChi(maCTV, ngayThuTien, ngayThuTien);
+			for (CongTacVien ctv : items) {
+				List<LichSuThuPhatChi> lichSuIn = LichSuThuPhatChiLocalServiceUtil.findByCTV_Loai_Createdate(maCTV, 3,
+						ngayThuTien, ngayThuTien, -1, -1, comparator);
+
+				Double tongVonTra = GetterUtil.getDouble("0");
+				Double tongLaiTra = GetterUtil.getDouble("0");
+				for (LichSuThuPhatChi item : lichSuIn) {
+					tongVonTra += item.getTongSoTienVonTra();
+					tongLaiTra += item.getTongSoTienLaiTra();
+				}
+				Double tongduNoGoc = GetterUtil.getDouble("0");
+				List<PhatVay> phatVays = PhatVayLocalServiceUtil.getPhatVaySaoKe(maCTV, 0, ngayThuTien);
+				for (PhatVay pv : phatVays) {
+					Double duGoc = pv.getSoTienVay();
+					List<LichSuThuPhatChi> lichSuDuNo = LichSuThuPhatChiLocalServiceUtil
+							.findByPhatVay_Createdate_Loai(pv.getPhatVayId(), null, ngayThuTien, "3,4");
+					for (LichSuThuPhatChi lichSuThuPhatChi : lichSuDuNo) {
+						duGoc -= lichSuThuPhatChi.getTongSoTienVonTra();
+					}
+					tongduNoGoc += duGoc;
+				}
+				System.out.println("tongduNoGoc : " + tongduNoGoc);
+				congTacVienDTOs
+						.add(new CongTacVienDTO(maCTV + "/" + new SimpleDateFormat("ddMMyyyy").format(ngayThuTien),
+								maCTV, ctv.getHoTen(), ctv.getDiaChi(), df.format(tongVonTra).replaceAll(",", "."),
+								df.format(tongLaiTra).replaceAll(",", "."),
+								df.format(tongLaiTra + tongVonTra).replaceAll(",", "."),
+								DocSo.docSo(GetterUtil.getLong(tongLaiTra + tongVonTra)),
+								df.format(tongduNoGoc).replaceAll(",", "."), "", "", "", "", null, null));
+			}
+
+			String nameFile = "THU_TIEN_NGAY_" + new SimpleDateFormat("ddMMyyyy").format(ngayThuTien);
+			if (Validator.isNotNull(maCTV)) {
+				nameFile = maCTV + "_" + new SimpleDateFormat("ddMMyyyy").format(ngayThuTien);
+			}
+			resourceResponse.setContentType("application/DOCX");
+			resourceResponse.setProperty("Content-Disposition", "attachment; filename=\"" + nameFile + ".docx\"");
+			in = getServletContext().getResourceAsStream("report/MAU_THU_TIEN_HANG_NGAY.docx");
+
+			IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Velocity);
+			IContext iContext = report.createContext();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("TEN_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.ten")));
+			map.put("DIA_CHI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.diachi")));
+			map.put("SO_DIEN_THOAI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.sodienthoai")));
+			map.put("NGAY", sdf.format(ngayThuTien).substring(0, 2));
+			map.put("THANG", sdf.format(ngayThuTien).substring(3, 5));
+			map.put("NAM", sdf.format(ngayThuTien).substring(6, 10));
+
+			FieldsMetadata metadata = new FieldsMetadata();
+			metadata.addFieldAsList("ctvs.so");
+			metadata.addFieldAsList("ctvs.maSo");
+			metadata.addFieldAsList("ctvs.hoTen");
+			metadata.addFieldAsList("ctvs.diaChi");
+			metadata.addFieldAsList("ctvs.vonTra");
+			metadata.addFieldAsList("ctvs.laiTra");
+			metadata.addFieldAsList("ctvs.tongTien");
+			metadata.addFieldAsList("ctvs.tongTienBangChu");
+			metadata.addFieldAsList("ctvs.duNoGoc");
+			report.setFieldsMetadata(metadata);
+			iContext.putMap(map);
+			iContext.put("ctvs", congTacVienDTOs);
+			report.process(iContext, outStream);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			kq.putException(e);
+		} finally {
+		}
+		outStream.flush();
+		return kq;
 	}
 
 	public JSONObject inThuPhatChiNgay(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
@@ -87,8 +189,7 @@ public class ThuPhatChiNgayPortlet extends MVCPortlet {
 		int typeIn = ParamUtil.getInteger(resourceRequest, "typeIn");
 		long ngayTuTime = ParamUtil.getLong(resourceRequest, "ngayTuTime");
 		Date ngayBatDauTu = ngayTuTime != 0 ? new Date(ngayTuTime) : null;
-		CongTacVienComparator obc = new CongTacVienComparator("createdate", true);
-		List<CongTacVien> items = CongTacVienLocalServiceUtil.findBase(maCTV, "", "", "", 1, -1, -1, obc);
+		List<CongTacVien> items = CongTacVienLocalServiceUtil.getCTVThuPhatChi(maCTV, ngayBatDauTu, ngayBatDauTu);
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		DecimalFormat df = new DecimalFormat("###,###.###");
 		if (CollectionUtils.isNotEmpty(items)) {
@@ -106,84 +207,100 @@ public class ThuPhatChiNgayPortlet extends MVCPortlet {
 					parameters.put("ngayThongKe", sdf.format(ngayBatDauTu));
 				}
 				int index = 0;
-				Double tongTienAll = GetterUtil.getDouble("0");
+				Double tongTienChiAll = GetterUtil.getDouble("0");
 				Double tongTienVonAll = GetterUtil.getDouble("0");
 				Double tongTienLaiAll = GetterUtil.getDouble("0");
 				for (CongTacVien item : items) {
 					index++;
+					Double tongTienChiCTV = GetterUtil.getDouble("0");
+					Double tongTienVonCTV = GetterUtil.getDouble("0");
+					Double tongTienLaiCTV = GetterUtil.getDouble("0");
+
+					Double tienVonPV = GetterUtil.getDouble("0");
+					Double tienLaiPV = GetterUtil.getDouble("0");
+					Double tongTienPV = GetterUtil.getDouble("0");
+
+					Double tienVonTT = GetterUtil.getDouble("0");
+					Double tienLaiTT = GetterUtil.getDouble("0");
+
+					Double tienVonTHN = GetterUtil.getDouble("0");
+					Double tienLaiTHN = GetterUtil.getDouble("0");
+
+					Double tienVonThuTruoc = GetterUtil.getDouble("0");
+					Double tienLaiThuTruoc = GetterUtil.getDouble("0");
 					LichSuThuPhatChiComparator comparator = new LichSuThuPhatChiComparator("createdate", true);
 					List<LichSuThuPhatChi> lichSuThuPhatChis = LichSuThuPhatChiLocalServiceUtil
-							.findByCTV_Loai_Createdate(item.getMa(), 0, ngayBatDauTu, ngayBatDauTu, -1, -1,
-									comparator);
+							.findByCTV_Loai_Createdate(item.getMa(), 0, ngayBatDauTu, ngayBatDauTu, -1, -1, comparator);
 					List<LichSuThuPhatChDTO> lichSuThuPhatChDTOs = new ArrayList<LichSuThuPhatChDTO>();
-					Double tongTien = GetterUtil.getDouble("0");
-					Double tongTienVon = GetterUtil.getDouble("0");
-					Double tongTienLai = GetterUtil.getDouble("0");
 					if (CollectionUtils.isNotEmpty(lichSuThuPhatChis)) {
-						Double tienVonPV = GetterUtil.getDouble("0");
-					 	Double tienLaiPV = GetterUtil.getDouble("0");
-					 	Double tongTienPV = GetterUtil.getDouble("0");
-					 	
-					 	Double tienVonTT = GetterUtil.getDouble("0");
-					 	Double tienLaiTT = GetterUtil.getDouble("0");
-					 	Double tongTienTT = GetterUtil.getDouble("0");
-					 	
-					 	Double tienVonTHN = GetterUtil.getDouble("0");
-					 	Double tienLaiTHN = GetterUtil.getDouble("0");
-					 	Double tongTienTHN = GetterUtil.getDouble("0");
-					 	
-					 	Double tienVonThuTruoc = GetterUtil.getDouble("0");
-					 	Double tienLaiThuTruoc = GetterUtil.getDouble("0");
-					 	Double tongTienThuTruoc = GetterUtil.getDouble("0");
 						for (LichSuThuPhatChi lichSuThuPhatChi : lichSuThuPhatChis) {
-							tongTien += lichSuThuPhatChi.getSoTien();
-							tongTienVon += lichSuThuPhatChi.getTongSoTienVonTra();
-							tongTienLai += lichSuThuPhatChi.getTongSoTienLaiTra();
-							if(lichSuThuPhatChi.getLoai() == 1){
-				 				tienVonPV += lichSuThuPhatChi.getTongSoTienVonTra();
-				 				tienLaiPV += lichSuThuPhatChi.getTongSoTienLaiTra();
-				 				tongTienPV += lichSuThuPhatChi.getSoTien();
-				 			}else if(lichSuThuPhatChi.getLoai() == 2){
-				 				tienVonTT += lichSuThuPhatChi.getTongSoTienVonTra();
-				 				tienLaiTT += lichSuThuPhatChi.getTongSoTienLaiTra();
-				 				tongTienTT += lichSuThuPhatChi.getSoTien();
-				 			}else if(lichSuThuPhatChi.getLoai() == 3){
-				 				tienVonTHN += lichSuThuPhatChi.getTongSoTienVonTra();
-				 				tienLaiTHN += lichSuThuPhatChi.getTongSoTienLaiTra();
-				 				tongTienTHN += lichSuThuPhatChi.getSoTien();
-				 			}else if(lichSuThuPhatChi.getLoai() == 4){
-				 				tienVonThuTruoc += lichSuThuPhatChi.getTongSoTienVonTra();
-				 				tienLaiThuTruoc += lichSuThuPhatChi.getTongSoTienLaiTra();
-				 				tongTienThuTruoc += lichSuThuPhatChi.getSoTien();
-				 			}
+							if (lichSuThuPhatChi.getLoai() == 1) {
+								tienVonPV += lichSuThuPhatChi.getTongSoTienVonTra();
+								tienLaiPV += lichSuThuPhatChi.getTongSoTienLaiTra();
+								tongTienPV += lichSuThuPhatChi.getSoTien();
+							} else if (lichSuThuPhatChi.getLoai() == 2) {
+								tienVonTT += lichSuThuPhatChi.getTongSoTienVonTra();
+								tienLaiTT += lichSuThuPhatChi.getTongSoTienLaiTra();
+							} else if (lichSuThuPhatChi.getLoai() == 3) {
+								tienVonTHN += lichSuThuPhatChi.getTongSoTienVonTra();
+								tienLaiTHN += lichSuThuPhatChi.getTongSoTienLaiTra();
+							} else if (lichSuThuPhatChi.getLoai() == 4) {
+								tienVonThuTruoc += lichSuThuPhatChi.getTongSoTienVonTra();
+								tienLaiThuTruoc += lichSuThuPhatChi.getTongSoTienLaiTra();
+							}
 						}
-				 		if(tongTienPV > 0){
-				 			LichSuThuPhatChDTO phatVay = new LichSuThuPhatChDTO("","phat-vay", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienPV > 0 ? df.format(tongTienPV) : "0",tienVonPV > 0 ? df.format(tienVonPV) : "0",tienLaiPV > 0 ? df.format(tienLaiPV) : "0","0");
-					 		lichSuThuPhatChDTOs.add(phatVay);
-				 		}
-				 		if(tongTienTT > 0){
-					 		LichSuThuPhatChDTO tatToan = new LichSuThuPhatChDTO("","tat-toan", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienTT > 0 ? df.format(tongTienTT) : "0",tienVonTT > 0 ? df.format(tienVonTT) : "0",tienLaiTT > 0 ? df.format(tienLaiTT) : "0",df.format(tienLaiTT + tienVonTT));
-					 		lichSuThuPhatChDTOs.add(tatToan);
-				 		}
-				 		if(tongTienTHN > 0){
-					 		LichSuThuPhatChDTO thuHangNgay = new LichSuThuPhatChDTO("","thu-hang-ngay", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienTHN > 0 ? df.format(tongTienTHN) : "0",tienVonTHN > 0 ? df.format(tienVonTHN) : "0",tienLaiTHN > 0 ? df.format(tienLaiTHN) : "0",df.format(tienLaiTHN + tienVonTHN));
-					 		lichSuThuPhatChDTOs.add(thuHangNgay);
-				 		}
-				 		if(tongTienThuTruoc > 0){
-					 		LichSuThuPhatChDTO thuTruoc = new LichSuThuPhatChDTO("","thu-tien-tet", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienThuTruoc > 0 ? df.format(tongTienThuTruoc) : "0",tienVonThuTruoc > 0 ? df.format(tienVonThuTruoc) : "0",tienLaiThuTruoc > 0 ? df.format(tienLaiThuTruoc) : "0",df.format(tienVonThuTruoc + tienLaiThuTruoc));
-					 		lichSuThuPhatChDTOs.add(thuTruoc);
-				 		}
+						if (tongTienPV > 0) {
+							LichSuThuPhatChDTO phatVay = new LichSuThuPhatChDTO("", PropsUtil.get("phat-vay"),
+									ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "",
+									tongTienPV > 0 ? df.format(tongTienPV) : "0",
+									tienVonPV > 0 ? df.format(tienVonPV) : "0",
+									tienLaiPV > 0 ? df.format(tienLaiPV) : "0", "0", 1);
+							lichSuThuPhatChDTOs.add(phatVay);
+						}
+						if ((tienVonTT + tienLaiTT) > 0) {
+							LichSuThuPhatChDTO tatToan = new LichSuThuPhatChDTO("", PropsUtil.get("phat-tat-toan"),
+									ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", "0",
+									tienVonTT > 0 ? df.format(tienVonTT) : "0",
+									tienLaiTT > 0 ? df.format(tienLaiTT) : "0", df.format(tienLaiTT + tienVonTT), 2);
+							lichSuThuPhatChDTOs.add(tatToan);
+						}
+						if ((tienVonTHN + tienLaiTHN) > 0) {
+							LichSuThuPhatChDTO thuHangNgay = new LichSuThuPhatChDTO("", PropsUtil.get("thu-hang-ngay"),
+									ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", "0",
+									tienVonTHN > 0 ? df.format(tienVonTHN) : "0",
+									tienLaiTHN > 0 ? df.format(tienLaiTHN) : "0", df.format(tienLaiTHN + tienVonTHN),
+									3);
+							lichSuThuPhatChDTOs.add(thuHangNgay);
+						}
+						if ((tienVonThuTruoc + tienLaiThuTruoc) > 0) {
+							LichSuThuPhatChDTO thuTruoc = new LichSuThuPhatChDTO("", PropsUtil.get("thu-tien-truoc"),
+									ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", "0",
+									tienVonThuTruoc > 0 ? df.format(tienVonThuTruoc) : "0",
+									tienLaiThuTruoc > 0 ? df.format(tienLaiThuTruoc) : "0",
+									df.format(tienVonThuTruoc + tienLaiThuTruoc), 4);
+							lichSuThuPhatChDTOs.add(thuTruoc);
+						}
 					}
-					LichSuThuPhatChDTO lsCTV = new LichSuThuPhatChDTO(String.valueOf(index), item.getHoTen(), "", tongTien > 0 ? df.format(tongTien) : "", tongTienVon > 0 ? df.format(tongTienVon) : "",tongTienLai > 0 ? df.format(tongTienLai) : "",df.format(tongTienVon + tongTienLai));
+					tongTienChiCTV = tongTienPV;
+					tongTienVonCTV = tienVonTT + tienVonTHN + tienVonThuTruoc;
+					tongTienLaiCTV = tienLaiTT + tienLaiTHN + tienLaiThuTruoc;
+
+					tongTienChiAll += tongTienChiCTV;
+					tongTienVonAll += tongTienVonCTV;
+					tongTienLaiAll += tongTienLaiCTV;
+
+					LichSuThuPhatChDTO lsCTV = new LichSuThuPhatChDTO(String.valueOf(index), item.getHoTen(), "",
+							tongTienChiCTV > 0 ? df.format(tongTienChiCTV) : "",
+							tongTienVonCTV > 0 ? df.format(tongTienVonCTV) : "",
+							tongTienLaiCTV > 0 ? df.format(tongTienLaiCTV) : "",
+							df.format(tongTienVonCTV + tongTienLaiCTV), 0);
 					collections.add(lsCTV);
 					collections.addAll(lichSuThuPhatChDTOs);
-					tongTienAll += tongTien;
-					tongTienVonAll += tongTienVon;
-					tongTienLaiAll += tongTienLai;
 				}
 				parameters.put("tongVon", tongTienVonAll > 0 ? df.format(tongTienVonAll) : "");
 				parameters.put("tongLai", tongTienLaiAll > 0 ? df.format(tongTienLaiAll) : "");
-				parameters.put("tongSoTien", tongTienAll > 0 ? df.format(tongTienAll) : "");
+				parameters.put("tongThu", df.format(tongTienVonAll + tongTienLaiAll));
+				parameters.put("tongChi", df.format(tongTienChiAll));
 				JasperReportUtil.exportReport(in, outStream, parameters, collections,
 						typeIn == 1 ? FileType.DOCX : FileType.XLSX);
 				outStream.flush();

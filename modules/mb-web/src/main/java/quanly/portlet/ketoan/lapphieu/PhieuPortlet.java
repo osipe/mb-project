@@ -84,12 +84,31 @@ public class PhieuPortlet extends MVCPortlet {
 			kq = getTaiKhoanDoiUngURL(resourceRequest, resourceResponse, serviceContext);
 		} else if (resourceId.equals("getMaSoTheoDoiURL")) {
 			kq = getMaSoTheoDoiURL(resourceRequest, resourceResponse, serviceContext);
+		} else if (resourceId.equals("getDienGiaiTheoDoiURL")) {
+			kq = getDienGiaiTheoDoiURL(resourceRequest, resourceResponse, serviceContext);
 		}
 		PrintWriter writer = resourceResponse.getWriter();
 		writer.print(kq.toString());
 		writer.flush();
 		writer.close();
 
+	}
+	public JSONObject getDienGiaiTheoDoiURL(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
+			ServiceContext serviceContext) {
+		JSONObject kq = JSONFactoryUtil.createJSONObject();
+		try {
+			long taiKhoanDoiUngId = ParamUtil.getLong(resourceRequest, "taiKhoanDoiUngId");
+			if(taiKhoanDoiUngId > 0) {
+				TaiKhoanDoiUng taikhoan = TaiKhoanDoiUngLocalServiceUtil.fetchTaiKhoanDoiUng(taiKhoanDoiUngId);
+				if(taikhoan != null) {
+					kq.put("dienGiaiTheoDoi", taikhoan.getDienGiaiTheoDoi());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			kq.putException(e);
+		}
+		return kq;
 	}
 
 	public JSONObject getMaSoTheoDoiURL(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
@@ -154,7 +173,6 @@ public class PhieuPortlet extends MVCPortlet {
 				MaSoThuChi mstc = MaSoThuChiLocalServiceUtil.fetchByMa_Loai_HoatDong(maMSThuChi, loai, true);
 				if (mstc != null) {
 					kq.put("dienGiai", mstc.getDienGiai());
-					kq.put("dienGiaiTheoDoi", mstc.getDienGiaiTheoDoi());
 				}
 			}
 		} catch (Exception e) {
@@ -171,12 +189,14 @@ public class PhieuPortlet extends MVCPortlet {
 			Date now = new Date();
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			int loai = ParamUtil.getInteger(resourceRequest, "loai");
+			long ngayChungTuTime = ParamUtil.getLong(resourceRequest, "ngayChungTuTime");
+			Date ngayChungTu = ngayChungTuTime != 0 ? new Date(ngayChungTuTime) : now;
 			if (loai > 0) {
-				QuanLyMaSo quanLyMaSo = QuanLyMaSoLocalServiceUtil.fetchByKey(sdf.format(now) + "_" + loai);
+				QuanLyMaSo quanLyMaSo = QuanLyMaSoLocalServiceUtil.fetchByKey(sdf.format(ngayChungTu) + "_" + loai);
 				if (quanLyMaSo == null) {
 					quanLyMaSo = QuanLyMaSoLocalServiceUtil.createQuanLyMaSo(0L);
 					quanLyMaSo.setSo(0);
-					quanLyMaSo.setKey(sdf.format(now) + "_" + loai);
+					quanLyMaSo.setKey(sdf.format(ngayChungTu) + "_" + loai);
 					quanLyMaSo = QuanLyMaSoLocalServiceUtil.addQuanLyMaSo(quanLyMaSo, serviceContext);
 				}
 				kq.put("soPhieu", quanLyMaSo.getSo() + 1);
@@ -214,12 +234,12 @@ public class PhieuPortlet extends MVCPortlet {
 			ServiceContext serviceContext) {
 		JSONObject kq = JSONFactoryUtil.createJSONObject();
 		try {
-			Date now = new Date();
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			long phieuId = ParamUtil.getLong(resourceRequest, "phieuId");
 			String maMSThuChi = ParamUtil.getString(resourceRequest, "maMSThuChi");
 			String maCTV = ParamUtil.getString(resourceRequest, "maCTV");
 			String soTien = ParamUtil.getString(resourceRequest, "soTien");
+			int soPhieu = ParamUtil.getInteger(resourceRequest, "soPhieu");
 			long ngayChungTuTime = ParamUtil.getLong(resourceRequest, "ngayChungTuTime");
 			Date ngayChungTu = ngayChungTuTime != 0 ? new Date(ngayChungTuTime) : null;
 			long ngayGhiSoTime = ParamUtil.getLong(resourceRequest, "ngayGhiSoTime");
@@ -227,47 +247,63 @@ public class PhieuPortlet extends MVCPortlet {
 			int loai = ParamUtil.getInteger(resourceRequest, "loai");
 			Phieu phieu = PhieuLocalServiceUtil.createPhieu(0L);
 			boolean hoatDong = true;
+			int soPhieuDaTonTai = PhieuLocalServiceUtil.countBase("", "", String.valueOf(soPhieu), ngayChungTu,
+					ngayChungTu, loai, 1);
+			boolean error = false;
 			if (phieuId > 0) {
 				phieu = PhieuLocalServiceUtil.fetchPhieu(phieuId);
 				hoatDong = phieu.getHoatDong();
-			}
-			phieu.setMaCTV(maCTV);
-			if (Validator.isNotNull(maCTV)) {
-				CongTacVien ctv = CongTacVienLocalServiceUtil.fetchByMa(maCTV);
-				if (ctv != null) {
-					phieu.setHoTenCTV(ctv.getHoTen());
-					phieu.setDiaChi(ctv.getDiaChi());
+				if (soPhieuDaTonTai > 0) {
+					List<Phieu> phieus = PhieuLocalServiceUtil.findBase("", "", String.valueOf(soPhieu), ngayChungTu,
+							ngayChungTu, loai, 1, -1, -1, null);
+					if(!phieus.contains(phieu)) {
+						error = true;
+						kq.put("exception", "TonSo");
+					}
+				}
+			} else {
+				if (soPhieuDaTonTai > 0) {
+					error = true;
+					kq.put("exception", "TonSo");
 				}
 			}
-			phieu.setNgayChungTu(ngayChungTu);
-			QuanLyMaSo quanLyMaSo = null;
-			if (loai > 0 && phieuId == 0) {
-				quanLyMaSo = QuanLyMaSoLocalServiceUtil.fetchByKey(sdf.format(now) + "_" + loai);
-				if (quanLyMaSo == null) {
-					quanLyMaSo = QuanLyMaSoLocalServiceUtil.createQuanLyMaSo(0L);
-					quanLyMaSo.setSo(0);
-					quanLyMaSo.setKey(sdf.format(now) + "_" + loai);
-					quanLyMaSo = QuanLyMaSoLocalServiceUtil.addQuanLyMaSo(quanLyMaSo, serviceContext);
+			if (!error) {
+				phieu.setMaCTV(maCTV);
+				if (Validator.isNotNull(maCTV)) {
+					CongTacVien ctv = CongTacVienLocalServiceUtil.fetchByMa(maCTV);
+					if (ctv != null) {
+						phieu.setHoTenCTV(ctv.getHoTen());
+						phieu.setDiaChi(ctv.getDiaChi());
+					}
 				}
-				phieu.setSoPhieu(String.valueOf(quanLyMaSo.getSo() + 1));
-			}
-			phieu.setNgayGhiSo(ngayGhiSo);
-			phieu.setMaMSThuChi(maMSThuChi);
-			phieu.setLoai(loai);
-			if (Validator.isNotNull(soTien)) {
-				phieu.setSoTien(GetterUtil.getDouble(soTien.replaceAll(",", "")));
-			}
-			phieu.setHoatDong(hoatDong);
-			PhieuLocalServiceUtil.addOrUpdatePhieu(phieu, serviceContext);
-			String dsPhieuTaiKhoan = ParamUtil.getString(resourceRequest, "dsPhieuTaiKhoan");
-			if (Validator.isNotNull(dsPhieuTaiKhoan)) {
-				JSONArray dsPhieuTaiKhoanJSONArray = JSONFactoryUtil.createJSONArray(dsPhieuTaiKhoan);
-				phieu.setDsPhieuTaiKhoanJSONArray(dsPhieuTaiKhoanJSONArray);
-				DsPhieuTaiKhoanLocalServiceUtil.addOrUpdateDsPhieuTaiKhoan(phieu, serviceContext);
-			}
-			if (quanLyMaSo != null) {
-				quanLyMaSo.setSo(quanLyMaSo.getSo() + 1);
-				QuanLyMaSoLocalServiceUtil.updateQuanLyMaSo(quanLyMaSo, serviceContext);
+				phieu.setNgayChungTu(ngayChungTu);
+				phieu.setSoPhieu(String.valueOf(soPhieu));
+				phieu.setNgayGhiSo(ngayGhiSo);
+				phieu.setMaMSThuChi(maMSThuChi);
+				phieu.setLoai(loai);
+				if (Validator.isNotNull(soTien)) {
+					phieu.setSoTien(GetterUtil.getDouble(soTien.replaceAll(",", "")));
+				}
+				phieu.setHoatDong(hoatDong);
+				PhieuLocalServiceUtil.addOrUpdatePhieu(phieu, serviceContext);
+				String dsPhieuTaiKhoan = ParamUtil.getString(resourceRequest, "dsPhieuTaiKhoan");
+				if (Validator.isNotNull(dsPhieuTaiKhoan)) {
+					JSONArray dsPhieuTaiKhoanJSONArray = JSONFactoryUtil.createJSONArray(dsPhieuTaiKhoan);
+					phieu.setDsPhieuTaiKhoanJSONArray(dsPhieuTaiKhoanJSONArray);
+					DsPhieuTaiKhoanLocalServiceUtil.addOrUpdateDsPhieuTaiKhoan(phieu, serviceContext);
+				}
+				if (loai > 0 && phieuId == 0) {
+					QuanLyMaSo quanLyMaSo = QuanLyMaSoLocalServiceUtil.fetchByKey(sdf.format(ngayChungTu) + "_" + loai);
+					if (quanLyMaSo == null) {
+						quanLyMaSo = QuanLyMaSoLocalServiceUtil.createQuanLyMaSo(0L);
+						quanLyMaSo.setSo(soPhieu);
+						quanLyMaSo.setKey(sdf.format(ngayChungTu) + "_" + loai);
+						quanLyMaSo = QuanLyMaSoLocalServiceUtil.addQuanLyMaSo(quanLyMaSo, serviceContext);
+					} else {
+						quanLyMaSo.setSo(soPhieu);
+						QuanLyMaSoLocalServiceUtil.updateQuanLyMaSo(quanLyMaSo, serviceContext);
+					}
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

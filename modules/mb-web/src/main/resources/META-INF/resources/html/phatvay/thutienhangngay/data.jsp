@@ -37,7 +37,7 @@
 		<portlet:param name="mvcPath" value="/html/phatvay/thutienhangngay/data.jsp" />
 	</liferay-portlet:renderURL>
 	<div style="text-align: right;"><span class="note-span">(Đơn vị : VND)</span></div>
-	<liferay-ui:search-container  delta="10"  emptyResultsMessage="Không có kết quả nào được tìm thấy!" iteratorURL="<%=iteratorURL %>" total="<%=count %>" >
+	<liferay-ui:search-container  delta="20"  emptyResultsMessage="Không có kết quả nào được tìm thấy!" iteratorURL="<%=iteratorURL %>" total="<%=count %>" >
 		 <%
 		 	String orderByType = ParamUtil.getString(request, "orderByType"); 
 		 	String orderByCol = ParamUtil.getString(request, "orderByCol"); 
@@ -45,11 +45,11 @@
 		 		orderByType = "asc";
 		 	}
 		 	if(Validator.isNull(orderByCol)){
-		 		orderByCol = "createdate";
+		 		orderByCol = "ma";
 		 	}
-		 	boolean ascending = false;
-		 	if("asc".equals(orderByType)){
-		 		ascending = true;
+		 	boolean ascending = true;
+		 	if("desc".equals(orderByType)){
+		 		ascending = false;
 		 	}
 		 	CongTacVienComparator obc = new CongTacVienComparator(orderByCol,ascending);
 		 	searchContainer.setOrderByCol(orderByCol);

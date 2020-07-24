@@ -73,6 +73,7 @@ public class DsPhieuTaiKhoanWrapper
 		attributes.put("soTien", getSoTien());
 		attributes.put("tenCTV", getTenCTV());
 		attributes.put("maCTV", getMaCTV());
+		attributes.put("soPhieu", getSoPhieu());
 		attributes.put("hoatDong", getHoatDong());
 
 		return attributes;
@@ -168,6 +169,12 @@ public class DsPhieuTaiKhoanWrapper
 
 		if (maCTV != null) {
 			setMaCTV(maCTV);
+		}
+
+		String soPhieu = (String)attributes.get("soPhieu");
+
+		if (soPhieu != null) {
+			setSoPhieu(soPhieu);
 		}
 
 		Boolean hoatDong = (Boolean)attributes.get("hoatDong");
@@ -321,6 +328,16 @@ public class DsPhieuTaiKhoanWrapper
 	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _dsPhieuTaiKhoan.getPrimaryKeyObj();
+	}
+
+	/**
+	 * Returns the so phieu of this ds phieu tai khoan.
+	 *
+	 * @return the so phieu of this ds phieu tai khoan
+	 */
+	@Override
+	public String getSoPhieu() {
+		return _dsPhieuTaiKhoan.getSoPhieu();
 	}
 
 	/**
@@ -563,6 +580,16 @@ public class DsPhieuTaiKhoanWrapper
 	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		_dsPhieuTaiKhoan.setPrimaryKeyObj(primaryKeyObj);
+	}
+
+	/**
+	 * Sets the so phieu of this ds phieu tai khoan.
+	 *
+	 * @param soPhieu the so phieu of this ds phieu tai khoan
+	 */
+	@Override
+	public void setSoPhieu(String soPhieu) {
+		_dsPhieuTaiKhoan.setSoPhieu(soPhieu);
 	}
 
 	/**

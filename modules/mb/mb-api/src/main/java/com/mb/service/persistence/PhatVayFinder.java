@@ -24,7 +24,7 @@ import aQute.bnd.annotation.ProviderType;
 public interface PhatVayFinder {
 
 	public java.util.List<com.mb.model.PhatVay> getPhatVaySaoKe(
-			String maCTV, java.util.Date createDate)
+			String maCTV, int loaiPhatVay, java.util.Date createDate)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public com.mb.model.PhatVay getPhatVayByNgayThuTruocLast()

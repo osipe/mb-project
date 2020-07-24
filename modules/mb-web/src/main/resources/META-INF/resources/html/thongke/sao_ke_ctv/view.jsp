@@ -49,6 +49,15 @@
 AUI().ready(['aui-base'], function(A) {
 	$('.input-date').datepicker();
 	$('.input-date').mask('99/99/9999');
+	$('.input-select2').select2({
+		placeholder : 'Chọn',
+		allowClear : true,
+		language : {
+			noResults : function() {
+				return '';
+			}
+		}
+	});
 	var contentDataTable = A.one('#<portlet:namespace />contentDataTable');
 	var loadingMask = new A.LoadingMask(
 		{

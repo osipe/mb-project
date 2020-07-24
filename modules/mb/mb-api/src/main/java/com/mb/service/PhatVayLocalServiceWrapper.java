@@ -350,10 +350,11 @@ public class PhatVayLocalServiceWrapper
 
 	@Override
 	public java.util.List<com.mb.model.PhatVay> getPhatVaySaoKe(
-			String maCTV, java.util.Date createDate)
+			String maCTV, int loaiPhatVay, java.util.Date createDate)
 		throws com.liferay.portal.kernel.exception.SystemException {
 
-		return _phatVayLocalService.getPhatVaySaoKe(maCTV, createDate);
+		return _phatVayLocalService.getPhatVaySaoKe(
+			maCTV, loaiPhatVay, createDate);
 	}
 
 	/**

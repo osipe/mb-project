@@ -66,7 +66,6 @@ public class MaSoThuChiWrapper implements MaSoThuChi, ModelWrapper<MaSoThuChi> {
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("ma", getMa());
 		attributes.put("dienGiai", getDienGiai());
-		attributes.put("dienGiaiTheoDoi", getDienGiaiTheoDoi());
 		attributes.put("loai", getLoai());
 		attributes.put("hoatDong", getHoatDong());
 
@@ -129,12 +128,6 @@ public class MaSoThuChiWrapper implements MaSoThuChi, ModelWrapper<MaSoThuChi> {
 			setDienGiai(dienGiai);
 		}
 
-		String dienGiaiTheoDoi = (String)attributes.get("dienGiaiTheoDoi");
-
-		if (dienGiaiTheoDoi != null) {
-			setDienGiaiTheoDoi(dienGiaiTheoDoi);
-		}
-
 		Integer loai = (Integer)attributes.get("loai");
 
 		if (loai != null) {
@@ -186,16 +179,6 @@ public class MaSoThuChiWrapper implements MaSoThuChi, ModelWrapper<MaSoThuChi> {
 	@Override
 	public String getDienGiai() {
 		return _maSoThuChi.getDienGiai();
-	}
-
-	/**
-	 * Returns the dien giai theo doi of this ma so thu chi.
-	 *
-	 * @return the dien giai theo doi of this ma so thu chi
-	 */
-	@Override
-	public String getDienGiaiTheoDoi() {
-		return _maSoThuChi.getDienGiaiTheoDoi();
 	}
 
 	@Override
@@ -366,16 +349,6 @@ public class MaSoThuChiWrapper implements MaSoThuChi, ModelWrapper<MaSoThuChi> {
 	@Override
 	public void setDienGiai(String dienGiai) {
 		_maSoThuChi.setDienGiai(dienGiai);
-	}
-
-	/**
-	 * Sets the dien giai theo doi of this ma so thu chi.
-	 *
-	 * @param dienGiaiTheoDoi the dien giai theo doi of this ma so thu chi
-	 */
-	@Override
-	public void setDienGiaiTheoDoi(String dienGiaiTheoDoi) {
-		_maSoThuChi.setDienGiaiTheoDoi(dienGiaiTheoDoi);
 	}
 
 	@Override

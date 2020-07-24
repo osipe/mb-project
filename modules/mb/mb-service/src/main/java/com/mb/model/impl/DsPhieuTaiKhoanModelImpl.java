@@ -80,7 +80,8 @@ public class DsPhieuTaiKhoanModelImpl
 		{"ngayChungTu", Types.TIMESTAMP}, {"taiKhoanDoiUngId", Types.BIGINT},
 		{"maTheoDoi", Types.VARCHAR}, {"dienGiaiTheoDoi", Types.VARCHAR},
 		{"soTien", Types.DOUBLE}, {"tenCTV", Types.VARCHAR},
-		{"maCTV", Types.VARCHAR}, {"hoatDong", Types.BOOLEAN}
+		{"maCTV", Types.VARCHAR}, {"soPhieu", Types.VARCHAR},
+		{"hoatDong", Types.BOOLEAN}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -102,11 +103,12 @@ public class DsPhieuTaiKhoanModelImpl
 		TABLE_COLUMNS_MAP.put("soTien", Types.DOUBLE);
 		TABLE_COLUMNS_MAP.put("tenCTV", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("maCTV", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("soPhieu", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("hoatDong", Types.BOOLEAN);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ketoan_dsphieutaikhoan (dsPhieuTaiKhoanId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,phieuId LONG,ngayChungTu DATE null,taiKhoanDoiUngId LONG,maTheoDoi VARCHAR(75) null,dienGiaiTheoDoi VARCHAR(75) null,soTien DOUBLE,tenCTV VARCHAR(75) null,maCTV VARCHAR(75) null,hoatDong BOOLEAN)";
+		"create table ketoan_dsphieutaikhoan (dsPhieuTaiKhoanId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,phieuId LONG,ngayChungTu DATE null,taiKhoanDoiUngId LONG,maTheoDoi VARCHAR(75) null,dienGiaiTheoDoi VARCHAR(75) null,soTien DOUBLE,tenCTV VARCHAR(75) null,maCTV VARCHAR(75) null,soPhieu VARCHAR(75) null,hoatDong BOOLEAN)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table ketoan_dsphieutaikhoan";
@@ -174,6 +176,7 @@ public class DsPhieuTaiKhoanModelImpl
 		model.setSoTien(soapModel.getSoTien());
 		model.setTenCTV(soapModel.getTenCTV());
 		model.setMaCTV(soapModel.getMaCTV());
+		model.setSoPhieu(soapModel.getSoPhieu());
 		model.setHoatDong(soapModel.getHoatDong());
 
 		return model;
@@ -638,6 +641,28 @@ public class DsPhieuTaiKhoanModelImpl
 
 			});
 		attributeGetterFunctions.put(
+			"soPhieu",
+			new Function<DsPhieuTaiKhoan, Object>() {
+
+				@Override
+				public Object apply(DsPhieuTaiKhoan dsPhieuTaiKhoan) {
+					return dsPhieuTaiKhoan.getSoPhieu();
+				}
+
+			});
+		attributeSetterBiConsumers.put(
+			"soPhieu",
+			new BiConsumer<DsPhieuTaiKhoan, Object>() {
+
+				@Override
+				public void accept(
+					DsPhieuTaiKhoan dsPhieuTaiKhoan, Object soPhieu) {
+
+					dsPhieuTaiKhoan.setSoPhieu((String)soPhieu);
+				}
+
+			});
+		attributeGetterFunctions.put(
 			"hoatDong",
 			new Function<DsPhieuTaiKhoan, Object>() {
 
@@ -906,6 +931,22 @@ public class DsPhieuTaiKhoanModelImpl
 
 	@JSON
 	@Override
+	public String getSoPhieu() {
+		if (_soPhieu == null) {
+			return "";
+		}
+		else {
+			return _soPhieu;
+		}
+	}
+
+	@Override
+	public void setSoPhieu(String soPhieu) {
+		_soPhieu = soPhieu;
+	}
+
+	@JSON
+	@Override
 	public Boolean getHoatDong() {
 		return _hoatDong;
 	}
@@ -974,6 +1015,7 @@ public class DsPhieuTaiKhoanModelImpl
 		dsPhieuTaiKhoanImpl.setSoTien(getSoTien());
 		dsPhieuTaiKhoanImpl.setTenCTV(getTenCTV());
 		dsPhieuTaiKhoanImpl.setMaCTV(getMaCTV());
+		dsPhieuTaiKhoanImpl.setSoPhieu(getSoPhieu());
 		dsPhieuTaiKhoanImpl.setHoatDong(getHoatDong());
 
 		dsPhieuTaiKhoanImpl.resetOriginalValues();
@@ -1151,6 +1193,14 @@ public class DsPhieuTaiKhoanModelImpl
 			dsPhieuTaiKhoanCacheModel.maCTV = null;
 		}
 
+		dsPhieuTaiKhoanCacheModel.soPhieu = getSoPhieu();
+
+		String soPhieu = dsPhieuTaiKhoanCacheModel.soPhieu;
+
+		if ((soPhieu != null) && (soPhieu.length() == 0)) {
+			dsPhieuTaiKhoanCacheModel.soPhieu = null;
+		}
+
 		dsPhieuTaiKhoanCacheModel.hoatDong = getHoatDong();
 
 		return dsPhieuTaiKhoanCacheModel;
@@ -1245,6 +1295,7 @@ public class DsPhieuTaiKhoanModelImpl
 	private Double _soTien;
 	private String _tenCTV;
 	private String _maCTV;
+	private String _soPhieu;
 	private Boolean _hoatDong;
 	private Boolean _originalHoatDong;
 	private boolean _setOriginalHoatDong;

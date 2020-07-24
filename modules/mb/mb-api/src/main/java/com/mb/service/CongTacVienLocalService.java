@@ -250,6 +250,11 @@ public interface CongTacVienLocalService
 		throws SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<CongTacVien> getCTVThuPhatChi(
+			String maCTV, Date ngayTaoTu, Date ngayTaoDen)
+		throws SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
 
 	/**

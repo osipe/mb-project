@@ -128,4 +128,7 @@ public class CongTacVienLocalServiceImpl
 	public List<CongTacVien> getCTVPhatVayNgay(Date ngayTaoTu,Date ngayTaoDen) throws SystemException {
 		return congTacVienFinder.getCTVPhatVayNgay(ngayTaoTu, ngayTaoDen);
 	}
+	public List<CongTacVien> getCTVThuPhatChi(String maCTV,Date ngayTaoTu,Date ngayTaoDen) throws SystemException {
+		return congTacVienFinder.getCTVThuPhatChi(maCTV,ngayTaoTu, ngayTaoDen);
+	}
 }

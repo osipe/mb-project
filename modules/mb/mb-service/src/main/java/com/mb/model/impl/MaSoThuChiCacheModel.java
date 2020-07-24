@@ -65,7 +65,7 @@ public class MaSoThuChiCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(23);
 
 		sb.append("{maSoThuChiId=");
 		sb.append(maSoThuChiId);
@@ -85,8 +85,6 @@ public class MaSoThuChiCacheModel
 		sb.append(ma);
 		sb.append(", dienGiai=");
 		sb.append(dienGiai);
-		sb.append(", dienGiaiTheoDoi=");
-		sb.append(dienGiaiTheoDoi);
 		sb.append(", loai=");
 		sb.append(loai);
 		sb.append(", hoatDong=");
@@ -140,13 +138,6 @@ public class MaSoThuChiCacheModel
 			maSoThuChiImpl.setDienGiai(dienGiai);
 		}
 
-		if (dienGiaiTheoDoi == null) {
-			maSoThuChiImpl.setDienGiaiTheoDoi("");
-		}
-		else {
-			maSoThuChiImpl.setDienGiaiTheoDoi(dienGiaiTheoDoi);
-		}
-
 		maSoThuChiImpl.setLoai(loai);
 		maSoThuChiImpl.setHoatDong(hoatDong);
 
@@ -169,7 +160,6 @@ public class MaSoThuChiCacheModel
 		modifiedDate = objectInput.readLong();
 		ma = objectInput.readUTF();
 		dienGiai = objectInput.readUTF();
-		dienGiaiTheoDoi = objectInput.readUTF();
 
 		loai = objectInput.readInt();
 
@@ -210,13 +200,6 @@ public class MaSoThuChiCacheModel
 			objectOutput.writeUTF(dienGiai);
 		}
 
-		if (dienGiaiTheoDoi == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(dienGiaiTheoDoi);
-		}
-
 		objectOutput.writeInt(loai);
 
 		objectOutput.writeBoolean(hoatDong);
@@ -231,7 +214,6 @@ public class MaSoThuChiCacheModel
 	public long modifiedDate;
 	public String ma;
 	public String dienGiai;
-	public String dienGiaiTheoDoi;
 	public int loai;
 	public boolean hoatDong;
 

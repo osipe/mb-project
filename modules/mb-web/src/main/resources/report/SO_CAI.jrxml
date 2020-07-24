@@ -39,6 +39,7 @@
 		<field name="taiKhoanDoiUng" class="java.lang.String"/>
 		<field name="soTienThu" class="java.lang.String"/>
 		<field name="soTienChi" class="java.lang.String"/>
+		<field name="soTienTon" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="tenCongTy" class="java.lang.String"/>
 	<parameter name="diaChiCongTy" class="java.lang.String"/>
@@ -150,141 +151,176 @@
 						</datasetParameter>
 						<dataSourceExpression><![CDATA[$P{REPORT_DATA_SOURCE}]]></dataSourceExpression>
 					</datasetRun>
-					<jr:column width="90">
-						<jr:tableHeader height="0" rowSpan="1"/>
-						<jr:tableFooter height="0" rowSpan="1"/>
-						<jr:columnHeader style="table 1_TH" height="60" rowSpan="2">
+					<jr:column width="60">
+						<jr:tableHeader style="table 1_TH" height="60" rowSpan="2">
 							<staticText>
-								<reportElement x="0" y="0" width="90" height="60"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<reportElement x="0" y="0" width="60" height="60"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
 								<text><![CDATA[NGÀY THÁNG GHI SỔ]]></text>
 							</staticText>
-						</jr:columnHeader>
+						</jr:tableHeader>
+						<jr:tableFooter height="0" rowSpan="1"/>
 						<jr:columnFooter height="0" rowSpan="1"/>
 						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
 							<textField isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="90" height="30"/>
-								<textElement/>
+								<reportElement x="0" y="0" width="60" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
 								<textFieldExpression><![CDATA[$F{ngayGhiSo}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:columnGroup width="180">
-						<jr:columnHeader style="table 1_TH" height="30" rowSpan="1">
+					<jr:columnGroup width="120">
+						<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="180" height="30"/>
-								<textElement textAlignment="Center"/>
+								<reportElement x="0" y="0" width="120" height="30"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
 								<text><![CDATA[CHỨNG TỪ]]></text>
 							</staticText>
-						</jr:columnHeader>
-						<jr:column width="90">
-							<jr:columnHeader style="table 1_TH" height="30" rowSpan="1">
+						</jr:tableHeader>
+						<jr:column width="50">
+							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="90" height="30"/>
-									<textElement textAlignment="Center"/>
+									<reportElement x="0" y="0" width="50" height="30"/>
+									<textElement textAlignment="Center">
+										<font isBold="true"/>
+									</textElement>
 									<text><![CDATA[SỐ HIỆU]]></text>
 								</staticText>
-							</jr:columnHeader>
+							</jr:tableHeader>
 							<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
 								<textField isBlankWhenNull="true">
-									<reportElement x="0" y="0" width="90" height="30"/>
-									<textElement/>
+									<reportElement x="0" y="0" width="50" height="30"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{soHieu}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="90">
-							<jr:columnHeader style="table 1_TH" height="30" rowSpan="1">
+						<jr:column width="70">
+							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="90" height="30"/>
-									<textElement textAlignment="Center"/>
+									<reportElement x="0" y="0" width="70" height="30"/>
+									<textElement textAlignment="Center">
+										<font isBold="true"/>
+									</textElement>
 									<text><![CDATA[NGÀY THÁNG]]></text>
 								</staticText>
-							</jr:columnHeader>
+							</jr:tableHeader>
 							<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
 								<textField isBlankWhenNull="true">
-									<reportElement x="0" y="0" width="90" height="30"/>
-									<textElement/>
+									<reportElement x="0" y="0" width="70" height="30"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{ngayChungTu}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
 					</jr:columnGroup>
 					<jr:column width="180">
-						<jr:tableHeader height="0" rowSpan="1"/>
-						<jr:tableFooter height="0" rowSpan="1"/>
-						<jr:columnHeader style="table 1_TH" height="60" rowSpan="2">
+						<jr:tableHeader style="table 1_TH" height="60" rowSpan="2">
 							<staticText>
 								<reportElement x="0" y="0" width="180" height="60"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
 								<text><![CDATA[DIỄN GIẢI]]></text>
 							</staticText>
-						</jr:columnHeader>
+						</jr:tableHeader>
+						<jr:tableFooter height="0" rowSpan="1"/>
 						<jr:columnFooter height="0" rowSpan="1"/>
 						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
 							<textField isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="180" height="30"/>
-								<textElement/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
 								<textFieldExpression><![CDATA[$F{dienGiai}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="180">
-						<jr:tableHeader height="0" rowSpan="1"/>
-						<jr:tableFooter height="0" rowSpan="1"/>
-						<jr:columnHeader style="table 1_TH" height="60" rowSpan="2">
+						<jr:tableHeader style="table 1_TH" height="60" rowSpan="2">
 							<staticText>
 								<reportElement x="0" y="0" width="180" height="60"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
 								<text><![CDATA[TÀI KHOẢN ĐỐI ỨNG]]></text>
 							</staticText>
-						</jr:columnHeader>
+						</jr:tableHeader>
+						<jr:tableFooter height="0" rowSpan="1"/>
 						<jr:columnFooter height="0" rowSpan="1"/>
 						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
 							<textField isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="180" height="30"/>
-								<textElement/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
 								<textFieldExpression><![CDATA[$F{taiKhoanDoiUng}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:columnGroup width="180">
-						<jr:columnHeader style="table 1_TH" height="30" rowSpan="1">
+					<jr:columnGroup width="270">
+						<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="180" height="30"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<reportElement x="0" y="0" width="270" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
 								<text><![CDATA[SỐ PHÁT SINH]]></text>
 							</staticText>
-						</jr:columnHeader>
+						</jr:tableHeader>
 						<jr:column width="90">
-							<jr:columnHeader style="table 1_TH" height="30" rowSpan="1">
+							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
 									<reportElement x="0" y="0" width="90" height="30"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font isBold="true"/>
+									</textElement>
 									<text><![CDATA[NỢ]]></text>
 								</staticText>
-							</jr:columnHeader>
+							</jr:tableHeader>
 							<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
 								<textField isBlankWhenNull="true">
 									<reportElement x="0" y="0" width="90" height="30"/>
-									<textElement/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression><![CDATA[$F{soTienChi}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="90">
+							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="90" height="30"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font isBold="true"/>
+									</textElement>
+									<text><![CDATA[CÓ]]></text>
+								</staticText>
+							</jr:tableHeader>
+							<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+								<textField isBlankWhenNull="true">
+									<reportElement x="0" y="0" width="90" height="30"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{soTienThu}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
 						<jr:column width="90">
-							<jr:columnHeader style="table 1_TH" height="30" rowSpan="1">
+							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
 									<reportElement x="0" y="0" width="90" height="30"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle"/>
-									<text><![CDATA[CÓ]]></text>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font isBold="true"/>
+									</textElement>
+									<text><![CDATA[TỒN]]></text>
 								</staticText>
-							</jr:columnHeader>
+							</jr:tableHeader>
 							<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
 								<textField isBlankWhenNull="true">
 									<reportElement x="0" y="0" width="90" height="30"/>
-									<textElement/>
-									<textFieldExpression><![CDATA[$F{soTienChi}]]></textFieldExpression>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font isBold="true" isItalic="false" isUnderline="true"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{soTienTon}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>

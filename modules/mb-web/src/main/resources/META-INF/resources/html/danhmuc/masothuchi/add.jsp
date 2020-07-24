@@ -44,13 +44,6 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan="2">
-				<aui:input class="input-text" name="dienGiaiTheoDoi" label="Diễn giải theo dõi" value="<%=maSoThuChi.getDienGiaiTheoDoi()%>">
-					<aui:validator name="required" errorMessage="Diễn giải theo dõi không được bỏ trống!" />
-				</aui:input>
-			</td>
-		</tr>
-		<tr>
 			<td>
 				<button id="<portlet:namespace />luu" type="button" class="btn btn-labeled btn-default" onclick="save(true);">
 					<span class="btn-label"><i class="glyphicon glyphicon-floppy-disk"></i></span><%=maSoThuChiId == 0 ? "Lưu" : "Cập nhật" %>
@@ -89,8 +82,7 @@ AUI().ready(['aui-base'], function(A) {
 				<portlet:namespace />maSoThuChiId : '<%=maSoThuChiId %>',
 				<portlet:namespace />ma : form.one('#<portlet:namespace />ma').val(),
 				<portlet:namespace />loai : form.one('#<portlet:namespace />loai').val(),
-				<portlet:namespace />dienGiai : form.one('#<portlet:namespace />dienGiai').val(),
-				<portlet:namespace />dienGiaiTheoDoi : form.one('#<portlet:namespace />dienGiaiTheoDoi').val()
+				<portlet:namespace />dienGiai : form.one('#<portlet:namespace />dienGiai').val()
 			}
 			A.io.request('${addURL}', {
 	               method: 'post',

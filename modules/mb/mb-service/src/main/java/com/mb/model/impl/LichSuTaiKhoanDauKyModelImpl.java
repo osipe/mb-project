@@ -79,7 +79,8 @@ public class LichSuTaiKhoanDauKyModelImpl
 		{"userName", Types.VARCHAR}, {"createDate", Types.TIMESTAMP},
 		{"modifiedDate", Types.TIMESTAMP}, {"taiKhoanDoiUngId", Types.BIGINT},
 		{"thang", Types.INTEGER}, {"nam", Types.INTEGER},
-		{"soTienTon", Types.DOUBLE}, {"hoatDong", Types.BOOLEAN}
+		{"soTienTon", Types.DOUBLE}, {"soTienThu", Types.DOUBLE},
+		{"soTienChi", Types.DOUBLE}, {"hoatDong", Types.BOOLEAN}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -97,11 +98,13 @@ public class LichSuTaiKhoanDauKyModelImpl
 		TABLE_COLUMNS_MAP.put("thang", Types.INTEGER);
 		TABLE_COLUMNS_MAP.put("nam", Types.INTEGER);
 		TABLE_COLUMNS_MAP.put("soTienTon", Types.DOUBLE);
+		TABLE_COLUMNS_MAP.put("soTienThu", Types.DOUBLE);
+		TABLE_COLUMNS_MAP.put("soTienChi", Types.DOUBLE);
 		TABLE_COLUMNS_MAP.put("hoatDong", Types.BOOLEAN);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ketoan_lichsutaikhoandauky (lichSuTaiKhoanDauKyId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,taiKhoanDoiUngId LONG,thang INTEGER,nam INTEGER,soTienTon DOUBLE,hoatDong BOOLEAN)";
+		"create table ketoan_lichsutaikhoandauky (lichSuTaiKhoanDauKyId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,taiKhoanDoiUngId LONG,thang INTEGER,nam INTEGER,soTienTon DOUBLE,soTienThu DOUBLE,soTienChi DOUBLE,hoatDong BOOLEAN)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table ketoan_lichsutaikhoandauky";
@@ -167,6 +170,8 @@ public class LichSuTaiKhoanDauKyModelImpl
 		model.setThang(soapModel.getThang());
 		model.setNam(soapModel.getNam());
 		model.setSoTienTon(soapModel.getSoTienTon());
+		model.setSoTienThu(soapModel.getSoTienThu());
+		model.setSoTienChi(soapModel.getSoTienChi());
 		model.setHoatDong(soapModel.getHoatDong());
 
 		return model;
@@ -550,6 +555,50 @@ public class LichSuTaiKhoanDauKyModelImpl
 
 			});
 		attributeGetterFunctions.put(
+			"soTienThu",
+			new Function<LichSuTaiKhoanDauKy, Object>() {
+
+				@Override
+				public Object apply(LichSuTaiKhoanDauKy lichSuTaiKhoanDauKy) {
+					return lichSuTaiKhoanDauKy.getSoTienThu();
+				}
+
+			});
+		attributeSetterBiConsumers.put(
+			"soTienThu",
+			new BiConsumer<LichSuTaiKhoanDauKy, Object>() {
+
+				@Override
+				public void accept(
+					LichSuTaiKhoanDauKy lichSuTaiKhoanDauKy, Object soTienThu) {
+
+					lichSuTaiKhoanDauKy.setSoTienThu((Double)soTienThu);
+				}
+
+			});
+		attributeGetterFunctions.put(
+			"soTienChi",
+			new Function<LichSuTaiKhoanDauKy, Object>() {
+
+				@Override
+				public Object apply(LichSuTaiKhoanDauKy lichSuTaiKhoanDauKy) {
+					return lichSuTaiKhoanDauKy.getSoTienChi();
+				}
+
+			});
+		attributeSetterBiConsumers.put(
+			"soTienChi",
+			new BiConsumer<LichSuTaiKhoanDauKy, Object>() {
+
+				@Override
+				public void accept(
+					LichSuTaiKhoanDauKy lichSuTaiKhoanDauKy, Object soTienChi) {
+
+					lichSuTaiKhoanDauKy.setSoTienChi((Double)soTienChi);
+				}
+
+			});
+		attributeGetterFunctions.put(
 			"hoatDong",
 			new Function<LichSuTaiKhoanDauKy, Object>() {
 
@@ -766,6 +815,28 @@ public class LichSuTaiKhoanDauKyModelImpl
 
 	@JSON
 	@Override
+	public Double getSoTienThu() {
+		return _soTienThu;
+	}
+
+	@Override
+	public void setSoTienThu(Double soTienThu) {
+		_soTienThu = soTienThu;
+	}
+
+	@JSON
+	@Override
+	public Double getSoTienChi() {
+		return _soTienChi;
+	}
+
+	@Override
+	public void setSoTienChi(Double soTienChi) {
+		_soTienChi = soTienChi;
+	}
+
+	@JSON
+	@Override
 	public Boolean getHoatDong() {
 		return _hoatDong;
 	}
@@ -821,6 +892,8 @@ public class LichSuTaiKhoanDauKyModelImpl
 		lichSuTaiKhoanDauKyImpl.setThang(getThang());
 		lichSuTaiKhoanDauKyImpl.setNam(getNam());
 		lichSuTaiKhoanDauKyImpl.setSoTienTon(getSoTienTon());
+		lichSuTaiKhoanDauKyImpl.setSoTienThu(getSoTienThu());
+		lichSuTaiKhoanDauKyImpl.setSoTienChi(getSoTienChi());
 		lichSuTaiKhoanDauKyImpl.setHoatDong(getHoatDong());
 
 		lichSuTaiKhoanDauKyImpl.resetOriginalValues();
@@ -962,6 +1035,10 @@ public class LichSuTaiKhoanDauKyModelImpl
 
 		lichSuTaiKhoanDauKyCacheModel.soTienTon = getSoTienTon();
 
+		lichSuTaiKhoanDauKyCacheModel.soTienThu = getSoTienThu();
+
+		lichSuTaiKhoanDauKyCacheModel.soTienChi = getSoTienChi();
+
 		lichSuTaiKhoanDauKyCacheModel.hoatDong = getHoatDong();
 
 		return lichSuTaiKhoanDauKyCacheModel;
@@ -1054,6 +1131,8 @@ public class LichSuTaiKhoanDauKyModelImpl
 	private int _originalNam;
 	private boolean _setOriginalNam;
 	private Double _soTienTon;
+	private Double _soTienThu;
+	private Double _soTienChi;
 	private Boolean _hoatDong;
 	private long _columnBitmask;
 	private LichSuTaiKhoanDauKy _escapedModel;

@@ -247,6 +247,34 @@ public interface LichSuTaiKhoanDauKyModel
 	public void setSoTienTon(Double soTienTon);
 
 	/**
+	 * Returns the so tien thu of this lich su tai khoan dau ky.
+	 *
+	 * @return the so tien thu of this lich su tai khoan dau ky
+	 */
+	public Double getSoTienThu();
+
+	/**
+	 * Sets the so tien thu of this lich su tai khoan dau ky.
+	 *
+	 * @param soTienThu the so tien thu of this lich su tai khoan dau ky
+	 */
+	public void setSoTienThu(Double soTienThu);
+
+	/**
+	 * Returns the so tien chi of this lich su tai khoan dau ky.
+	 *
+	 * @return the so tien chi of this lich su tai khoan dau ky
+	 */
+	public Double getSoTienChi();
+
+	/**
+	 * Sets the so tien chi of this lich su tai khoan dau ky.
+	 *
+	 * @param soTienChi the so tien chi of this lich su tai khoan dau ky
+	 */
+	public void setSoTienChi(Double soTienChi);
+
+	/**
 	 * Returns the hoat dong of this lich su tai khoan dau ky.
 	 *
 	 * @return the hoat dong of this lich su tai khoan dau ky

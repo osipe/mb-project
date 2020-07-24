@@ -302,6 +302,13 @@ public class CongTacVienLocalServiceUtil {
 		return getService().getCTVSaoKe(maCTV, ngayTaoTu);
 	}
 
+	public static java.util.List<com.mb.model.CongTacVien> getCTVThuPhatChi(
+			String maCTV, java.util.Date ngayTaoTu, java.util.Date ngayTaoDen)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return getService().getCTVThuPhatChi(maCTV, ngayTaoTu, ngayTaoDen);
+	}
+
 	public static
 		com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery
 			getIndexableActionableDynamicQuery() {

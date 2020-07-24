@@ -68,6 +68,7 @@ public class TaiKhoanDoiUngWrapper
 		attributes.put("taiKhoanDoiUngChaId", getTaiKhoanDoiUngChaId());
 		attributes.put("soHieu", getSoHieu());
 		attributes.put("ten", getTen());
+		attributes.put("dienGiaiTheoDoi", getDienGiaiTheoDoi());
 		attributes.put("loaiTaiKhoan", getLoaiTaiKhoan());
 		attributes.put("hoatDong", getHoatDong());
 
@@ -136,6 +137,12 @@ public class TaiKhoanDoiUngWrapper
 			setTen(ten);
 		}
 
+		String dienGiaiTheoDoi = (String)attributes.get("dienGiaiTheoDoi");
+
+		if (dienGiaiTheoDoi != null) {
+			setDienGiaiTheoDoi(dienGiaiTheoDoi);
+		}
+
 		Integer loaiTaiKhoan = (Integer)attributes.get("loaiTaiKhoan");
 
 		if (loaiTaiKhoan != null) {
@@ -178,6 +185,16 @@ public class TaiKhoanDoiUngWrapper
 	@Override
 	public Date getCreateDate() {
 		return _taiKhoanDoiUng.getCreateDate();
+	}
+
+	/**
+	 * Returns the dien giai theo doi of this tai khoan doi ung.
+	 *
+	 * @return the dien giai theo doi of this tai khoan doi ung
+	 */
+	@Override
+	public String getDienGiaiTheoDoi() {
+		return _taiKhoanDoiUng.getDienGiaiTheoDoi();
 	}
 
 	@Override
@@ -358,6 +375,16 @@ public class TaiKhoanDoiUngWrapper
 	@Override
 	public void setCreateDate(Date createDate) {
 		_taiKhoanDoiUng.setCreateDate(createDate);
+	}
+
+	/**
+	 * Sets the dien giai theo doi of this tai khoan doi ung.
+	 *
+	 * @param dienGiaiTheoDoi the dien giai theo doi of this tai khoan doi ung
+	 */
+	@Override
+	public void setDienGiaiTheoDoi(String dienGiaiTheoDoi) {
+		_taiKhoanDoiUng.setDienGiaiTheoDoi(dienGiaiTheoDoi);
 	}
 
 	@Override

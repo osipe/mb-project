@@ -33,7 +33,6 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.spring.extender.service.ServiceReference;
 import com.mb.model.PhatVay;
-import com.mb.model.impl.CongTacVienImpl;
 import com.mb.model.impl.PhatVayImpl;
 import com.mb.service.persistence.PhatVayFinder;
 
@@ -63,13 +62,16 @@ public class PhatVayFinderImpl extends PhatVayFinderBaseImpl implements PhatVayF
 	public static final String GET_PHATVAY_SAOKE = PhatVayFinder.class.getName() + ".getPhatVaySaoKe";
 
 	@SuppressWarnings("unchecked")
-	public List<PhatVay> getPhatVaySaoKe(String maCTV, Date createDate) throws SystemException {
+	public List<PhatVay> getPhatVaySaoKe(String maCTV,int loaiPhatVay, Date createDate) throws SystemException {
 		Session session = null;
 		try {
 			session = openSession();
 			String sql = _customSQL.get(getClass(), GET_PHATVAY_SAOKE);
 			if (Validator.isNull(maCTV)) {
 				sql = sql.replace("and mactv = ?", "");
+			}
+			if (loaiPhatVay == 0) {
+				sql = sql.replace("and loaiphatvay = ?", "");
 			}
 			if (createDate == null) {
 				sql = sql.replace("and ngayketthuc >= ?", "");
@@ -82,6 +84,9 @@ public class PhatVayFinderImpl extends PhatVayFinderBaseImpl implements PhatVayF
 			QueryPos qPos = QueryPos.getInstance(q);
 			if (Validator.isNotNull(maCTV)) {
 				qPos.add(maCTV);
+			}
+			if (loaiPhatVay > 0) {
+				qPos.add(loaiPhatVay);
 			}
 			if (createDate != null) {
 				Calendar cal = Calendar.getInstance();
@@ -134,7 +139,6 @@ public class PhatVayFinderImpl extends PhatVayFinderBaseImpl implements PhatVayF
 			if (Validator.isNull(ngayThuTienTu)) {
 				sql = sql.replace("AND (ngayBatDau <= ?)", "");
 				sql = sql.replace("AND (ngayDaThuCuoi < ? OR ngayDaThuCuoi IS NULL)", "");
-				sql = sql.replace("AND (ngayKetThuc >= ?)", "");
 			}
 			SQLQuery q = session.createSQLQuery(sql);
 			q.addEntity("PhatVay", PhatVayImpl.class);
@@ -170,7 +174,6 @@ public class PhatVayFinderImpl extends PhatVayFinderBaseImpl implements PhatVayF
 			if (Validator.isNull(ngayThuTien)) {
 				sql = sql.replace("AND (ngayBatDau <= ?)", "");
 				sql = sql.replace("AND (ngayDaThuCuoi < ? OR ngayDaThuCuoi IS NULL)", "");
-				sql = sql.replace("AND (ngayKetThuc >= ?)", "");
 			}
 			SQLQuery q = session.createSQLQuery(sql);
 			q.addEntity("PhatVay", PhatVayImpl.class);
@@ -181,7 +184,6 @@ public class PhatVayFinderImpl extends PhatVayFinderBaseImpl implements PhatVayF
 			if (Validator.isNotNull(ngayThuTien)) {
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(ngayThuTien);
-				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getGTDate(cal)));
 				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getGTDate(cal)));
 				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getGTDate(cal)));
 			}

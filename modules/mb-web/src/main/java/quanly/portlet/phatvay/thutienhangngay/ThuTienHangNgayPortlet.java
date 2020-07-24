@@ -47,6 +47,7 @@ import fr.opensagres.xdocreport.template.formatter.FieldsMetadata;
 import quanly.constants.QuanlyPortletKeys;
 import quanly.constants.TrangThaiPhatVayEnum;
 import quanly.dto.CongTacVienDTO;
+import quanly.portlet.danhmuc.ctv.CongTacVienComparator;
 import quanly.util.DocSo;
 
 /**
@@ -246,8 +247,8 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 			try {
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 				DecimalFormat df = new DecimalFormat("###,###.###");
-				List<CongTacVien> items = CongTacVienLocalServiceUtil.findBase(maCTVSearch, "", "", "", 1, -1, -1,
-						null);
+				CongTacVienComparator obc = new CongTacVienComparator("ma", true);
+				List<CongTacVien> items = CongTacVienLocalServiceUtil.findBase(maCTVSearch, "", "", "", 1, -1, -1, obc);
 				List<CongTacVienDTO> congTacVienDTOs = new ArrayList<CongTacVienDTO>();
 				for (CongTacVien item : items) {
 					List<PhatVay> phatVays = PhatVayLocalServiceUtil.findCTV_NgayThuTien(item.getMa(), ngayThuTien);
@@ -413,7 +414,7 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 									tongVonTra += pv.getDuNoGoc();
 									tongLaiTra += (pv.getLaiNgay()
 											* (pv.getThoiHan() - (pv.getSoLanDaThu() + pv.getSoNgayThuTruoc())));
-									
+
 									vonTra = pv.getDuNoGoc();
 									laiTra = (pv.getLaiNgay()
 											* (pv.getThoiHan() - (pv.getSoLanDaThu() + pv.getSoNgayThuTruoc())));
@@ -428,10 +429,10 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 											- CalendarUtil.getGTDate(calTu).getTime()) / time1Ngay);
 									tongVonTra += (soLanPhaiThu * pv.getGocNgay());
 									tongLaiTra += (soLanPhaiThu * pv.getLaiNgay());
-									
+
 									vonTra = (soLanPhaiThu * pv.getGocNgay());
 									laiTra += (soLanPhaiThu * pv.getLaiNgay());
-									
+
 									int soLanDaThu = (int) ((CalendarUtil.getLTDate(calDen).getTime()
 											- CalendarUtil.getGTDate(calNgayBatDau).getTime()) / time1Ngay);
 									pv.setNgayDaThuCuoi(calDen.getTime());
@@ -451,10 +452,10 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 												- CalendarUtil.getGTDate(calTu).getTime()) / time1Ngay);
 										tongVonTra += (soLanPhaiThu * pv.getGocNgay());
 										tongLaiTra += (soLanPhaiThu * pv.getLaiNgay());
-										
+
 										vonTra = (soLanPhaiThu * pv.getGocNgay());
 										laiTra = (soLanPhaiThu * pv.getLaiNgay());
-										
+
 										pv.setTrangThai(TrangThaiPhatVayEnum.CO_THU_TIEN_TRUOC.getValue());
 										pv.setNgayThuTruocTu(calTu.getTime());
 										pv.setNgayThuTruocDen(calNgayKetThuc.getTime());
@@ -465,10 +466,10 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 											- CalendarUtil.getGTDate(calTu).getTime()) / time1Ngay);
 									tongVonTra += (soLanPhaiThu * pv.getGocNgay());
 									tongLaiTra += (soLanPhaiThu * pv.getLaiNgay());
-									
+
 									vonTra = (soLanPhaiThu * pv.getGocNgay());
 									laiTra = (soLanPhaiThu * pv.getLaiNgay());
-									
+
 									pv.setTrangThai(TrangThaiPhatVayEnum.CO_THU_TIEN_TRUOC.getValue());
 									pv.setNgayThuTruocTu(calTu.getTime());
 									pv.setNgayThuTruocDen(calDen.getTime());
@@ -483,7 +484,7 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 									tongVonTra += pv.getDuNoGoc();
 									tongLaiTra += (pv.getLaiNgay()
 											* (pv.getThoiHan() - (pv.getSoLanDaThu() + pv.getSoNgayThuTruoc())));
-									
+
 									vonTra = pv.getDuNoGoc();
 									laiTra = (pv.getLaiNgay()
 											* (pv.getThoiHan() - (pv.getSoLanDaThu() + pv.getSoNgayThuTruoc())));
@@ -498,10 +499,10 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 											- CalendarUtil.getGTDate(calTu).getTime()) / time1Ngay);
 									tongVonTra += (soLanPhaiThu * pv.getGocNgay());
 									tongLaiTra += (soLanPhaiThu * pv.getLaiNgay());
-									
+
 									vonTra = (soLanPhaiThu * pv.getGocNgay());
 									laiTra = (soLanPhaiThu * pv.getLaiNgay());
-									
+
 									int soLanDaThu = (int) ((CalendarUtil.getLTDate(calDen).getTime()
 											- CalendarUtil.getGTDate(calNgayBatDau).getTime()) / time1Ngay);
 									pv.setNgayDaThuCuoi(calDen.getTime());
@@ -519,10 +520,10 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 											- CalendarUtil.getGTDate(calTu).getTime()) / time1Ngay);
 									tongVonTra += (soLanPhaiThu * pv.getGocNgay());
 									tongLaiTra += (soLanPhaiThu * pv.getLaiNgay());
-									
+
 									vonTra = (soLanPhaiThu * pv.getGocNgay());
 									laiTra = (soLanPhaiThu * pv.getLaiNgay());
-									
+
 									pv.setTrangThai(TrangThaiPhatVayEnum.CO_THU_TIEN_TRUOC.getValue());
 									pv.setNgayThuTruocTu(calTu.getTime());
 									pv.setNgayThuTruocDen(calNgayKetThuc.getTime());
@@ -532,10 +533,10 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 											- CalendarUtil.getGTDate(calTu).getTime()) / time1Ngay);
 									tongVonTra += (soLanPhaiThu * pv.getGocNgay());
 									tongLaiTra += (soLanPhaiThu * pv.getLaiNgay());
-									
+
 									vonTra = (soLanPhaiThu * pv.getGocNgay());
 									laiTra = (soLanPhaiThu * pv.getLaiNgay());
-									
+
 									pv.setTrangThai(TrangThaiPhatVayEnum.CO_THU_TIEN_TRUOC.getValue());
 									pv.setNgayThuTruocTu(calTu.getTime());
 									pv.setNgayThuTruocDen(calDen.getTime());

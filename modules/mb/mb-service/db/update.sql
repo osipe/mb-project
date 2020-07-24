@@ -1,3 +1,7 @@
+--16.07.2020
+ALTER TABLE public.dm_taikhoandoiung ADD COLUMN dienGiaiTheoDoi text;
+
+--02.07.2020
 ALTER TABLE public.dm_taikhoandoiung ADD COLUMN loaiTaiKhoan integer;
 ALTER TABLE public.ketoan_dsphieutaikhoan ADD COLUMN maCTV  character varying(255);
 ALTER TABLE public.ketoan_dsphieutaikhoan ADD COLUMN tenCTV  character varying(255);
@@ -28,3 +32,11 @@ select public.capNhatTenCTV();
 ALTER TABLE public.dm_congtacvien ADD COLUMN duNoToiDaTheChap double precision;
 ALTER TABLE public.mb_phatvay ADD COLUMN ngaytao timestamp without time zone;
 ALTER TABLE public.mb_lichsuthuphatchi ADD COLUMN trangThaiPhatVayHienTai integer;
+ALTER TABLE public.ketoan_dsphieutaikhoan ADD COLUMN sophieu character varying(75);
+ALTER TABLE public.ketoan_lichsutaikhoandauky ADD COLUMN soTienThu double precision;
+ALTER TABLE public.ketoan_lichsutaikhoandauky ADD COLUMN soTienChi double precision;
+
+ALTER TABLE public.ketoan_dsphieutaikhoan ADD COLUMN sophieu character varying(75);
+ALTER TABLE public.ketoan_lichsutaikhoandauky ADD COLUMN sotienchi double precision;
+ALTER TABLE public.ketoan_lichsutaikhoandauky ADD COLUMN sotienthu double precision;
+

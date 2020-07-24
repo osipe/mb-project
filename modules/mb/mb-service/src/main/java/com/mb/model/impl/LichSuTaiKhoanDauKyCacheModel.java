@@ -68,7 +68,7 @@ public class LichSuTaiKhoanDauKyCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(29);
 
 		sb.append("{lichSuTaiKhoanDauKyId=");
 		sb.append(lichSuTaiKhoanDauKyId);
@@ -92,6 +92,10 @@ public class LichSuTaiKhoanDauKyCacheModel
 		sb.append(nam);
 		sb.append(", soTienTon=");
 		sb.append(soTienTon);
+		sb.append(", soTienThu=");
+		sb.append(soTienThu);
+		sb.append(", soTienChi=");
+		sb.append(soTienChi);
 		sb.append(", hoatDong=");
 		sb.append(hoatDong);
 		sb.append("}");
@@ -134,6 +138,8 @@ public class LichSuTaiKhoanDauKyCacheModel
 		lichSuTaiKhoanDauKyImpl.setThang(thang);
 		lichSuTaiKhoanDauKyImpl.setNam(nam);
 		lichSuTaiKhoanDauKyImpl.setSoTienTon(soTienTon);
+		lichSuTaiKhoanDauKyImpl.setSoTienThu(soTienThu);
+		lichSuTaiKhoanDauKyImpl.setSoTienChi(soTienChi);
 		lichSuTaiKhoanDauKyImpl.setHoatDong(hoatDong);
 
 		lichSuTaiKhoanDauKyImpl.resetOriginalValues();
@@ -161,6 +167,10 @@ public class LichSuTaiKhoanDauKyCacheModel
 		nam = objectInput.readInt();
 
 		soTienTon = objectInput.readDouble();
+
+		soTienThu = objectInput.readDouble();
+
+		soTienChi = objectInput.readDouble();
 
 		hoatDong = objectInput.readBoolean();
 	}
@@ -193,6 +203,10 @@ public class LichSuTaiKhoanDauKyCacheModel
 
 		objectOutput.writeDouble(soTienTon);
 
+		objectOutput.writeDouble(soTienThu);
+
+		objectOutput.writeDouble(soTienChi);
+
 		objectOutput.writeBoolean(hoatDong);
 	}
 
@@ -207,6 +221,8 @@ public class LichSuTaiKhoanDauKyCacheModel
 	public int thang;
 	public int nam;
 	public double soTienTon;
+	public double soTienThu;
+	public double soTienChi;
 	public boolean hoatDong;
 
 }

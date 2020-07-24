@@ -101,12 +101,28 @@ public class PhatVayPortlet extends MVCPortlet {
 			kq = inPhieuThu(resourceRequest, resourceResponse, serviceContext);
 		} else if (resourceId.equals("xoaURL")) {
 			kq = xoaURL(resourceRequest, resourceResponse, serviceContext);
+		} else if (resourceId.equals("checkPhatVayKhachHang")) {
+			kq = checkPhatVayKhachHang(resourceRequest, resourceResponse, serviceContext);
 		}
 		PrintWriter writer = resourceResponse.getWriter();
 		writer.print(kq.toString());
 		writer.flush();
 		writer.close();
 
+	}
+	public JSONObject checkPhatVayKhachHang(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
+			ServiceContext serviceContext) {
+		JSONObject kq = JSONFactoryUtil.createJSONObject();
+		try {
+			String maCTV = ParamUtil.getString(resourceRequest, "maCTV");
+			String maKhachHang = ParamUtil.getString(resourceRequest, "maKhachHang");
+			int soPhatVay = PhatVayLocalServiceUtil.countBase("", maCTV, maKhachHang, null, null, null, null, null,
+					null, "1,4");
+			kq.put("soPhatVayChuaTatToan", soPhatVay);
+		}catch (Exception e) {
+			kq.putException(e);
+		}
+		return kq;
 	}
 
 	public JSONObject addKhachHangURL(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
@@ -351,63 +367,47 @@ public class PhatVayPortlet extends MVCPortlet {
 			long createDateTime = ParamUtil.getLong(resourceRequest, "createDateTime");
 			Date createDate = createDateTime != 0 ? new Date(createDateTime) : null;
 			SoKheUoc soKheUoc = null;
-			boolean error = false;
 			if (phatVayId > 0) {
 				phatVay = PhatVayLocalServiceUtil.fetchPhatVay(phatVayId);
-			} else {
-				int soPhatVay = PhatVayLocalServiceUtil.countBase("", maCTV, maKhachHang,null,null,
-						null, null, null, null, "1,4");
-				if (soPhatVay >= 1) {
-					error = true;
-					kq.put("exception", "ConPhatVay");
-				}
 			}
-			if (!error) {
-				String[] cauTrucs = soKU.split("-");
-				String cauTruc = "";
-				int number = 0;
-				if (cauTrucs.length == 2) {
-					cauTruc = cauTrucs[0];
-					number = GetterUtil.getInteger(cauTrucs[1]);
-				}
-				try {
-					soKheUoc = SoKheUocLocalServiceUtil.fetchByCauTruc(cauTruc);
-				} catch (Exception e) {
-					e.printStackTrace();
-					kq.putException(e);
-				}
-				if (soKheUoc == null) {
-					soKheUoc = SoKheUocLocalServiceUtil.createSoKheUoc(0L);
-					soKheUoc.setCauTruc(maCTV);
-					soKheUoc.setSo(0);
-					soKheUoc = SoKheUocLocalServiceUtil.addSoKheUoc(soKheUoc, serviceContext);
-				}
-				phatVay.setCreateDate(createDate);
-				phatVay.setSoKU(soKU);
-				phatVay.setSoTienVay(soTienVay);
-				phatVay.setThoiHan(thoiHan);
-				phatVay.setLaiSuatVay(laiSuatVay);
-				phatVay.setGocNgay(tienGocNgay);
-				phatVay.setLaiNgay(tienLaiNgay);
-				phatVay.setGocNgayCuoi(tienGocNgayCuoi);
-				phatVay.setNgayBatDau(ngayBatDau);
-				phatVay.setNgayKetThuc(ngayKetThuc);
-				if (loaiPhatVay == 1) {
-					String taiSanTheChapString = ParamUtil.getString(resourceRequest, "taiSanTheChap");
-					JSONArray taiSanTheChaps = JSONFactoryUtil.createJSONArray(taiSanTheChapString);
-					phatVay.setTaiSanThueChapJSONArray(taiSanTheChaps);
-				}
-				phatVay.setMaKhachHang(maKhachHang);
-				phatVay.setMaCTV(maCTV);
-				phatVay.setLoaiPhatVay(loaiPhatVay);
-				phatVay.setNgayKetThuc(ngayKetThuc);
-				phatVay.setTrangThai(TrangThaiPhatVayEnum.CHUA_THANH_TOAN.getValue());
-				PhatVayLocalServiceUtil.addOrUpdatePhatVay(phatVay, serviceContext);
-				PhatVayLocalServiceUtil.addOrUpdateThongTinLienQuan(phatVay, serviceContext);
-				if (soKheUoc.getSo() <= number) {
-					soKheUoc.setSo(number + 1);
-					SoKheUocLocalServiceUtil.updateSoKheUoc(soKheUoc, serviceContext);
-				}
+			int number = GetterUtil.getInteger(soKU.substring(maCTV.length(), soKU.length()));
+			try {
+				soKheUoc = SoKheUocLocalServiceUtil.fetchByCauTruc(maCTV);
+			} catch (Exception e) {
+				e.printStackTrace();
+				kq.putException(e);
+			}
+			if (soKheUoc == null) {
+				soKheUoc = SoKheUocLocalServiceUtil.createSoKheUoc(0L);
+				soKheUoc.setCauTruc(maCTV);
+				soKheUoc.setSo(0);
+				soKheUoc = SoKheUocLocalServiceUtil.addSoKheUoc(soKheUoc, serviceContext);
+			}
+			phatVay.setCreateDate(createDate);
+			phatVay.setSoKU(soKU);
+			phatVay.setSoTienVay(soTienVay);
+			phatVay.setThoiHan(thoiHan);
+			phatVay.setLaiSuatVay(laiSuatVay);
+			phatVay.setGocNgay(tienGocNgay);
+			phatVay.setLaiNgay(tienLaiNgay);
+			phatVay.setGocNgayCuoi(tienGocNgayCuoi);
+			phatVay.setNgayBatDau(ngayBatDau);
+			phatVay.setNgayKetThuc(ngayKetThuc);
+			if (loaiPhatVay == 1) {
+				String taiSanTheChapString = ParamUtil.getString(resourceRequest, "taiSanTheChap");
+				JSONArray taiSanTheChaps = JSONFactoryUtil.createJSONArray(taiSanTheChapString);
+				phatVay.setTaiSanThueChapJSONArray(taiSanTheChaps);
+			}
+			phatVay.setMaKhachHang(maKhachHang);
+			phatVay.setMaCTV(maCTV);
+			phatVay.setLoaiPhatVay(loaiPhatVay);
+			phatVay.setNgayKetThuc(ngayKetThuc);
+			phatVay.setTrangThai(TrangThaiPhatVayEnum.CHUA_THANH_TOAN.getValue());
+			PhatVayLocalServiceUtil.addOrUpdatePhatVay(phatVay, serviceContext);
+			PhatVayLocalServiceUtil.addOrUpdateThongTinLienQuan(phatVay, serviceContext);
+			if (soKheUoc.getSo() <= number) {
+				soKheUoc.setSo(number + 1);
+				SoKheUocLocalServiceUtil.updateSoKheUoc(soKheUoc, serviceContext);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

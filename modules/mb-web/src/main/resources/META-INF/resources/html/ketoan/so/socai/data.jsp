@@ -23,7 +23,7 @@
 <%
 	int namSearch = ParamUtil.getInteger(request, "namSearch");
 	int thangSearch = ParamUtil.getInteger(request, "thangSearch");
-	long taiKhoanDoiUngIdSearch = ParamUtil.getLong(request, "taiKhoanDoiUngIdSearch");
+	long taiKhoanDoiUngIdSearch = ParamUtil.getLong(request, "taiKhoanDoiUngIdSoCaiSearch");
 	TaiKhoanDoiUng taiKhoanDoiUng = TaiKhoanDoiUngLocalServiceUtil.createTaiKhoanDoiUng(0L);
 	if(taiKhoanDoiUngIdSearch > 0){ 
 		taiKhoanDoiUng = TaiKhoanDoiUngLocalServiceUtil.fetchTaiKhoanDoiUng(taiKhoanDoiUngIdSearch);
@@ -49,6 +49,8 @@
 	cuoiKy.setNam(thangSearch == 12 ?  namSearch + 1 : namSearch);
 	cuoiKy.setThang(thangSearch == 12 ? 1 : thangSearch + 1);
 	Double soTien = lichSuTaiKhoanDauKy.getSoTienTon() != null ? lichSuTaiKhoanDauKy.getSoTienTon() : GetterUtil.getDouble("0");
+	Double soTienThu = lichSuTaiKhoanDauKy.getSoTienThu() != null ? lichSuTaiKhoanDauKy.getSoTienThu() : GetterUtil.getDouble("0");
+	Double soTienChi = lichSuTaiKhoanDauKy.getSoTienChi() != null ? lichSuTaiKhoanDauKy.getSoTienChi() : GetterUtil.getDouble("0");
 	Double soTienNo =  GetterUtil.getDouble("0");
 	Double soTienCo =  GetterUtil.getDouble("0");
 
@@ -76,13 +78,14 @@
 			    <th rowspan="2">Diễn giải</th>
 			    <th rowspan="2">Tên CTV</th>
 			    <th rowspan="2">Tài khoản đối ứng</th>
-			    <th colspan="2">Số phát sinh</th>
+			    <th colspan="3">Số phát sinh</th>
 			 </tr>
 			 <tr >
 				<th>Số hiệu</th>
 			    <th>Ngày tháng</th>
-			    <th>Nợ</th>
-			    <th >Có</th>
+			    <th>Thu</th>
+			    <th >Chi</th>
+			    <th >Tồn</th>
 			 </tr>
 	</thead>
 	 <tbody>
@@ -93,7 +96,9 @@
 	 		<td><b><u>SỐ ĐẦU KỲ</u></b></td>
 	 		<td/>
 	 		<td/>
-	 		<td colspan="2" style="text-align: center;"><b><%=(lichSuTaiKhoanDauKy.getSoTienTon() != null && lichSuTaiKhoanDauKy.getSoTienTon() != 0)  ? df.format(lichSuTaiKhoanDauKy.getSoTienTon()) : ""%></b></td>
+	 		<td style="text-align: center;"><b><%=(lichSuTaiKhoanDauKy.getSoTienThu() != null && lichSuTaiKhoanDauKy.getSoTienThu() != 0)  ? df.format(lichSuTaiKhoanDauKy.getSoTienThu()) : ""%></b></td>
+	 		<td style="text-align: center;"><b><%=(lichSuTaiKhoanDauKy.getSoTienChi() != null && lichSuTaiKhoanDauKy.getSoTienChi() != 0)  ? df.format(lichSuTaiKhoanDauKy.getSoTienChi()) : ""%></b></td>
+	 		<td style="text-align: center;"><b><%=(lichSuTaiKhoanDauKy.getSoTienTon() != null && lichSuTaiKhoanDauKy.getSoTienTon() != 0)  ? df.format(lichSuTaiKhoanDauKy.getSoTienTon()) : ""%></b></td>
 	 	</tr>
 	 		<c:choose>
 	 	<c:when test="<%=CollectionUtils.isNotEmpty(dsPhieuTaiKhoans)%>">
@@ -108,8 +113,6 @@
 			serviceContext.setUserId(themeDisplay.getUserId());
 			String ngayChungTu = "";
 			String ngayGhiSo =  "";
-			String dauNo =  "";
-			String dauCo =  "";
 			for(DsPhieuTaiKhoan item : dsPhieuTaiKhoans){
 				String soPhieuDayDu = "";
 				String tenTaiKhoanDoiUng = "";
@@ -117,11 +120,8 @@
 				String soCo = "";
 				String tenCTV = "";
 				if(item.getPhieu() != null){
-					soPhieuDayDu = item.getPhieu().getSoPhieu() + "/" + sdfSo.format(item.getNgayChungTu()) + item.getPhieu().getMaMSThuChi();
-					soPhieuDayDu = item.getPhieu().getSoPhieu() + "/" + sdfSo.format(item.getNgayChungTu()) + item.getPhieu().getMaMSThuChi();
-					if(taiKhoanDoiUng.getSoHieu().equals(PropsUtil.get("config.taikhoanthuvon"))){
-						dauNo = "+";
-						dauCo = "-";		
+					soPhieuDayDu = item.getPhieu().getSoPhieu();
+					if(taiKhoanDoiUng.getSoHieu().equals(PropsUtil.get("config.taikhoanthuvon"))){	
 						//1 Thu
 						if(item.getPhieu().getLoai() == 1){
 							soTienCo += item.getSoTien();
@@ -132,8 +132,6 @@
 							soTien += item.getSoTien();
 						}
 					}else{
-						dauNo = "-";
-						dauCo = "+";	
 						//1 Thu
 						if(item.getPhieu().getLoai() == 1){
 							soTienCo += item.getSoTien();
@@ -175,8 +173,9 @@
 		 		<td><%=item.getDienGiaiTheoDoi()%></td>
 		 		<td><%=item.getTenCTV()%></td>
 		 		<td><%=tenTaiKhoanDoiUng%></td>
-		 		<td><%=soNo%></td>
 		 		<td><%=soCo%></td>
+		 		<td><%=soNo%></td>
+		 		<td><%=df.format(soTien)%></td>
 			</tr>
 		<%
 			}
@@ -189,8 +188,9 @@
 		 		<td><b><u>SỐ TRONG THÁNG</u></b></td>
 		 		<td/>
 	 			<td/>
-		 		<td style="text-align: center;"><b><%=dauNo + df.format(soTienNo)%></b></td>
-		 		<td style="text-align: center;"><b><%=dauCo +df.format(soTienCo)%></b></td>
+		 		<td style="text-align: center;"><b><%=df.format(soTienCo)%></b></td>
+		 		<td style="text-align: center;"><b><%=df.format(soTienNo)%></b></td>
+		 		<td style="text-align: center;"><b><%=""%></b></td>
 		 	</tr>
 			<tr>
 		 		<td/>
@@ -199,12 +199,14 @@
 		 		<td><b><u>SỐ CUỐI THÁNG</u></b></td>
 		 		<td/>
 	 			<td/>
-		 		<td colspan="2" style="text-align: center;"><b><%=df.format(cuoiKy.getSoTienTon())%></b></td>
+		 		<td  style="text-align: center;"><b><%=df.format(soTienThu + soTienCo)%></b></td>
+		 		<td  style="text-align: center;"><b><%=df.format(soTienChi + soTienNo)%></b></td>
+		 		<td  style="text-align: center;"><b><%=df.format(cuoiKy.getSoTienTon())%></b></td>
 		 	</tr>
 		</c:when>
 		<c:otherwise>
 				<tr>
-					<td colspan="7" class="empty text-center">Không có dữ liệu</td>
+					<td colspan="9" class="empty text-center">Không có dữ liệu</td>
 				</tr>
 			</c:otherwise>
 		</c:choose>

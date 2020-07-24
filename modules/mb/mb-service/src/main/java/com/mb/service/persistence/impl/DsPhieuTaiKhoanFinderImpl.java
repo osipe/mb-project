@@ -62,21 +62,21 @@ public class DsPhieuTaiKhoanFinderImpl extends DsPhieuTaiKhoanFinderBaseImpl imp
 			session = openSession();
 			String sql = _customSQL.get(getClass(), GET_DSTHUCHI_BY_TAIKHOAN_NGAYCHUNGTU);
 			if (hoatDong == 0) {
-				sql = sql.replace("AND (hoatdong = ?)", "");
+				sql = sql.replace("AND (ds.hoatdong = ?)", "");
 			}
 			if (Validator.isNull(maCTV)) {
-				sql = sql.replace("AND (maCTV = ?)", "");
+				sql = sql.replace("AND (ds.maCTV = ?)", "");
 			}
 			if (taiKhoanDoiUngId == 0) {
 				sql = sql.replace(
-						"AND (taiKhoanDoiUngId IN (SELECT taiKhoanDoiUngId FROM dm_taikhoandoiung WHERE taiKhoanDoiUngChaId = ? OR taiKhoanDoiUngId = ?)",
+						"AND (ds.taiKhoanDoiUngId IN (SELECT taiKhoanDoiUngId FROM dm_taikhoandoiung WHERE taiKhoanDoiUngChaId = ? OR taiKhoanDoiUngId = ?)",
 						"");
 			}
 			if (Validator.isNull(ngayChungTuTu)) {
-				sql = sql.replace("AND (ngayChungTu >= ?)", "");
+				sql = sql.replace("AND (ds.ngayChungTu >= ?)", "");
 			}
 			if (Validator.isNull(ngayChungTuDen)) {
-				sql = sql.replace("AND (ngayChungTu <= ?)", "");
+				sql = sql.replace("AND (ds.ngayChungTu <= ?)", "");
 			}
 			sql = _customSQL.replaceOrderBy(sql, obc);
 			SQLQuery q = session.createSQLQuery(sql);

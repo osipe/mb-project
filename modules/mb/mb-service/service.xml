@@ -22,6 +22,7 @@
 		<column name="maMSThuChi" type="String" />
 		<column name="soTien" type="Double" />
 		<column name="chungTuKemTheo" type="String" />
+	<!-- 	1 :  Thu - 2 : Chi -->
 		<column name="loai" type="int" />
 		<column name="hoatDong" type="Boolean" />
 		<order by="asc">
@@ -42,6 +43,8 @@
 		<column name="thang" type="int" />
 		<column name="nam" type="int" />
 		<column name="soTienTon" type="Double" />
+		<column name="soTienThu" type="Double" />
+		<column name="soTienChi" type="Double" />
 		<column name="hoatDong" type="Boolean" />
 		<order by="asc">
 			<order-column name="lichSuTaiKhoanDauKyId" />
@@ -73,6 +76,7 @@
 		<column name="soTien" type="Double" />
 		<column name="tenCTV" type="String" />
 		<column name="maCTV" type="String" />
+		<column name="soPhieu" type="String" />
 		<column name="hoatDong" type="Boolean" />
 		<order by="asc">
 			<order-column name="dsPhieuTaiKhoanId" />
@@ -321,7 +325,6 @@
 		<column name="modifiedDate" type="Date" />
 		<column name="ma" type="String" />
 		<column name="dienGiai" type="String" />
-		<column name="dienGiaiTheoDoi" type="String" />
 		<column name="loai" type="int" />
 		<column name="hoatDong" type="Boolean" />
 		<order by="asc">
@@ -394,6 +397,7 @@
 		<column name="taiKhoanDoiUngChaId" type="long" />
 		<column name="soHieu" type="String" />
 		<column name="ten" type="String" />
+		<column name="dienGiaiTheoDoi" type="String" />
 		<!-- 1 : Cty - 2 : CTV -->
 		<column name="loaiTaiKhoan" type="int" />
 		<column name="hoatDong" type="Boolean" />

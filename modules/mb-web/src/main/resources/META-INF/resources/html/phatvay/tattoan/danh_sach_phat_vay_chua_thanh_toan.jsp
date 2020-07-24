@@ -32,15 +32,15 @@
 	</liferay-portlet:renderURL>
 		<div style="text-align: right;"><span class="note-span">(Đơn vị : VND)</span></div>
 		<h4>Danh sách KU chưa tất toán</h4>
-		<liferay-ui:search-container  delta="<%= count%>"  emptyResultsMessage="Không có kết quả nào được tìm thấy!" iteratorURL="<%=iteratorURL %>" total="<%=count %>" rowChecker="<%=rowChecker%>">
+		<liferay-ui:search-container  delta="20"  emptyResultsMessage="Không có kết quả nào được tìm thấy!" iteratorURL="<%=iteratorURL %>" total="<%=count %>" rowChecker="<%=rowChecker%>">
 			 <%
 			 	String orderByType = ParamUtil.getString(request, "orderByType"); 
 			 	String orderByCol = ParamUtil.getString(request, "orderByCol"); 
 			 	if(Validator.isNull(orderByType)){
-			 		orderByType = "desc";
+			 		orderByType = "asc";
 			 	}
 			 	if(Validator.isNull(orderByCol)){
-			 		orderByCol = "createdate";
+			 		orderByCol = "maCTV";
 			 	}
 			 	boolean ascending = true;
 			 	if("desc".equals(orderByType)){

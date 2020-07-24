@@ -23,7 +23,7 @@
 <%
 	int namSearch = ParamUtil.getInteger(request, "namSearch");
 	int thangSearch = ParamUtil.getInteger(request, "thangSearch");
-	long taiKhoanDoiUngIdSearch = ParamUtil.getLong(request, "taiKhoanDoiUngIdSearch");
+	long taiKhoanDoiUngIdSearch = ParamUtil.getLong(request, "taiKhoanDoiUngIdSoCTVSearch");
 	TaiKhoanDoiUng taiKhoanDoiUng = TaiKhoanDoiUngLocalServiceUtil.createTaiKhoanDoiUng(0L);
 	TaiKhoanDoiUng taiKhoanThuVon = TaiKhoanDoiUngLocalServiceUtil.createTaiKhoanDoiUng(0L);
 	if(taiKhoanDoiUngIdSearch > 0){ 
@@ -121,7 +121,7 @@
 				String soCo = "";
 				String tenCTV = "";
 				if(item.getPhieu() != null){
-					soPhieuDayDu = item.getPhieu().getSoPhieu() + "/" + sdfSo.format(item.getNgayChungTu()) + item.getPhieu().getMaMSThuChi();
+					soPhieuDayDu = item.getPhieu().getSoPhieu();
 					//1 Thu
 					if(item.getPhieu().getLoai() == 1){
 						soTienCo += item.getSoTien();
@@ -197,7 +197,6 @@
 		</c:choose>
 	</tbody>
 </table>
-<portlet:resourceURL var="capNhatDuLieuDauKyURL" id="capNhatDuLieuDauKyURL"></portlet:resourceURL>
 <portlet:resourceURL var="inSoCaiURL" id="inSoCaiURL">
 	<portlet:param name="nam" value="<%=String.valueOf(namSearch)%>" />
 	<portlet:param name="thang" value="<%=String.valueOf(thangSearch)%>" />
@@ -210,33 +209,10 @@ AUI().ready(['aui-base'], function(A) {
 			target: A.getBody()
 		}
 	);
-	Liferay.provide(window,'capNhatDuLieuDauKy', function(){
-		loadingMask.show();
-		A.io.request('${capNhatDuLieuDauKyURL}', {
-               method: 'post',
-               data: {
-               	'<portlet:namespace />taiKhoanDoiUngId' : '<%=taiKhoanDoiUngIdSearch %>',
-               	'<portlet:namespace />nam' : '<%=namSearch %>',
-               	'<portlet:namespace />thang' : '<%=thangSearch %>'
-               },
-               on: {
-                   success: function() {
-                   		if(this.get('responseData')){
-                   			var data = JSON.parse(this.get('responseData'));
-                   			if(data.exception){
-                   				toastr.warning('Cập nhật dữ liệu đầu kỳ lỗi', 'Cảnh báo!');
-                   			}
-                   		}
-                   }
-              }
-        });
-        loadingMask.hide();
-	});	
 	Liferay.provide(window,'inSoCai', function(type){
 		var url = '${inSoCaiURL}';
 		url += '&<portlet:namespace/>typeIn=' + type;
 		window.location.href = url;
 	});
-	capNhatDuLieuDauKy();
 });
 </aui:script>

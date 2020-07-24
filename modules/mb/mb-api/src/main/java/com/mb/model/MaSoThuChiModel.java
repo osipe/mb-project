@@ -221,21 +221,6 @@ public interface MaSoThuChiModel
 	public void setDienGiai(String dienGiai);
 
 	/**
-	 * Returns the dien giai theo doi of this ma so thu chi.
-	 *
-	 * @return the dien giai theo doi of this ma so thu chi
-	 */
-	@AutoEscape
-	public String getDienGiaiTheoDoi();
-
-	/**
-	 * Sets the dien giai theo doi of this ma so thu chi.
-	 *
-	 * @param dienGiaiTheoDoi the dien giai theo doi of this ma so thu chi
-	 */
-	public void setDienGiaiTheoDoi(String dienGiaiTheoDoi);
-
-	/**
 	 * Returns the loai of this ma so thu chi.
 	 *
 	 * @return the loai of this ma so thu chi

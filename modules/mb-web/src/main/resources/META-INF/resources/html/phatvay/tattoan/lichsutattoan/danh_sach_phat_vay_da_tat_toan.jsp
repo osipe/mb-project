@@ -33,7 +33,7 @@
 		<portlet:param name="mvcPath" value="/html/phatvay/tattoan/lichsutattoan/danh_sach_phat_vay_da_tat_toan.jsp" />
 	</liferay-portlet:renderURL>
 		<div style="text-align: right;"><span class="note-span">(Đơn vị : VND)</span></div>
-		<liferay-ui:search-container  delta="10"  emptyResultsMessage="Không có kết quả nào được tìm thấy!" iteratorURL="<%=iteratorURL %>" total="<%=count %>" rowChecker="<%=rowChecker%>">
+		<liferay-ui:search-container  delta="20"  emptyResultsMessage="Không có kết quả nào được tìm thấy!" iteratorURL="<%=iteratorURL %>" total="<%=count %>" rowChecker="<%=rowChecker%>">
 			 <%
 			 	String orderByType = ParamUtil.getString(request, "orderByType"); 
 			 	String orderByCol = ParamUtil.getString(request, "orderByCol"); 

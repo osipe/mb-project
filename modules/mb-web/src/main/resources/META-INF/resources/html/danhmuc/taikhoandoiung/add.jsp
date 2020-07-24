@@ -51,6 +51,13 @@
 			</td>
 		</tr>
 		<tr>
+			<td colspan="2">
+				<aui:input type="textarea" class="input-text" name="dienGiaiTheoDoi" label="Diễn giải theo dõi" value="<%=taiKhoanDoiUng.getDienGiaiTheoDoi()%>">
+					<aui:validator name="required" errorMessage="Diễn giải không được bỏ trống!" />
+				</aui:input>
+			</td>
+		</tr>
+		<tr>
 			<td>
 				<button id="<portlet:namespace />luu" type="button" class="btn btn-labeled btn-default" onclick="save(true);">
 					<span class="btn-label"><i class="glyphicon glyphicon-floppy-disk"></i></span><%=taiKhoanDoiUngId == 0 ? "Lưu" : "Cập nhật" %>
@@ -90,7 +97,8 @@ AUI().ready(['aui-base'], function(A) {
 				<portlet:namespace />taiKhoanDoiUngChaId : form.one('#<portlet:namespace />taiKhoanDoiUngChaId').val(),
 				<portlet:namespace />ten : form.one('#<portlet:namespace />ten').val(),
 				<portlet:namespace />soHieu : form.one('#<portlet:namespace />soHieu').val(),
-				<portlet:namespace />loaiTaiKhoan : form.one('#<portlet:namespace />loaiTaiKhoan').val()
+				<portlet:namespace />loaiTaiKhoan : form.one('#<portlet:namespace />loaiTaiKhoan').val(),
+				<portlet:namespace />dienGiaiTheoDoi : form.one('#<portlet:namespace />dienGiaiTheoDoi').val()
 			}
 			A.io.request('${addURL}', {
 	               method: 'post',

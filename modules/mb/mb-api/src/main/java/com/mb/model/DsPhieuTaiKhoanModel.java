@@ -307,6 +307,21 @@ public interface DsPhieuTaiKhoanModel
 	public void setMaCTV(String maCTV);
 
 	/**
+	 * Returns the so phieu of this ds phieu tai khoan.
+	 *
+	 * @return the so phieu of this ds phieu tai khoan
+	 */
+	@AutoEscape
+	public String getSoPhieu();
+
+	/**
+	 * Sets the so phieu of this ds phieu tai khoan.
+	 *
+	 * @param soPhieu the so phieu of this ds phieu tai khoan
+	 */
+	public void setSoPhieu(String soPhieu);
+
+	/**
 	 * Returns the hoat dong of this ds phieu tai khoan.
 	 *
 	 * @return the hoat dong of this ds phieu tai khoan

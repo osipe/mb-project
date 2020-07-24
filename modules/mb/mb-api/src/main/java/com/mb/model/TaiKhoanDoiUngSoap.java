@@ -44,6 +44,7 @@ public class TaiKhoanDoiUngSoap implements Serializable {
 		soapModel.setTaiKhoanDoiUngChaId(model.getTaiKhoanDoiUngChaId());
 		soapModel.setSoHieu(model.getSoHieu());
 		soapModel.setTen(model.getTen());
+		soapModel.setDienGiaiTheoDoi(model.getDienGiaiTheoDoi());
 		soapModel.setLoaiTaiKhoan(model.getLoaiTaiKhoan());
 		soapModel.setHoatDong(model.getHoatDong());
 
@@ -184,6 +185,14 @@ public class TaiKhoanDoiUngSoap implements Serializable {
 		_ten = ten;
 	}
 
+	public String getDienGiaiTheoDoi() {
+		return _dienGiaiTheoDoi;
+	}
+
+	public void setDienGiaiTheoDoi(String dienGiaiTheoDoi) {
+		_dienGiaiTheoDoi = dienGiaiTheoDoi;
+	}
+
 	public int getLoaiTaiKhoan() {
 		return _loaiTaiKhoan;
 	}
@@ -210,6 +219,7 @@ public class TaiKhoanDoiUngSoap implements Serializable {
 	private long _taiKhoanDoiUngChaId;
 	private String _soHieu;
 	private String _ten;
+	private String _dienGiaiTheoDoi;
 	private int _loaiTaiKhoan;
 	private Boolean _hoatDong;
 

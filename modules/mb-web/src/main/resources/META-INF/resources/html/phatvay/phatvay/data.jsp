@@ -43,7 +43,7 @@
 	<button id="<portlet:namespace />tatToanBtn" type="button" class="btn btn-labeled btn-danger hide" onclick="tatToan();" 
 		<span class="btn-label"><i class="glyphicon glyphicon-piggy-bank"></i></span> Tất toán
 	</button>
-	<liferay-ui:search-container  delta="<%=count %>"  emptyResultsMessage="Không có kết quả nào được tìm thấy!" iteratorURL="<%=iteratorURL %>" total="<%=count %>">
+	<liferay-ui:search-container  delta="20"  emptyResultsMessage="Không có kết quả nào được tìm thấy!" iteratorURL="<%=iteratorURL %>" total="<%=count %>">
 		 <%
 		 	String orderByType = ParamUtil.getString(request, "orderByType"); 
 		 	String orderByCol = ParamUtil.getString(request, "orderByCol"); 
@@ -51,11 +51,11 @@
 		 		orderByType = "desc";
 		 	}
 		 	if(Validator.isNull(orderByCol)){
-		 		orderByCol = "createdate";
+		 		orderByCol = "createDate";
 		 	}
-		 	boolean ascending = true;
-		 	if("desc".equals(orderByType)){
-		 		ascending = false;
+		 	boolean ascending = false;
+		 	if("asc".equals(orderByType)){
+		 		ascending = true;
 		 	}
 		 	PhatVayComparator obc = new PhatVayComparator(orderByCol,ascending);
 		 	searchContainer.setOrderByCol(orderByCol);

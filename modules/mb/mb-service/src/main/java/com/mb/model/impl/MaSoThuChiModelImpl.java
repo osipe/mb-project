@@ -77,8 +77,8 @@ public class MaSoThuChiModelImpl
 		{"groupId", Types.BIGINT}, {"userId", Types.BIGINT},
 		{"userName", Types.VARCHAR}, {"createDate", Types.TIMESTAMP},
 		{"modifiedDate", Types.TIMESTAMP}, {"ma", Types.VARCHAR},
-		{"dienGiai", Types.VARCHAR}, {"dienGiaiTheoDoi", Types.VARCHAR},
-		{"loai", Types.INTEGER}, {"hoatDong", Types.BOOLEAN}
+		{"dienGiai", Types.VARCHAR}, {"loai", Types.INTEGER},
+		{"hoatDong", Types.BOOLEAN}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -94,13 +94,12 @@ public class MaSoThuChiModelImpl
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("ma", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("dienGiai", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("dienGiaiTheoDoi", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("loai", Types.INTEGER);
 		TABLE_COLUMNS_MAP.put("hoatDong", Types.BOOLEAN);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table dm_masothuchi (maSoThuChiId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,ma VARCHAR(75) null,dienGiai VARCHAR(75) null,dienGiaiTheoDoi VARCHAR(75) null,loai INTEGER,hoatDong BOOLEAN)";
+		"create table dm_masothuchi (maSoThuChiId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,ma VARCHAR(75) null,dienGiai VARCHAR(75) null,loai INTEGER,hoatDong BOOLEAN)";
 
 	public static final String TABLE_SQL_DROP = "drop table dm_masothuchi";
 
@@ -161,7 +160,6 @@ public class MaSoThuChiModelImpl
 		model.setModifiedDate(soapModel.getModifiedDate());
 		model.setMa(soapModel.getMa());
 		model.setDienGiai(soapModel.getDienGiai());
-		model.setDienGiaiTheoDoi(soapModel.getDienGiaiTheoDoi());
 		model.setLoai(soapModel.getLoai());
 		model.setHoatDong(soapModel.getHoatDong());
 
@@ -471,28 +469,6 @@ public class MaSoThuChiModelImpl
 
 			});
 		attributeGetterFunctions.put(
-			"dienGiaiTheoDoi",
-			new Function<MaSoThuChi, Object>() {
-
-				@Override
-				public Object apply(MaSoThuChi maSoThuChi) {
-					return maSoThuChi.getDienGiaiTheoDoi();
-				}
-
-			});
-		attributeSetterBiConsumers.put(
-			"dienGiaiTheoDoi",
-			new BiConsumer<MaSoThuChi, Object>() {
-
-				@Override
-				public void accept(
-					MaSoThuChi maSoThuChi, Object dienGiaiTheoDoi) {
-
-					maSoThuChi.setDienGiaiTheoDoi((String)dienGiaiTheoDoi);
-				}
-
-			});
-		attributeGetterFunctions.put(
 			"loai",
 			new Function<MaSoThuChi, Object>() {
 
@@ -689,22 +665,6 @@ public class MaSoThuChiModelImpl
 
 	@JSON
 	@Override
-	public String getDienGiaiTheoDoi() {
-		if (_dienGiaiTheoDoi == null) {
-			return "";
-		}
-		else {
-			return _dienGiaiTheoDoi;
-		}
-	}
-
-	@Override
-	public void setDienGiaiTheoDoi(String dienGiaiTheoDoi) {
-		_dienGiaiTheoDoi = dienGiaiTheoDoi;
-	}
-
-	@JSON
-	@Override
 	public int getLoai() {
 		return _loai;
 	}
@@ -790,7 +750,6 @@ public class MaSoThuChiModelImpl
 		maSoThuChiImpl.setModifiedDate(getModifiedDate());
 		maSoThuChiImpl.setMa(getMa());
 		maSoThuChiImpl.setDienGiai(getDienGiai());
-		maSoThuChiImpl.setDienGiaiTheoDoi(getDienGiaiTheoDoi());
 		maSoThuChiImpl.setLoai(getLoai());
 		maSoThuChiImpl.setHoatDong(getHoatDong());
 
@@ -930,14 +889,6 @@ public class MaSoThuChiModelImpl
 			maSoThuChiCacheModel.dienGiai = null;
 		}
 
-		maSoThuChiCacheModel.dienGiaiTheoDoi = getDienGiaiTheoDoi();
-
-		String dienGiaiTheoDoi = maSoThuChiCacheModel.dienGiaiTheoDoi;
-
-		if ((dienGiaiTheoDoi != null) && (dienGiaiTheoDoi.length() == 0)) {
-			maSoThuChiCacheModel.dienGiaiTheoDoi = null;
-		}
-
 		maSoThuChiCacheModel.loai = getLoai();
 
 		maSoThuChiCacheModel.hoatDong = getHoatDong();
@@ -1025,7 +976,6 @@ public class MaSoThuChiModelImpl
 	private String _ma;
 	private String _originalMa;
 	private String _dienGiai;
-	private String _dienGiaiTheoDoi;
 	private int _loai;
 	private int _originalLoai;
 	private boolean _setOriginalLoai;

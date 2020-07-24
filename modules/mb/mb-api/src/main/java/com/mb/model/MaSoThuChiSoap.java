@@ -43,7 +43,6 @@ public class MaSoThuChiSoap implements Serializable {
 		soapModel.setModifiedDate(model.getModifiedDate());
 		soapModel.setMa(model.getMa());
 		soapModel.setDienGiai(model.getDienGiai());
-		soapModel.setDienGiaiTheoDoi(model.getDienGiaiTheoDoi());
 		soapModel.setLoai(model.getLoai());
 		soapModel.setHoatDong(model.getHoatDong());
 
@@ -171,14 +170,6 @@ public class MaSoThuChiSoap implements Serializable {
 		_dienGiai = dienGiai;
 	}
 
-	public String getDienGiaiTheoDoi() {
-		return _dienGiaiTheoDoi;
-	}
-
-	public void setDienGiaiTheoDoi(String dienGiaiTheoDoi) {
-		_dienGiaiTheoDoi = dienGiaiTheoDoi;
-	}
-
 	public int getLoai() {
 		return _loai;
 	}
@@ -204,7 +195,6 @@ public class MaSoThuChiSoap implements Serializable {
 	private Date _modifiedDate;
 	private String _ma;
 	private String _dienGiai;
-	private String _dienGiaiTheoDoi;
 	private int _loai;
 	private Boolean _hoatDong;
 

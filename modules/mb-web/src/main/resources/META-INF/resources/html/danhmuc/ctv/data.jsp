@@ -34,10 +34,10 @@
 		 	String orderByType = ParamUtil.getString(request, "orderByType"); 
 		 	String orderByCol = ParamUtil.getString(request, "orderByCol"); 
 		 	if(Validator.isNull(orderByType)){
-		 		orderByType = "desc";
+		 		orderByType = "asc";
 		 	}
 		 	if(Validator.isNull(orderByCol)){
-		 		orderByCol = "createdate";
+		 		orderByCol = "ma";
 		 	}
 		 	boolean ascending = true;
 		 	if("desc".equals(orderByType)){

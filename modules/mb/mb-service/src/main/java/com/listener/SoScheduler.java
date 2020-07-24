@@ -94,7 +94,7 @@ public class SoScheduler extends BaseMessageListener {
 		Calendar calDen = Calendar.getInstance();
 		calDen.set(Calendar.DATE, CalendarUtil.getDaysInMonth(calDen));
 		Date ngayChungTuDen = calDen.getTime();
-
+		
 		List<TaiKhoanDoiUng> taiKhoanDoiUngCTVs = TaiKhoanDoiUngLocalServiceUtil.findByLoaiTaiKhoan_HoatDong(2, true);
 		if (CollectionUtils.isNotEmpty(taiKhoanDoiUngCTVs)) {
 			TaiKhoanDoiUng taiKhoanThuVon = TaiKhoanDoiUngLocalServiceUtil
@@ -120,6 +120,10 @@ public class SoScheduler extends BaseMessageListener {
 						}
 						Double soTienTon = dauKy.getSoTienTon() != null ? dauKy.getSoTienTon()
 								: GetterUtil.getDouble("0");
+						Double soTienThu = dauKy.getSoTienThu() != null ? dauKy.getSoTienThu()
+								: GetterUtil.getDouble("0");
+						Double soTienChi = dauKy.getSoTienChi() != null ? dauKy.getSoTienChi()
+								: GetterUtil.getDouble("0");
 						ServiceContext serviceContext = new ServiceContext();
 						serviceContext.setUserId(item.getUserId());
 						serviceContext.setCompanyId(item.getCompanyId());
@@ -127,12 +131,16 @@ public class SoScheduler extends BaseMessageListener {
 						for (DsPhieuTaiKhoan dsPhieuTaiKhoan : dsPhieuTaiKhoans) {
 							if (dsPhieuTaiKhoan.getPhieu() != null) {
 								if (dsPhieuTaiKhoan.getPhieu().getLoai() == 1) {
+									soTienThu += dsPhieuTaiKhoan.getSoTien();
 									soTienTon -= dsPhieuTaiKhoan.getSoTien();
 								} else if (dsPhieuTaiKhoan.getPhieu().getLoai() == 2) {
 									soTienTon += dsPhieuTaiKhoan.getSoTien();
+									soTienChi += dsPhieuTaiKhoan.getSoTien();
 								}
 							}
 						}
+						cuoiKy.setSoTienThu(soTienThu);
+						cuoiKy.setSoTienChi(soTienChi);
 						cuoiKy.setHoatDong(true);
 						cuoiKy.setSoTienTon(soTienTon != null ? soTienTon : GetterUtil.getDouble("0"));
 						LichSuTaiKhoanDauKyLocalServiceUtil.addOrUpdateLichSuTaiKhoanDauKy(cuoiKy, serviceContext);
@@ -164,6 +172,10 @@ public class SoScheduler extends BaseMessageListener {
 						}
 						Double soTienTon = dauKy.getSoTienTon() != null ? dauKy.getSoTienTon()
 								: GetterUtil.getDouble("0");
+						Double soTienThu = dauKy.getSoTienThu() != null ? dauKy.getSoTienThu()
+								: GetterUtil.getDouble("0");
+						Double soTienChi = dauKy.getSoTienChi() != null ? dauKy.getSoTienChi()
+								: GetterUtil.getDouble("0");
 						ServiceContext serviceContext = new ServiceContext();
 						serviceContext.setUserId(item.getUserId());
 						serviceContext.setCompanyId(item.getCompanyId());
@@ -174,12 +186,16 @@ public class SoScheduler extends BaseMessageListener {
 						for (DsPhieuTaiKhoan dsPhieuTaiKhoan : dsPhieuTaiKhoans) {
 							if (dsPhieuTaiKhoan.getPhieu() != null) {
 								if (dsPhieuTaiKhoan.getPhieu().getLoai() == 1) {
+									soTienThu += dsPhieuTaiKhoan.getSoTien();
 									soTienTon -= dsPhieuTaiKhoan.getSoTien();
 								} else if (dsPhieuTaiKhoan.getPhieu().getLoai() == 2) {
 									soTienTon += dsPhieuTaiKhoan.getSoTien();
+									soTienChi += dsPhieuTaiKhoan.getSoTien();
 								}
 							}
 						}
+						cuoiKy.setSoTienThu(soTienThu);
+						cuoiKy.setSoTienChi(soTienChi);
 						cuoiKy.setHoatDong(true);
 						cuoiKy.setSoTienTon(soTienTon != null ? soTienTon : GetterUtil.getDouble("0"));
 						LichSuTaiKhoanDauKyLocalServiceUtil.addOrUpdateLichSuTaiKhoanDauKy(cuoiKy, serviceContext);
@@ -203,6 +219,10 @@ public class SoScheduler extends BaseMessageListener {
 						}
 						Double soTienTon = dauKy.getSoTienTon() != null ? dauKy.getSoTienTon()
 								: GetterUtil.getDouble("0");
+						Double soTienThu = dauKy.getSoTienThu() != null ? dauKy.getSoTienThu()
+								: GetterUtil.getDouble("0");
+						Double soTienChi = dauKy.getSoTienChi() != null ? dauKy.getSoTienChi()
+								: GetterUtil.getDouble("0");
 						ServiceContext serviceContext = new ServiceContext();
 						serviceContext.setUserId(item.getUserId());
 						serviceContext.setCompanyId(item.getCompanyId());
@@ -213,12 +233,16 @@ public class SoScheduler extends BaseMessageListener {
 						for (DsPhieuTaiKhoan dsPhieuTaiKhoan : dsPhieuTaiKhoans) {
 							if (dsPhieuTaiKhoan.getPhieu() != null) {
 								if (dsPhieuTaiKhoan.getPhieu().getLoai() == 1) {
+									soTienThu += dsPhieuTaiKhoan.getSoTien();
 									soTienTon += dsPhieuTaiKhoan.getSoTien();
 								} else if (dsPhieuTaiKhoan.getPhieu().getLoai() == 2) {
 									soTienTon -= dsPhieuTaiKhoan.getSoTien();
+									soTienChi += dsPhieuTaiKhoan.getSoTien();
 								}
 							}
 						}
+						cuoiKy.setSoTienThu(soTienThu);
+						cuoiKy.setSoTienChi(soTienChi);
 						cuoiKy.setHoatDong(true);
 						cuoiKy.setSoTienTon(soTienTon != null ? soTienTon : GetterUtil.getDouble("0"));
 						LichSuTaiKhoanDauKyLocalServiceUtil.addOrUpdateLichSuTaiKhoanDauKy(cuoiKy, serviceContext);

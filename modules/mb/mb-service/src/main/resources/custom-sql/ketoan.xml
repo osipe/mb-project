@@ -23,15 +23,15 @@
 	</sql>
 	<sql id="com.mb.service.persistence.DsPhieuTaiKhoanFinder.getDSThuChiByTaiKhoanNgayChungTu">
 			<![CDATA[
-				SELECT  ketoan_dsphieutaikhoan.*
-				FROM ketoan_dsphieutaikhoan
+				SELECT  ds.*
+				FROM ketoan_dsphieutaikhoan ds INNER JOIN ketoan_phieu p ON ds.phieuid = p.phieuid
 				WHERE TRUE
-				AND (hoatdong = ?)
-				AND (maCTV = ?)
-				AND (taiKhoanDoiUngId IN (SELECT taiKhoanDoiUngId FROM dm_taikhoandoiung WHERE taiKhoanDoiUngChaId = ? OR taiKhoanDoiUngId = ?))
-				AND (ngayChungTu >= ?)
-				AND (ngayChungTu <= ?)
-				ORDER BY ngaychungtu,tenCTV ASC
+				AND (ds.hoatdong = ?)
+				AND (ds.maCTV = ?)
+				AND (ds.taiKhoanDoiUngId IN (SELECT taiKhoanDoiUngId FROM dm_taikhoandoiung WHERE taiKhoanDoiUngChaId = ? OR taiKhoanDoiUngId = ?))
+				AND (ds.ngayChungTu >= ?)
+				AND (ds.ngayChungTu <= ?)
+			  	ORDER BY ds.ngaychungtu,CAST(ds.sophieu AS bigint) ASC   
 			]]>
 	</sql>
 	<sql id="com.mb.service.persistence.PhieuFinder.findBase">

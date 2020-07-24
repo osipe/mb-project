@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.PropsUtil"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="org.apache.commons.collections.CollectionUtils"%>
@@ -21,7 +22,7 @@
 <%
 	int namSearch = ParamUtil.getInteger(request, "namSearch");
 	int thangSearch = ParamUtil.getInteger(request, "thangSearch");
-	TaiKhoanDoiUng taiKhoanTienMat = TaiKhoanDoiUngLocalServiceUtil.fetchBySoHieu("1111");
+	TaiKhoanDoiUng taiKhoanTienMat = TaiKhoanDoiUngLocalServiceUtil.fetchBySoHieu(PropsUtil.get("config.taikhoantienmat"));
 %>
 <%
 	if(taiKhoanTienMat == null){
@@ -47,6 +48,8 @@
 			cuoiKySoQuyTienMat = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
 		}
 		Double soTien = dauKy.getSoTienTon() != null ? dauKy.getSoTienTon() : GetterUtil.getDouble("0");
+		Double soTienThuDauKy = dauKy.getSoTienThu() != null ? dauKy.getSoTienThu() : GetterUtil.getDouble("0");
+		Double soTienChiDauKy = dauKy.getSoTienChi() != null ? dauKy.getSoTienChi() : GetterUtil.getDouble("0");
 		Double soTienThuThang =  GetterUtil.getDouble("0");
 		Double soTienChiThang =  GetterUtil.getDouble("0");
 %>
@@ -87,8 +90,8 @@
 	 		<td/>
 	 		<td/>
 	 		<td><b><u>SỐ ĐẦU KỲ</u></b></td>
-	 		<td/>
-	 		<td/>
+	 		<td style="text-align: center;"><b><%=(dauKy.getSoTienThu() != null && dauKy.getSoTienThu() != 0)  ? df.format(dauKy.getSoTienThu()) : ""%></b></td>
+	 		<td style="text-align: center;"><b><%=(dauKy.getSoTienChi() != null && dauKy.getSoTienChi() != 0)  ? df.format(dauKy.getSoTienChi()) : ""%></b></td>
 	 		<td style="text-align: center;"><b><%=(dauKy.getSoTienTon() != null && dauKy.getSoTienTon() != 0)  ? df.format(dauKy.getSoTienTon()) : ""%></b></td>
 	 	</tr>
 	 		<c:choose>
@@ -108,18 +111,17 @@
 				if(item.getPhieu() != null){
 					if(item.getSoTien() > 0){
 						if(item.getPhieu().getLoai() == 1 ){
-							soPhieuDayDu1 = item.getPhieu().getSoPhieu() + "/" + sdfSo.format(item.getNgayChungTu()) + item.getPhieu().getMaMSThuChi();
-							soTienTon = "+" + df.format(item.getSoTien());
+							soPhieuDayDu1 = item.getPhieu().getSoPhieu();
 							soTienThu = df.format(item.getSoTien());
 							soTien += item.getSoTien();
 							soTienThuThang += item.getSoTien();
 						}else if(item.getPhieu().getLoai() == 2){
-							soPhieuDayDu2 = item.getPhieu().getSoPhieu() + "/" + sdfSo.format(item.getNgayChungTu()) + item.getPhieu().getMaMSThuChi();
-							soTienTon = "-" + df.format(item.getSoTien());
+							soPhieuDayDu2 = item.getPhieu().getSoPhieu();
 							soTien -= item.getSoTien();
 							soTienChi = df.format(item.getSoTien());
 							soTienChiThang += item.getSoTien();
 						}
+						soTienTon = df.format(soTien);
 					}
 					if(item.getPhieu().getCtv() != null){
 						dienGiai = item.getPhieu().getCtv().getHoTen() + "( " + item.getDienGiaiTheoDoi() + " )";
@@ -159,9 +161,9 @@
 		 		<td/>
 		 		<td/>
 		 		<td><b><u>SỐ CUỐI THÁNG</u></b></td>
-		 		<td/>
-		 		<td/>
-		 		<td style="text-align: center;"><b><%=(cuoiKySoQuyTienMat.getSoTienTon() != null && cuoiKySoQuyTienMat.getSoTienTon() != 0)  ? df.format(cuoiKySoQuyTienMat.getSoTienTon()) : ""%></b></td>
+		 		<td style="text-align: center;"><b><%=df.format(soTienThuDauKy + soTienThuThang)%></b></td>
+		 		<td style="text-align: center;"><b><%=df.format(soTienChiDauKy + soTienChiThang)%></b></td>
+		 		<td style="text-align: center;"><b><%=df.format(soTien)%></b></td>
 	 		</tr>
 		</c:when>
 		<c:otherwise>
@@ -170,12 +172,9 @@
 				</tr>
 			</c:otherwise>
 		</c:choose>
-		<%
-			cuoiKySoQuyTienMat.setSoTienTon(soTien);
-		%>
 	</tbody>
 </table>
-<portlet:resourceURL var="inSoQuyTienMatURL" id="inSoQuyTienMatURL">
+<portlet:resourceURL var="inSoCaiURL" id="inSoCaiURL">
 	<portlet:param name="nam" value="<%=String.valueOf(namSearch)%>" />
 	<portlet:param name="thang" value="<%=String.valueOf(thangSearch)%>" />
 	<portlet:param name="taiKhoanDoiUngId" value="<%=String.valueOf(taiKhoanTienMat.getTaiKhoanDoiUngId())%>" />
@@ -183,7 +182,7 @@
 <aui:script use="aui-base,aui-io-plugin-deprecated,aui-loading-mask-deprecated">
 AUI().ready(['aui-base'], function(A) {
 	Liferay.provide(window,'inSoQuyTienMat', function(type){
-		var url = '${inSoQuyTienMatURL}';
+		var url = '${inSoCaiURL}';
 		url += '&<portlet:namespace/>typeIn=' + type;
 		window.location.href = url;
 	});

@@ -94,7 +94,6 @@ create table dm_masothuchi (
 	modifiedDate DATE null,
 	ma VARCHAR(75) null,
 	dienGiai VARCHAR(75) null,
-	dienGiaiTheoDoi VARCHAR(75) null,
 	loai INTEGER,
 	hoatDong BOOLEAN
 );
@@ -122,6 +121,7 @@ create table dm_taikhoandoiung (
 	taiKhoanDoiUngChaId LONG,
 	soHieu VARCHAR(75) null,
 	ten VARCHAR(75) null,
+	dienGiaiTheoDoi VARCHAR(75) null,
 	loaiTaiKhoan INTEGER,
 	hoatDong BOOLEAN
 );
@@ -142,6 +142,7 @@ create table ketoan_dsphieutaikhoan (
 	soTien DOUBLE,
 	tenCTV VARCHAR(75) null,
 	maCTV VARCHAR(75) null,
+	soPhieu VARCHAR(75) null,
 	hoatDong BOOLEAN
 );
 
@@ -157,6 +158,8 @@ create table ketoan_lichsutaikhoandauky (
 	thang INTEGER,
 	nam INTEGER,
 	soTienTon DOUBLE,
+	soTienThu DOUBLE,
+	soTienChi DOUBLE,
 	hoatDong BOOLEAN
 );
 

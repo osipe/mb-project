@@ -49,14 +49,14 @@
 		<tr>
 			<td><aui:input class="input-text" name="soPhieu"
 					label="Số Phiếu" style="font-weight: bold;color: #0006ff;"
-					readonly="true" value="<%=phieu.getSoPhieu()%>">
+					 value="<%=phieu.getSoPhieu()%>">
 					<aui:validator name="required"
 						errorMessage="Số Phiếu không được bỏ trống!" />
 				</aui:input></td>
 		</tr>
 		<tr>
 			<td><aui:select name="maMSThuChi" label="Mã số"
-					onchange="changeMaSo();">
+					onchange="changeMaSo();" cssClass="input-select2">
 					<aui:option value=" " label="Chọn" />
 					<c:forEach items="<%=maSoThuChis%>" var="item">
 						<aui:option value="${item.ma}" label="${item.ma}"
@@ -73,7 +73,7 @@
 		</tr>
 		<tr>
 			<td><aui:select name="maCTV" label="Cộng tác viên"
-					onchange="changeCTV();">
+					onchange="changeCTV();" cssClass="input-select2">
 					<aui:option value=" " label="Chọn" />
 					<c:forEach items="<%=congTacViens%>" var="item">
 						<aui:option value="${item.ma}" label="${item.hoTen}"
@@ -223,6 +223,7 @@
 <portlet:resourceURL var="getTaiKhoanDoiUngURL"
 	id="getTaiKhoanDoiUngURL"></portlet:resourceURL>
 <portlet:resourceURL var="getMaSoTheoDoiURL" id="getMaSoTheoDoiURL"></portlet:resourceURL>
+<portlet:resourceURL var="getDienGiaiTheoDoiURL" id="getDienGiaiTheoDoiURL"></portlet:resourceURL>
 <aui:script
 	use="aui-base,aui-io-plugin-deprecated,aui-loading-mask-deprecated">
 AUI().ready(['aui-base'], function(A) {
@@ -244,15 +245,26 @@ AUI().ready(['aui-base'], function(A) {
 		}
 	);
 	Liferay.provide(window,'refreshData', function(){
-		form.all('input').each(function(node){
-			node.val('');
-		});
+		getSoPhieu();
+		form.one('#<portlet:namespace />soTien').val('');
+		var table = form.one('#<portlet:namespace />dsTaiKhoanDoiUngTable');
+		var tbody = tableNode.getElementsByTagName('tbody');
+		tbody.empty();
+		tbody.append('<tr><td colspan="5" class="empty text-center">Không có dữ liệu</td></tr>');
 	});
 	<!-- Lấy dữ liệu danh mục -->
 	Liferay.provide(window,'getSoPhieu', function(){
 		loadingMask.show();
+		var pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
+		var ngayChungTuVal = A.one('#<portlet:namespace />ngayChungTu').val();
+		var ngayChungTu = 0;
+		if (('' != ngayChungTuVal && pattern.test(ngayChungTuVal)) && 'dd/MM/yyyy' != ngayChungTuVal) {
+			var date = new Date(ngayChungTuVal.replace(pattern, '$3-$2-$1'));
+			ngayChungTu = date.getTime();
+		}
 		var data = {
-				<portlet:namespace />loai : '<%=loai%>'
+				<portlet:namespace />loai : '<%=loai%>',
+				<portlet:namespace />ngayChungTuTime : ngayChungTu
 		}
 		A.io.request('${getSoPhieuURL}', {
                method: 'post',
@@ -372,8 +384,8 @@ AUI().ready(['aui-base'], function(A) {
                    success: function() {
                    		if(this.get('responseData')){
                    			var data = JSON.parse(this.get('responseData'));
-                   			if(data.dienGiaiTheoDoi){
-                   				dienGiaiNode.val(data.dienGiaiTheoDoi);
+                   			if(data.dienGiai){
+                   				dienGiaiNode.val(data.dienGiai);
                    			}else{
                    				dienGiaiNode.val('');
                    			}
@@ -421,7 +433,6 @@ AUI().ready(['aui-base'], function(A) {
 		var taiKhoanDoiUngIdNode =  $('<select name="<portlet:namespace />taiKhoanDoiUngId_'+len+'" class="aui-w100"></select>');
 		td1.append(taiKhoanDoiUngIdNode);
 		getTaiKhoanDoiUng(taiKhoanDoiUngIdNode);
-		
 		var td2 = A.Node.create('<td />');
 		var maTheoDoiNode =  $('<select name="<portlet:namespace />maTheoDoi_'+len+'" class="aui-w100"></select>');
 		td2.append(maTheoDoiNode);
@@ -430,7 +441,6 @@ AUI().ready(['aui-base'], function(A) {
 		var td3 = A.Node.create('<td />');
 		var dienGiaiNode =  $('<input name="<portlet:namespace />dienGiaiTheoDoi_'+len+'" class="input-text aui-w100">');
 		td3.append(dienGiaiNode);
-		getDienGiaiTheoDoi(dienGiaiNode);
 		
 		var td4 = A.Node.create('<td />');
 		var soTienTheoDoiNode = A.Node.create('<input name="<portlet:namespace />soTienTheoDoi_'+len+'" id="<portlet:namespace />soTienTheoDoi_'+len+'" class="input-text aui-w100">')
@@ -444,6 +454,24 @@ AUI().ready(['aui-base'], function(A) {
 				thousandsSeparator : ',',
 				clearOnEmpty : true
 			});
+		});
+		taiKhoanDoiUngIdNode.on('change',function(){
+			A.io.request('${getDienGiaiTheoDoiURL}', {
+               method: 'post',
+               data : {
+               	'<portlet:namespace />taiKhoanDoiUngId' : taiKhoanDoiUngIdNode.val()
+               },
+               on: {
+                   success: function() {
+                   		if(this.get('responseData')){
+                   			var data = JSON.parse(this.get('responseData'));
+                   			if(data){
+                   				dienGiaiNode.val(data.dienGiaiTheoDoi);
+                   			}
+                   		}
+                   }
+              }
+        });
 		});
 		tr.append(td0);
 		tr.append(td1);
@@ -492,6 +520,7 @@ AUI().ready(['aui-base'], function(A) {
 				'<portlet:namespace />ngayChungTuTime' : ngayChungTu,
 				'<portlet:namespace />ngayGhiSoTime' : ngayGhiSo,
 				'<portlet:namespace />loai' : '<%=loai%>',
+				'<portlet:namespace />soPhieu' : form.one('#<portlet:namespace />soPhieu').val(),
 			}
 			var array = [];
 			var tongSoTienTheoDoi = 0;
@@ -528,8 +557,6 @@ AUI().ready(['aui-base'], function(A) {
 				});
 			}
 			var soTien = form.one('#<portlet:namespace />soTien').val().split(',').join('');
-			console.log('soTien : ',Number.parseFloat(soTien));
-			console.log('tongSoTienTheoDoi : ',tongSoTienTheoDoi);
 			if(array.length == 0){
 				batLoi = true;
 				toastr.warning('Chưa nhập thông tin tài khoản đối ứng', 'Cảnh báo!');
@@ -558,7 +585,11 @@ AUI().ready(['aui-base'], function(A) {
 	                   					toastr.success('Lập phiếu thành công', 'Thông báo!');
 	                   				}
 	                   			}else{
-                   					toastr.error('Yêu cầu thực hiện không thành công', 'Lỗi!');
+	                   				if(data.exception.indexOf('TonSo') > -1){
+	                   					toastr.warning('Số phiếu đã  tồn tại', 'Thông báo!');
+	                   				}else{
+	                   					toastr.error('Yêu cầu thực hiện không thành công', 'Lỗi!');
+	                   				}
 	                   			}
 	                   			getSoPhieu();
 	                   		}

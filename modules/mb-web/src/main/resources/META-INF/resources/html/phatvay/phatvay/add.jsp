@@ -211,6 +211,15 @@
 					<span class="btn-label"><i class="glyphicon glyphicon-floppy-disk"></i></span><%=phatVayId == 0 ? "Lưu" : "Cập nhật" %>
 				</button>
 				<%
+					if(phatVayId == 0){
+				%>
+					<button id="<portlet:namespace />luuvanhaptiep" onclick="save(false);" type="button" class="btn btn-labeled btn-primary">
+						<span class="btn-label"><i class="glyphicon glyphicon-copy"></i></span>Lưu và nhập tiếp
+					</button>
+				<%
+					} 
+				%>
+				<%
 					String functionDong = "Liferay.Util.getOpener().dongPopup('" +dialogId+ "');";
 				%>
 				<button id="<portlet:namespace />dong" onclick="<%=functionDong %>" type="button"class="btn btn-labeled btn-danger">
@@ -224,6 +233,7 @@
 <portlet:resourceURL var="getThongTinLaiSuat" id="getThongTinLaiSuat"></portlet:resourceURL>
 <portlet:resourceURL var="getLoaiTaiSanURL" id="getLoaiTaiSan"></portlet:resourceURL>
 <portlet:resourceURL var="saveURL" id="save"></portlet:resourceURL>
+<portlet:resourceURL var="checkPhatVayKhachHang" id="checkPhatVayKhachHang"></portlet:resourceURL>
 <portlet:renderURL var="addLKhachHangURL"
 	windowState="<%=LiferayWindowState.POP_UP.toString()%>">
 	<portlet:param name="mvcPath" value="/html/danhmuc/khachhang/add_kh.jsp" />
@@ -508,6 +518,41 @@ AUI().ready(['aui-base','node-event-simulate'], function(A) {
 	});
 	Liferay.provide(window,'save', function(close){
 		loadingMask.show();
+		if(<%=phatVayId == 0 %>){
+			var data = {
+				'<portlet:namespace />maCTV' : form.one('#<portlet:namespace />maCTV').val(),
+				'<portlet:namespace />maKhachHang' : form.one('#<portlet:namespace />maKhachHang').val(),
+			}
+			A.io.request('${checkPhatVayKhachHang}', {
+	               method: 'post',
+	               data : data,
+	               on: {
+	                   success: function() {
+	                   		if(this.get('responseData')){
+	                   			var data = JSON.parse(this.get('responseData'));
+	                   			if(!data.exception){
+	                   				if(data.soPhatVayChuaTatToan > 0){
+	                   						var check = confirm('Khách hàng còn phát vay chưa tất toán,có tiếp tục mở phát vay ?');
+											if (check) {
+												submitFrom();
+											}
+	                   				}else{
+	                   					submitFrom();
+	                   				}
+	                   			}else{
+                   					toastr.error('Yêu cầu thực hiện không thành công', 'Lỗi!');
+	                   			}
+	                   		}
+	                   }
+	              }
+	        });
+		}else{
+			submitFrom();
+		}
+        loadingMask.hide();
+	});
+	Liferay.provide(window,'submitFrom', function(close){
+		loadingMask.show();
 		formValidator.validate();
 		if(!formValidator.hasErrors()){
 			var batLoi = false;
@@ -593,19 +638,32 @@ AUI().ready(['aui-base','node-event-simulate'], function(A) {
 		                   		if(this.get('responseData')){
 		                   			var data = JSON.parse(this.get('responseData'));
 		                   			if(!data.exception){
-	                   					refreshData();
 	                   					Liferay.Util.getOpener().search();
 		                   				if(close){
+		                   					refreshData();
 		                   					Liferay.Util.getOpener().dongPopup('<%=dialogId%>');
 		                   					Liferay.Util.getOpener().thongBao('<%=phatVayId > 0 ? "Cập nhật phát vay thành công" : "Thêm phát vay thành công"  %>');
 		                   				}else{
+		                   					form.one('#<portlet:namespace />maCTV').val('');
+		                   					form.one('#<portlet:namespace />maCTV').simulate('change');
+		                   					form.one('#<portlet:namespace />soKU').val('');
+		                   					form.one('#<portlet:namespace />maKhachHang').val('');
+		                   					form.one('#<portlet:namespace />maKhachHang').simulate('change');
+		                   					form.one('#<portlet:namespace />soTienVay').val('');
+		                   					form.one('#<portlet:namespace />thoiHan').val('');
+		                   					form.one('#<portlet:namespace />tienLaiNgay').val('');
+		                   					form.one('#<portlet:namespace />tienGocNgay').val('');
+		                   					form.one('#<portlet:namespace />tienGocNgayCuoi').val('');
+		                   					form.one('#<portlet:namespace />ngayKetThuc').val('');
+		                   					form.one('#<portlet:namespace />loaiPhatVay').val(1);
+		                   					loaiPhatVayChange();
+		                   					getDataKhachHang();
 		                   					toastr.success('Thêm danh phát vay thành công', 'Thông báo!');
+		                   					console.log(form.one('#<portlet:namespace />laiSuatVay').val());
 		                   				}
 		                   			}else{
 		                   				if(data.exception.indexOf('com.mb.exception.TrungSoKUException') > -1){
 		                   					toastr.warning('Số KU đã tồn tại', 'Cảnh báo!');
-		                   				}else if(data.exception.indexOf('ConPhatVay') > -1){
-		                   					toastr.warning('Khách hàng này chưa thanh toán xong phát vay', 'Cảnh báo!');
 		                   				}else{
 		                   					toastr.error('Yêu cầu thực hiện không thành công', 'Lỗi!');
 		                   				}

@@ -74,6 +74,7 @@
 			 <liferay-ui:search-container-column-text cssClass="text-center" name="Tên tài khoản" value="${taiKhoanDoiUng.ten}" orderable="true" orderableProperty="ten"/>
 			 <liferay-ui:search-container-column-text cssClass="text-center" name="Số hiệu" value="${taiKhoanDoiUng.soHieu}" orderable="true" orderableProperty="soHieu"/> 
 			 <liferay-ui:search-container-column-text cssClass="text-center" name="Tài khoản cha" value="<%=tenTaiKhoanCha %>" orderable="true" orderableProperty="taiKhoanDoiUngChaId"/> 
+			 <liferay-ui:search-container-column-text cssClass="text-center" name="Diễn giải theo dõi" value="${taiKhoanDoiUng.dienGiaiTheoDoi}"  orderable="true" orderableProperty="dienGiaiTheoDoi"/> 
 			  <liferay-ui:search-container-column-text name="Thao tác" cssClass="aui-w10 text-center">
 			 	<a href="javascript:void(0);" onclick="<%=editAction %>" title="Sửa">
 			 		<span style="color:#ff3d00e8"><i class="glyphicon glyphicon-edit"></i></span>

@@ -91,12 +91,14 @@ public class TaiKhoanDoiUngPortlet extends MVCPortlet {
 			String ten = ParamUtil.getString(resourceRequest, "ten");
 			String soHieu = ParamUtil.getString(resourceRequest, "soHieu");
 			int loaiTaiKhoan = ParamUtil.getInteger(resourceRequest, "loaiTaiKhoan");
+			String dienGiaiTheoDoi = ParamUtil.getString(resourceRequest, "dienGiaiTheoDoi");
 			TaiKhoanDoiUng taiKhoanDoiUng = TaiKhoanDoiUngLocalServiceUtil.createTaiKhoanDoiUng(0L);
 			boolean hoatDong = true;
 			if (taiKhoanDoiUngId > 0) {
 				taiKhoanDoiUng = TaiKhoanDoiUngLocalServiceUtil.fetchTaiKhoanDoiUng(taiKhoanDoiUngId);
 				hoatDong = taiKhoanDoiUng.getHoatDong();
 			}
+			taiKhoanDoiUng.setDienGiaiTheoDoi(dienGiaiTheoDoi);
 			taiKhoanDoiUng.setLoaiTaiKhoan(loaiTaiKhoan);
 			taiKhoanDoiUng.setTen(ten);
 			taiKhoanDoiUng.setTaiKhoanDoiUngChaId(taiKhoanDoiUngChaId);

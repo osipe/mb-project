@@ -69,6 +69,8 @@ public class LichSuTaiKhoanDauKyWrapper
 		attributes.put("thang", getThang());
 		attributes.put("nam", getNam());
 		attributes.put("soTienTon", getSoTienTon());
+		attributes.put("soTienThu", getSoTienThu());
+		attributes.put("soTienChi", getSoTienChi());
 		attributes.put("hoatDong", getHoatDong());
 
 		return attributes;
@@ -141,6 +143,18 @@ public class LichSuTaiKhoanDauKyWrapper
 
 		if (soTienTon != null) {
 			setSoTienTon(soTienTon);
+		}
+
+		Double soTienThu = (Double)attributes.get("soTienThu");
+
+		if (soTienThu != null) {
+			setSoTienThu(soTienThu);
+		}
+
+		Double soTienChi = (Double)attributes.get("soTienChi");
+
+		if (soTienChi != null) {
+			setSoTienChi(soTienChi);
 		}
 
 		Boolean hoatDong = (Boolean)attributes.get("hoatDong");
@@ -249,6 +263,26 @@ public class LichSuTaiKhoanDauKyWrapper
 	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _lichSuTaiKhoanDauKy.getPrimaryKeyObj();
+	}
+
+	/**
+	 * Returns the so tien chi of this lich su tai khoan dau ky.
+	 *
+	 * @return the so tien chi of this lich su tai khoan dau ky
+	 */
+	@Override
+	public Double getSoTienChi() {
+		return _lichSuTaiKhoanDauKy.getSoTienChi();
+	}
+
+	/**
+	 * Returns the so tien thu of this lich su tai khoan dau ky.
+	 *
+	 * @return the so tien thu of this lich su tai khoan dau ky
+	 */
+	@Override
+	public Double getSoTienThu() {
+		return _lichSuTaiKhoanDauKy.getSoTienThu();
 	}
 
 	/**
@@ -446,6 +480,26 @@ public class LichSuTaiKhoanDauKyWrapper
 	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		_lichSuTaiKhoanDauKy.setPrimaryKeyObj(primaryKeyObj);
+	}
+
+	/**
+	 * Sets the so tien chi of this lich su tai khoan dau ky.
+	 *
+	 * @param soTienChi the so tien chi of this lich su tai khoan dau ky
+	 */
+	@Override
+	public void setSoTienChi(Double soTienChi) {
+		_lichSuTaiKhoanDauKy.setSoTienChi(soTienChi);
+	}
+
+	/**
+	 * Sets the so tien thu of this lich su tai khoan dau ky.
+	 *
+	 * @param soTienThu the so tien thu of this lich su tai khoan dau ky
+	 */
+	@Override
+	public void setSoTienThu(Double soTienThu) {
+		_lichSuTaiKhoanDauKy.setSoTienThu(soTienThu);
 	}
 
 	/**

@@ -65,9 +65,35 @@
 	<parameter name="tongDuNoGoc" class="java.lang.String"/>
 	<parameter name="tongDuNoGocToiDa" class="java.lang.String"/>
 	<title>
-		<band height="197" splitType="Stretch">
+		<band height="113" splitType="Stretch">
+			<staticText>
+				<reportElement x="687" y="0" width="43" height="20"/>
+				<textElement>
+					<font isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Ngày :]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="730" y="0" width="72" height="20"/>
+				<textElement>
+					<font isItalic="true" isUnderline="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ngayIn}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="265" y="30" width="298" height="40"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SAO KÊ DƯ NỢ CỘNG TÁC VIÊN]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="84">
 			<componentElement>
-				<reportElement key="table 1" style="table 1" x="0" y="110" width="802" height="50"/>
+				<reportElement key="table 1" style="table 1" x="0" y="0" width="802" height="50"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="thongKeThucHien">
 						<datasetParameter name="REPORT_CONTEXT">
@@ -97,6 +123,7 @@
 						<dataSourceExpression><![CDATA[$P{REPORT_DATA_SOURCE}]]></dataSourceExpression>
 					</datasetRun>
 					<jr:columnGroup width="310">
+						<printWhenExpression><![CDATA[$V{REPORT_COUNT} == 1]]></printWhenExpression>
 						<jr:tableFooter style="table 1_TD" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="310" height="30" forecolor="#FF0000"/>
@@ -107,15 +134,15 @@
 							</staticText>
 						</jr:tableFooter>
 						<jr:column width="40">
-							<jr:columnHeader style="table 1_TH" height="30" rowSpan="1">
+							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="40" height="30"/>
+									<reportElement mode="Transparent" x="0" y="0" width="40" height="30"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font fontName="Serif" size="8" isBold="true" pdfEncoding="Cp1258"/>
+										<font fontName="Serif" isBold="true" pdfEncoding="Cp1258"/>
 									</textElement>
 									<text><![CDATA[STT]]></text>
 								</staticText>
-							</jr:columnHeader>
+							</jr:tableHeader>
 							<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
 								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 									<reportElement x="0" y="0" width="40" height="30"/>
@@ -127,15 +154,15 @@
 							</jr:detailCell>
 						</jr:column>
 						<jr:column width="70">
-							<jr:columnHeader style="table 1_TH" height="30" rowSpan="1">
+							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="70" height="30"/>
+									<reportElement x="0" y="0" width="70" height="30" isPrintWhenDetailOverflows="true"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font fontName="Serif" size="8" isBold="true" pdfEncoding="Cp1258"/>
+										<font fontName="Serif" isBold="true" pdfEncoding="Cp1258"/>
 									</textElement>
 									<text><![CDATA[Mã]]></text>
 								</staticText>
-							</jr:columnHeader>
+							</jr:tableHeader>
 							<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
 								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 									<reportElement x="0" y="0" width="70" height="30"/>
@@ -147,15 +174,15 @@
 							</jr:detailCell>
 						</jr:column>
 						<jr:column width="130">
-							<jr:columnHeader style="table 1_TH" height="30" rowSpan="1">
+							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="130" height="30"/>
+									<reportElement x="0" y="0" width="130" height="30" isPrintWhenDetailOverflows="true"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font fontName="Serif" size="8" isBold="true" pdfEncoding="Cp1258"/>
+										<font fontName="Serif" isBold="true" pdfEncoding="Cp1258"/>
 									</textElement>
 									<text><![CDATA[Họ Tên]]></text>
 								</staticText>
-							</jr:columnHeader>
+							</jr:tableHeader>
 							<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
 								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 									<reportElement x="0" y="0" width="130" height="30"/>
@@ -167,15 +194,15 @@
 							</jr:detailCell>
 						</jr:column>
 						<jr:column width="70">
-							<jr:columnHeader style="table 1_TH" height="30" rowSpan="1">
+							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="70" height="30"/>
+									<reportElement x="0" y="0" width="70" height="30" isPrintWhenDetailOverflows="true"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font fontName="Serif" size="8" isBold="true" pdfEncoding="Cp1258"/>
+										<font fontName="Serif" isBold="true" pdfEncoding="Cp1258"/>
 									</textElement>
 									<text><![CDATA[TT.Chấp]]></text>
 								</staticText>
-							</jr:columnHeader>
+							</jr:tableHeader>
 							<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
 								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 									<reportElement x="0" y="0" width="70" height="30"/>
@@ -188,6 +215,15 @@
 						</jr:column>
 					</jr:columnGroup>
 					<jr:column width="70">
+						<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="70" height="30" isPrintWhenDetailOverflows="true"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Serif" isBold="true" pdfEncoding="Cp1258"/>
+								</textElement>
+								<text><![CDATA[Dư nợ tối đa]]></text>
+							</staticText>
+						</jr:tableHeader>
 						<jr:tableFooter height="30" rowSpan="1">
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="70" height="30" forecolor="#FF0000"/>
@@ -197,15 +233,6 @@
 								<textFieldExpression><![CDATA[$P{tongDuNoGocToiDa}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
-						<jr:columnHeader style="table 1_TH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="70" height="30"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Serif" size="8" isBold="true" pdfEncoding="Cp1258"/>
-								</textElement>
-								<text><![CDATA[Dư nợ tối đa]]></text>
-							</staticText>
-						</jr:columnHeader>
 						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="70" height="30"/>
@@ -217,6 +244,15 @@
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="70">
+						<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="70" height="30" isPrintWhenDetailOverflows="true"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Serif" isBold="true" pdfEncoding="Cp1258"/>
+								</textElement>
+								<text><![CDATA[Tổng số tiền]]></text>
+							</staticText>
+						</jr:tableHeader>
 						<jr:tableFooter style="table 1_TD" height="30" rowSpan="1">
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="70" height="30" forecolor="#FF0000"/>
@@ -226,15 +262,6 @@
 								<textFieldExpression><![CDATA[$P{tongTienVayTable}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
-						<jr:columnHeader style="table 1_TH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="70" height="30"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Serif" size="8" isBold="true" pdfEncoding="Cp1258"/>
-								</textElement>
-								<text><![CDATA[Tổng số tiền]]></text>
-							</staticText>
-						</jr:columnHeader>
 						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="70" height="30"/>
@@ -246,6 +273,15 @@
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="70">
+						<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="70" height="30" isPrintWhenDetailOverflows="true"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Serif" isBold="true" pdfEncoding="Cp1258"/>
+								</textElement>
+								<text><![CDATA[Gốc ngày]]></text>
+							</staticText>
+						</jr:tableHeader>
 						<jr:tableFooter style="table 1_TD" height="30" rowSpan="1">
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="70" height="30" forecolor="#FF0000"/>
@@ -255,15 +291,6 @@
 								<textFieldExpression><![CDATA[$P{tongGocNgayTable}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
-						<jr:columnHeader style="table 1_TH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="70" height="30"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Serif" size="8" isBold="true" pdfEncoding="Cp1258"/>
-								</textElement>
-								<text><![CDATA[Gốc ngày]]></text>
-							</staticText>
-						</jr:columnHeader>
 						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="70" height="30"/>
@@ -275,6 +302,15 @@
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="70">
+						<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="70" height="30" isPrintWhenDetailOverflows="true"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Serif" isBold="true" pdfEncoding="Cp1258"/>
+								</textElement>
+								<text><![CDATA[Lãi ngày]]></text>
+							</staticText>
+						</jr:tableHeader>
 						<jr:tableFooter style="table 1_TD" height="30" rowSpan="1">
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="70" height="30" forecolor="#FF0000"/>
@@ -284,15 +320,6 @@
 								<textFieldExpression><![CDATA[$P{tongLaiNgayTable}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
-						<jr:columnHeader style="table 1_TH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="70" height="30"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Serif" size="8" isBold="true" pdfEncoding="Cp1258"/>
-								</textElement>
-								<text><![CDATA[Lãi ngày]]></text>
-							</staticText>
-						</jr:columnHeader>
 						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="70" height="30"/>
@@ -304,6 +331,15 @@
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="70">
+						<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="70" height="30" isPrintWhenDetailOverflows="true"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Serif" isBold="true" pdfEncoding="Cp1258"/>
+								</textElement>
+								<text><![CDATA[Gốc thu]]></text>
+							</staticText>
+						</jr:tableHeader>
 						<jr:tableFooter style="table 1_TD" height="30" rowSpan="1">
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="70" height="30" forecolor="#FF0000"/>
@@ -313,15 +349,6 @@
 								<textFieldExpression><![CDATA[$P{tongGocThuTable}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
-						<jr:columnHeader style="table 1_TH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="70" height="30"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Serif" size="8" isBold="true" pdfEncoding="Cp1258"/>
-								</textElement>
-								<text><![CDATA[Gốc thu]]></text>
-							</staticText>
-						</jr:columnHeader>
 						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="70" height="30"/>
@@ -333,6 +360,15 @@
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="70">
+						<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="70" height="30" isPrintWhenDetailOverflows="true"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Serif" isBold="true" pdfEncoding="Cp1258"/>
+								</textElement>
+								<text><![CDATA[Lãi thu]]></text>
+							</staticText>
+						</jr:tableHeader>
 						<jr:tableFooter style="table 1_TD" height="30" rowSpan="1">
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="70" height="30" forecolor="#FF0000"/>
@@ -342,15 +378,6 @@
 								<textFieldExpression><![CDATA[$P{tongLaiThuTable}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
-						<jr:columnHeader style="table 1_TH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="70" height="30"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Serif" size="8" isBold="true" pdfEncoding="Cp1258"/>
-								</textElement>
-								<text><![CDATA[Lãi thu]]></text>
-							</staticText>
-						</jr:columnHeader>
 						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="70" height="30"/>
@@ -362,6 +389,15 @@
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="70">
+						<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="70" height="30" isPrintWhenDetailOverflows="true"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Serif" isBold="true" pdfEncoding="Cp1258"/>
+								</textElement>
+								<text><![CDATA[Dư nợ gốc]]></text>
+							</staticText>
+						</jr:tableHeader>
 						<jr:tableFooter style="table 1_TD" height="30" rowSpan="1">
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="70" height="30" forecolor="#FF0000"/>
@@ -371,15 +407,6 @@
 								<textFieldExpression><![CDATA[$P{tongDuNoGocTable}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
-						<jr:columnHeader style="table 1_TH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="70" height="30"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Serif" size="8" isBold="true" pdfEncoding="Cp1258"/>
-								</textElement>
-								<text><![CDATA[Dư nợ gốc]]></text>
-							</staticText>
-						</jr:columnHeader>
 						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="70" height="30"/>
@@ -392,28 +419,6 @@
 					</jr:column>
 				</jr:table>
 			</componentElement>
-			<staticText>
-				<reportElement x="687" y="0" width="43" height="20"/>
-				<textElement>
-					<font isUnderline="true"/>
-				</textElement>
-				<text><![CDATA[Ngày :]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="730" y="0" width="72" height="20"/>
-				<textElement>
-					<font isItalic="true" isUnderline="true"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{ngayIn}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="265" y="30" width="298" height="40"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="20" isBold="true"/>
-				</textElement>
-				<text><![CDATA[SAO KÊ DƯ NỢ CỘNG TÁC VIÊN]]></text>
-			</staticText>
 		</band>
-	</title>
+	</detail>
 </jasperReport>

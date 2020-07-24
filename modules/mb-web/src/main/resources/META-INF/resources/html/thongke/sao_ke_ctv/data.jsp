@@ -51,11 +51,11 @@
 		 		orderByType = "asc";
 		 	}
 		 	if(Validator.isNull(orderByCol)){
-		 		orderByCol = "createdate";
+		 		orderByCol = "ma";
 		 	}
-		 	boolean ascending = false;
-		 	if("asc".equals(orderByType)){
-		 		ascending = true;
+		 	boolean ascending = true;
+		 	if("desc".equals(orderByType)){
+		 		ascending = false;
 		 	}
 		 	CongTacVienComparator obc = new CongTacVienComparator(orderByCol,ascending);
 		 	searchContainer.setOrderByCol(orderByCol);
@@ -88,7 +88,7 @@
 		 		}
 				
 				PhatVayComparator obcPhatVay = new PhatVayComparator("createdate",true);
-				List<PhatVay> phatVays = PhatVayLocalServiceUtil.getPhatVaySaoKe(congTacVien.getMa(), ngay);
+				List<PhatVay> phatVays = PhatVayLocalServiceUtil.getPhatVaySaoKe(congTacVien.getMa(),0, ngay);
 		 		for(PhatVay item : phatVays){
 		 			Double gocDaThu = GetterUtil.getDouble("0");
 		 			Double laiDaThu = GetterUtil.getDouble("0");

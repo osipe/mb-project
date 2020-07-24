@@ -56,6 +56,49 @@ public class CongTacVienFinderImpl extends CongTacVienFinderBaseImpl implements 
 	public static final String COUNT_BASE = CongTacVienFinder.class.getName() + ".countBase";
 	public static final String GET_CTV_SAOKE = CongTacVienFinder.class.getName() + ".getCTVSaoKe";
 	public static final String GET_CTV_PHATVAYNGAY = CongTacVienFinder.class.getName() + ".getCTVPhatVayNgay";
+	public static final String GET_CTV_THUPHATCHI = CongTacVienFinder.class.getName() + ".getCTVThuPhatChi";
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<CongTacVien> getCTVThuPhatChi(String maCTV,Date ngayTaoTu,Date ngayTaoDen) throws SystemException {
+		Session session = null;
+		try {
+			session = openSession();
+			String sql = _customSQL.get(getClass(), GET_CTV_THUPHATCHI);
+			if (Validator.isNull(maCTV)) {
+				sql = sql.replace("AND (maCTV = ?)","");
+			}
+			if (ngayTaoDen == null) {
+				sql = sql.replace("AND (createDate <= ?)","");
+			}
+			if (ngayTaoTu == null) {
+				sql = sql.replace("AND (createDate >= ?)","");
+			}
+			sql = _customSQL.replaceOrderBy(sql, null);
+			SQLQuery q = session.createSQLQuery(sql);
+			q.addEntity("CongTacVien", CongTacVienImpl.class);
+			QueryPos qPos = QueryPos.getInstance(q);
+			if (Validator.isNotNull(maCTV)) {
+				qPos.add(maCTV);
+			}
+			if (ngayTaoDen != null) {
+				Calendar calDen = Calendar.getInstance();
+				calDen.setTime(ngayTaoDen);
+				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getLTDate(calDen)));
+			}
+			if (ngayTaoTu != null) {
+				Calendar calTu = Calendar.getInstance();
+				calTu.setTime(ngayTaoTu);
+				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getGTDate(calTu)));
+			}
+			return (List<CongTacVien>) QueryUtil.list(q, getDialect(), -1, -1);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SystemException(e);
+		} finally {
+			closeSession(session);
+		}
+	}
 	
 	@SuppressWarnings("unchecked")
 	public List<CongTacVien> getCTVPhatVayNgay(Date ngayTaoTu,Date ngayTaoDen) throws SystemException {

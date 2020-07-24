@@ -45,11 +45,11 @@
 		 		orderByType = "asc";
 		 	}
 		 	if(Validator.isNull(orderByCol)){
-		 		orderByCol = "createdate";
+		 		orderByCol = "ma";
 		 	}
-		 	boolean ascending = false;
-		 	if("asc".equals(orderByType)){
-		 		ascending = true;
+		 	boolean ascending = true;
+		 	if("desc".equals(orderByType)){
+		 		ascending = false;
 		 	}
 		 	CongTacVienComparator obc = new CongTacVienComparator(orderByCol,ascending);
 		 	searchContainer.setOrderByCol(orderByCol);

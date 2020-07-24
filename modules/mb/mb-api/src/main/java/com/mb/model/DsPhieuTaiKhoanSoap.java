@@ -49,6 +49,7 @@ public class DsPhieuTaiKhoanSoap implements Serializable {
 		soapModel.setSoTien(model.getSoTien());
 		soapModel.setTenCTV(model.getTenCTV());
 		soapModel.setMaCTV(model.getMaCTV());
+		soapModel.setSoPhieu(model.getSoPhieu());
 		soapModel.setHoatDong(model.getHoatDong());
 
 		return soapModel;
@@ -229,6 +230,14 @@ public class DsPhieuTaiKhoanSoap implements Serializable {
 		_maCTV = maCTV;
 	}
 
+	public String getSoPhieu() {
+		return _soPhieu;
+	}
+
+	public void setSoPhieu(String soPhieu) {
+		_soPhieu = soPhieu;
+	}
+
 	public Boolean getHoatDong() {
 		return _hoatDong;
 	}
@@ -252,6 +261,7 @@ public class DsPhieuTaiKhoanSoap implements Serializable {
 	private Double _soTien;
 	private String _tenCTV;
 	private String _maCTV;
+	private String _soPhieu;
 	private Boolean _hoatDong;
 
 }

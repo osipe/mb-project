@@ -141,6 +141,7 @@
 			FROM dm_congtacvien 
 			WHERE 1 = 1
 			AND [QUERY_PHAVAYNGAY] 
+			ORDER BY ma ASC
 		]]>
 	</sql>
 	<sql id="com.mb.service.persistence.CongTacVienFinder.getCTVSaoKe">
@@ -159,6 +160,7 @@
 												and createdate <= ?
 											)
 						)
+			ORDER BY ma ASC
 		]]>
 	</sql>
 	<sql id="com.mb.service.persistence.CongTacVienFinder.findBase">
@@ -183,6 +185,21 @@
 			AND (soCMND = ?)
 			AND (LOWER(hoTen) LIKE ?)
 			AND (LOWER(diaChi) LIKE ?)
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.CongTacVienFinder.getCTVThuPhatChi">
+		<![CDATA[
+			select * 
+			from dm_congtacvien 
+			where ma in ( 
+							SELECT maCTV
+							FROM mb_lichsuthuphatchi
+							WHERE TRUE
+							AND (maCTV = ?)
+							AND (createDate <= ?)
+							AND (createDate >= ?)
+						)
+			ORDER BY ma ASC
 		]]>
 	</sql>
 </custom-sql>

@@ -235,6 +235,21 @@ public interface TaiKhoanDoiUngModel
 	public void setTen(String ten);
 
 	/**
+	 * Returns the dien giai theo doi of this tai khoan doi ung.
+	 *
+	 * @return the dien giai theo doi of this tai khoan doi ung
+	 */
+	@AutoEscape
+	public String getDienGiaiTheoDoi();
+
+	/**
+	 * Sets the dien giai theo doi of this tai khoan doi ung.
+	 *
+	 * @param dienGiaiTheoDoi the dien giai theo doi of this tai khoan doi ung
+	 */
+	public void setDienGiaiTheoDoi(String dienGiaiTheoDoi);
+
+	/**
 	 * Returns the loai tai khoan of this tai khoan doi ung.
 	 *
 	 * @return the loai tai khoan of this tai khoan doi ung

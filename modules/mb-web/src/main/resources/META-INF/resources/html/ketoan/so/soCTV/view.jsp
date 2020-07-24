@@ -64,7 +64,7 @@ AUI().ready(['aui-base'], function(A) {
 		var data = {
 			'<portlet:namespace/>namSearch' : A.one('#<portlet:namespace />namSoCTVSearch').val(),
 			'<portlet:namespace/>thangSearch' : A.one('#<portlet:namespace />thangSoCTVSearch').val(),
-        	'<portlet:namespace/>taiKhoanDoiUngIdSearch' : A.one('#<portlet:namespace />taiKhoanDoiUngIdSoCTVSearch').val()
+        	'<portlet:namespace/>taiKhoanDoiUngIdSoCTVSearch' : A.one('#<portlet:namespace />taiKhoanDoiUngIdSoCTVSearch').val()
         }
 		contentDataTable.plug(A.Plugin.IO,{
             autoLoad: false,

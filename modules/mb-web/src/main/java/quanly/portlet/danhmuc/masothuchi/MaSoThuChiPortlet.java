@@ -87,7 +87,6 @@ public class MaSoThuChiPortlet extends MVCPortlet {
 			long maSoThuChiId = ParamUtil.getLong(resourceRequest, "maSoThuChiId");
 			String ma = ParamUtil.getString(resourceRequest, "ma");
 			String dienGiai = ParamUtil.getString(resourceRequest, "dienGiai");
-			String dienGiaiTheoDoi = ParamUtil.getString(resourceRequest, "dienGiaiTheoDoi");
 			int loai = ParamUtil.getInteger(resourceRequest, "loai");
 			MaSoThuChi maSoThuChi = MaSoThuChiLocalServiceUtil.createMaSoThuChi(0L);
 			boolean hoatDong = true;
@@ -95,7 +94,6 @@ public class MaSoThuChiPortlet extends MVCPortlet {
 				maSoThuChi = MaSoThuChiLocalServiceUtil.fetchMaSoThuChi(maSoThuChiId);
 				hoatDong = maSoThuChi.getHoatDong();
 			}
-			maSoThuChi.setDienGiaiTheoDoi(dienGiaiTheoDoi);
 			maSoThuChi.setMa(ma);
 			maSoThuChi.setDienGiai(dienGiai);
 			maSoThuChi.setLoai(loai);

@@ -63,18 +63,18 @@ public class LichSuThuPhatChiFinderImpl extends LichSuThuPhatChiFinderBaseImpl i
 			session = openSession();
 			String sql = _customSQL.get(getClass(), FIND_BY_PHATVAY_CREATEDATE_LOAI);
 			if (phatVayId == 0) {
-				sql = sql.replace("AND (phatVayId = ?)", "");
+				sql = sql.replace("AND (ls.phatVayId = ?)", "");
 			}
 			if (ngayTaoDen == null) {
-				sql = sql.replace("AND (createDate <= ?)", "");
+				sql = sql.replace("AND (ls.createDate <= ?)", "");
 			}
 			if (ngayTaoTu == null) {
-				sql = sql.replace("AND (createDate >= ?)", "");
+				sql = sql.replace("AND (ls.createDate >= ?)", "");
 			}
 			if (Validator.isNull(loai)) {
 				sql = sql.replace("AND [$QUERY_LOAI$]", "");
 			} else {
-				sql = sql.replace("AND [$QUERY_LOAI$]", "AND loai IN (" + loai + ")");
+				sql = sql.replace("AND [$QUERY_LOAI$]", "AND ls.loai IN (" + loai + ")");
 			}
 			SQLQuery q = session.createSQLQuery(sql);
 			q.addEntity("LichSuThuPhatChi", LichSuThuPhatChiImpl.class);
@@ -109,16 +109,16 @@ public class LichSuThuPhatChiFinderImpl extends LichSuThuPhatChiFinderBaseImpl i
 			session = openSession();
 			String sql = _customSQL.get(getClass(), FIND_BY_CTV_LOAI_CREATEDATE);
 			if (Validator.isNull(maCTV)) {
-				sql = sql.replace("AND (maCTV = ?)", "");
+				sql = sql.replace("AND (ls.maCTV = ?)", "");
 			}
 			if (loai == 0) {
-				sql = sql.replace("AND (loai = ?)", "");
+				sql = sql.replace("AND (ls.loai = ?)", "");
 			}
 			if (ngayTaoTu == null) {
-				sql = sql.replace("AND (createDate <= ?)", "");
+				sql = sql.replace("AND (ls.createDate <= ?)", "");
 			}
 			if (ngayTaoDen == null) {
-				sql = sql.replace("AND (createDate >= ?)", "");
+				sql = sql.replace("AND (ls.createDate >= ?)", "");
 			}
 			sql = _customSQL.replaceOrderBy(sql, obc);
 			SQLQuery q = session.createSQLQuery(sql);

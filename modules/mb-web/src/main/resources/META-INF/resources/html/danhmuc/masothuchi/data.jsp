@@ -62,7 +62,6 @@
 			 <liferay-ui:search-container-column-text cssClass="text-center" name="Mã số" value="${maSoThuChi.ma}" orderable="true" orderableProperty="ma"/>
 			 <liferay-ui:search-container-column-text cssClass="text-center" name="Loại" value="${maSoThuChi.loai == 1 ? 'Thu' : 'Chi'}"/> 
 			 <liferay-ui:search-container-column-text cssClass="text-center" name="Diễn giải" value="${maSoThuChi.dienGiai}" orderable="true" orderableProperty="dienGiai"/> 
-			  <liferay-ui:search-container-column-text cssClass="text-center" name="Diễn giải theo dõi" value="${maSoThuChi.dienGiaiTheoDoi}" orderable="true" orderableProperty="dienGiaiTheoDoi"/> 
 			  <liferay-ui:search-container-column-text name="Thao tác" cssClass="aui-w10 text-center">
 			 	<a href="javascript:void(0);" onclick="<%=editAction %>" title="Sửa">
 			 		<span style="color:#ff3d00e8"><i class="glyphicon glyphicon-edit"></i></span>

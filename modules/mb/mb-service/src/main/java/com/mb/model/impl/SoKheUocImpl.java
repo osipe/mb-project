@@ -40,7 +40,7 @@ public class SoKheUocImpl extends SoKheUocBaseImpl {
 
 	public String getSoKheUocDayDu() {
 		if (getSo() > 0 && Validator.isNotNull(getCauTruc())) {
-			soKheUocDayDu = getCauTruc() + "-" + getSo();
+			soKheUocDayDu = getCauTruc() + getSo();
 		}
 		return soKheUocDayDu;
 	}

@@ -130,7 +130,7 @@ public class TongHopSaoKeDuNoCTVPortlet extends MVCPortlet {
 				Double tongLaiDaThuTheChap = GetterUtil.getDouble("0");
 				Double tongDuNoGocTheChap = GetterUtil.getDouble("0");
 
-				List<PhatVay> phatVays = PhatVayLocalServiceUtil.getPhatVaySaoKe(ctv.getMa(), ngaySearch);
+				List<PhatVay> phatVays = PhatVayLocalServiceUtil.getPhatVaySaoKe(ctv.getMa(),0, ngaySearch);
 				for (PhatVay pv : phatVays) {
 					Double gocDaThu = GetterUtil.getDouble("0");
 		 			Double laiDaThu = GetterUtil.getDouble("0");
@@ -179,11 +179,12 @@ public class TongHopSaoKeDuNoCTVPortlet extends MVCPortlet {
 					tongDuNoGocAll += duGoc;
 				}
 				collections.add(new PhatVayDTO(ctv.getMa(), ctv.getHoTen(),  PropsUtil.get("viethoa.tong"), ctv.getDuNoToiDa() > 0 ? df.format(ctv.getDuNoToiDa()) : "",  tongTienVay > 0 ? df.format(tongTienVay) : "", tongGocNgay > 0 ? df.format(tongGocNgay) : "", tongLaiNgay > 0 ? df.format(tongLaiNgay) : "",tongGocDaThu > 0 ? df.format(tongGocDaThu) : "" , tongLaiDaThu > 0 ? df.format(tongLaiDaThu) : "",tongDuNoGoc > 0 ? df.format(tongDuNoGoc) : "" , String.valueOf(stt), "", "", "", "", "", "", ""));
-			
-				collections.add(new PhatVayDTO("", "", PropsUtil.get("viethoa.thue-chap"), ctv.getDuNoToiDaTheChap() > 0 ? df.format(ctv.getDuNoToiDaTheChap()) : "",  tongTienVayTheChap > 0 ? df.format(tongTienVayTheChap) : "", tongGocNgayTheChap > 0 ? df.format(tongGocNgayTheChap) : "", tongLaiNgayTheChap > 0 ? df.format(tongLaiNgayTheChap) : "",tongGocDaThuTheChap > 0 ? df.format(tongGocDaThuTheChap) : "" , tongLaiDaThuTheChap > 0 ? df.format(tongLaiDaThuTheChap) : "",tongDuNoGocTheChap > 0 ? df.format(tongDuNoGocTheChap) : "" , "", "", "", "", "", "", "", ""));
-				
-				collections.add(new PhatVayDTO("", "", PropsUtil.get("viethoa.tin-chap"), (ctv.getDuNoToiDa() - ctv.getDuNoToiDaTheChap()) > 0 ? df.format(ctv.getDuNoToiDa() - ctv.getDuNoToiDaTheChap()) : "",  tongTienVayTinChap > 0 ? df.format(tongTienVayTinChap) : "", tongGocNgayTinChap > 0 ? df.format(tongGocNgayTinChap) : "", tongLaiNgayTinChap > 0 ? df.format(tongLaiNgayTinChap) : "",tongGocDaThuTinChap > 0 ? df.format(tongGocDaThuTinChap) : "" , tongLaiDaThuTinChap > 0 ? df.format(tongLaiDaThuTinChap) : "",tongDuNoGocTinChap > 0 ? df.format(tongDuNoGocTinChap) : "" , "", "", "", "", "", "", "", ""));
-				
+				if(tongDuNoGocTheChap > 0) {
+					collections.add(new PhatVayDTO("", "", PropsUtil.get("viethoa.thue-chap"), ctv.getDuNoToiDaTheChap() > 0 ? df.format(ctv.getDuNoToiDaTheChap()) : "",  tongTienVayTheChap > 0 ? df.format(tongTienVayTheChap) : "", tongGocNgayTheChap > 0 ? df.format(tongGocNgayTheChap) : "", tongLaiNgayTheChap > 0 ? df.format(tongLaiNgayTheChap) : "",tongGocDaThuTheChap > 0 ? df.format(tongGocDaThuTheChap) : "" , tongLaiDaThuTheChap > 0 ? df.format(tongLaiDaThuTheChap) : "",tongDuNoGocTheChap > 0 ? df.format(tongDuNoGocTheChap) : "" , "", "", "", "", "", "", "", ""));
+				}
+				if(tongDuNoGocTinChap > 0) {
+					collections.add(new PhatVayDTO("", "", PropsUtil.get("viethoa.tin-chap"), (ctv.getDuNoToiDa() - ctv.getDuNoToiDaTheChap()) > 0 ? df.format(ctv.getDuNoToiDa() - ctv.getDuNoToiDaTheChap()) : "",  tongTienVayTinChap > 0 ? df.format(tongTienVayTinChap) : "", tongGocNgayTinChap > 0 ? df.format(tongGocNgayTinChap) : "", tongLaiNgayTinChap > 0 ? df.format(tongLaiNgayTinChap) : "",tongGocDaThuTinChap > 0 ? df.format(tongGocDaThuTinChap) : "" , tongLaiDaThuTinChap > 0 ? df.format(tongLaiDaThuTinChap) : "",tongDuNoGocTinChap > 0 ? df.format(tongDuNoGocTinChap) : "" , "", "", "", "", "", "", "", ""));
+				}
 				tongDuNoGocToiDaAll += ctv.getDuNoToiDa();
 			}
 			parameters.put("tongDuNoGocToiDa", tongDuNoGocToiDaAll > 0 ? df.format(tongDuNoGocToiDaAll) : "");

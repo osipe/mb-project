@@ -23,6 +23,10 @@ import aQute.bnd.annotation.ProviderType;
 @ProviderType
 public interface CongTacVienFinder {
 
+	public java.util.List<com.mb.model.CongTacVien> getCTVThuPhatChi(
+			String maCTV, java.util.Date ngayTaoTu, java.util.Date ngayTaoDen)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public java.util.List<com.mb.model.CongTacVien> getCTVPhatVayNgay(
 			java.util.Date ngayTaoTu, java.util.Date ngayTaoDen)
 		throws com.liferay.portal.kernel.exception.SystemException;

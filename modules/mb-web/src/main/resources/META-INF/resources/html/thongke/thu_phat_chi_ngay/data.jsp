@@ -21,7 +21,7 @@
 	long ngayBatDauTuSearchTime = ParamUtil.getLong(request, "ngayBatDauTuSearch");
 	int thanhToanSearch = ParamUtil.getInteger(request, "thanhToanSearch");
 	Date ngayBatDauTu = ngayBatDauTuSearchTime != 0 ? new Date(ngayBatDauTuSearchTime) : null;
-	int count = CongTacVienLocalServiceUtil.countBase(maCTVSearch, "", "", "", 1);
+	List<CongTacVien> items  = CongTacVienLocalServiceUtil.getCTVThuPhatChi(maCTVSearch, ngayBatDauTu, ngayBatDauTu);
 	DecimalFormat df = new DecimalFormat("###,###.###");
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     Double tongVon = GetterUtil.getDouble("0");
@@ -33,28 +33,11 @@
 	<portlet:param name="ngayBatDauTuSearch" value="<%= String.valueOf(ngayBatDauTuSearchTime)%>" />
 	<portlet:param name="mvcPath" value="/html/thongke/thu_phat_chi_ngay/data.jsp" />
 </liferay-portlet:renderURL>
+<portlet:resourceURL var="printPhieuThuTienHangNgay" id="printPhieuThuTienHangNgay">
+</portlet:resourceURL>
 <div id="<portlet:namespace />recordSearchContainer">
 	<div style="text-align: right;"><span class="note-span">(Đơn vị : VND)</span></div>
-	<liferay-ui:search-container  delta="<%=count %>"  emptyResultsMessage="Không có kết quả nào được tìm thấy!" iteratorURL="<%=iteratorURL %>" total="<%=count %>" >
-		 <%
-		 	String orderByType = ParamUtil.getString(request, "orderByType"); 
-		 	String orderByCol = ParamUtil.getString(request, "orderByCol"); 
-		 	if(Validator.isNull(orderByType)){
-		 		orderByType = "asc";
-		 	}
-		 	if(Validator.isNull(orderByCol)){
-		 		orderByCol = "hoten";
-		 	}
-		 	boolean ascending = false;
-		 	if("asc".equals(orderByType)){
-		 		ascending = true;
-		 	}
-		 	CongTacVienComparator obc = new CongTacVienComparator(orderByCol,ascending);
-		 	searchContainer.setOrderByCol(orderByCol);
-		 	searchContainer.setOrderByType(orderByType);
-		 	searchContainer.setOrderByComparator(obc);
-			List<CongTacVien> items = CongTacVienLocalServiceUtil.findBase(maCTVSearch, "", "", "", 1, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-		 %>
+	<liferay-ui:search-container  delta="<%=items.size() %>"  emptyResultsMessage="Không có kết quả nào được tìm thấy!" iteratorURL="<%=iteratorURL %>" total="<%=items.size() %>" >
 		 <liferay-ui:search-container-results results="<%= items %>" />
 		 <liferay-ui:search-container-row className="com.mb.model.CongTacVien" modelVar="congTacVien" keyProperty="congTacVienId" indexVar="index"> 
 			 <%
@@ -98,19 +81,19 @@
 		 			}
 		 		}
 		 		if(tongTienPV > 0){
-		 			LichSuThuPhatChDTO phatVay = new LichSuThuPhatChDTO("","Phát vay", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienPV > 0 ? df.format(tongTienPV) : "0", "0", "0","0");
+		 			LichSuThuPhatChDTO phatVay = new LichSuThuPhatChDTO("","Phát vay", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienPV > 0 ? df.format(tongTienPV) : "0", "0", "0","0",1);
 			 		lichSuThuPhatChDTOs.add(phatVay);
 		 		}
 		 		if(tongTienTT > 0){
-			 		LichSuThuPhatChDTO tatToan = new LichSuThuPhatChDTO("","Tất toán", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", "0",tienVonTT > 0 ? df.format(tienVonTT) : "0",tienLaiTT > 0 ? df.format(tienLaiTT) : "0",df.format(tienVonTT+ tienLaiTT) );
+			 		LichSuThuPhatChDTO tatToan = new LichSuThuPhatChDTO("","Tất toán", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", "0",tienVonTT > 0 ? df.format(tienVonTT) : "0",tienLaiTT > 0 ? df.format(tienLaiTT) : "0",df.format(tienVonTT+ tienLaiTT),2 );
 			 		lichSuThuPhatChDTOs.add(tatToan);
 		 		}
 		 		if(tongTienTHN > 0){
-			 		LichSuThuPhatChDTO thuHangNgay = new LichSuThuPhatChDTO("","Thu hằng ngày", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", "0",tienVonTHN > 0 ? df.format(tienVonTHN) : "0",tienLaiTHN > 0 ? df.format(tienLaiTHN) : "0",df.format(tienVonTHN+ tienLaiTHN));
+			 		LichSuThuPhatChDTO thuHangNgay = new LichSuThuPhatChDTO("","Thu hằng ngày", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", "0",tienVonTHN > 0 ? df.format(tienVonTHN) : "0",tienLaiTHN > 0 ? df.format(tienLaiTHN) : "0",df.format(tienVonTHN+ tienLaiTHN),3);
 			 		lichSuThuPhatChDTOs.add(thuHangNgay);
 		 		}
 		 		if(tongTienThuTruoc > 0){
-			 		LichSuThuPhatChDTO thuTruoc = new LichSuThuPhatChDTO("","Thu tiền tết", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "",  "0",tienVonThuTruoc > 0 ? df.format(tienVonThuTruoc) : "0",tienLaiThuTruoc > 0 ? df.format(tienLaiThuTruoc) : "0",df.format(tienVonThuTruoc+ tienLaiThuTruoc));
+			 		LichSuThuPhatChDTO thuTruoc = new LichSuThuPhatChDTO("","Thu tiền tết", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "",  "0",tienVonThuTruoc > 0 ? df.format(tienVonThuTruoc) : "0",tienLaiThuTruoc > 0 ? df.format(tienLaiThuTruoc) : "0",df.format(tienVonThuTruoc+ tienLaiThuTruoc),4);
 			 		lichSuThuPhatChDTOs.add(thuTruoc);
 		 		}
 		 		tongVon += tienVonCTV;
@@ -120,12 +103,18 @@
 			  <liferay-ui:search-container-column-text cssClass="aui-w10" name="STT">
 			 	<span style="color:#ff3d00e8;font-weight: bold;"><%=index + 1%></span>
 			 	<%
-			 		for(LichSuThuPhatChi item : lichSuThuPhatChis){
+			 		for(LichSuThuPhatChDTO item : lichSuThuPhatChDTOs){
 			 	%>
 			 		<br/>
-			 		<span style="font-style: italic;"> </span>
+			 		<%
+			 			if(item.getLoai() == 3 && ngayBatDauTuSearchTime != 0){
+			 				String clickIn = "printPhieuThuTienHangNgay('" +congTacVien.getMa() + "');" ;
+			 		%>
+				 		<a href="#" onclick="<%=clickIn %>" title="In phiếu thu"><i class="glyphicon glyphicon-print"></i></a>
+					<%}else{%>
+						<span style="font-style: italic;"></span>
 			 	<%
-			 		}
+					}}
 			 	%>
 			 </liferay-ui:search-container-column-text>
 			 <liferay-ui:search-container-column-text name="Tên">
@@ -259,5 +248,11 @@ AUI().ready(['aui-base'], function(A) {
     	trNode.append(td5Node);
     	tbody.append(trNode);
     }
+    Liferay.provide(window,'printPhieuThuTienHangNgay', function(maCTV){
+		var url = '${printPhieuThuTienHangNgay}';
+		url += '&<portlet:namespace/>ngayThuTien=' + '<%=ngayBatDauTuSearchTime %>';
+		url += '&<portlet:namespace/>maCTV=' + maCTV;
+		 window.open(url);
+	});
 });	
 </aui:script>

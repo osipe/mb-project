@@ -1,3 +1,4 @@
+<%@page import="org.apache.commons.collections.CollectionUtils"%>
 <%@page import="com.mb.service.LichSuThuPhatChiLocalServiceUtil"%>
 <%@page import="com.mb.model.LichSuThuPhatChi"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -58,11 +59,11 @@
 		 		orderByType = "asc";
 		 	}
 		 	if(Validator.isNull(orderByCol)){
-		 		orderByCol = "createdate";
+		 		orderByCol = "ma";
 		 	}
-		 	boolean ascending = false;
-		 	if("asc".equals(orderByType)){
-		 		ascending = true;
+		 	boolean ascending = true;
+		 	if("desc".equals(orderByType)){
+		 		ascending = false;
 		 	}
 		 	CongTacVienComparator obc = new CongTacVienComparator(orderByCol,ascending);
 		 	searchContainer.setOrderByCol(orderByCol);
@@ -80,7 +81,6 @@
 				Double tongDuNoGoc = GetterUtil.getDouble("0");
 				tongDuNoToiDaAll += congTacVien.getDuNoToiDa();
 				PhatVayComparator obcPhatVay = new PhatVayComparator("createdate",true);
-		 		List<PhatVay> phatVays = PhatVayLocalServiceUtil.getPhatVaySaoKe(congTacVien.getMa(), ngay);
 		 		Double duNoToiDaTinChap = GetterUtil.getDouble("0");
 		 		if(congTacVien.getDuNoToiDa() > congTacVien.getDuNoToiDaTheChap()){
 		 			duNoToiDaTinChap = congTacVien.getDuNoToiDa() - congTacVien.getDuNoToiDaTheChap();
@@ -124,34 +124,50 @@
 			 		<th>Lãi đã thu</th>
 			 		<th>Dư gốc</th>
 			 		<%
-			 		for(PhatVay item : phatVays){
-			 			Double gocDaThu = GetterUtil.getDouble("0");
-			 			Double laiDaThu = GetterUtil.getDouble("0");
-			 			Double duGoc =  item.getSoTienVay();
-			 			List<LichSuThuPhatChi> lichSuThuPhatChis = LichSuThuPhatChiLocalServiceUtil.findByPhatVay_Createdate_Loai(item.getPhatVayId(), null, ngay, "3,4");
-			 			for(LichSuThuPhatChi lichSuThuPhatChi : lichSuThuPhatChis){
-			 				gocDaThu += lichSuThuPhatChi.getTongSoTienVonTra();
-			 				laiDaThu += lichSuThuPhatChi.getTongSoTienLaiTra();
-			 				duGoc -= lichSuThuPhatChi.getTongSoTienVonTra();
-			 			}
-			 			tongTienVay += item.getSoTienVay();
-			 			tongGocNgay += item.getGocNgay();
-			 			tongLaiNgay += item.getLaiNgay();
-			 			tongGocDaThu += gocDaThu;
-			 			tongLaiDaThu += laiDaThu;
-			 			tongDuNoGoc += duGoc;
-			 			
-			 			Double soLanDaThu =  gocDaThu/item.getGocNgay();
-			 			
-			 			tongTienVayAll += item.getSoTienVay();
-			 			tongGocNgayAll += item.getGocNgay();
-			 			tongLaiNgayAll += item.getLaiNgay();
-			 			tongGocDaThuAll += gocDaThu;
-			 			tongLaiDaThuAll += laiDaThu;
-			 			tongDuNoGocAll += duGoc;
-			 			
-				 	%>
-				 		<tr>
+			 			List<PhatVay> phatVayTinChaps = PhatVayLocalServiceUtil.getPhatVaySaoKe(congTacVien.getMa(),2, ngay);
+			 			Double tongTienVayTinChap = GetterUtil.getDouble("0");
+			 			Double tongTienGocNgayTinChap = GetterUtil.getDouble("0");
+			 			Double tongTienLaiNgayTinChap = GetterUtil.getDouble("0");
+			 			Double tongGocDaThuTinChap = GetterUtil.getDouble("0");
+			 			Double tongLaiDaThuTinChap = GetterUtil.getDouble("0");
+			 			Double tongDuNoGocTinChap = GetterUtil.getDouble("0");
+			 			if(CollectionUtils.isNotEmpty(phatVayTinChaps)){
+			 				for(PhatVay item : phatVayTinChaps){
+			 					List<LichSuThuPhatChi> lichSuThuPhatChis = LichSuThuPhatChiLocalServiceUtil.findByPhatVay_Createdate_Loai(item.getPhatVayId(), null, ngay, "3,4");
+			 					tongTienVayTinChap += item.getSoTienVay();
+			 					tongTienGocNgayTinChap += item.getGocNgay();
+			 					tongTienLaiNgayTinChap += item.getLaiNgay();
+			 					for(LichSuThuPhatChi lichSuThuPhatChi : lichSuThuPhatChis){
+			 						tongGocDaThuTinChap += lichSuThuPhatChi.getTongSoTienVonTra();
+			 						tongLaiDaThuTinChap += lichSuThuPhatChi.getTongSoTienLaiTra();
+					 			}
+			 				}
+			 				tongDuNoGocTinChap = tongTienVayTinChap - tongGocDaThuTinChap;
+			 				
+			 		%>
+			 			<tr>
+			 				<td style="text-align: center;font-weight: bold;text-decoration: underline;" colspan="7">TÍN CHẤP</td>
+			 				<td style="text-align: center;font-weight: bold;text-decoration: underline;"><%=tongTienVayTinChap > 0 ? df.format(tongTienVayTinChap) : "0" %></td>
+			 				<td style="text-align: center;font-weight: bold;text-decoration: underline;"><%=tongTienGocNgayTinChap > 0 ? df.format(tongTienGocNgayTinChap) : "0" %></td>
+			 				<td style="text-align: center;font-weight: bold;text-decoration: underline;"><%=tongTienLaiNgayTinChap > 0 ? df.format(tongTienLaiNgayTinChap) : "0" %><ins></td>
+			 				<td style="text-align: center;font-weight: bold;text-decoration: underline;"><%=tongGocDaThuTinChap > 0 ? df.format(tongGocDaThuTinChap) : "0" %></td>
+			 				<td style="text-align: center;font-weight: bold;text-decoration: underline;"><%=tongLaiDaThuTinChap > 0 ? df.format(tongLaiDaThuTinChap) : "0" %></td>
+			 				<td style="text-align: center;font-weight: bold;text-decoration: underline;"><%=tongDuNoGocTinChap > 0 ? df.format(tongDuNoGocTinChap) : "0" %></td>
+			 			</tr>
+			 			<%
+				 			for(PhatVay item : phatVayTinChaps){
+				 				Double gocDaThu = GetterUtil.getDouble("0");
+					 			Double laiDaThu = GetterUtil.getDouble("0");
+					 			Double duGoc =  item.getSoTienVay();
+			 					List<LichSuThuPhatChi> lichSuThuPhatChis = LichSuThuPhatChiLocalServiceUtil.findByPhatVay_Createdate_Loai(item.getPhatVayId(), null, ngay, "3,4");
+			 					for(LichSuThuPhatChi lichSuThuPhatChi : lichSuThuPhatChis){
+			 						gocDaThu += lichSuThuPhatChi.getTongSoTienVonTra();
+					 				laiDaThu += lichSuThuPhatChi.getTongSoTienLaiTra();
+					 				duGoc -= lichSuThuPhatChi.getTongSoTienVonTra();
+					 			}
+			 					Double soLanDaThu =  gocDaThu/item.getGocNgay();
+			 			%>
+			 				<tr>
 				 			<td><%=item.getSoKU() %></td>
 				 			<td><%=item.getMaKhachHang() %></td>
 				 			<td><%=item.getKhachHang() != null ? item.getKhachHang().getHoTen()  : "" %></td>
@@ -168,9 +184,93 @@
 				 			<td><%=laiDaThu > 0 ? df.format(laiDaThu) : "0"%></td>
 				 			<td><%=duGoc > 0 ? df.format(duGoc) : "0"%></td>
 				 		</tr>
-				 	<%
-				 		}
-				 	%>
+			 			<%} %>
+			 			
+			 		<%
+			 			} 
+			 		%>
+			 		<%
+			 			List<PhatVay> phatVayThueChaps = PhatVayLocalServiceUtil.getPhatVaySaoKe(congTacVien.getMa(),1, ngay);
+			 			Double tongTienVayThueChap = GetterUtil.getDouble("0");
+			 			Double tongTienGocNgayThueChap = GetterUtil.getDouble("0");
+			 			Double tongTienLaiNgayThueChap = GetterUtil.getDouble("0");
+			 			Double tongGocDaThuThueChap = GetterUtil.getDouble("0");
+			 			Double tongLaiDaThuThueChap = GetterUtil.getDouble("0");
+			 			Double tongDuNoGocThueChap = GetterUtil.getDouble("0");
+			 			if(CollectionUtils.isNotEmpty(phatVayThueChaps)){
+			 				for(PhatVay item : phatVayThueChaps){
+			 					List<LichSuThuPhatChi> lichSuThuPhatChis = LichSuThuPhatChiLocalServiceUtil.findByPhatVay_Createdate_Loai(item.getPhatVayId(), null, ngay, "3,4");
+			 					tongTienVayThueChap += item.getSoTienVay();
+			 					tongTienGocNgayThueChap += item.getGocNgay();
+			 					tongTienLaiNgayThueChap += item.getLaiNgay();
+			 					for(LichSuThuPhatChi lichSuThuPhatChi : lichSuThuPhatChis){
+			 						tongGocDaThuThueChap += lichSuThuPhatChi.getTongSoTienVonTra();
+			 						tongLaiDaThuThueChap += lichSuThuPhatChi.getTongSoTienLaiTra();
+					 			}
+			 				}
+			 				tongDuNoGocThueChap = tongTienVayThueChap - tongGocDaThuThueChap;
+			 				
+			 		%>
+			 			<tr>
+			 				<td style="text-align: center;font-weight: bold;text-decoration: underline;" colspan="7">THẾ CHẤP</td>
+			 				<td style="text-align: center;font-weight: bold;text-decoration: underline;"><%=tongTienVayThueChap > 0 ? df.format(tongTienVayThueChap) : "0" %></td>
+			 				<td style="text-align: center;font-weight: bold;text-decoration: underline;"><%=tongTienGocNgayThueChap > 0 ? df.format(tongTienGocNgayThueChap) : "0" %></td>
+			 				<td style="text-align: center;font-weight: bold;text-decoration: underline;"><%=tongTienLaiNgayThueChap > 0 ? df.format(tongTienLaiNgayThueChap) : "0" %><ins></td>
+			 				<td style="text-align: center;font-weight: bold;text-decoration: underline;"><%=tongGocDaThuThueChap > 0 ? df.format(tongGocDaThuThueChap) : "0" %></td>
+			 				<td style="text-align: center;font-weight: bold;text-decoration: underline;"><%=tongLaiDaThuThueChap > 0 ? df.format(tongLaiDaThuThueChap) : "0" %></td>
+			 				<td style="text-align: center;font-weight: bold;text-decoration: underline;"><%=tongDuNoGocThueChap > 0 ? df.format(tongDuNoGocThueChap) : "0" %></td>
+			 			</tr>
+			 			<%
+				 			for(PhatVay item : phatVayThueChaps){
+				 				Double gocDaThu = GetterUtil.getDouble("0");
+					 			Double laiDaThu = GetterUtil.getDouble("0");
+					 			Double duGoc =  item.getSoTienVay();
+			 					List<LichSuThuPhatChi> lichSuThuPhatChis = LichSuThuPhatChiLocalServiceUtil.findByPhatVay_Createdate_Loai(item.getPhatVayId(), null, ngay, "3,4");
+			 					for(LichSuThuPhatChi lichSuThuPhatChi : lichSuThuPhatChis){
+			 						gocDaThu += lichSuThuPhatChi.getTongSoTienVonTra();
+					 				laiDaThu += lichSuThuPhatChi.getTongSoTienLaiTra();
+					 				duGoc -= lichSuThuPhatChi.getTongSoTienVonTra();
+					 			}
+			 					Double soLanDaThu =  gocDaThu/item.getGocNgay();
+			 			%>
+			 				<tr>
+				 			<td><%=item.getSoKU() %></td>
+				 			<td><%=item.getMaKhachHang() %></td>
+				 			<td><%=item.getKhachHang() != null ? item.getKhachHang().getHoTen()  : "" %></td>
+				 			<td>
+				 				<span data-toggle="tooltip" title="<%=item.getKhachHang() != null ? item.getKhachHang().getDiaChi() : ""%>"><%=(item.getKhachHang() != null && Validator.isNotNull(item.getKhachHang().getDiaChi()) && item.getKhachHang().getDiaChi().length() > 40) ? item.getKhachHang().getDiaChi().substring(0, 40) + "..." : item.getKhachHang().getDiaChi() %></span>
+				 			</td>
+				 			<td><%=item.getCreateDate() != null ? sdf.format(item.getCreateDate()) : ""%></td>
+				 			<td><%=item.getThoiHan()%></td>
+				 			<td><%=GetterUtil.getInteger(soLanDaThu)%></td>
+				 			<td><%=item.getSoTienVay() > 0 ? df.format(item.getSoTienVay()) : "0"%></td>
+				 			<td><%=item.getGocNgay() > 0 ? df.format(item.getGocNgay()) : "0"%></td>
+				 			<td><%=item.getLaiNgay() > 0 ? df.format(item.getLaiNgay())  : "0"%></td>
+				 			<td><%=gocDaThu > 0 ? df.format(gocDaThu) : "0"%></td>
+				 			<td><%=laiDaThu > 0 ? df.format(laiDaThu) : "0"%></td>
+				 			<td><%=duGoc > 0 ? df.format(duGoc) : "0"%></td>
+				 		</tr>
+			 			<%} %>
+			 			
+			 		<%
+			 			} 
+			 		%>
+			 		
+			 		<%
+			 			tongTienVay = tongTienVayTinChap + tongTienVayThueChap;
+			 			tongGocNgay = tongTienGocNgayTinChap + tongTienGocNgayThueChap;
+			 			tongLaiNgay = tongTienLaiNgayTinChap + tongTienLaiNgayThueChap;
+			 			tongGocDaThu = tongGocDaThuTinChap + tongGocDaThuThueChap;
+			 			tongLaiDaThu = tongLaiDaThuTinChap + tongLaiDaThuThueChap;
+			 			tongDuNoGoc = tongDuNoGocTinChap + tongDuNoGocThueChap;
+			 			
+			 			tongTienVayAll += tongTienVay;
+			 			tongGocNgayAll += tongGocNgay;
+			 			tongLaiNgayAll += tongLaiNgay;
+			 			tongGocDaThuAll  += tongGocDaThu;
+			 			tongLaiDaThuAll += tongLaiDaThu;
+			 			tongDuNoGocAll += tongDuNoGoc;
+			 		%>
 				 	<tr>
 				 		<td style="text-align: center;color: red;font-weight: bold;" colspan="7">TỔNG</td>
 				 		<td style="color: red;font-weight: bold;"><%=tongTienVay > 0 ? df.format(tongTienVay) : "0"%></td>

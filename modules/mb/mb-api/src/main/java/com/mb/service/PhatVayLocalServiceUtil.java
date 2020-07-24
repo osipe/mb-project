@@ -334,10 +334,10 @@ public class PhatVayLocalServiceUtil {
 	}
 
 	public static java.util.List<com.mb.model.PhatVay> getPhatVaySaoKe(
-			String maCTV, java.util.Date createDate)
+			String maCTV, int loaiPhatVay, java.util.Date createDate)
 		throws com.liferay.portal.kernel.exception.SystemException {
 
-		return getService().getPhatVaySaoKe(maCTV, createDate);
+		return getService().getPhatVaySaoKe(maCTV, loaiPhatVay, createDate);
 	}
 
 	/**
