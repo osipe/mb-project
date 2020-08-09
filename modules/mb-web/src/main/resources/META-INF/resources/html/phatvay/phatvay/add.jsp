@@ -1,3 +1,4 @@
+<%@page import="quanly.portlet.danhmuc.ctv.CongTacVienComparator"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.mb.service.LoaiTaiSanLocalServiceUtil"%>
@@ -26,7 +27,8 @@
 <%
 	String dialogId =  ParamUtil.getString(request, "dialogId");
 	List<LaiSuat> laiSuats = LaiSuatLocalServiceUtil.findBase(GetterUtil.getDouble(0), GetterUtil.getDouble(0), 0, 1, -1, -1, null);
-	List<CongTacVien> ctvs = CongTacVienLocalServiceUtil.findBase("", "", "", "", 1, -1, -1, null);
+	CongTacVienComparator congTacVienComparator = new  CongTacVienComparator("ma",true);
+	List<CongTacVien> ctvs = CongTacVienLocalServiceUtil.findBase("", "", "", "", 1, -1, -1, congTacVienComparator);
 	long phatVayId = ParamUtil.getLong(request, "phatVayId");
 	PhatVay phatVay = null;
 	if(phatVayId > 0){
@@ -35,7 +37,8 @@
 	if(phatVay == null){
 		phatVay = PhatVayLocalServiceUtil.createPhatVay(0L);
 	}
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	Date now = new  Date();
 	Calendar cal = Calendar.getInstance();
@@ -63,7 +66,7 @@
 				<aui:select name="maCTV" onchange="getDataKhachHang();" label="Cộng tác viên" cssClass="input-select2">
 					 <aui:option value=" " label="Chọn" />
 					 <c:forEach items="<%= ctvs%>" var="item">
-					 	<aui:option value="${item.ma}" label="${item.hoTen}" selected="${phatVay.maCTV.equals(item.ma)}"/>
+					 	<aui:option value="${item.ma}" label="${item.hoTen} - ${item.ma}" selected="${phatVay.maCTV.equals(item.ma)}"/>
 					</c:forEach>
 					<aui:validator name="required" errorMessage="Cộng tác viên không được bỏ trống!" />
 				</aui:select>
@@ -178,7 +181,7 @@
 									</aui:input>
 								</td>
 								<td>
-									<aui:input class="input-text" name='<%="giaTriTaiSan_" + index%>' label=" " value='<%=taiSanThueChap.getGiaTriTaiSan() > 0 ? df.format(taiSanThueChap.getGiaTriTaiSan())  : ""%>'>
+									<aui:input onkeypress="_formatNumber();" class="input-text" name='<%="giaTriTaiSan_" + index%>' label=" " value='<%=taiSanThueChap.getGiaTriTaiSan() > 0 ? df.format(taiSanThueChap.getGiaTriTaiSan())  : ""%>'>
 									</aui:input>
 								</td>
 								<td>
@@ -311,7 +314,7 @@ AUI().ready(['aui-base','node-event-simulate'], function(A) {
 		var laiSuatVay = form.one('#<portlet:namespace />laiSuatVay').val();
 		var gocNgay = 0;
 		if(soTienVay > 0 && thoiHan > 0){
-			gocNgay = Math.floor(soTienVay/thoiHan);
+			gocNgay = Math.round(soTienVay/thoiHan);
 			var gocNgayCuoi = soTienVay - (gocNgay * (thoiHan - 1));
 			form.one('#<portlet:namespace />tienGocNgay').val(gocNgay);
 			form.one('#<portlet:namespace />tienGocNgayCuoi').val(gocNgayCuoi);
@@ -320,7 +323,7 @@ AUI().ready(['aui-base','node-event-simulate'], function(A) {
 			form.one('#<portlet:namespace />tienGocNgayCuoi').val('');
 		}
 		if(soTienVay > 0 && laiSuatVay > 0 && thoiHan > 0){
-			var laiNgay = Math.floor((soTienVay * laiSuatVay)/(30 * 100));
+			var laiNgay = Math.round((soTienVay * laiSuatVay)/(30 * 100));
 		    form.one('#<portlet:namespace />tienLaiNgay').val(laiNgay);
 		}else{
 			  form.one('#<portlet:namespace />tienLaiNgay').val('');
@@ -468,18 +471,9 @@ AUI().ready(['aui-base','node-event-simulate'], function(A) {
 		td2.append(tenTaiSanNode);
 		
 		var td3 = A.Node.create('<td/>');
-		var giaTriTaiSanNode = A.Node.create('<input name="<portlet:namespace />giaTriTaiSan_'+len+'"  id="<portlet:namespace />giaTriTaiSan_'+len+'" class="input-text aui-w100" >')
+		var giaTriTaiSanNode = A.Node.create('<input onkeypress="_formatNumber();" name="<portlet:namespace />giaTriTaiSan_'+len+'"  id="<portlet:namespace />giaTriTaiSan_'+len+'" class="input-text aui-w100" >')
 		td3.append(giaTriTaiSanNode);
 		
-		giaTriTaiSanNode.on('keypress',function(){
-			$('#' + '<portlet:namespace />giaTriTaiSan_' + len).priceFormat({
-				prefix : '',
-				centsLimit : 0,
-				centsSeparator : '.',
-				thousandsSeparator : ',',
-				clearOnEmpty : true
-			});
-		});
 		
 		var td4 = A.Node.create('<td/>');
 		var thongTinTaiSanNode = A.Node.create('<input name="<portlet:namespace />thongTinTaiSan_'+len+'"  class="input-text aui-w100" >')
@@ -534,10 +528,10 @@ AUI().ready(['aui-base','node-event-simulate'], function(A) {
 	                   				if(data.soPhatVayChuaTatToan > 0){
 	                   						var check = confirm('Khách hàng còn phát vay chưa tất toán,có tiếp tục mở phát vay ?');
 											if (check) {
-												submitFrom();
+												submitFrom(close);
 											}
 	                   				}else{
-	                   					submitFrom();
+	                   					submitFrom(close);
 	                   				}
 	                   			}else{
                    					toastr.error('Yêu cầu thực hiện không thành công', 'Lỗi!');
@@ -547,7 +541,7 @@ AUI().ready(['aui-base','node-event-simulate'], function(A) {
 	              }
 	        });
 		}else{
-			submitFrom();
+			submitFrom(close);
 		}
         loadingMask.hide();
 	});
@@ -556,6 +550,11 @@ AUI().ready(['aui-base','node-event-simulate'], function(A) {
 		formValidator.validate();
 		if(!formValidator.hasErrors()){
 			var batLoi = false;
+			var soTienVay = form.one('#<portlet:namespace />soTienVay').val().replace(/[,]/g, '');
+			if(soTienVay < 1000000){
+				batLoi = true;
+				toastr.warning('Vui lòng nhập số tiền vay trên 1,000,000 VND', 'Cảnh báo!');
+			}
 			var loaiPhatVay = form.one('#<portlet:namespace />loaiPhatVay').val();
 			var ngayBatDauTime = 0;
 			var createDateTime = 0;

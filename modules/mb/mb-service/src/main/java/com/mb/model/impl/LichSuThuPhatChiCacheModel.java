@@ -68,7 +68,7 @@ public class LichSuThuPhatChiCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("{lichSuThuPhatChiId=");
 		sb.append(lichSuThuPhatChiId);
@@ -94,6 +94,8 @@ public class LichSuThuPhatChiCacheModel
 		sb.append(tongSoTienVonTra);
 		sb.append(", tongSoTienLaiTra=");
 		sb.append(tongSoTienLaiTra);
+		sb.append(", ngayXuLy=");
+		sb.append(ngayXuLy);
 		sb.append(", loai=");
 		sb.append(loai);
 		sb.append(", trangThaiPhatVayHienTai=");
@@ -145,6 +147,14 @@ public class LichSuThuPhatChiCacheModel
 		lichSuThuPhatChiImpl.setSoTien(soTien);
 		lichSuThuPhatChiImpl.setTongSoTienVonTra(tongSoTienVonTra);
 		lichSuThuPhatChiImpl.setTongSoTienLaiTra(tongSoTienLaiTra);
+
+		if (ngayXuLy == Long.MIN_VALUE) {
+			lichSuThuPhatChiImpl.setNgayXuLy(null);
+		}
+		else {
+			lichSuThuPhatChiImpl.setNgayXuLy(new Date(ngayXuLy));
+		}
+
 		lichSuThuPhatChiImpl.setLoai(loai);
 		lichSuThuPhatChiImpl.setTrangThaiPhatVayHienTai(
 			trangThaiPhatVayHienTai);
@@ -175,6 +185,7 @@ public class LichSuThuPhatChiCacheModel
 		tongSoTienVonTra = objectInput.readDouble();
 
 		tongSoTienLaiTra = objectInput.readDouble();
+		ngayXuLy = objectInput.readLong();
 
 		loai = objectInput.readInt();
 
@@ -215,6 +226,7 @@ public class LichSuThuPhatChiCacheModel
 		objectOutput.writeDouble(tongSoTienVonTra);
 
 		objectOutput.writeDouble(tongSoTienLaiTra);
+		objectOutput.writeLong(ngayXuLy);
 
 		objectOutput.writeInt(loai);
 
@@ -233,6 +245,7 @@ public class LichSuThuPhatChiCacheModel
 	public double soTien;
 	public double tongSoTienVonTra;
 	public double tongSoTienLaiTra;
+	public long ngayXuLy;
 	public int loai;
 	public int trangThaiPhatVayHienTai;
 

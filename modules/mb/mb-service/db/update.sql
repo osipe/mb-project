@@ -1,3 +1,5 @@
+--07.08.2020
+ALTER TABLE public.mb_lichsuthuphatchi ADD COLUMN ngayXuLy timestamp without time zone;
 --16.07.2020
 ALTER TABLE public.dm_taikhoandoiung ADD COLUMN dienGiaiTheoDoi text;
 

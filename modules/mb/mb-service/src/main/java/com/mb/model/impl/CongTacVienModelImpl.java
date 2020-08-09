@@ -109,11 +109,9 @@ public class CongTacVienModelImpl
 
 	public static final String TABLE_SQL_DROP = "drop table dm_congtacvien";
 
-	public static final String ORDER_BY_JPQL =
-		" ORDER BY congTacVien.congTacVienId ASC";
+	public static final String ORDER_BY_JPQL = " ORDER BY congTacVien.ma ASC";
 
-	public static final String ORDER_BY_SQL =
-		" ORDER BY dm_congtacvien.congTacVienId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY dm_congtacvien.ma ASC";
 
 	public static final String DATA_SOURCE = "liferayDataSource";
 
@@ -139,8 +137,6 @@ public class CongTacVienModelImpl
 	public static final long MA_COLUMN_BITMASK = 1L;
 
 	public static final long SOCMND_COLUMN_BITMASK = 2L;
-
-	public static final long CONGTACVIENID_COLUMN_BITMASK = 4L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -619,8 +615,6 @@ public class CongTacVienModelImpl
 
 	@Override
 	public void setCongTacVienId(long congTacVienId) {
-		_columnBitmask = -1L;
-
 		_congTacVienId = congTacVienId;
 	}
 
@@ -730,7 +724,7 @@ public class CongTacVienModelImpl
 
 	@Override
 	public void setMa(String ma) {
-		_columnBitmask |= MA_COLUMN_BITMASK;
+		_columnBitmask = -1L;
 
 		if (_originalMa == null) {
 			_originalMa = _ma;
@@ -907,15 +901,7 @@ public class CongTacVienModelImpl
 	public int compareTo(CongTacVien congTacVien) {
 		int value = 0;
 
-		if (getCongTacVienId() < congTacVien.getCongTacVienId()) {
-			value = -1;
-		}
-		else if (getCongTacVienId() > congTacVien.getCongTacVienId()) {
-			value = 1;
-		}
-		else {
-			value = 0;
-		}
+		value = getMa().compareTo(congTacVien.getMa());
 
 		if (value != 0) {
 			return value;

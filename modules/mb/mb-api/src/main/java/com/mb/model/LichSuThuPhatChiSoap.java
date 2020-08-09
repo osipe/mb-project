@@ -46,6 +46,7 @@ public class LichSuThuPhatChiSoap implements Serializable {
 		soapModel.setSoTien(model.getSoTien());
 		soapModel.setTongSoTienVonTra(model.getTongSoTienVonTra());
 		soapModel.setTongSoTienLaiTra(model.getTongSoTienLaiTra());
+		soapModel.setNgayXuLy(model.getNgayXuLy());
 		soapModel.setLoai(model.getLoai());
 		soapModel.setTrangThaiPhatVayHienTai(
 			model.getTrangThaiPhatVayHienTai());
@@ -206,6 +207,14 @@ public class LichSuThuPhatChiSoap implements Serializable {
 		_tongSoTienLaiTra = tongSoTienLaiTra;
 	}
 
+	public Date getNgayXuLy() {
+		return _ngayXuLy;
+	}
+
+	public void setNgayXuLy(Date ngayXuLy) {
+		_ngayXuLy = ngayXuLy;
+	}
+
 	public int getLoai() {
 		return _loai;
 	}
@@ -234,6 +243,7 @@ public class LichSuThuPhatChiSoap implements Serializable {
 	private Double _soTien;
 	private Double _tongSoTienVonTra;
 	private Double _tongSoTienLaiTra;
+	private Date _ngayXuLy;
 	private int _loai;
 	private int _trangThaiPhatVayHienTai;
 

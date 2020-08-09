@@ -1,4 +1,5 @@
 
+<%@page import="quanly.portlet.danhmuc.ctv.CongTacVienComparator"%>
 <%@page import="com.mb.service.KhachHangLocalServiceUtil"%>
 <%@page import="com.mb.model.KhachHang"%>
 <%@page import="com.mb.service.CongTacVienLocalServiceUtil"%>
@@ -8,7 +9,8 @@
 <%@ include file="/html/phatvay/init.jsp"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-	List<CongTacVien> ctvs = CongTacVienLocalServiceUtil.findBase( "", "", "", "", 1, -1, -1, null);
+	CongTacVienComparator congTacVienComparator = new  CongTacVienComparator("ma",true);
+	List<CongTacVien> ctvs = CongTacVienLocalServiceUtil.findBase( "", "", "", "", 1, -1, -1, congTacVienComparator);
 	List<KhachHang> khachHangs = KhachHangLocalServiceUtil.findBase("", "", "", "", "", 1, -1, -1, null);
 %>
 <portlet:renderURL var="addURL"
@@ -56,7 +58,7 @@
 					<aui:select name="maCTVSearch" onchange="getDataKhachHang();" label="Cộng tác viên" cssClass="input-select2">
 						 <aui:option value=" " label="Chọn" />
 						 <c:forEach items="<%= ctvs%>" var="item">
-						 	<aui:option value="${item.ma}" label="${item.hoTen}"/>
+						 	<aui:option value="${item.ma}" label="${item.hoTen} - ${item.ma}"/>
 						</c:forEach>
 					</aui:select>
 				</td>

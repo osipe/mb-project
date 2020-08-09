@@ -100,4 +100,23 @@ public class LichSuThuPhatChiLocalServiceImpl extends LichSuThuPhatChiLocalServi
 		lichSuThuPhatChiPersistence.removeByPhatVayId(phatVayId);
 	}
 
+	public List<Object[]> getLichSuThuPhatChi_MaCTV_Createdate(String maCTV, Date createdate) throws SystemException {
+		return lichSuThuPhatChiFinder.getLichSuThuPhatChi_MaCTV_Createdate(maCTV, createdate);
+	}
+
+	public List<LichSuThuPhatChi> findByCTV_Loai_Createdate_NgayXuLy(String maCTV, int loai, Date ngayTaoTu,
+			Date ngayTaoDen, Date ngayXuLyTu, Date ngayXuLyDen, int start, int end, OrderByComparator obc)
+			throws SystemException {
+		return lichSuThuPhatChiFinder.findByCTV_Loai_Createdate_NgayXuLy(maCTV, loai, ngayTaoTu, ngayTaoDen, ngayXuLyTu,
+				ngayXuLyDen, start, end, obc);
+	}
+
+	public Object[] getTongLichSuTraTien_CTV_TAINGAY(String maCTV, Date ngay, Date ngayXuLy) throws SystemException {
+		return lichSuThuPhatChiFinder.getTongLichSuTraTien_CTV_TAINGAY(maCTV, ngay,ngayXuLy);
+	}
+
+	public Double getSoTienVay_CTV_TAINGAY(String maCTV, Date ngay) throws SystemException {
+		return lichSuThuPhatChiFinder.getSoTienVay_CTV_TAINGAY(maCTV, ngay);
+	}
+
 }

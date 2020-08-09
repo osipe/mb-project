@@ -107,10 +107,10 @@ public class TaiKhoanDoiUngModelImpl
 	public static final String TABLE_SQL_DROP = "drop table dm_taikhoandoiung";
 
 	public static final String ORDER_BY_JPQL =
-		" ORDER BY taiKhoanDoiUng.taiKhoanDoiUngId ASC";
+		" ORDER BY taiKhoanDoiUng.soHieu ASC";
 
 	public static final String ORDER_BY_SQL =
-		" ORDER BY dm_taikhoandoiung.taiKhoanDoiUngId ASC";
+		" ORDER BY dm_taikhoandoiung.soHieu ASC";
 
 	public static final String DATA_SOURCE = "liferayDataSource";
 
@@ -140,8 +140,6 @@ public class TaiKhoanDoiUngModelImpl
 	public static final long SOHIEU_COLUMN_BITMASK = 4L;
 
 	public static final long TAIKHOANDOIUNGCHAID_COLUMN_BITMASK = 8L;
-
-	public static final long TAIKHOANDOIUNGID_COLUMN_BITMASK = 16L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -599,8 +597,6 @@ public class TaiKhoanDoiUngModelImpl
 
 	@Override
 	public void setTaiKhoanDoiUngId(long taiKhoanDoiUngId) {
-		_columnBitmask = -1L;
-
 		_taiKhoanDoiUngId = taiKhoanDoiUngId;
 	}
 
@@ -733,7 +729,7 @@ public class TaiKhoanDoiUngModelImpl
 
 	@Override
 	public void setSoHieu(String soHieu) {
-		_columnBitmask |= SOHIEU_COLUMN_BITMASK;
+		_columnBitmask = -1L;
 
 		if (_originalSoHieu == null) {
 			_originalSoHieu = _soHieu;
@@ -879,15 +875,7 @@ public class TaiKhoanDoiUngModelImpl
 	public int compareTo(TaiKhoanDoiUng taiKhoanDoiUng) {
 		int value = 0;
 
-		if (getTaiKhoanDoiUngId() < taiKhoanDoiUng.getTaiKhoanDoiUngId()) {
-			value = -1;
-		}
-		else if (getTaiKhoanDoiUngId() > taiKhoanDoiUng.getTaiKhoanDoiUngId()) {
-			value = 1;
-		}
-		else {
-			value = 0;
-		}
+		value = getSoHieu().compareTo(taiKhoanDoiUng.getSoHieu());
 
 		if (value != 0) {
 			return value;

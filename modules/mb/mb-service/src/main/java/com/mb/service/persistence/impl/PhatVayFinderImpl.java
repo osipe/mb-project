@@ -150,7 +150,7 @@ public class PhatVayFinderImpl extends PhatVayFinderBaseImpl implements PhatVayF
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(ngayThuTienTu);
 				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getGTDate(cal)));
-				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getGTDate(cal)));
+				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getLTDate(cal)));
 				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getGTDate(cal)));
 			}
 			return (List<PhatVay>) QueryUtil.list(q, getDialect(), -1, -1);

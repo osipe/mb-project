@@ -262,6 +262,20 @@ public interface LichSuThuPhatChiModel
 	public void setTongSoTienLaiTra(Double tongSoTienLaiTra);
 
 	/**
+	 * Returns the ngay xu ly of this lich su thu phat chi.
+	 *
+	 * @return the ngay xu ly of this lich su thu phat chi
+	 */
+	public Date getNgayXuLy();
+
+	/**
+	 * Sets the ngay xu ly of this lich su thu phat chi.
+	 *
+	 * @param ngayXuLy the ngay xu ly of this lich su thu phat chi
+	 */
+	public void setNgayXuLy(Date ngayXuLy);
+
+	/**
 	 * Returns the loai of this lich su thu phat chi.
 	 *
 	 * @return the loai of this lich su thu phat chi

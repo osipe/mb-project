@@ -18,10 +18,14 @@ public class CongTacVienDTO {
 	private String tongDinhMucDuNo;
 	private List<PhatVayDTO> phatVayDTOs;
 	private TongTienDTO tongTienDTO;
+	private String ngay;
+	private String thang;
+	private String nam;
 
 	public CongTacVienDTO(String so, String maSo, String hoTen, String diaChi, String vonTra, String laiTra,
 			String tongTien, String tongTienBangChu, String duNoGoc, String ngayThuTienTruoc, String dinhMucTheChap,
-			String dinhMucTinChap, String tongDinhMucDuNo, List<PhatVayDTO> phatVayDTOs,TongTienDTO tongTienDTO) {
+			String dinhMucTinChap, String tongDinhMucDuNo, List<PhatVayDTO> phatVayDTOs, TongTienDTO tongTienDTO,
+			String ngay, String thang, String nam) {
 		super();
 		this.so = so;
 		this.maSo = maSo;
@@ -38,17 +42,42 @@ public class CongTacVienDTO {
 		this.tongDinhMucDuNo = tongDinhMucDuNo;
 		this.phatVayDTOs = phatVayDTOs;
 		this.tongTienDTO = tongTienDTO;
+		this.ngay = ngay;
+		this.thang = thang;
+		this.nam = nam;
+	}
+
+	public String getNgay() {
+		return ngay;
+	}
+
+	public void setNgay(String ngay) {
+		this.ngay = ngay;
+	}
+
+	public String getThang() {
+		return thang;
+	}
+
+	public void setThang(String thang) {
+		this.thang = thang;
+	}
+
+	public String getNam() {
+		return nam;
+	}
+
+	public void setNam(String nam) {
+		this.nam = nam;
 	}
 
 	public TongTienDTO getTongTienDTO() {
 		return tongTienDTO;
 	}
 
-
 	public void setTongTienDTO(TongTienDTO tongTienDTO) {
 		this.tongTienDTO = tongTienDTO;
 	}
-
 
 	public String getDinhMucTheChap() {
 		return dinhMucTheChap;

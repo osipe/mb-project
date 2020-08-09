@@ -97,6 +97,7 @@
 		<field name="soTien" type="Double" />
 		<field name="tongSoTienVonTra" type="Double" />
 		<field name="tongSoTienLaiTra" type="Double" />
+		<field name="ngayXuLy" type="Date" />
 		<field name="loai" type="int" />
 		<field name="trangThaiPhatVayHienTai" type="int" />
 	</model>

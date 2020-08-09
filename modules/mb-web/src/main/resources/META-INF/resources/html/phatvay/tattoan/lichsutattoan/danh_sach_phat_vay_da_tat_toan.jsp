@@ -91,7 +91,7 @@
 				 	<br/>
 				 	Dư nợ gốc còn : <span style="font-style: italic;color:blue;">${phatVay.duNoGoc > 0 ? df.format(phatVay.duNoGoc) : '0'}</span>
 				 	<br/>
-				 	Số ngày đã thu : <span style="font-style: italic;color:blue;">soLanDaThuStr</span>
+				 	Số ngày đã thu : <span style="font-style: italic;color:blue;"><%=soLanDaThuStr %></span>
 				 </liferay-ui:search-container-column-text>
 				 <%
 				 	Double traLai = (phatVay.getThoiHan()  - (phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc())) * phatVay.getLaiNgay();

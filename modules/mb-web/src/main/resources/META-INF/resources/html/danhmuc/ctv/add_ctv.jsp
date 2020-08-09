@@ -17,7 +17,8 @@
 	if(ctv == null){
 		ctv = CongTacVienLocalServiceUtil.createCongTacVien(0L);
 	}
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 %>
 <aui:form name="frmAdd">
 	<table class="info table-pa5 aui-w100">

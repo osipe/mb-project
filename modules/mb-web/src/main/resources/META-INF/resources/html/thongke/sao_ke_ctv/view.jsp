@@ -1,4 +1,5 @@
 
+<%@page import="quanly.portlet.danhmuc.ctv.CongTacVienComparator"%>
 <%@page import="com.mb.service.CongTacVienLocalServiceUtil"%>
 <%@page import="com.mb.model.CongTacVien"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -10,7 +11,8 @@
 <%@ include file="/html/thongke/init.jsp"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-	List<CongTacVien> ctvs = CongTacVienLocalServiceUtil.findBase( "", "", "", "", 1, -1, -1, null);
+	CongTacVienComparator congTacVienComparator = new  CongTacVienComparator("ma",true);
+	List<CongTacVien> ctvs = CongTacVienLocalServiceUtil.findBase( "", "", "", "", 1, -1, -1, congTacVienComparator);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	Date now = new Date();
 %>
@@ -25,7 +27,7 @@
 			<aui:select name="maCTVSearch" label="Cộng tác viên" cssClass="input-select2" onchange="search();">
 				 <aui:option value=" " label="Tất cả" />
 				 <c:forEach items="<%= ctvs%>" var="item">
-				 	<aui:option value="${item.ma}" label="${item.hoTen}"/>
+				 	<aui:option value="${item.ma}" label="${item.hoTen} - ${item.ma}"/>
 				</c:forEach>
 			</aui:select>
 		</td>

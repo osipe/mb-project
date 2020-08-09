@@ -1,3 +1,4 @@
+<%@page import="java.util.Locale"%>
 <%@page import="com.mb.service.CongTacVienLocalServiceUtil"%>
 <%@page import="com.mb.model.CongTacVien"%>
 <%@page import="com.mb.service.MaSoTheoDoiLocalServiceUtil"%>
@@ -19,7 +20,8 @@
 	if(maSoTheoDoi == null){
 		maSoTheoDoi = MaSoTheoDoiLocalServiceUtil.createMaSoTheoDoi(0L);
 	}
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 	List<CongTacVien> congTacViens = CongTacVienLocalServiceUtil.findBase("", "", "", "", 1, -1, -1, null);
 %>
 <c:set var="maSoTheoDoi" value="<%=maSoTheoDoi %>"/>

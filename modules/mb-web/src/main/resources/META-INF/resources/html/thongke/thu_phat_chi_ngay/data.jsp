@@ -1,7 +1,4 @@
-<%@page import="quanly.dto.LichSuThuPhatChDTO"%>
-<%@page import="quanly.portlet.thongke.thu_phat_chi_ngay.LichSuThuPhatChiComparator"%>
 <%@page import="com.mb.service.LichSuThuPhatChiLocalServiceUtil"%>
-<%@page import="com.mb.model.LichSuThuPhatChi"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="java.util.Date"%>
@@ -33,6 +30,10 @@
 	<portlet:param name="ngayBatDauTuSearch" value="<%= String.valueOf(ngayBatDauTuSearchTime)%>" />
 	<portlet:param name="mvcPath" value="/html/thongke/thu_phat_chi_ngay/data.jsp" />
 </liferay-portlet:renderURL>
+<portlet:renderURL var="xemChiTietHangNgayURL" windowState="<%=LiferayWindowState.POP_UP.toString()%>">
+	<portlet:param name="mvcPath" value="/html/thongke/thu_phat_chi_ngay/chi_tiet_thu_hang_ngay.jsp" />
+	<portlet:param name="ngayBatDauTu"  value="<%= String.valueOf(ngayBatDauTuSearchTime)%>" />
+</portlet:renderURL>
 <portlet:resourceURL var="printPhieuThuTienHangNgay" id="printPhieuThuTienHangNgay">
 </portlet:resourceURL>
 <div id="<portlet:namespace />recordSearchContainer">
@@ -41,76 +42,38 @@
 		 <liferay-ui:search-container-results results="<%= items %>" />
 		 <liferay-ui:search-container-row className="com.mb.model.CongTacVien" modelVar="congTacVien" keyProperty="congTacVienId" indexVar="index"> 
 			 <%
-				LichSuThuPhatChiComparator comparator = new LichSuThuPhatChiComparator("createdate",true);
 			 	Double tienVonCTV = GetterUtil.getDouble("0");
 			 	Double tienLaiCTV = GetterUtil.getDouble("0");
-			 	Double tongTienCTV = GetterUtil.getDouble("0");
-		 		List<LichSuThuPhatChi> lichSuThuPhatChis = LichSuThuPhatChiLocalServiceUtil.findByCTV_Loai_Createdate(congTacVien.getMa(), 0, ngayBatDauTu, ngayBatDauTu, -1, -1, comparator);
-		 		List<LichSuThuPhatChDTO> lichSuThuPhatChDTOs = new ArrayList<LichSuThuPhatChDTO>();
-			 	Double tongTienPV = GetterUtil.getDouble("0");
-			 	
-			 	Double tienVonTT = GetterUtil.getDouble("0");
-			 	Double tienLaiTT = GetterUtil.getDouble("0");
-			 	Double tongTienTT = GetterUtil.getDouble("0");
-			 	
-			 	Double tienVonTHN = GetterUtil.getDouble("0");
-			 	Double tienLaiTHN = GetterUtil.getDouble("0");
-			 	Double tongTienTHN = GetterUtil.getDouble("0");
-			 	
-			 	Double tienVonThuTruoc = GetterUtil.getDouble("0");
-			 	Double tienLaiThuTruoc = GetterUtil.getDouble("0");
-			 	Double tongTienThuTruoc = GetterUtil.getDouble("0");
-			 	
-		 		for(LichSuThuPhatChi item : lichSuThuPhatChis){
-		 			tienVonCTV += item.getTongSoTienVonTra();
-		 			tienLaiCTV += item.getTongSoTienLaiTra();
-		 			if(item.getLoai() == 1){
-		 				tongTienPV += item.getSoTien();
-		 			}else if(item.getLoai() == 2){
-		 				tienVonTT += item.getTongSoTienVonTra();
-		 				tienLaiTT += item.getTongSoTienLaiTra();
-		 				tongTienTT += item.getSoTien();
-		 			}else if(item.getLoai() == 3){
-		 				tienVonTHN += item.getTongSoTienVonTra();
-		 				tienLaiTHN += item.getTongSoTienLaiTra();
-		 				tongTienTHN += item.getSoTien();
-		 			}else if(item.getLoai() == 4){
-		 				tienVonThuTruoc += item.getTongSoTienVonTra();
-		 				tienLaiThuTruoc += item.getTongSoTienLaiTra();
-		 				tongTienThuTruoc += item.getSoTien();
-		 			}
-		 		}
-		 		if(tongTienPV > 0){
-		 			LichSuThuPhatChDTO phatVay = new LichSuThuPhatChDTO("","Phát vay", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", tongTienPV > 0 ? df.format(tongTienPV) : "0", "0", "0","0",1);
-			 		lichSuThuPhatChDTOs.add(phatVay);
-		 		}
-		 		if(tongTienTT > 0){
-			 		LichSuThuPhatChDTO tatToan = new LichSuThuPhatChDTO("","Tất toán", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", "0",tienVonTT > 0 ? df.format(tienVonTT) : "0",tienLaiTT > 0 ? df.format(tienLaiTT) : "0",df.format(tienVonTT+ tienLaiTT),2 );
-			 		lichSuThuPhatChDTOs.add(tatToan);
-		 		}
-		 		if(tongTienTHN > 0){
-			 		LichSuThuPhatChDTO thuHangNgay = new LichSuThuPhatChDTO("","Thu hằng ngày", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", "0",tienVonTHN > 0 ? df.format(tienVonTHN) : "0",tienLaiTHN > 0 ? df.format(tienLaiTHN) : "0",df.format(tienVonTHN+ tienLaiTHN),3);
-			 		lichSuThuPhatChDTOs.add(thuHangNgay);
-		 		}
-		 		if(tongTienThuTruoc > 0){
-			 		LichSuThuPhatChDTO thuTruoc = new LichSuThuPhatChDTO("","Thu tiền tết", ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "",  "0",tienVonThuTruoc > 0 ? df.format(tienVonThuTruoc) : "0",tienLaiThuTruoc > 0 ? df.format(tienLaiThuTruoc) : "0",df.format(tienVonThuTruoc+ tienLaiThuTruoc),4);
-			 		lichSuThuPhatChDTOs.add(thuTruoc);
-		 		}
-		 		tongVon += tienVonCTV;
-		 		tongLai += tienLaiCTV;
-		 		tongPhatVay += tongTienPV;
+			 	Double tongPhatVayCTV = GetterUtil.getDouble("0");
+			 	List<Object[]> lichSuThuPhatChDTOs = LichSuThuPhatChiLocalServiceUtil.getLichSuThuPhatChi_MaCTV_Createdate(congTacVien.getMa(), ngayBatDauTu);
 	 		%>
 			  <liferay-ui:search-container-column-text cssClass="aui-w10" name="STT">
 			 	<span style="color:#ff3d00e8;font-weight: bold;"><%=index + 1%></span>
 			 	<%
-			 		for(LichSuThuPhatChDTO item : lichSuThuPhatChDTOs){
+			 		for(Object[] item : lichSuThuPhatChDTOs){
+			 			tienVonCTV += GetterUtil.getDouble(item[2]);
+			 			tienLaiCTV += GetterUtil.getDouble(item[3]);
+			 			if(GetterUtil.getInteger(item[0]) == 1){
+			 				tongPhatVayCTV +=  GetterUtil.getDouble(item[4]);
+			 			}
+			 			
+			 			tongVon += GetterUtil.getDouble(item[2]);
+			 			tongLai += GetterUtil.getDouble(item[3]);
+			 			if(GetterUtil.getInteger(item[0]) == 1){
+			 				tongPhatVay +=  GetterUtil.getDouble(item[4]);
+			 			}
 			 	%>
 			 		<br/>
 			 		<%
-			 			if(item.getLoai() == 3 && ngayBatDauTuSearchTime != 0){
-			 				String clickIn = "printPhieuThuTienHangNgay('" +congTacVien.getMa() + "');" ;
+			 			if(GetterUtil.getInteger(item[0]) == 3 && ngayBatDauTuSearchTime != 0){
+			 				String ngayXuLyStr = GetterUtil.getString(item[1]);
+			 				Date ngayXuLy = sdf.parse(ngayXuLyStr);
+			 				long ngayXuLyTime = ngayXuLy != null ? ngayXuLy.getTime() : 0;
+			 				String clickIn = "printPhieuThuTienHangNgay('" +congTacVien.getMa() + "','"+ ngayXuLyTime +"');" ;
+			 				String clickView = "xemChiTietThuTienHangNgay('" +congTacVien.getMa() + "','"+ ngayXuLyTime +"');" ;
 			 		%>
-				 		<a href="#" onclick="<%=clickIn %>" title="In phiếu thu"><i class="glyphicon glyphicon-print"></i></a>
+				 		<a href="javascript:void(0);" onclick="<%=clickIn %>" title="In phiếu thu"><i class="glyphicon glyphicon-print"></i></a>
+				 		<a href="javascript:void(0);" onclick="<%=clickView %>" title="Xem chi tiết"><i class="glyphicon glyphicon-search"></i></a>
 					<%}else{%>
 						<span style="font-style: italic;"></span>
 			 	<%
@@ -120,10 +83,20 @@
 			 <liferay-ui:search-container-column-text name="Tên">
 			 	<span style="color:#ff3d00e8;font-weight: bold;"><%=congTacVien.getHoTen()%></span>
 			 	<%
-			 		for(LichSuThuPhatChDTO item : lichSuThuPhatChDTOs){
+			 		String tenLoai = "";
+			 		for(Object[] item : lichSuThuPhatChDTOs){
+			 			if(GetterUtil.getInteger(item[0]) == 1){
+			 				tenLoai = "Phát vay";
+			 			} else if(GetterUtil.getInteger(item[0]) == 2){
+			 				tenLoai = "Tất toán";
+			 			} else if(GetterUtil.getInteger(item[0]) == 3){
+			 				tenLoai = "Thu hằng ngày";
+			 			} else if(GetterUtil.getInteger(item[0]) == 4){
+			 				tenLoai = "Thu tết";
+			 			}
 			 	%>
 			 		<br/>
-			 		<span style="font-style: italic;"><%=item.getTen()%></span>
+			 		<span style="font-style: italic;"><%=tenLoai%></span>
 			 	<%
 			 		}
 			 	%>
@@ -131,10 +104,10 @@
 			 <liferay-ui:search-container-column-text name="Ngày">
 			 	<span style="color:#ff3d00e8;font-weight: bold;"> </span>
 			 	<%
-			 		for(LichSuThuPhatChDTO item : lichSuThuPhatChDTOs){
+			 		for(Object[] item : lichSuThuPhatChDTOs){
 			 	%>
 			 		<br/>
-			 		<span style="font-style: italic;"><%=item.getNgay()%></span>
+			 		<span style="font-style: italic;"><%=GetterUtil.getString(item[1]) %></span>
 			 	<%
 			 		}
 			 	%>
@@ -142,10 +115,10 @@
 			  <liferay-ui:search-container-column-text name="Thu vốn">
 			 	<span style="color:#ff3d00e8;font-weight: bold;"><%=tienVonCTV > 0 ? df.format(tienVonCTV) : 0 %></span>
 			 	<%
-			 		for(LichSuThuPhatChDTO item : lichSuThuPhatChDTOs){
+			 	for(Object[] item : lichSuThuPhatChDTOs){
 			 	%>
 			 		<br/>
-			 		<span style="font-style: italic;"><%=item.getTienVon()%></span>
+			 		<span style="font-style: italic;"><%=df.format(GetterUtil.getDouble(item[2]))%></span>
 			 	<%
 			 		}
 			 	%>
@@ -153,10 +126,10 @@
 			  <liferay-ui:search-container-column-text name="Thu lãi">
 			 	<span style="color:#ff3d00e8;font-weight: bold;"><%=tienLaiCTV > 0 ? df.format(tienLaiCTV) : 0 %> </span>
 			 	<%
-			 		for(LichSuThuPhatChDTO item : lichSuThuPhatChDTOs){
+				for(Object[] item : lichSuThuPhatChDTOs){
 			 	%>
 			 		<br/>
-			 		<span style="font-style: italic;"><%=item.getTienLai() %></span>
+			 		<span style="font-style: italic;"><%=df.format(GetterUtil.getDouble(item[3])) %></span>
 			 	<%
 			 		}
 			 	%>
@@ -164,21 +137,22 @@
 			 <liferay-ui:search-container-column-text name="Tổng thu">
 			 	<span style="color:#ff3d00e8;font-weight: bold;"><%=df.format(tienLaiCTV + tienVonCTV) %> </span>
 			 	<%
-			 		for(LichSuThuPhatChDTO item : lichSuThuPhatChDTOs){
+			 		for(Object[] item : lichSuThuPhatChDTOs){
+			 			Double tongThu = GetterUtil.getDouble(item[2]) + GetterUtil.getDouble(item[3]);
 			 	%>
 			 		<br/>
-			 		<span style="font-style: italic;"><%=item.getTongThu()%></span>
+			 		<span style="font-style: italic;"><%=(tongThu != null && tongThu > 0) ? df.format(tongThu) : '0'%></span>
 			 	<%
 			 		}
 			 	%>
 			 </liferay-ui:search-container-column-text>
 			  <liferay-ui:search-container-column-text name="Chi phát vay">
-			 	<span style="color:#ff3d00e8;font-weight: bold;"> <%=tongTienPV > 0 ? df.format(tongTienPV) : 0 %> </span>
+			 	<span style="color:#ff3d00e8;font-weight: bold;"> <%=tongPhatVayCTV > 0 ? df.format(tongPhatVayCTV) : 0 %> </span>
 			 	<%
-			 		for(LichSuThuPhatChDTO item : lichSuThuPhatChDTOs){
+			 	for(Object[] item : lichSuThuPhatChDTOs){
 			 	%>
 			 		<br/>
-			 		<span style="font-style: italic;"><%=item.getTienChi() %></span>
+			 		<span style="font-style: italic;"><%=GetterUtil.getInteger(item[0]) == 1 ? df.format(GetterUtil.getDouble(item[4])) : "0" %></span>
 			 	<%
 			 		}
 			 	%>
@@ -248,10 +222,27 @@ AUI().ready(['aui-base'], function(A) {
     	trNode.append(td5Node);
     	tbody.append(trNode);
     }
-    Liferay.provide(window,'printPhieuThuTienHangNgay', function(maCTV){
+    Liferay.provide(window,'xemChiTietThuTienHangNgay', function(maCTV,ngayXuLyTime){
+    	var url = '${xemChiTietHangNgayURL}';
+    	url += '&<portlet:namespace/>maCTV=' + maCTV;
+    	url += '&<portlet:namespace/>ngayXuLyTime=' + ngayXuLyTime;
+		Liferay.Util.openWindow({
+			dialog : {
+				centered : true,
+				height : 1000,
+				modal : true,
+				width : 1200
+			},
+			id : '<portlet:namespace />dialogChiTiet',
+			title : 'Lịch sử thu hằng ngày ' + '<%= sdf.format(ngayBatDauTu) %>',
+			uri : url
+		});
+	});
+    Liferay.provide(window,'printPhieuThuTienHangNgay', function(maCTV,ngayXuLyTime){
 		var url = '${printPhieuThuTienHangNgay}';
 		url += '&<portlet:namespace/>ngayThuTien=' + '<%=ngayBatDauTuSearchTime %>';
 		url += '&<portlet:namespace/>maCTV=' + maCTV;
+		url += '&<portlet:namespace/>ngayXuLyTime=' + ngayXuLyTime;
 		 window.open(url);
 	});
 });	

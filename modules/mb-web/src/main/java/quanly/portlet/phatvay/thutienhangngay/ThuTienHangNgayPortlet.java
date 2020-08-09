@@ -5,12 +5,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.Portlet;
@@ -223,6 +225,7 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 							lichSuThuPhatChi.setTongSoTienLaiTra(laiTra);
 							lichSuThuPhatChi.setTongSoTienVonTra(vonTra);
 							lichSuThuPhatChi.setTrangThaiPhatVayHienTai(pv.getTrangThai());
+							lichSuThuPhatChi.setNgayXuLy(ngayThuTien);
 							LichSuThuPhatChiLocalServiceUtil.addLichSuThuPhatChi(lichSuThuPhatChi, serviceContext);
 						}
 					}
@@ -246,7 +249,8 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 		if (Validator.isNotNull(ngayThuTien)) {
 			try {
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-				DecimalFormat df = new DecimalFormat("###,###.###");
+				Locale localeEn = new Locale("en", "EN");
+				NumberFormat df = NumberFormat.getInstance(localeEn);
 				CongTacVienComparator obc = new CongTacVienComparator("ma", true);
 				List<CongTacVien> items = CongTacVienLocalServiceUtil.findBase(maCTVSearch, "", "", "", 1, -1, -1, obc);
 				List<CongTacVienDTO> congTacVienDTOs = new ArrayList<CongTacVienDTO>();
@@ -332,7 +336,9 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 								df.format(tongLaiTra).replaceAll(",", "."),
 								df.format(tongLaiTra + tongVonTra).replaceAll(",", "."),
 								DocSo.docSo(GetterUtil.getLong(tongLaiTra + tongVonTra)),
-								df.format(tongduNoGoc).replaceAll(",", "."), "", "", "", "", null, null));
+								df.format(tongduNoGoc).replaceAll(",", "."), "", "", "", "", null, null,
+								sdf.format(ngayThuTien).substring(0, 2), sdf.format(ngayThuTien).substring(3, 5),
+								sdf.format(ngayThuTien).substring(6, 10)));
 					}
 				}
 				String nameFile = "THU_TIEN_NGAY_" + new SimpleDateFormat("ddMMyyyy").format(ngayThuTien);
@@ -346,12 +352,10 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 				IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Velocity);
 				IContext iContext = report.createContext();
 				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("TRA_CUU", sdf.format(new Date()));
 				map.put("TEN_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.ten")));
 				map.put("DIA_CHI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.diachi")));
 				map.put("SO_DIEN_THOAI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.sodienthoai")));
-				map.put("NGAY", sdf.format(ngayThuTien).substring(0, 2));
-				map.put("THANG", sdf.format(ngayThuTien).substring(3, 5));
-				map.put("NAM", sdf.format(ngayThuTien).substring(6, 10));
 
 				FieldsMetadata metadata = new FieldsMetadata();
 				metadata.addFieldAsList("ctvs.so");
@@ -677,7 +681,9 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 								df.format(tongLaiTra).replaceAll(",", "."),
 								df.format(tongLaiTra + tongVonTra).replaceAll(",", "."),
 								DocSo.docSo(GetterUtil.getLong(tongLaiTra + tongVonTra)),
-								df.format(tongduNoGoc).replaceAll(",", "."), ngayThuTienTruoc, "", "", "", null, null));
+								df.format(tongduNoGoc).replaceAll(",", "."), ngayThuTienTruoc, "", "", "", null, null,
+								sdf.format(new Date()).substring(0, 2), sdf.format(new Date()).substring(3, 5),
+								sdf.format(new Date()).substring(6, 10)));
 					}
 				}
 				String nameFile = "THU_TIEN_TRUOC_NGAY_" + new SimpleDateFormat("ddMMyyyy").format(new Date());
@@ -694,9 +700,6 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 				map.put("TEN_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.ten")));
 				map.put("DIA_CHI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.diachi")));
 				map.put("SO_DIEN_THOAI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.sodienthoai")));
-				map.put("NGAY", sdf.format(new Date()).substring(0, 2));
-				map.put("THANG", sdf.format(new Date()).substring(3, 5));
-				map.put("NAM", sdf.format(new Date()).substring(6, 10));
 
 				FieldsMetadata metadata = new FieldsMetadata();
 				metadata.addFieldAsList("ctvs.so");

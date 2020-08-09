@@ -17,7 +17,8 @@
 	if(ls == null){
 		ls = LaiSuatLocalServiceUtil.createLaiSuat(0L);
 	}
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 %>
 <c:set value="<%=ls %>" var="ls"/>
 <c:set value="<%=df %>" var="df"/>

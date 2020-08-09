@@ -22,7 +22,8 @@
 	if(kh == null){
 		kh = KhachHangLocalServiceUtil.createKhachHang(0L);
 	}
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 %>
 <c:set value="<%=kh %>" var="kh"/>
 <aui:form name="frmAddKhacHang">

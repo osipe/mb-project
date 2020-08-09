@@ -14,7 +14,7 @@
 					<aui:select name="maCTVSearch" label="Cộng tác viên" cssClass="input-select2" onchange="search();">
 						 <aui:option value=" " label="Chọn" />
 						 <c:forEach items="<%= ctvs%>" var="item">
-						 	<aui:option value="${item.ma}" label="${item.hoTen}"/>
+						 	<aui:option value="${item.ma}" label="${item.hoTen} - ${item.ma}"/>
 						</c:forEach>
 					</aui:select>
 				</td>

@@ -358,7 +358,6 @@ public class PhatVayPortlet extends MVCPortlet {
 			Double tienGocNgay = GetterUtil.getDouble(tienGocNgayStr.replaceAll(",", ""));
 			String tienGocNgayCuoiStr = ParamUtil.getString(resourceRequest, "tienGocNgayCuoi");
 			Double tienGocNgayCuoi = GetterUtil.getDouble(tienGocNgayCuoiStr.replaceAll(",", ""));
-
 			int loaiPhatVay = ParamUtil.getInteger(resourceRequest, "loaiPhatVay");
 			long ngayBatDauTime = ParamUtil.getLong(resourceRequest, "ngayBatDauTime");
 			Date ngayBatDau = ngayBatDauTime != 0 ? new Date(ngayBatDauTime) : null;

@@ -1,3 +1,4 @@
+<%@page import="quanly.portlet.danhmuc.ctv.CongTacVienComparator"%>
 <%@page import="com.mb.service.CongTacVienLocalServiceUtil"%>
 <%@page import="com.mb.model.CongTacVien"%>
 <%@page import="java.util.List"%>
@@ -15,7 +16,8 @@
 </portlet:renderURL>
 <%
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	List<CongTacVien> ctvs = CongTacVienLocalServiceUtil.findBase( "", "", "", "", 1, -1, -1, null);
+	CongTacVienComparator congTacVienComparator = new  CongTacVienComparator("ma",true);
+	List<CongTacVien> ctvs = CongTacVienLocalServiceUtil.findBase( "", "", "", "", 1, -1, -1, congTacVienComparator);
 	String oppenThuTienTruoc = "openDialogThuTienTruoc('"+thuTienTruocURL.toString() + "','Thu tiền tết','dialogThuTienTruoc');";
 %>
 <aui:form name="fmLichSu">
@@ -25,7 +27,7 @@
 					<aui:select name="maCTVSearch" label="Cộng tác viên" cssClass="input-select2" onchange="searchURL();showHideThuTienTet();">
 						 <aui:option value=" " label="Tất cả" />
 						 <c:forEach items="<%= ctvs%>" var="item">
-						 	<aui:option value="${item.ma}" label="${item.hoTen}"/>
+						 	<aui:option value="${item.ma}" label="${item.hoTen} - ${item.ma}"/>
 						</c:forEach>
 					</aui:select>
 				</td>

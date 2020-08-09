@@ -1,3 +1,4 @@
+<%@page import="quanly.portlet.danhmuc.ctv.CongTacVienComparator"%>
 <%@page import="java.util.Locale"%>
 <%@page import="com.mb.model.TaiKhoanDoiUng"%>
 <%@page import="com.mb.service.TaiKhoanDoiUngLocalServiceUtil"%>
@@ -33,7 +34,8 @@
 		phieu = PhieuLocalServiceUtil.createPhieu(0L);
 	}
 	List<MaSoThuChi> maSoThuChis = MaSoThuChiLocalServiceUtil.findByLoai_HoatDong(loai, true);
-	List<CongTacVien> congTacViens = CongTacVienLocalServiceUtil.findBase("", "", "", "", 1, -1, -1, null);
+	CongTacVienComparator congTacVienComparator = new  CongTacVienComparator("ma",true);
+	List<CongTacVien> congTacViens = CongTacVienLocalServiceUtil.findBase("", "", "", "", 1, -1, -1, congTacVienComparator);
 	List<TaiKhoanDoiUng> taiKhoanDoiUngs = TaiKhoanDoiUngLocalServiceUtil.findByLoaiTaiKhoan_HoatDong(1, true);
 	Locale localeEn = new Locale("en", "EN");
     NumberFormat df = NumberFormat.getInstance(localeEn);
@@ -76,7 +78,7 @@
 					onchange="changeCTV();" cssClass="input-select2">
 					<aui:option value=" " label="Chọn" />
 					<c:forEach items="<%=congTacViens%>" var="item">
-						<aui:option value="${item.ma}" label="${item.hoTen}"
+						<aui:option value="${item.ma}" label="${item.hoTen} - ${item.ma}"
 							selected="${item.ma.equals(phieu.maCTV)}" />
 					</c:forEach>
 					<aui:validator name="required"

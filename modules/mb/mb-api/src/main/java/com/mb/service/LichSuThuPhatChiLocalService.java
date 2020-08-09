@@ -194,6 +194,12 @@ public interface LichSuThuPhatChiLocalService
 			int end, OrderByComparator obc)
 		throws SystemException;
 
+	public List<LichSuThuPhatChi> findByCTV_Loai_Createdate_NgayXuLy(
+			String maCTV, int loai, Date ngayTaoTu, Date ngayTaoDen,
+			Date ngayXuLyTu, Date ngayXuLyDen, int start, int end,
+			OrderByComparator obc)
+		throws SystemException;
+
 	public List<LichSuThuPhatChi> findByPhatVay_Createdate_Loai(
 			long phatVayId, Date ngayTaoTu, Date ngayTaoDen, String loai)
 		throws SystemException;
@@ -217,6 +223,11 @@ public interface LichSuThuPhatChiLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public LichSuThuPhatChi getLichSuThuPhatChi(long lichSuThuPhatChiId)
 		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Object[]> getLichSuThuPhatChi_MaCTV_Createdate(
+			String maCTV, Date createdate)
+		throws SystemException;
 
 	/**
 	 * Returns a range of all the lich su thu phat chis.
@@ -251,6 +262,15 @@ public interface LichSuThuPhatChiLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
 		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Double getSoTienVay_CTV_TAINGAY(String maCTV, Date ngay)
+		throws SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Object[] getTongLichSuTraTien_CTV_TAINGAY(
+			String maCTV, Date ngay, Date ngayXuLy)
+		throws SystemException;
 
 	public void removeByPhatVayId(long phatVayId) throws SystemException;
 

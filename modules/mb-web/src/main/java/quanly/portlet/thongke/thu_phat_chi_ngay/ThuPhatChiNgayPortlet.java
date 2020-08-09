@@ -5,14 +5,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
@@ -34,16 +35,13 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.mb.model.CongTacVien;
 import com.mb.model.LichSuThuPhatChi;
-import com.mb.model.PhatVay;
 import com.mb.service.CongTacVienLocalServiceUtil;
 import com.mb.service.LichSuThuPhatChiLocalServiceUtil;
-import com.mb.service.PhatVayLocalServiceUtil;
 
 import fr.opensagres.xdocreport.document.IXDocReport;
 import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
 import fr.opensagres.xdocreport.template.IContext;
 import fr.opensagres.xdocreport.template.TemplateEngineKind;
-import fr.opensagres.xdocreport.template.formatter.FieldsMetadata;
 import quanly.constants.FileType;
 import quanly.constants.QuanlyPortletKeys;
 import quanly.dto.CongTacVienDTO;
@@ -71,8 +69,6 @@ import quanly.util.JasperReportUtil;
 		"javax.portlet.security-role-ref=power-user,user",
 		"com.liferay.portlet.footer-portlet-javascript=/js/main.js", }, service = Portlet.class)
 public class ThuPhatChiNgayPortlet extends MVCPortlet {
-	private static ResourceBundle resourceBundle = ResourceBundle.getBundle("content.Language");
-
 	@Override
 	public void serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws IOException, PortletException {
@@ -98,46 +94,47 @@ public class ThuPhatChiNgayPortlet extends MVCPortlet {
 	public JSONObject printPhieuThuTienHangNgay(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
 			ServiceContext serviceContext) throws IOException {
 		JSONObject kq = JSONFactoryUtil.createJSONObject();
+		Map<String, Object> map = new HashMap<String, Object>();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		long ngayThuTienTime = ParamUtil.getLong(resourceRequest, "ngayThuTien");
+		long ngayXuLyTime = ParamUtil.getLong(resourceRequest, "ngayXuLyTime");
 		Date ngayThuTien = ngayThuTienTime != 0 ? new Date(ngayThuTienTime) : null;
+		Date ngayXuLy = ngayXuLyTime != 0 ? new Date(ngayXuLyTime) : null;
 		String maCTV = ParamUtil.getString(resourceRequest, "maCTV");
 		InputStream in = null;
 		OutputStream outStream = resourceResponse.getPortletOutputStream();
 		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			DecimalFormat df = new DecimalFormat("###,###.###");
+			Locale localeEn = new Locale("en", "EN");
+			NumberFormat df = NumberFormat.getInstance(localeEn);
 			List<CongTacVienDTO> congTacVienDTOs = new ArrayList<CongTacVienDTO>();
-			LichSuThuPhatChiComparator comparator = new LichSuThuPhatChiComparator("createdate", true);
 			List<CongTacVien> items = CongTacVienLocalServiceUtil.getCTVThuPhatChi(maCTV, ngayThuTien, ngayThuTien);
 			for (CongTacVien ctv : items) {
-				List<LichSuThuPhatChi> lichSuIn = LichSuThuPhatChiLocalServiceUtil.findByCTV_Loai_Createdate(maCTV, 3,
-						ngayThuTien, ngayThuTien, -1, -1, comparator);
+				List<Object[]> lichSuThuPhatChDTOs = LichSuThuPhatChiLocalServiceUtil
+						.getLichSuThuPhatChi_MaCTV_Createdate(maCTV, ngayThuTien);
+				for (Object[] item : lichSuThuPhatChDTOs) {
+					if (GetterUtil.getInteger(item[0]) == 3) {
+						String ngayXuLyStr = GetterUtil.getString(item[1]);
+						if (ngayXuLy == null || (ngayXuLy != null && sdf.format(ngayXuLy).equals(ngayXuLyStr))) {
+							Double tongVonTra = GetterUtil.getDouble(item[2]);
+							Double tongLaiTra = GetterUtil.getDouble(item[3]);
+							Double soTienVay = LichSuThuPhatChiLocalServiceUtil.getSoTienVay_CTV_TAINGAY(ctv.getMa(),
+									ngayThuTien);
+							Object[] tongTienDaTra = LichSuThuPhatChiLocalServiceUtil
+									.getTongLichSuTraTien_CTV_TAINGAY(ctv.getMa(), ngayThuTien, sdf.parse(ngayXuLyStr));
 
-				Double tongVonTra = GetterUtil.getDouble("0");
-				Double tongLaiTra = GetterUtil.getDouble("0");
-				for (LichSuThuPhatChi item : lichSuIn) {
-					tongVonTra += item.getTongSoTienVonTra();
-					tongLaiTra += item.getTongSoTienLaiTra();
-				}
-				Double tongduNoGoc = GetterUtil.getDouble("0");
-				List<PhatVay> phatVays = PhatVayLocalServiceUtil.getPhatVaySaoKe(maCTV, 0, ngayThuTien);
-				for (PhatVay pv : phatVays) {
-					Double duGoc = pv.getSoTienVay();
-					List<LichSuThuPhatChi> lichSuDuNo = LichSuThuPhatChiLocalServiceUtil
-							.findByPhatVay_Createdate_Loai(pv.getPhatVayId(), null, ngayThuTien, "3,4");
-					for (LichSuThuPhatChi lichSuThuPhatChi : lichSuDuNo) {
-						duGoc -= lichSuThuPhatChi.getTongSoTienVonTra();
+							Double tongduNoGoc = soTienVay - GetterUtil.getDouble(tongTienDaTra[2]);
+
+							CongTacVienDTO ctvDTO = new CongTacVienDTO(
+									ctv.getMa() + "/" + new SimpleDateFormat("ddMMyyyy").format(sdf.parse(ngayXuLyStr)), ctv.getMa(),
+									ctv.getHoTen(), ctv.getDiaChi(), df.format(tongVonTra), df.format(tongLaiTra),
+									df.format(tongLaiTra + tongVonTra),
+									DocSo.docSo(GetterUtil.getLong(tongLaiTra + tongVonTra)), df.format(tongduNoGoc),
+									"", "", "", "", null, null, ngayXuLyStr.substring(0, 2),
+									ngayXuLyStr.substring(3, 5), ngayXuLyStr.substring(6, 10));
+							congTacVienDTOs.add(ctvDTO);
+						}
 					}
-					tongduNoGoc += duGoc;
 				}
-				System.out.println("tongduNoGoc : " + tongduNoGoc);
-				congTacVienDTOs
-						.add(new CongTacVienDTO(maCTV + "/" + new SimpleDateFormat("ddMMyyyy").format(ngayThuTien),
-								maCTV, ctv.getHoTen(), ctv.getDiaChi(), df.format(tongVonTra).replaceAll(",", "."),
-								df.format(tongLaiTra).replaceAll(",", "."),
-								df.format(tongLaiTra + tongVonTra).replaceAll(",", "."),
-								DocSo.docSo(GetterUtil.getLong(tongLaiTra + tongVonTra)),
-								df.format(tongduNoGoc).replaceAll(",", "."), "", "", "", "", null, null));
 			}
 
 			String nameFile = "THU_TIEN_NGAY_" + new SimpleDateFormat("ddMMyyyy").format(ngayThuTien);
@@ -150,25 +147,11 @@ public class ThuPhatChiNgayPortlet extends MVCPortlet {
 
 			IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Velocity);
 			IContext iContext = report.createContext();
-			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("TEN_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.ten")));
 			map.put("DIA_CHI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.diachi")));
 			map.put("SO_DIEN_THOAI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.sodienthoai")));
-			map.put("NGAY", sdf.format(ngayThuTien).substring(0, 2));
-			map.put("THANG", sdf.format(ngayThuTien).substring(3, 5));
-			map.put("NAM", sdf.format(ngayThuTien).substring(6, 10));
+			map.put("TRA_CUU", sdf.format(ngayThuTien));
 
-			FieldsMetadata metadata = new FieldsMetadata();
-			metadata.addFieldAsList("ctvs.so");
-			metadata.addFieldAsList("ctvs.maSo");
-			metadata.addFieldAsList("ctvs.hoTen");
-			metadata.addFieldAsList("ctvs.diaChi");
-			metadata.addFieldAsList("ctvs.vonTra");
-			metadata.addFieldAsList("ctvs.laiTra");
-			metadata.addFieldAsList("ctvs.tongTien");
-			metadata.addFieldAsList("ctvs.tongTienBangChu");
-			metadata.addFieldAsList("ctvs.duNoGoc");
-			report.setFieldsMetadata(metadata);
 			iContext.putMap(map);
 			iContext.put("ctvs", congTacVienDTOs);
 			report.process(iContext, outStream);

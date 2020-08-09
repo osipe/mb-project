@@ -17,7 +17,8 @@
 	if(lts == null){
 		lts = LoaiTaiSanLocalServiceUtil.createLoaiTaiSan(0L);
 	}
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 %>
 <c:set value="<%=lts %>" var="lts"/>
 <c:set value="<%=df %>" var="df"/>

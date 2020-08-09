@@ -1,3 +1,5 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="quanly.portlet.phatvay.phatvay.PhatVayChecker"%>
 <%@page import="com.liferay.portal.kernel.util.StringUtil"%>
@@ -24,7 +26,8 @@
 	Date ngayBatDauTu = ngayBatDauTuSearchTime != 0 ? new Date(ngayBatDauTuSearchTime) : null;
 	Date ngayBatDauDen = ngayBatDauDenSearchTime != 0 ? new Date(ngayBatDauDenSearchTime) : null;
 	int count = PhatVayLocalServiceUtil.countBase(soKUSearch, maCTVSearch, maKhachHangSearch,null,null, ngayBatDauTu, ngayBatDauDen,null,null, thanhToanSearch);
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 %>
 <c:set value="<%=df %>" var="df"/>

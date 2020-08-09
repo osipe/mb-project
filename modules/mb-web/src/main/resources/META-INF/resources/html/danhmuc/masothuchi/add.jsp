@@ -1,3 +1,4 @@
+<%@page import="java.util.Locale"%>
 <%@page import="com.mb.service.MaSoThuChiLocalServiceUtil"%>
 <%@page import="com.mb.model.MaSoThuChi"%>
 <%@page import="java.util.List"%>
@@ -17,7 +18,8 @@
 	if(maSoThuChi == null){
 		maSoThuChi = MaSoThuChiLocalServiceUtil.createMaSoThuChi(0L);
 	}
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 %>
 <aui:form name="frmAdd">
 	<table class="info table-pa5 aui-w100">

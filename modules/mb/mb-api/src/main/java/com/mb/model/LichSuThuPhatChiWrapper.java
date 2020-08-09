@@ -70,6 +70,7 @@ public class LichSuThuPhatChiWrapper
 		attributes.put("soTien", getSoTien());
 		attributes.put("tongSoTienVonTra", getTongSoTienVonTra());
 		attributes.put("tongSoTienLaiTra", getTongSoTienLaiTra());
+		attributes.put("ngayXuLy", getNgayXuLy());
 		attributes.put("loai", getLoai());
 		attributes.put("trangThaiPhatVayHienTai", getTrangThaiPhatVayHienTai());
 
@@ -148,6 +149,12 @@ public class LichSuThuPhatChiWrapper
 
 		if (tongSoTienLaiTra != null) {
 			setTongSoTienLaiTra(tongSoTienLaiTra);
+		}
+
+		Date ngayXuLy = (Date)attributes.get("ngayXuLy");
+
+		if (ngayXuLy != null) {
+			setNgayXuLy(ngayXuLy);
 		}
 
 		Integer loai = (Integer)attributes.get("loai");
@@ -248,6 +255,16 @@ public class LichSuThuPhatChiWrapper
 	@Override
 	public Date getModifiedDate() {
 		return _lichSuThuPhatChi.getModifiedDate();
+	}
+
+	/**
+	 * Returns the ngay xu ly of this lich su thu phat chi.
+	 *
+	 * @return the ngay xu ly of this lich su thu phat chi
+	 */
+	@Override
+	public Date getNgayXuLy() {
+		return _lichSuThuPhatChi.getNgayXuLy();
 	}
 
 	/**
@@ -465,6 +482,16 @@ public class LichSuThuPhatChiWrapper
 	@Override
 	public void setNew(boolean n) {
 		_lichSuThuPhatChi.setNew(n);
+	}
+
+	/**
+	 * Sets the ngay xu ly of this lich su thu phat chi.
+	 *
+	 * @param ngayXuLy the ngay xu ly of this lich su thu phat chi
+	 */
+	@Override
+	public void setNgayXuLy(Date ngayXuLy) {
+		_lichSuThuPhatChi.setNgayXuLy(ngayXuLy);
 	}
 
 	/**

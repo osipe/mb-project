@@ -1,3 +1,4 @@
+<%@page import="quanly.portlet.danhmuc.ctv.CongTacVienComparator"%>
 <%@page import="com.mb.service.CongTacVienLocalServiceUtil"%>
 <%@page import="com.mb.model.CongTacVien"%>
 <%@page import="java.util.List"%>
@@ -10,7 +11,8 @@
 <%
 	DecimalFormat df = new DecimalFormat("###,###.###");
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	List<CongTacVien> ctvs = CongTacVienLocalServiceUtil.findBase( "", "", "", "", 1, -1, -1, null);
+	CongTacVienComparator congTacVienComparator = new  CongTacVienComparator("ma",true);
+	List<CongTacVien> ctvs = CongTacVienLocalServiceUtil.findBase( "", "", "", "", 1, -1, -1, congTacVienComparator);
 %>
 <c:set value="<%=df%>" var="df" />
 <aui:form name="frm">

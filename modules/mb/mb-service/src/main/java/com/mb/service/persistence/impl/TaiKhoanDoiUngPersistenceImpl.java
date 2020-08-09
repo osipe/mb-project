@@ -2852,7 +2852,8 @@ public class TaiKhoanDoiUngPersistenceImpl
 			TaiKhoanDoiUngModelImpl.FINDER_CACHE_ENABLED,
 			TaiKhoanDoiUngImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"findByHoatDong", new String[] {Boolean.class.getName()},
-			TaiKhoanDoiUngModelImpl.HOATDONG_COLUMN_BITMASK);
+			TaiKhoanDoiUngModelImpl.HOATDONG_COLUMN_BITMASK |
+			TaiKhoanDoiUngModelImpl.SOHIEU_COLUMN_BITMASK);
 
 		_finderPathCountByHoatDong = new FinderPath(
 			TaiKhoanDoiUngModelImpl.ENTITY_CACHE_ENABLED,
@@ -2880,7 +2881,8 @@ public class TaiKhoanDoiUngPersistenceImpl
 				"findByLoaiTaiKhoan_HoatDong",
 				new String[] {Integer.class.getName(), Boolean.class.getName()},
 				TaiKhoanDoiUngModelImpl.LOAITAIKHOAN_COLUMN_BITMASK |
-				TaiKhoanDoiUngModelImpl.HOATDONG_COLUMN_BITMASK);
+				TaiKhoanDoiUngModelImpl.HOATDONG_COLUMN_BITMASK |
+				TaiKhoanDoiUngModelImpl.SOHIEU_COLUMN_BITMASK);
 
 		_finderPathCountByLoaiTaiKhoan_HoatDong = new FinderPath(
 			TaiKhoanDoiUngModelImpl.ENTITY_CACHE_ENABLED,
@@ -2911,7 +2913,8 @@ public class TaiKhoanDoiUngPersistenceImpl
 				"findByTaiKhoanDoiUngChaId_HoatDong",
 				new String[] {Long.class.getName(), Boolean.class.getName()},
 				TaiKhoanDoiUngModelImpl.TAIKHOANDOIUNGCHAID_COLUMN_BITMASK |
-				TaiKhoanDoiUngModelImpl.HOATDONG_COLUMN_BITMASK);
+				TaiKhoanDoiUngModelImpl.HOATDONG_COLUMN_BITMASK |
+				TaiKhoanDoiUngModelImpl.SOHIEU_COLUMN_BITMASK);
 
 		_finderPathCountByTaiKhoanDoiUngChaId_HoatDong = new FinderPath(
 			TaiKhoanDoiUngModelImpl.ENTITY_CACHE_ENABLED,

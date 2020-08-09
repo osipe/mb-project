@@ -288,7 +288,7 @@ public class TatToanPortlet extends MVCPortlet {
 							lichSuThuPhatChi.setTongSoTienLaiTra(laiPhaiThu);
 							lichSuThuPhatChi.setTrangThaiPhatVayHienTai(TrangThaiPhatVayEnum.DA_TAT_TOAN.getValue());
 							lichSuThuPhatChi.setTongSoTienVonTra(gocPhaithu);
-							LichSuThuPhatChiLocalServiceUtil.addOrUpdateLichSuThuPhatChi(lichSuThuPhatChi,serviceContext);
+							LichSuThuPhatChiLocalServiceUtil.addLichSuThuPhatChi(lichSuThuPhatChi, serviceContext);
 						}
 					}
 				}

@@ -79,7 +79,8 @@ public class LichSuThuPhatChiModelImpl
 		{"modifiedDate", Types.TIMESTAMP}, {"phatVayId", Types.BIGINT},
 		{"maCTV", Types.VARCHAR}, {"soTien", Types.DOUBLE},
 		{"tongSoTienVonTra", Types.DOUBLE}, {"tongSoTienLaiTra", Types.DOUBLE},
-		{"loai", Types.INTEGER}, {"trangThaiPhatVayHienTai", Types.INTEGER}
+		{"ngayXuLy", Types.TIMESTAMP}, {"loai", Types.INTEGER},
+		{"trangThaiPhatVayHienTai", Types.INTEGER}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -98,12 +99,13 @@ public class LichSuThuPhatChiModelImpl
 		TABLE_COLUMNS_MAP.put("soTien", Types.DOUBLE);
 		TABLE_COLUMNS_MAP.put("tongSoTienVonTra", Types.DOUBLE);
 		TABLE_COLUMNS_MAP.put("tongSoTienLaiTra", Types.DOUBLE);
+		TABLE_COLUMNS_MAP.put("ngayXuLy", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("loai", Types.INTEGER);
 		TABLE_COLUMNS_MAP.put("trangThaiPhatVayHienTai", Types.INTEGER);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table mb_lichsuthuphatchi (lichSuThuPhatChiId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,phatVayId LONG,maCTV VARCHAR(75) null,soTien DOUBLE,tongSoTienVonTra DOUBLE,tongSoTienLaiTra DOUBLE,loai INTEGER,trangThaiPhatVayHienTai INTEGER)";
+		"create table mb_lichsuthuphatchi (lichSuThuPhatChiId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,phatVayId LONG,maCTV VARCHAR(75) null,soTien DOUBLE,tongSoTienVonTra DOUBLE,tongSoTienLaiTra DOUBLE,ngayXuLy DATE null,loai INTEGER,trangThaiPhatVayHienTai INTEGER)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table mb_lichsuthuphatchi";
@@ -168,6 +170,7 @@ public class LichSuThuPhatChiModelImpl
 		model.setSoTien(soapModel.getSoTien());
 		model.setTongSoTienVonTra(soapModel.getTongSoTienVonTra());
 		model.setTongSoTienLaiTra(soapModel.getTongSoTienLaiTra());
+		model.setNgayXuLy(soapModel.getNgayXuLy());
 		model.setLoai(soapModel.getLoai());
 		model.setTrangThaiPhatVayHienTai(
 			soapModel.getTrangThaiPhatVayHienTai());
@@ -574,6 +577,28 @@ public class LichSuThuPhatChiModelImpl
 
 			});
 		attributeGetterFunctions.put(
+			"ngayXuLy",
+			new Function<LichSuThuPhatChi, Object>() {
+
+				@Override
+				public Object apply(LichSuThuPhatChi lichSuThuPhatChi) {
+					return lichSuThuPhatChi.getNgayXuLy();
+				}
+
+			});
+		attributeSetterBiConsumers.put(
+			"ngayXuLy",
+			new BiConsumer<LichSuThuPhatChi, Object>() {
+
+				@Override
+				public void accept(
+					LichSuThuPhatChi lichSuThuPhatChi, Object ngayXuLy) {
+
+					lichSuThuPhatChi.setNgayXuLy((Date)ngayXuLy);
+				}
+
+			});
+		attributeGetterFunctions.put(
 			"loai",
 			new Function<LichSuThuPhatChi, Object>() {
 
@@ -816,6 +841,17 @@ public class LichSuThuPhatChiModelImpl
 
 	@JSON
 	@Override
+	public Date getNgayXuLy() {
+		return _ngayXuLy;
+	}
+
+	@Override
+	public void setNgayXuLy(Date ngayXuLy) {
+		_ngayXuLy = ngayXuLy;
+	}
+
+	@JSON
+	@Override
 	public int getLoai() {
 		return _loai;
 	}
@@ -892,6 +928,7 @@ public class LichSuThuPhatChiModelImpl
 		lichSuThuPhatChiImpl.setSoTien(getSoTien());
 		lichSuThuPhatChiImpl.setTongSoTienVonTra(getTongSoTienVonTra());
 		lichSuThuPhatChiImpl.setTongSoTienLaiTra(getTongSoTienLaiTra());
+		lichSuThuPhatChiImpl.setNgayXuLy(getNgayXuLy());
 		lichSuThuPhatChiImpl.setLoai(getLoai());
 		lichSuThuPhatChiImpl.setTrangThaiPhatVayHienTai(
 			getTrangThaiPhatVayHienTai());
@@ -1040,6 +1077,15 @@ public class LichSuThuPhatChiModelImpl
 
 		lichSuThuPhatChiCacheModel.tongSoTienLaiTra = getTongSoTienLaiTra();
 
+		Date ngayXuLy = getNgayXuLy();
+
+		if (ngayXuLy != null) {
+			lichSuThuPhatChiCacheModel.ngayXuLy = ngayXuLy.getTime();
+		}
+		else {
+			lichSuThuPhatChiCacheModel.ngayXuLy = Long.MIN_VALUE;
+		}
+
 		lichSuThuPhatChiCacheModel.loai = getLoai();
 
 		lichSuThuPhatChiCacheModel.trangThaiPhatVayHienTai =
@@ -1133,6 +1179,7 @@ public class LichSuThuPhatChiModelImpl
 	private Double _soTien;
 	private Double _tongSoTienVonTra;
 	private Double _tongSoTienLaiTra;
+	private Date _ngayXuLy;
 	private int _loai;
 	private int _originalLoai;
 	private boolean _setOriginalLoai;
