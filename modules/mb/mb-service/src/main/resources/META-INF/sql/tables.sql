@@ -6,6 +6,20 @@ create table dm_cauhinhthutientet (
 	soNgay INTEGER
 );
 
+create table dm_cauhinhthutientruoc (
+	cauHinhThuTienTruocId LONG not null primary key,
+	companyId LONG,
+	groupId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	createDate DATE null,
+	modifiedDate DATE null,
+	nam INTEGER,
+	ngayTu DATE null,
+	ngayDen DATE null,
+	hoatDong BOOLEAN
+);
+
 create table dm_congtacvien (
 	congTacVienId LONG not null primary key,
 	companyId LONG,

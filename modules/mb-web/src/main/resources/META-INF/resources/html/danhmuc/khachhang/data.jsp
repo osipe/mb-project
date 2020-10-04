@@ -1,3 +1,5 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <%@page import="com.mb.service.KhachHangLocalServiceUtil"%>
 <%@page import="com.mb.model.KhachHang"%>
 <%@page import="quanly.portlet.danhmuc.khachhang.KhachHangComparator"%>
@@ -17,7 +19,8 @@
 	String diaChiSearch = ParamUtil.getString(request, "diaChiSearch");
 	int hoatDongSearch = ParamUtil.getInteger(request, "hoatDongSearch");
 	int count = KhachHangLocalServiceUtil.countBase(maSearch, maCTVSearch, hoTenSearch, soCMNDSearch, diaChiSearch, hoatDongSearch);
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 %>
 <liferay-portlet:renderURL varImpl="iteratorURL">
 	<portlet:param name="maSearch" value="<%= maSearch %>" />

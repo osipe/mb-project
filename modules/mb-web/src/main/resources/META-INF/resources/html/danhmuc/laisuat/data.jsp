@@ -1,3 +1,5 @@
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.NumberFormat"%>
 <%@page import="com.mb.model.LaiSuat"%>
 <%@page import="com.mb.service.LaiSuatLocalServiceUtil"%>
 <%@page import="quanly.portlet.danhmuc.laisuat.LaiSuatComparator"%>
@@ -15,7 +17,8 @@
 	int thoiHanSearch = ParamUtil.getInteger(request, "thoiHanSearch");
 	int hoatDongSearch = ParamUtil.getInteger(request, "hoatDongSearch");
 	int count = LaiSuatLocalServiceUtil.countBase( soTienVaySearch, laiSuatVaySearch, thoiHanSearch, hoatDongSearch);
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 %>
 <c:set value="<%=df %>" var="df"/>
 <liferay-portlet:renderURL varImpl="iteratorURL">

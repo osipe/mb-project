@@ -7,6 +7,10 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
 >
+	<bean class="com.mb.service.impl.CauHinhThuTienTruocLocalServiceImpl" id="com.mb.service.CauHinhThuTienTruocLocalService" />
+	<bean class="com.mb.service.impl.CauHinhThuTienTruocServiceImpl" id="com.mb.service.CauHinhThuTienTruocService" />
+	<bean class="com.mb.service.persistence.impl.CauHinhThuTienTruocPersistenceImpl" id="com.mb.service.persistence.CauHinhThuTienTruocPersistence" parent="basePersistence" />
+	<bean class="com.mb.service.persistence.impl.CauHinhThuTienTruocFinderImpl" id="com.mb.service.persistence.CauHinhThuTienTruocFinder" parent="basePersistence" />
 	<bean class="com.mb.service.impl.CongTacVienLocalServiceImpl" id="com.mb.service.CongTacVienLocalService" />
 	<bean class="com.mb.service.impl.CongTacVienServiceImpl" id="com.mb.service.CongTacVienService" />
 	<bean class="com.mb.service.persistence.impl.CongTacVienPersistenceImpl" id="com.mb.service.persistence.CongTacVienPersistence" parent="basePersistence" />

@@ -333,6 +333,13 @@ public class PhatVayLocalServiceUtil {
 		return getService().getPhatVayDeThuTienTruoc(maCTV, ngayThuTienTu);
 	}
 
+	public static java.util.List<com.mb.model.PhatVay> getPhatVayInIds(
+			String ids)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return getService().getPhatVayInIds(ids);
+	}
+
 	public static java.util.List<com.mb.model.PhatVay> getPhatVaySaoKe(
 			String maCTV, int loaiPhatVay, java.util.Date createDate)
 		throws com.liferay.portal.kernel.exception.SystemException {

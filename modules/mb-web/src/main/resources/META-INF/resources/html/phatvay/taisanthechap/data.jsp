@@ -1,3 +1,5 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <%@page import="com.mb.model.PhatVay"%>
 <%@page import="quanly.portlet.phatvay.taisanthechap.TaiSanTheChapComparator"%>
 <%@page import="com.mb.model.TaiSanThueChap"%>
@@ -18,7 +20,8 @@
 	String tenSearch = ParamUtil.getString(request, "tenSearch");
 	long loaiTaSanSearch = ParamUtil.getLong(request, "loaiTaSanSearch");
 	int count = TaiSanThueChapLocalServiceUtil.countBase(soKUSearch, tenSearch, maKhachHangSearch, loaiTaSanSearch);
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 %>
 <c:set value="<%=df %>" var="df"/>

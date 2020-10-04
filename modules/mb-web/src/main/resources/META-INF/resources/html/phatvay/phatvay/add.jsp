@@ -57,12 +57,12 @@
 <aui:form name="frmAdd">
 	<table class="info aui-w100" style="padding-left: 5%;padding-right: 5%">
 		<tr>
-			<td>
+			<td class="aui-w33">
 				<aui:input class="input-text " name="soKU" label="Số KU" value="${phatVay.soKU}">
 					<aui:validator name="required" errorMessage="Số KU không được bỏ trống!" />
 				</aui:input>
 			</td>
-			<td>
+			<td class="aui-w33">
 				<aui:select name="maCTV" onchange="getDataKhachHang();" label="Cộng tác viên" cssClass="input-select2">
 					 <aui:option value=" " label="Chọn" />
 					 <c:forEach items="<%= ctvs%>" var="item">
@@ -71,13 +71,11 @@
 					<aui:validator name="required" errorMessage="Cộng tác viên không được bỏ trống!" />
 				</aui:select>
 			</td>
-			<td>
+			<td class="aui-w34">
 				<aui:select name="maKhachHang" label="Khách hàng" cssClass="input-select2">
 					 <aui:option value=" " label="Chọn" />
 					 <aui:validator name="required" errorMessage="Khách hàng không được bỏ trống!" />
 				</aui:select>
-			</td>
-			<td>
 				<a class="icon-add" href="javascript:void(0)" title="Thêm khách hàng" onclick="openDialogAddKhachHang()"><i class="glyphicon glyphicon-plus"></i>
 			</td>
 		</tr>
@@ -397,11 +395,13 @@ AUI().ready(['aui-base','node-event-simulate'], function(A) {
                    			if(<%=phatVayId == 0 %> && data.soKU){
                    				 form.one('#<portlet:namespace />soKU').val(data.soKU);
 							}
+							var maKhachHang = '<%= phatVay.getMaKhachHang()%>';
                    			if(data.khachHangs){
                    				var khachHangs = A.Array.map(data.khachHangs, function(item) {
+                   					console.log('selected : ',maKhachHang == item.ma);
 									item.id = item.ma;
-									item.text = item.hoTen;
-									item.selected = '<%= phatVay.getMaKhachHang()%>'
+									item.text = item.hoTen + ' - '  + 'Số CMND: ' +item.soCMND;
+									item.selected = (maKhachHang == item.ma);
 									return item;
 								});
 								khachHangs.unshift({

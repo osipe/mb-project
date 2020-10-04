@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,6 +13,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.Portlet;
@@ -119,7 +121,8 @@ public class SoPortlet extends MVCPortlet {
 				calDen.set(nam, thang - 1, CalendarUtil.getDaysInMonth(calTu));
 				Date ngayChungTuDen = calDen.getTime();
 				Collection<Object> collections = new ArrayList<Object>();
-				DecimalFormat df = new DecimalFormat("###,###.###");
+				Locale localeEn = new Locale("en", "EN");
+			    NumberFormat df = NumberFormat.getInstance(localeEn);
 
 				Double soTienThuTM = GetterUtil.getDouble("0");
 				Double soTienChiTM = GetterUtil.getDouble("0");
@@ -219,7 +222,8 @@ public class SoPortlet extends MVCPortlet {
 				parameters.put("thang", thang);
 				parameters.put("nam", nam);
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-				DecimalFormat df = new DecimalFormat("###,###.###");
+				Locale localeEn = new Locale("en", "EN");
+			    NumberFormat df = NumberFormat.getInstance(localeEn);
 				LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil
 						.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngId, nam, thang);
 				Double soTien = dauKy.getSoTienTon() != null ? dauKy.getSoTienTon() : GetterUtil.getDouble("0");
@@ -325,7 +329,8 @@ public class SoPortlet extends MVCPortlet {
 				parameters.put("thang", thang);
 				parameters.put("nam", nam);
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-				DecimalFormat df = new DecimalFormat("###,###.###");
+				Locale localeEn = new Locale("en", "EN");
+			    NumberFormat df = NumberFormat.getInstance(localeEn);
 				LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil
 						.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngId, nam, thang);
 				Double soTien = dauKy != null && dauKy.getSoTienTon() != null ? dauKy.getSoTienTon()

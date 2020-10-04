@@ -1,3 +1,5 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <%@page import="quanly.portlet.danhmuc.taikhoandoiung.TaiKhoanDoiUngComparator"%>
 <%@page import="com.liferay.portal.kernel.util.CalendarUtil"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
@@ -27,7 +29,8 @@
 	calDen.set(namSearch, thangSearch - 1,CalendarUtil.getDaysInMonth(calTu));
 	Date ngayChungTuDen = calDen.getTime();
 	TaiKhoanDoiUng taiKhoanTienMat = TaiKhoanDoiUngLocalServiceUtil.fetchBySoHieu(PropsUtil.get("config.taikhoantienmat"));
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 	if(taiKhoanTienMat == null){
 %>
 	<div>Chưa cấu hình tài khoản tiền mặt !!</div>

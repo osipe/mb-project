@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -174,7 +173,8 @@ public class ThuPhatChiNgayPortlet extends MVCPortlet {
 		Date ngayBatDauTu = ngayTuTime != 0 ? new Date(ngayTuTime) : null;
 		List<CongTacVien> items = CongTacVienLocalServiceUtil.getCTVThuPhatChi(maCTV, ngayBatDauTu, ngayBatDauTu);
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		DecimalFormat df = new DecimalFormat("###,###.###");
+		Locale localeEn = new Locale("en", "EN");
+	    NumberFormat df = NumberFormat.getInstance(localeEn);
 		if (CollectionUtils.isNotEmpty(items)) {
 			try {
 				InputStream in = null;

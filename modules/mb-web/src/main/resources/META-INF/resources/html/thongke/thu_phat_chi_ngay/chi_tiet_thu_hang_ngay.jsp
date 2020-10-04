@@ -1,3 +1,5 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <%@page import="com.mb.service.CongTacVienLocalServiceUtil"%>
 <%@page import="com.mb.model.CongTacVien"%>
 <%@page import="org.apache.commons.collections.CollectionUtils"%>
@@ -23,7 +25,8 @@
 	LichSuThuPhatChiComparator comparator = new LichSuThuPhatChiComparator("createdate", true);
 	List<LichSuThuPhatChi> lichSu = LichSuThuPhatChiLocalServiceUtil.findByCTV_Loai_Createdate_NgayXuLy(maCTV, 3,
 			ngayBatDauTu, ngayBatDauTu,ngayXuLy,ngayXuLy, -1, -1, comparator);
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 	CongTacVien ctv = CongTacVienLocalServiceUtil.fetchByMa(maCTV);
 %>
 <aui:form name="frm">

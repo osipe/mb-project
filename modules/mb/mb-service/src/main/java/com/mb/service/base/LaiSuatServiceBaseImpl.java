@@ -29,6 +29,8 @@ import com.liferay.portal.spring.extender.service.ServiceReference;
 
 import com.mb.model.LaiSuat;
 import com.mb.service.LaiSuatService;
+import com.mb.service.persistence.CauHinhThuTienTruocFinder;
+import com.mb.service.persistence.CauHinhThuTienTruocPersistence;
 import com.mb.service.persistence.CongTacVienFinder;
 import com.mb.service.persistence.CongTacVienPersistence;
 import com.mb.service.persistence.DsPhieuTaiKhoanFinder;
@@ -79,6 +81,91 @@ public abstract class LaiSuatServiceBaseImpl
 	 *
 	 * Never modify or reference this class directly. Use <code>LaiSuatService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>com.mb.service.LaiSuatServiceUtil</code>.
 	 */
+
+	/**
+	 * Returns the cau hinh thu tien truoc local service.
+	 *
+	 * @return the cau hinh thu tien truoc local service
+	 */
+	public com.mb.service.CauHinhThuTienTruocLocalService
+		getCauHinhThuTienTruocLocalService() {
+
+		return cauHinhThuTienTruocLocalService;
+	}
+
+	/**
+	 * Sets the cau hinh thu tien truoc local service.
+	 *
+	 * @param cauHinhThuTienTruocLocalService the cau hinh thu tien truoc local service
+	 */
+	public void setCauHinhThuTienTruocLocalService(
+		com.mb.service.CauHinhThuTienTruocLocalService
+			cauHinhThuTienTruocLocalService) {
+
+		this.cauHinhThuTienTruocLocalService = cauHinhThuTienTruocLocalService;
+	}
+
+	/**
+	 * Returns the cau hinh thu tien truoc remote service.
+	 *
+	 * @return the cau hinh thu tien truoc remote service
+	 */
+	public com.mb.service.CauHinhThuTienTruocService
+		getCauHinhThuTienTruocService() {
+
+		return cauHinhThuTienTruocService;
+	}
+
+	/**
+	 * Sets the cau hinh thu tien truoc remote service.
+	 *
+	 * @param cauHinhThuTienTruocService the cau hinh thu tien truoc remote service
+	 */
+	public void setCauHinhThuTienTruocService(
+		com.mb.service.CauHinhThuTienTruocService cauHinhThuTienTruocService) {
+
+		this.cauHinhThuTienTruocService = cauHinhThuTienTruocService;
+	}
+
+	/**
+	 * Returns the cau hinh thu tien truoc persistence.
+	 *
+	 * @return the cau hinh thu tien truoc persistence
+	 */
+	public CauHinhThuTienTruocPersistence getCauHinhThuTienTruocPersistence() {
+		return cauHinhThuTienTruocPersistence;
+	}
+
+	/**
+	 * Sets the cau hinh thu tien truoc persistence.
+	 *
+	 * @param cauHinhThuTienTruocPersistence the cau hinh thu tien truoc persistence
+	 */
+	public void setCauHinhThuTienTruocPersistence(
+		CauHinhThuTienTruocPersistence cauHinhThuTienTruocPersistence) {
+
+		this.cauHinhThuTienTruocPersistence = cauHinhThuTienTruocPersistence;
+	}
+
+	/**
+	 * Returns the cau hinh thu tien truoc finder.
+	 *
+	 * @return the cau hinh thu tien truoc finder
+	 */
+	public CauHinhThuTienTruocFinder getCauHinhThuTienTruocFinder() {
+		return cauHinhThuTienTruocFinder;
+	}
+
+	/**
+	 * Sets the cau hinh thu tien truoc finder.
+	 *
+	 * @param cauHinhThuTienTruocFinder the cau hinh thu tien truoc finder
+	 */
+	public void setCauHinhThuTienTruocFinder(
+		CauHinhThuTienTruocFinder cauHinhThuTienTruocFinder) {
+
+		this.cauHinhThuTienTruocFinder = cauHinhThuTienTruocFinder;
+	}
 
 	/**
 	 * Returns the cong tac vien local service.
@@ -1447,6 +1534,20 @@ public abstract class LaiSuatServiceBaseImpl
 			throw new SystemException(e);
 		}
 	}
+
+	@BeanReference(type = com.mb.service.CauHinhThuTienTruocLocalService.class)
+	protected com.mb.service.CauHinhThuTienTruocLocalService
+		cauHinhThuTienTruocLocalService;
+
+	@BeanReference(type = com.mb.service.CauHinhThuTienTruocService.class)
+	protected com.mb.service.CauHinhThuTienTruocService
+		cauHinhThuTienTruocService;
+
+	@BeanReference(type = CauHinhThuTienTruocPersistence.class)
+	protected CauHinhThuTienTruocPersistence cauHinhThuTienTruocPersistence;
+
+	@BeanReference(type = CauHinhThuTienTruocFinder.class)
+	protected CauHinhThuTienTruocFinder cauHinhThuTienTruocFinder;
 
 	@BeanReference(type = com.mb.service.CongTacVienLocalService.class)
 	protected com.mb.service.CongTacVienLocalService congTacVienLocalService;

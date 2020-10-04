@@ -1,3 +1,4 @@
+<%@page import="java.util.Locale"%>
 <%@page import="java.util.List"%>
 <%@page import="com.mb.service.TaiKhoanDoiUngLocalServiceUtil"%>
 <%@page import="com.mb.model.TaiKhoanDoiUng"%>
@@ -17,7 +18,8 @@
 	if(taiKhoanDoiUng == null){
 		taiKhoanDoiUng = TaiKhoanDoiUngLocalServiceUtil.createTaiKhoanDoiUng(0L);
 	}
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 	List<TaiKhoanDoiUng> taiKhoanDoiUngs = TaiKhoanDoiUngLocalServiceUtil.findBase(0, "", "", 0, -1, -1, null);
 %>
 <c:set var="taiKhoanDoiUng" value="<%=taiKhoanDoiUng %>"/>

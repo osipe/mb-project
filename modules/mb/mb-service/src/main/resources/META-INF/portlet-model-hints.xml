@@ -1,6 +1,19 @@
 <?xml version="1.0"?>
 
 <model-hints>
+	<model name="com.mb.model.CauHinhThuTienTruoc">
+		<field name="cauHinhThuTienTruocId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="nam" type="int" />
+		<field name="ngayTu" type="Date" />
+		<field name="ngayDen" type="Date" />
+		<field name="hoatDong" type="Boolean" />
+	</model>
 	<model name="com.mb.model.CongTacVien">
 		<field name="congTacVienId" type="long" />
 		<field name="companyId" type="long" />

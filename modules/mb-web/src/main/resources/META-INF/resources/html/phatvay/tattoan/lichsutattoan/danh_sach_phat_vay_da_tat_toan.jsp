@@ -1,3 +1,5 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
 <%@page import="quanly.portlet.phatvay.phatvay.PhatVayChecker"%>
@@ -17,7 +19,8 @@
 	Date ngayTatToanSearch = ngayTatToanSearchTime != 0 ? new Date(ngayTatToanSearchTime) : null;
 	String maCTVSearch = ParamUtil.getString(request, "maCTVSearch");
 	int count = PhatVayLocalServiceUtil.countBase("", maCTVSearch, "",null,null, null, null,ngayTatToanSearch,ngayTatToanSearch, "3");
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 	String arrayChecked = ParamUtil.getString(request, "arrayChecked");
 	String[] checked = StringUtil.split(arrayChecked, ",");
 	PhatVayChecker rowChecker = new PhatVayChecker(renderResponse, checked);

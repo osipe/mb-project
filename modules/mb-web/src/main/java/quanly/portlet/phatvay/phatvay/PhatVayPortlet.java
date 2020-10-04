@@ -4,12 +4,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.Portlet;
@@ -169,7 +170,8 @@ public class PhatVayPortlet extends MVCPortlet {
 		if (phatVayId > 0) {
 			try {
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-				DecimalFormat df = new DecimalFormat("###,###.###");
+				Locale localeEn = new Locale("en", "EN");
+			    NumberFormat df = NumberFormat.getInstance(localeEn);
 				PhatVay phatVay = PhatVayLocalServiceUtil.fetchPhatVay(phatVayId);
 				Date ngayIn = new Date();
 				if (phatVay != null) {

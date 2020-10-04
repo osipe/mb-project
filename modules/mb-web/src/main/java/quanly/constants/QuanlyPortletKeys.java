@@ -23,5 +23,6 @@ public class QuanlyPortletKeys {
 	public static final String phieu = "phieu";
 	public static final String so = "so";
 	public static final String themDauKy = "themdauky";
+	public static final String cauhinhthutientruoc = "cauhinhthutientruoc";
 
 }

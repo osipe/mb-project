@@ -1,3 +1,5 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <%@page import="quanly.constants.TrangThaiPhatVayEnum"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="com.mb.model.CongTacVien"%>
@@ -24,7 +26,8 @@
 	Date ngayThuTienDen = ngayThuTienDenTime != 0 ? new Date(ngayThuTienDenTime) : null;
 	String maCTVSearch = ParamUtil.getString(request, "maCTVSearch");
 	int count = CongTacVienLocalServiceUtil.countBase(maCTVSearch, "", "", "", 1);
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 %>
 <c:set value="<%=df %>" var="df"/>

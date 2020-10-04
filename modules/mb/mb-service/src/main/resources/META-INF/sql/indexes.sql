@@ -1,5 +1,7 @@
 create index IX_3C5078C4 on dm_cauhinhthutientet (nam);
 
+create index IX_20BD795C on dm_cauhinhthutientruoc (nam);
+
 create index IX_672B6A45 on dm_congtacvien (ma[$COLUMN_LENGTH:75$]);
 create index IX_34912B2D on dm_congtacvien (soCMND[$COLUMN_LENGTH:75$]);
 

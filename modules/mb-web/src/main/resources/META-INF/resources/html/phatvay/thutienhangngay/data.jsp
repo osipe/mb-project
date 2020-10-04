@@ -1,3 +1,5 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <%@page import="quanly.constants.TrangThaiPhatVayEnum"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="com.mb.model.CongTacVien"%>
@@ -22,7 +24,8 @@
 	Date ngayThuTienSearch = ngayThuTienTime != 0 ? new Date(ngayThuTienTime) : null;
 	String maCTVSearch = ParamUtil.getString(request, "maCTVSearch");
 	int count = CongTacVienLocalServiceUtil.countBase(maCTVSearch, "", "", "", 1);
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	Double tongTienVayAll = GetterUtil.getDouble("0");
 	Double tongGocNgayAll = GetterUtil.getDouble("0");
@@ -178,7 +181,7 @@
 			 		<span style="color:#ff3d00e8;font-weight: bold;">&nbsp;</span>
 			 	<%
 			 		for(PhatVay item : phatVays){
-			 			String ngayThuTruoc = "";
+			 			String ngayThuTruoc = "&nbsp;";
 			 			if(item.getTrangThai() == TrangThaiPhatVayEnum.CO_THU_TIEN_TRUOC.getValue() && item.getNgayThuTruocTu() != null && item.getNgayThuTruocDen() != null){
 			 				ngayThuTruoc = "Đã thu trước tết" + "( " + sdf.format(item.getNgayThuTruocTu()) + " - " + sdf.format(item.getNgayThuTruocDen()) + " )";
 			 			}

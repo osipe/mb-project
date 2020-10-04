@@ -349,6 +349,13 @@ public class PhatVayLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<com.mb.model.PhatVay> getPhatVayInIds(String ids)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return _phatVayLocalService.getPhatVayInIds(ids);
+	}
+
+	@Override
 	public java.util.List<com.mb.model.PhatVay> getPhatVaySaoKe(
 			String maCTV, int loaiPhatVay, java.util.Date createDate)
 		throws com.liferay.portal.kernel.exception.SystemException {

@@ -4,13 +4,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.Portlet;
@@ -37,7 +38,6 @@ import com.mb.service.PhatVayLocalServiceUtil;
 
 import quanly.constants.FileType;
 import quanly.constants.QuanlyPortletKeys;
-import quanly.dto.LichSuThuPhatChDTO;
 import quanly.dto.PhatVayDTO;
 import quanly.util.JasperReportUtil;
 
@@ -89,7 +89,8 @@ public class PhatVayNgayPortlet extends MVCPortlet {
 		Date ngayPhatVay = ngayPhatVayTime != 0 ? new Date(ngayPhatVayTime) : null;
 		List<CongTacVien> items = CongTacVienLocalServiceUtil.getCTVPhatVayNgay(ngayPhatVay, ngayPhatVay);
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		DecimalFormat df = new DecimalFormat("###,###.###");
+		Locale localeEn = new Locale("en", "EN");
+	    NumberFormat df = NumberFormat.getInstance(localeEn);
 		if (CollectionUtils.isNotEmpty(items)) {
 			try {
 				InputStream in = null;

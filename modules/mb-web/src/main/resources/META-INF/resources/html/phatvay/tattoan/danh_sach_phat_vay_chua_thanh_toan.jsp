@@ -1,3 +1,5 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <%@page import="quanly.portlet.phatvay.phatvay.PhatVayChecker"%>
 <%@page import="com.liferay.portal.kernel.util.StringUtil"%>
 <%@page import="com.liferay.portal.kernel.util.Validator"%>
@@ -15,9 +17,10 @@
 	String maCTVSearch = ParamUtil.getString(request, "maCTVSearch");
 	String soKUSearch = ParamUtil.getString(request, "soKUSearch");
 	int count = PhatVayLocalServiceUtil.countBase(soKUSearch, maCTVSearch, "", null,null,null, null,null,null, "1,4");
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	String arrayChecked = ParamUtil.getString(request, "arrayChecked");
+	String arrayChecked = ParamUtil.getString(request, "phatVayIdAdds");
 	String[] checked = StringUtil.split(arrayChecked, ",");
 	PhatVayChecker rowChecker = new PhatVayChecker(renderResponse, checked);
 %>
@@ -40,7 +43,7 @@
 			 		orderByType = "asc";
 			 	}
 			 	if(Validator.isNull(orderByCol)){
-			 		orderByCol = "maCTV";
+			 		orderByCol = "soKU";
 			 	}
 			 	boolean ascending = true;
 			 	if("desc".equals(orderByType)){

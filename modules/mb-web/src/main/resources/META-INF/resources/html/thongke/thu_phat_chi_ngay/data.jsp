@@ -1,3 +1,5 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <%@page import="com.mb.service.LichSuThuPhatChiLocalServiceUtil"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
@@ -19,7 +21,8 @@
 	int thanhToanSearch = ParamUtil.getInteger(request, "thanhToanSearch");
 	Date ngayBatDauTu = ngayBatDauTuSearchTime != 0 ? new Date(ngayBatDauTuSearchTime) : null;
 	List<CongTacVien> items  = CongTacVienLocalServiceUtil.getCTVThuPhatChi(maCTVSearch, ngayBatDauTu, ngayBatDauTu);
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     Double tongVon = GetterUtil.getDouble("0");
 	Double tongLai = GetterUtil.getDouble("0");

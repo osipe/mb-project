@@ -4,12 +4,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.Portlet;
@@ -96,7 +97,8 @@ public class SaoKeDuNoChiTietKHPortlet extends MVCPortlet {
 		Date ngaySearch = ngayTime != 0 ? new Date(ngayTime) : null;
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			DecimalFormat df = new DecimalFormat("###,###.###");
+			Locale localeEn = new Locale("en", "EN");
+		    NumberFormat df = NumberFormat.getInstance(localeEn);
 			resourceResponse.setContentType("application/DOCX");
 			resourceResponse.setProperty("Content-Disposition", "attachment; filename=\"TONG_HOP_SAO_KE_KH.docx\"");
 			in = getServletContext().getResourceAsStream("report/SAO_KE_DU_NO_CHI_TIET.docx");

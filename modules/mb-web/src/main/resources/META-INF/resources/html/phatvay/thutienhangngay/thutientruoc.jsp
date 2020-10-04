@@ -1,3 +1,6 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.mb.service.CauHinhThuTienTruocLocalServiceUtil"%>
+<%@page import="com.mb.model.CauHinhThuTienTruoc"%>
 <%@page import="com.liferay.portal.kernel.util.PropsUtil"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
@@ -12,8 +15,8 @@
 	String maCTVSearch =  ParamUtil.getString(request, "maCTVSearch");
 	CongTacVien ctv = CongTacVienLocalServiceUtil.fetchByMa(maCTVSearch);
 	int namNow = Calendar.getInstance().get(Calendar.YEAR);
-	String ngayBatDauThuTienCauHinh = PropsUtil.get("config.ngaythutientruocstart") + "/" + (namNow + 1);
-	String ngayKetThucThuTienCauHinh = PropsUtil.get("config.ngaythutientruocend") + "/" + (namNow + 1);
+	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	CauHinhThuTienTruoc cauHinh =  CauHinhThuTienTruocLocalServiceUtil.fetchByNam(namNow + 1);
 	if(ctv == null){
 	 	ctv = CongTacVienLocalServiceUtil.createCongTacVien(0L);
 	}
@@ -23,12 +26,12 @@
 	<table class="info table-pa5 aui-w100">
 			<tr>
 				<td>
-					<aui:input cssClass="input-date" name="ngayThuTienTu" value="<%=ngayBatDauThuTienCauHinh %>" label="Ngày thu tiền từ" placeholder="dd/MM/yyyy" onchange="searchURL();">
+					<aui:input readonly ="true" name="ngayThuTienTu" value="<%=cauHinh != null && cauHinh.getNgayTu() != null ? sdf.format(cauHinh.getNgayTu()) : "" %>" label="Ngày thu tiền từ" placeholder="dd/MM/yyyy" onchange="searchURL();">
 						<aui:validator name="required" errorMessage="Ngày thu tiền từ không được bỏ trống!" />
 					</aui:input>
 				</td>
 				<td>
-					<aui:input cssClass="input-date" name="ngayThuTienDen" value="<%=ngayKetThucThuTienCauHinh %>" label="Ngày thu tiền đến" placeholder="dd/MM/yyyy" onchange="searchURL();">
+					<aui:input readonly ="true" name="ngayThuTienDen" value="<%=cauHinh != null && cauHinh.getNgayDen() != null ? sdf.format(cauHinh.getNgayDen()) : "" %>" label="Ngày thu tiền đến" placeholder="dd/MM/yyyy" onchange="searchURL();">
 						<aui:validator name="required" errorMessage="Ngày thu tiền đến không được bỏ trống!" />
 					</aui:input>
 				</td>

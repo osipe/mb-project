@@ -149,8 +149,11 @@ public class PhatVayLocalServiceImpl extends PhatVayLocalServiceBaseImpl {
 		return phatVayFinder.countBase(soKU, maCTV, maKhachHang,createDateTu,createDateDen, ngayBatDauTu, ngayBatDauDen, ngayTatToanTu,
 				ngayTatToanDen, trangThai);
 	}
-	 	public List<PhatVay> getPhatVaySaoKe(String maCTV,int loaiPhatVay, Date createDate) throws SystemException {
+ 	public List<PhatVay> getPhatVaySaoKe(String maCTV,int loaiPhatVay, Date createDate) throws SystemException {
 		return phatVayFinder.getPhatVaySaoKe(maCTV,loaiPhatVay,createDate);
+	}
+ 	public List<PhatVay> getPhatVayInIds(String ids) throws SystemException {
+		return phatVayFinder.getPhatVayInIds(ids);
 	}
 
 }

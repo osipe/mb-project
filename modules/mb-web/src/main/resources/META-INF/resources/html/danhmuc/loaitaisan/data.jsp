@@ -1,3 +1,5 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <%@page import="com.mb.model.LoaiTaiSan"%>
 <%@page import="quanly.portlet.danhmuc.loaitaisan.LoaiTaiSanComparator"%>
 <%@page import="com.mb.service.LoaiTaiSanLocalServiceUtil"%>
@@ -15,7 +17,8 @@
 	String ghiChuSearch = ParamUtil.getString(request, "ghiChuSearch");
 	int hoatDongSearch = ParamUtil.getInteger(request, "hoatDongSearch");
 	int count = LoaiTaiSanLocalServiceUtil.countBase(maSearch, tenSearch, ghiChuSearch, hoatDongSearch);
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 %>
 <c:set value="<%=df %>" var="df"/>
 <liferay-portlet:renderURL varImpl="iteratorURL">

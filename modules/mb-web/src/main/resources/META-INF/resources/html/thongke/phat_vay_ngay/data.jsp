@@ -1,3 +1,5 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="quanly.portlet.phatvay.phatvay.PhatVayComparator"%>
@@ -19,7 +21,8 @@
 	long ngayPhatVaySearchTime = ParamUtil.getLong(request, "ngayPhatVaySearch");
 	Date ngayPhatVay = ngayPhatVaySearchTime != 0 ? new Date(ngayPhatVaySearchTime) : null;
 	List<CongTacVien> items = CongTacVienLocalServiceUtil.getCTVPhatVayNgay(ngayPhatVay, ngayPhatVay);
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 	Double tongTienPhatVay = GetterUtil.getDouble("0");
 %>
 <liferay-portlet:renderURL varImpl="iteratorURL">

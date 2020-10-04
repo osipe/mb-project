@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <custom-sql>
+	<sql id="com.mb.service.persistence.CauHinhThuTienTruocFinder.findBase">
+		<![CDATA[
+			SELECT  *
+			FROM dm_cauhinhthutientruoc
+			WHERE TRUE
+			AND (hoatdong = ?)
+			AND (nam = ?)
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.CauHinhThuTienTruocFinder.countBase">
+		<![CDATA[
+			SELECT  COUNT(1) as COUNT_VALUE
+			FROM dm_cauhinhthutientruoc
+			WHERE TRUE
+			AND (hoatdong = ?)
+			AND (nam = ?)
+		]]>
+	</sql>
 	<sql id="com.mb.service.persistence.MaSoTheoDoiFinder.findBase">
 			<![CDATA[
 				SELECT  mstc.*
@@ -135,7 +153,8 @@
 			AND (LOWER(diaChi) LIKE ?)
 		]]>
 	</sql>
-	<sql id="com.mb.service.persistence.CongTacVienFinder.getCTVPhatVayNgay">
+	<sql
+		id="com.mb.service.persistence.CongTacVienFinder.getCTVPhatVayNgay">
 		<![CDATA[
 			SELECT * 
 			FROM dm_congtacvien 
@@ -187,7 +206,8 @@
 			AND (LOWER(diaChi) LIKE ?)
 		]]>
 	</sql>
-	<sql id="com.mb.service.persistence.CongTacVienFinder.getCTVThuPhatChi">
+	<sql
+		id="com.mb.service.persistence.CongTacVienFinder.getCTVThuPhatChi">
 		<![CDATA[
 			select * 
 			from dm_congtacvien 

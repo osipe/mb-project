@@ -60,7 +60,31 @@ public class PhatVayFinderImpl extends PhatVayFinderBaseImpl implements PhatVayF
 	public static final String GET_PHATVAY_BY_NGAYTHUTRUOC_LAST = PhatVayFinder.class.getName()
 			+ ".getPhatVayByNgayThuTruocLast";
 	public static final String GET_PHATVAY_SAOKE = PhatVayFinder.class.getName() + ".getPhatVaySaoKe";
-
+	public static final String GET_PHATVAY_INIDS = PhatVayFinder.class.getName() + ".getPhatVayInIds";
+	@SuppressWarnings("unchecked")
+	public List<PhatVay> getPhatVayInIds(String ids) throws SystemException {
+		Session session = null;
+		try {
+			session = openSession();
+			String sql = _customSQL.get(getClass(), GET_PHATVAY_INIDS);
+			if (Validator.isNull(ids)) {
+				sql = sql.replace("AND phatVayId IN ?", "");
+			}
+			sql = _customSQL.replaceOrderBy(sql, null);
+			SQLQuery q = session.createSQLQuery(sql);
+			q.addEntity("PhatVay", PhatVayImpl.class);
+			QueryPos qPos = QueryPos.getInstance(q);
+			if (Validator.isNotNull(ids)) {
+				qPos.add("( " + ids + " ) ");
+			}
+			return (List<PhatVay>) QueryUtil.list(q, getDialect(), -1, -1);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SystemException(e);
+		} finally {
+			closeSession(session);
+		}
+	}
 	@SuppressWarnings("unchecked")
 	public List<PhatVay> getPhatVaySaoKe(String maCTV,int loaiPhatVay, Date createDate) throws SystemException {
 		Session session = null;

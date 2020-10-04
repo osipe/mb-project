@@ -4,10 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.Portlet;
@@ -17,6 +18,7 @@ import javax.portlet.ResourceResponse;
 
 import org.osgi.service.component.annotations.Component;
 
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
@@ -39,7 +41,6 @@ import fr.opensagres.xdocreport.document.IXDocReport;
 import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
 import fr.opensagres.xdocreport.template.IContext;
 import fr.opensagres.xdocreport.template.TemplateEngineKind;
-import fr.opensagres.xdocreport.template.formatter.FieldsMetadata;
 import quanly.constants.QuanlyPortletKeys;
 import quanly.constants.TrangThaiPhatVayEnum;
 import quanly.util.DocSo;
@@ -82,6 +83,8 @@ public class TatToanPortlet extends MVCPortlet {
 			kq = printPhieuTatToan(resourceRequest, resourceResponse, serviceContext);
 		} else if (resourceId.equals("getThongTinTatToan")) {
 			kq = getThongTinTatToan(resourceRequest, resourceResponse, serviceContext);
+		} else if (resourceId.equals("getTongTienTatToan")) {
+			kq = getTongTienTatToan(resourceRequest, resourceResponse, serviceContext);
 		}
 		PrintWriter writer = resourceResponse.getWriter();
 		writer.print(kq.toString());
@@ -94,30 +97,74 @@ public class TatToanPortlet extends MVCPortlet {
 			ServiceContext serviceContext) {
 		JSONObject kq = JSONFactoryUtil.createJSONObject();
 		try {
+			JSONArray arrayList = JSONFactoryUtil.createJSONArray();
 			String phatVayIds = ParamUtil.getString(resourceRequest, "phatVayIds");
+			Locale localeEn = new Locale("en", "EN");
+		    NumberFormat df = NumberFormat.getInstance(localeEn);
 			String[] array = StringUtil.split(phatVayIds, ",");
-			String tongLaiTatToanStr = "0";
-			String tongVonTatToanStr = "0";
-			Double tongLaiTatToan = Double.valueOf("0");
-			Double tongVonTatToan = Double.valueOf("0");
 			if (array != null && array.length > 0) {
 				for (int i = 0; i < array.length; i++) {
 					long phatVayId = Long.valueOf(array[i]);
 					if (phatVayId > 0) {
 						PhatVay phatVay = PhatVayLocalServiceUtil.fetchPhatVay(phatVayId);
-						tongLaiTatToan += ((phatVay.getThoiHan()
-								- (phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc())) * phatVay.getLaiNgay());
-						tongVonTatToan += phatVay.getDuNoGoc();
+						if(phatVay != null) {
+							
+							JSONObject jsonPhatVay = JSONFactoryUtil.createJSONObject(JSONFactoryUtil.looseSerialize(phatVay));
+							
+							int tongSoLanDaThu = phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc();
+							jsonPhatVay.put("tongSoLanDaThu",tongSoLanDaThu );
+							Double tongLaiTatToan =  (phatVay.getThoiHan() - tongSoLanDaThu) * phatVay.getLaiNgay();
+							Double tongVonTatToan = phatVay.getDuNoGoc();
+							jsonPhatVay.put("tongLaiTatToan",tongLaiTatToan);
+							jsonPhatVay.put("tongVonTatToan", tongVonTatToan);
+							jsonPhatVay.put("tongLaiTatToanStr", df.format(tongLaiTatToan));
+							jsonPhatVay.put("tongVonTatToanStr",  df.format(tongVonTatToan));
+							jsonPhatVay.put("soTienVayStr",  df.format(phatVay.getSoTienVay()));
+							jsonPhatVay.put("laiNgayStr",  df.format(phatVay.getLaiNgay()));
+							jsonPhatVay.put("gocNgayStr",  df.format(phatVay.getGocNgay()));
+							jsonPhatVay.put("gocNgayCuoiStr",  df.format(phatVay.getGocNgayCuoi()));
+							jsonPhatVay.put("duNoGocStr",  df.format(phatVay.getDuNoGoc()));
+							jsonPhatVay.put("hoTenKhachHang",  phatVay.getKhachHang() != null ? phatVay.getKhachHang().getHoTen() : "");
+							jsonPhatVay.put("hoTenCTV",  phatVay.getCongTacVien() != null ? phatVay.getCongTacVien().getHoTen() : "");
+							arrayList.put(jsonPhatVay);
+						}
 					}
 				}
 			}
-			DecimalFormat df = new DecimalFormat("###,###.###");
-			tongLaiTatToanStr = df.format(tongLaiTatToan);
-			tongVonTatToanStr = df.format(tongVonTatToan);
-			kq.put("tongLaiTatToanStr", tongLaiTatToanStr);
-			kq.put("tongVonTatToanStr", tongVonTatToanStr);
+			kq.put("data", arrayList);
+		} catch (Exception e) {
+			e.printStackTrace();
+			kq.putException(e);
+		}
+		return kq;
+	}
+	public JSONObject getTongTienTatToan(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
+			ServiceContext serviceContext) {
+		JSONObject kq = JSONFactoryUtil.createJSONObject();
+		try {
+			String phatVayIds = ParamUtil.getString(resourceRequest, "phatVayIds");
+			Locale localeEn = new Locale("en", "EN");
+		    NumberFormat df = NumberFormat.getInstance(localeEn);
+			String[] array = StringUtil.split(phatVayIds, ",");
+			Double tongLaiTatToan =  0.0;
+			Double tongVonTatToan = 0.0;
+			if (array != null && array.length > 0) {
+				for (int i = 0; i < array.length; i++) {
+					long phatVayId = Long.valueOf(array[i]);
+					if (phatVayId > 0) {
+						PhatVay phatVay = PhatVayLocalServiceUtil.fetchPhatVay(phatVayId);
+						if(phatVay != null) {
+							int tongSoLanDaThu = phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc();
+							tongLaiTatToan +=  ((phatVay.getThoiHan() - tongSoLanDaThu) * phatVay.getLaiNgay());
+							tongVonTatToan += phatVay.getDuNoGoc();
+						}
+					}
+				}
+			}
 			kq.put("tongLaiTatToan", tongLaiTatToan);
 			kq.put("tongVonTatToan", tongVonTatToan);
+			kq.put("tongLaiTatToanStr", df.format(tongLaiTatToan));
+			kq.put("tongVonTatToanStr", df.format(tongVonTatToan));
 		} catch (Exception e) {
 			e.printStackTrace();
 			kq.putException(e);
@@ -150,7 +197,8 @@ public class TatToanPortlet extends MVCPortlet {
 			try {
 				CongTacVien ctv = CongTacVienLocalServiceUtil.fetchByMa(maCTV);
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-				DecimalFormat df = new DecimalFormat("###,###.###");
+				Locale localeEn = new Locale("en", "EN");
+			    NumberFormat df = NumberFormat.getInstance(localeEn);
 				resourceResponse.setContentType("application/DOCX");
 				resourceResponse.setProperty("Content-Disposition",
 						"attachment; filename=\"PHIEU_THU_TAT_TOAN_" + maCTV.toUpperCase() + ".docx\"");
@@ -181,75 +229,6 @@ public class TatToanPortlet extends MVCPortlet {
 			}
 		}
 		outStream.flush();
-		return kq;
-	}
-
-	public JSONObject inPhieuThu(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
-			ServiceContext serviceContext) throws IOException {
-		JSONObject kq = JSONFactoryUtil.createJSONObject();
-		int soNgayTatToan = ParamUtil.getInteger(resourceRequest, "soNgayTatToan");
-		long phatVayId = ParamUtil.getLong(resourceRequest, "phatVayId");
-		InputStream in = null;
-		OutputStream outStream = resourceResponse.getPortletOutputStream();
-		if (phatVayId > 0) {
-			try {
-				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-				DecimalFormat df = new DecimalFormat("###,###.###");
-				PhatVay phatVay = PhatVayLocalServiceUtil.fetchPhatVay(phatVayId);
-				Date ngayIn = new Date();
-				if (phatVay != null) {
-					Double tongSoTienPhaiThu = GetterUtil.getDouble(0);
-					Double soTienGocPhaiThu = GetterUtil.getDouble(0);
-					Double soTienLaiPhaiThu = GetterUtil.getDouble(0);
-					Double duNoGocTonSau = GetterUtil.getDouble(0);
-					if (phatVay.getSoLanDaThu() + soNgayTatToan < phatVay.getThoiHan()) {
-						soTienGocPhaiThu = phatVay.getGocNgay() * soNgayTatToan;
-						soTienLaiPhaiThu = phatVay.getLaiNgay() * soNgayTatToan;
-						tongSoTienPhaiThu = soTienGocPhaiThu + soTienLaiPhaiThu;
-						duNoGocTonSau = phatVay.getDuNoGoc() - soTienGocPhaiThu;
-					} else if (phatVay.getSoLanDaThu() + soNgayTatToan == phatVay.getThoiHan()) {
-						soTienGocPhaiThu = phatVay.getDuNoGoc();
-						soTienLaiPhaiThu = phatVay.getLaiNgay() * soNgayTatToan;
-						tongSoTienPhaiThu = soTienGocPhaiThu + soTienLaiPhaiThu;
-					}
-
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				kq.putException(e);
-			} finally {
-			}
-		}
-		return kq;
-	}
-
-	public JSONObject printPhieuLichSuTatToan(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
-			ServiceContext serviceContext) throws IOException {
-		JSONObject kq = JSONFactoryUtil.createJSONObject();
-		String phatVayIds = ParamUtil.getString(resourceRequest, "phatVayIds");
-		String maCTV = ParamUtil.getString(resourceRequest, "maCTV");
-		InputStream in = null;
-		OutputStream outStream = resourceResponse.getPortletOutputStream();
-		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			DecimalFormat df = new DecimalFormat("###,###.###");
-			resourceResponse.setContentType("application/DOCX");
-			resourceResponse.setProperty("Content-Disposition", "attachment; filename=\"123.docx\"");
-			in = getServletContext().getResourceAsStream("report/123.docx");
-
-			IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Velocity);
-			IContext iContext = report.createContext();
-			FieldsMetadata metadata = new FieldsMetadata();
-			metadata.addFieldAsList("phatVays.soKU");
-			report.setFieldsMetadata(metadata);
-			// iContext.put("phatVays", phatVays);
-			report.process(iContext, outStream);
-			outStream.flush();
-		} catch (Exception e) {
-			e.printStackTrace();
-			kq.putException(e);
-		} finally {
-		}
 		return kq;
 	}
 

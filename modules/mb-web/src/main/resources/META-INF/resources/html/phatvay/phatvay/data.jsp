@@ -90,7 +90,7 @@
 			 	<br/>
 			 	Khách hàng : <span style="color:#ff3d00e8" >${not empty  phatVay.khachHang ? phatVay.khachHang.hoTen : ''}</span>
 			 	<br/>
-			 	<span class="note-span">(Mã : ${phatVay.maKhachHang})</span>
+			 	<span class="note-span">(Mã : ${phatVay.maKhachHang} - Số CMND :  ${not empty  phatVay.khachHang ? phatVay.khachHang.soCMND : ''})</span>
 			 	<br/>
 			 	Cộng tác viên : <span style="color:#ff3d00e8" >${not empty  phatVay.congTacVien ? phatVay.congTacVien.hoTen : ''}</span>
 			 	<br/>

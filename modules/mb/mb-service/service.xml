@@ -424,6 +424,26 @@
 			<finder-column name="hoatDong" />
 		</finder>
 	</entity>
+	<entity local-service="true" name="CauHinhThuTienTruoc"
+		remote-service="true" uuid="false" table="dm_cauhinhthutientruoc">
+		<column name="cauHinhThuTienTruocId" primary="true" type="long" />
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		<column name="nam" type="int" />
+		<column name="ngayTu" type="Date" />
+		<column name="ngayDen" type="Date" />
+		<column name="hoatDong" type="Boolean" />
+		<order by="asc">
+			<order-column name="nam" />
+		</order>
+		<finder name="Nam" return-type="CauHinhThuTienTruoc">
+			<finder-column name="nam" />
+		</finder>
+	</entity>
 	<exceptions>
 		<exception>TrungDuLieuDauKy</exception>
 		<exception>TrungSoHieu</exception>

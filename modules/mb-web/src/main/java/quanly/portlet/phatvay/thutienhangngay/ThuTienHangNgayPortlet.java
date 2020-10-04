@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -581,7 +580,8 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 		if (ngayThuTienTu != null && ngayThuTienDen != null) {
 			try {
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-				DecimalFormat df = new DecimalFormat("###,###.###");
+				Locale localeEn = new Locale("en", "EN");
+			    NumberFormat df = NumberFormat.getInstance(localeEn);
 				List<CongTacVien> items = CongTacVienLocalServiceUtil.findBase(maCTVSearch, "", "", "", 1, -1, -1,
 						null);
 				List<CongTacVienDTO> congTacVienDTOs = new ArrayList<CongTacVienDTO>();

@@ -1,3 +1,5 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <%@page import="org.apache.commons.collections.CollectionUtils"%>
 <%@page import="com.mb.service.LichSuThuPhatChiLocalServiceUtil"%>
 <%@page import="com.mb.model.LichSuThuPhatChi"%>
@@ -33,7 +35,8 @@
 	Date ngay = ngayBatDauTuSearchTime > 0 ? new Date(ngayBatDauTuSearchTime) : null;
 	List<CongTacVien> items = CongTacVienLocalServiceUtil.getCTVSaoKe(maCTVSearch,ngay);
 	int count = items.size();
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 	Double tongDuNoToiDaAll = GetterUtil.getDouble("0");
 	Double tongTienVayAll = GetterUtil.getDouble("0");
 	Double tongGocNgayAll = GetterUtil.getDouble("0");

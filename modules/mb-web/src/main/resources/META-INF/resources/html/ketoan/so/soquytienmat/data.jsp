@@ -1,3 +1,5 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <%@page import="com.liferay.portal.kernel.util.PropsUtil"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -36,7 +38,8 @@
 		Calendar calDen = Calendar.getInstance();
 		calDen.set(namSearch, thangSearch - 1,CalendarUtil.getDaysInMonth(calTu));
 		Date ngayChungTuDen = calDen.getTime();
-		DecimalFormat df = new DecimalFormat("###,###.###");
+		Locale localeEn = new Locale("en", "EN");
+	    NumberFormat df = NumberFormat.getInstance(localeEn);
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		List<DsPhieuTaiKhoan> dsPhieus = DsPhieuTaiKhoanLocalServiceUtil.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanTienMat.getTaiKhoanDoiUngId(),"", ngayChungTuTu, ngayChungTuDen, 1, -1, -1, null);
 		LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanTienMat.getTaiKhoanDoiUngId(), namSearch, thangSearch);

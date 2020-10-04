@@ -23,6 +23,9 @@ import aQute.bnd.annotation.ProviderType;
 @ProviderType
 public interface PhatVayFinder {
 
+	public java.util.List<com.mb.model.PhatVay> getPhatVayInIds(String ids)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public java.util.List<com.mb.model.PhatVay> getPhatVaySaoKe(
 			String maCTV, int loaiPhatVay, java.util.Date createDate)
 		throws com.liferay.portal.kernel.exception.SystemException;

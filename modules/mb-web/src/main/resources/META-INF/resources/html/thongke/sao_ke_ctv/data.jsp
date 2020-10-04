@@ -1,3 +1,5 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <%@page import="com.mb.service.LichSuThuPhatChiLocalServiceUtil"%>
 <%@page import="com.mb.model.LichSuThuPhatChi"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
@@ -34,7 +36,8 @@
 	Double tongGocDaThuAll = GetterUtil.getDouble("0");
 	Double tongLaiDaThuAll = GetterUtil.getDouble("0");
 	Double tongDuNoGocAll = GetterUtil.getDouble("0");
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 %>
 <liferay-portlet:renderURL varImpl="iteratorURL">
 	<portlet:param name="mvcPath" value="/html/thongke/sao_ke_ctv/data.jsp" />

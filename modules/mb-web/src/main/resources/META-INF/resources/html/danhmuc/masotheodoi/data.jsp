@@ -1,3 +1,5 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <%@page import="quanly.portlet.danhmuc.masotheodoi.MaSoTheoDoiComparator"%>
 <%@page import="com.mb.model.MaSoTheoDoi"%>
 <%@page import="com.mb.service.MaSoTheoDoiLocalServiceUtil"%>
@@ -14,7 +16,8 @@
 	String dienGiaiSearch = ParamUtil.getString(request, "dienGiaiSearch");
 	int hoatDongSearch = ParamUtil.getInteger(request, "hoatDongSearch");
 	int count = MaSoTheoDoiLocalServiceUtil.countBase(maSearch, dienGiaiSearch, hoatDongSearch);
-	DecimalFormat df = new DecimalFormat("###,###.###");
+	Locale localeEn = new Locale("en", "EN");
+    NumberFormat df = NumberFormat.getInstance(localeEn);
 %>
 <liferay-portlet:renderURL varImpl="iteratorURL">
 	<portlet:param name="maSearch" value="<%= maSearch %>" />
