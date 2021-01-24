@@ -91,6 +91,7 @@ public class PhatVayLocalServiceImpl extends PhatVayLocalServiceBaseImpl {
 		lichSuThuPhatChi.setPhatVayId(phatVay.getPhatVayId());
 		lichSuThuPhatChi.setMaCTV(phatVay.getMaCTV());
 		lichSuThuPhatChi.setLoai(1);
+		lichSuThuPhatChi.setChiNhanhId(phatVay.getChiNhanhId());
 		lichSuThuPhatChi.setSoTien(phatVay.getSoTienVay());
 		lichSuThuPhatChi.setTongSoTienLaiTra(Double.valueOf(0));
 		lichSuThuPhatChi.setTongSoTienVonTra(Double.valueOf(0));
@@ -149,11 +150,14 @@ public class PhatVayLocalServiceImpl extends PhatVayLocalServiceBaseImpl {
 		return phatVayFinder.countBase(soKU, maCTV, maKhachHang,createDateTu,createDateDen, ngayBatDauTu, ngayBatDauDen, ngayTatToanTu,
 				ngayTatToanDen, trangThai);
 	}
- 	public List<PhatVay> getPhatVaySaoKe(String maCTV,int loaiPhatVay, Date createDate) throws SystemException {
-		return phatVayFinder.getPhatVaySaoKe(maCTV,loaiPhatVay,createDate);
+ 	public List<PhatVay> getPhatVaySaoKe(long chiNhanhId, String maCTV,int loaiPhatVay, Date createDate) throws SystemException {
+		return phatVayFinder.getPhatVaySaoKe(chiNhanhId, maCTV,loaiPhatVay,createDate);
 	}
  	public List<PhatVay> getPhatVayInIds(String ids) throws SystemException {
 		return phatVayFinder.getPhatVayInIds(ids);
+	}
+ 	public void updateChiNhanh(String maCTV, long chiNhanhId) throws SystemException {
+		phatVayFinder.updateChiNhanh(maCTV,chiNhanhId);
 	}
 
 }

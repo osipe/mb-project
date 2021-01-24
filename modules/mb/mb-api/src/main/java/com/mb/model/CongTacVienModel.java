@@ -191,6 +191,35 @@ public interface CongTacVienModel
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
+	 * Returns the chi nhanh ID of this cong tac vien.
+	 *
+	 * @return the chi nhanh ID of this cong tac vien
+	 */
+	public long getChiNhanhId();
+
+	/**
+	 * Sets the chi nhanh ID of this cong tac vien.
+	 *
+	 * @param chiNhanhId the chi nhanh ID of this cong tac vien
+	 */
+	public void setChiNhanhId(long chiNhanhId);
+
+	/**
+	 * Returns the ten chi nhanh of this cong tac vien.
+	 *
+	 * @return the ten chi nhanh of this cong tac vien
+	 */
+	@AutoEscape
+	public String getTenChiNhanh();
+
+	/**
+	 * Sets the ten chi nhanh of this cong tac vien.
+	 *
+	 * @param tenChiNhanh the ten chi nhanh of this cong tac vien
+	 */
+	public void setTenChiNhanh(String tenChiNhanh);
+
+	/**
 	 * Returns the ma of this cong tac vien.
 	 *
 	 * @return the ma of this cong tac vien

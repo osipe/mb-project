@@ -1,5 +1,20 @@
 package quanly.portlet.thongke.thu_phat_chi_ngay;
 
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.mb.model.CongTacVien;
+import com.mb.model.LichSuThuPhatChi;
+import com.mb.service.CongTacVienLocalServiceUtil;
+import com.mb.service.LichSuThuPhatChiLocalServiceUtil;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -21,21 +36,6 @@ import javax.portlet.ResourceResponse;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.osgi.service.component.annotations.Component;
-
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
-import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.util.WebKeys;
-import com.mb.model.CongTacVien;
-import com.mb.model.LichSuThuPhatChi;
-import com.mb.service.CongTacVienLocalServiceUtil;
-import com.mb.service.LichSuThuPhatChiLocalServiceUtil;
 
 import fr.opensagres.xdocreport.document.IXDocReport;
 import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
@@ -99,6 +99,7 @@ public class ThuPhatChiNgayPortlet extends MVCPortlet {
 		long ngayXuLyTime = ParamUtil.getLong(resourceRequest, "ngayXuLyTime");
 		Date ngayThuTien = ngayThuTienTime != 0 ? new Date(ngayThuTienTime) : null;
 		Date ngayXuLy = ngayXuLyTime != 0 ? new Date(ngayXuLyTime) : null;
+		long chiNhanhId = ParamUtil.getLong(resourceRequest, "chiNhanhId");
 		String maCTV = ParamUtil.getString(resourceRequest, "maCTV");
 		InputStream in = null;
 		OutputStream outStream = resourceResponse.getPortletOutputStream();
@@ -109,24 +110,24 @@ public class ThuPhatChiNgayPortlet extends MVCPortlet {
 			List<CongTacVien> items = CongTacVienLocalServiceUtil.getCTVThuPhatChi(maCTV, ngayThuTien, ngayThuTien);
 			for (CongTacVien ctv : items) {
 				List<Object[]> lichSuThuPhatChDTOs = LichSuThuPhatChiLocalServiceUtil
-						.getLichSuThuPhatChi_MaCTV_Createdate(maCTV, ngayThuTien);
+						.getLichSuThuPhatChi_MaCTV_Createdate(ctv.getMa(), ngayThuTien);
 				for (Object[] item : lichSuThuPhatChDTOs) {
 					if (GetterUtil.getInteger(item[0]) == 3) {
 						String ngayXuLyStr = GetterUtil.getString(item[1]);
 						if (ngayXuLy == null || (ngayXuLy != null && sdf.format(ngayXuLy).equals(ngayXuLyStr))) {
 							Double tongVonTra = GetterUtil.getDouble(item[2]);
 							Double tongLaiTra = GetterUtil.getDouble(item[3]);
-							Double soTienVay = LichSuThuPhatChiLocalServiceUtil.getSoTienVay_CTV_TAINGAY(ctv.getMa(),
-									ngayThuTien);
-							Object[] tongTienDaTra = LichSuThuPhatChiLocalServiceUtil
-									.getTongLichSuTraTien_CTV_TAINGAY(ctv.getMa(), ngayThuTien, sdf.parse(ngayXuLyStr));
+							Double soTienVay = LichSuThuPhatChiLocalServiceUtil.getSoTienVay_CTV_TAINGAY(chiNhanhId,
+									ctv.getMa(), ngayThuTien);
+							Object[] tongTienDaTra = LichSuThuPhatChiLocalServiceUtil.getTongLichSuTraTien_CTV_TAINGAY(
+									chiNhanhId, ctv.getMa(), ngayThuTien, sdf.parse(ngayXuLyStr), 0);
 
-							Double tongduNoGoc = soTienVay - GetterUtil.getDouble(tongTienDaTra[2]);
+							Double tongduNoGoc = soTienVay - GetterUtil.getDouble(tongTienDaTra[2], 0.0);
 
 							CongTacVienDTO ctvDTO = new CongTacVienDTO(
-									ctv.getMa() + "/" + new SimpleDateFormat("ddMMyyyy").format(sdf.parse(ngayXuLyStr)), ctv.getMa(),
-									ctv.getHoTen(), ctv.getDiaChi(), df.format(tongVonTra), df.format(tongLaiTra),
-									df.format(tongLaiTra + tongVonTra),
+									ctv.getMa() + "/" + new SimpleDateFormat("ddMMyyyy").format(sdf.parse(ngayXuLyStr)),
+									ctv.getMa(), ctv.getHoTen(), ctv.getDiaChi(), df.format(tongVonTra),
+									df.format(tongLaiTra), df.format(tongLaiTra + tongVonTra),
 									DocSo.docSo(GetterUtil.getLong(tongLaiTra + tongVonTra)), df.format(tongduNoGoc),
 									"", "", "", "", null, null, ngayXuLyStr.substring(0, 2),
 									ngayXuLyStr.substring(3, 5), ngayXuLyStr.substring(6, 10));
@@ -174,7 +175,7 @@ public class ThuPhatChiNgayPortlet extends MVCPortlet {
 		List<CongTacVien> items = CongTacVienLocalServiceUtil.getCTVThuPhatChi(maCTV, ngayBatDauTu, ngayBatDauTu);
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Locale localeEn = new Locale("en", "EN");
-	    NumberFormat df = NumberFormat.getInstance(localeEn);
+		NumberFormat df = NumberFormat.getInstance(localeEn);
 		if (CollectionUtils.isNotEmpty(items)) {
 			try {
 				InputStream in = null;
@@ -242,8 +243,7 @@ public class ThuPhatChiNgayPortlet extends MVCPortlet {
 						}
 						if ((tienVonTT + tienLaiTT) > 0) {
 							LichSuThuPhatChDTO tatToan = new LichSuThuPhatChDTO("", PropsUtil.get("phat-tat-toan"),
-									ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", "0",
-									tienVonTT > 0 ? df.format(tienVonTT) : "0",
+									"#####", "0", tienVonTT > 0 ? df.format(tienVonTT) : "0",
 									tienLaiTT > 0 ? df.format(tienLaiTT) : "0", df.format(tienLaiTT + tienVonTT), 2);
 							lichSuThuPhatChDTOs.add(tatToan);
 						}
@@ -257,8 +257,7 @@ public class ThuPhatChiNgayPortlet extends MVCPortlet {
 						}
 						if ((tienVonThuTruoc + tienLaiThuTruoc) > 0) {
 							LichSuThuPhatChDTO thuTruoc = new LichSuThuPhatChDTO("", PropsUtil.get("thu-tien-truoc"),
-									ngayBatDauTu != null ? sdf.format(ngayBatDauTu) : "", "0",
-									tienVonThuTruoc > 0 ? df.format(tienVonThuTruoc) : "0",
+									"#####", "0", tienVonThuTruoc > 0 ? df.format(tienVonThuTruoc) : "0",
 									tienLaiThuTruoc > 0 ? df.format(tienLaiThuTruoc) : "0",
 									df.format(tienVonThuTruoc + tienLaiThuTruoc), 4);
 							lichSuThuPhatChDTOs.add(thuTruoc);

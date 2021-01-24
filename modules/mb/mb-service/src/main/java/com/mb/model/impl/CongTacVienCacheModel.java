@@ -66,7 +66,7 @@ public class CongTacVienCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(35);
 
 		sb.append("{congTacVienId=");
 		sb.append(congTacVienId);
@@ -82,6 +82,10 @@ public class CongTacVienCacheModel
 		sb.append(createDate);
 		sb.append(", modifiedDate=");
 		sb.append(modifiedDate);
+		sb.append(", chiNhanhId=");
+		sb.append(chiNhanhId);
+		sb.append(", tenChiNhanh=");
+		sb.append(tenChiNhanh);
 		sb.append(", ma=");
 		sb.append(ma);
 		sb.append(", hoTen=");
@@ -131,6 +135,15 @@ public class CongTacVienCacheModel
 		}
 		else {
 			congTacVienImpl.setModifiedDate(new Date(modifiedDate));
+		}
+
+		congTacVienImpl.setChiNhanhId(chiNhanhId);
+
+		if (tenChiNhanh == null) {
+			congTacVienImpl.setTenChiNhanh("");
+		}
+		else {
+			congTacVienImpl.setTenChiNhanh(tenChiNhanh);
 		}
 
 		if (ma == null) {
@@ -190,6 +203,9 @@ public class CongTacVienCacheModel
 		userName = objectInput.readUTF();
 		createDate = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
+
+		chiNhanhId = objectInput.readLong();
+		tenChiNhanh = objectInput.readUTF();
 		ma = objectInput.readUTF();
 		hoTen = objectInput.readUTF();
 		soCMND = objectInput.readUTF();
@@ -222,6 +238,15 @@ public class CongTacVienCacheModel
 
 		objectOutput.writeLong(createDate);
 		objectOutput.writeLong(modifiedDate);
+
+		objectOutput.writeLong(chiNhanhId);
+
+		if (tenChiNhanh == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(tenChiNhanh);
+		}
 
 		if (ma == null) {
 			objectOutput.writeUTF("");
@@ -272,6 +297,8 @@ public class CongTacVienCacheModel
 	public String userName;
 	public long createDate;
 	public long modifiedDate;
+	public long chiNhanhId;
+	public String tenChiNhanh;
 	public String ma;
 	public String hoTen;
 	public String soCMND;

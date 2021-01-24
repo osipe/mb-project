@@ -104,7 +104,8 @@
 		<!-- Ngay thao tác thu-chi tiền -->
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
-
+		
+		<column name="chiNhanhId" type="long" />
 		<column name="phatVayId" type="long" />
 		<column name="maCTV" type="String" />
 		<column name="soTien" type="Double" />
@@ -141,6 +142,7 @@
 		<column name="ngayTao" type="Date" />
 		<column name="modifiedDate" type="Date" />
 
+		<column name="chiNhanhId" type="long" />
 		<column name="maCTV" type="String" />
 		<column name="maKhachHang" type="String" />
 
@@ -150,6 +152,7 @@
 		<!-- Ngay bắt đầu thu lãi -->
 		<column name="ngayBatDau" type="Date" />
 		<column name="ngayKetThuc" type="Date" />
+	<!-- 	1 : Thế chấp - 2 : Tín chấp -->
 		<column name="loaiPhatVay" type="int" />
 		<column name="soLanDaThu" type="int" />
 		<column name="ngayDaThuCuoi" type="Date" />
@@ -272,6 +275,9 @@
 		<column name="userName" type="String" />
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
+		
+		<column name="chiNhanhId" type="long" />
+		<column name="tenChiNhanh" type="String" />
 		<column name="ma" type="String" />
 		<column name="hoTen" type="String" />
 		<column name="soCMND" type="String" />
@@ -288,6 +294,13 @@
 		</finder>
 		<finder name="SoCMND" return-type="CongTacVien">
 			<finder-column name="soCMND" />
+		</finder>
+		<finder name="ChiNhanh_HoatDong" return-type="Collection">
+			<finder-column name="chiNhanhId" />
+			<finder-column name="hoatDong" />
+		</finder>
+		<finder name="ChiNhanh" return-type="Collection">
+			<finder-column name="chiNhanhId" />
 		</finder>
 	</entity>
 	<entity local-service="true" name="KhachHang"
@@ -316,6 +329,29 @@
 		</finder>
 		<finder name="SoCMND" return-type="KhachHang">
 			<finder-column name="soCMND" />
+		</finder>
+	</entity>
+	<entity local-service="true" name="ChiNhanh"
+		remote-service="true" uuid="false" table="dm_chinhanh">
+		<column name="chiNhanhId" primary="true" type="long" />
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<column name="ma" type="String" />
+		<column name="ten" type="String" />
+		<column name="hoatDong" type="Boolean" />
+		<order by="asc">
+			<order-column name="chiNhanhId" />
+		</order>
+		<finder name="Ma" return-type="ChiNhanh">
+			<finder-column name="ma" />
+		</finder>
+		<finder name="HoatDong" return-type="Collection">
+			<finder-column name="hoatDong" />
 		</finder>
 	</entity>
 	<entity local-service="true" name="MaSoThuChi"
@@ -437,7 +473,7 @@
 		<column name="ngayTu" type="Date" />
 		<column name="ngayDen" type="Date" />
 		<column name="hoatDong" type="Boolean" />
-		<order by="asc">
+		<order by="desc">
 			<order-column name="nam" />
 		</order>
 		<finder name="Nam" return-type="CauHinhThuTienTruoc">

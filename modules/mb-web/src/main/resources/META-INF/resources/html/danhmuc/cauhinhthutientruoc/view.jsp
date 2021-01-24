@@ -9,10 +9,6 @@
 <%@ include file="/html/danhmuc/init.jsp"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%
-	Date now = new Date();
-	int nam = GetterUtil.getInteger(new SimpleDateFormat("yyyy").format(now));
-%>
 <portlet:renderURL var="addURL"
 	windowState="<%=LiferayWindowState.POP_UP.toString()%>">
 	<portlet:param name="mvcPath" value="/html/danhmuc/cauhinhthutientruoc/add.jsp" />
@@ -35,19 +31,6 @@
 	<div id="idSearchAdvance" class="collapse">
 		<table class="info table-pa5 aui-w100">
 			<tr>
-				<td>
-					<aui:select name="namSearch" label="Cộng tác viên" cssClass="input-select2" onchange="search();">
-						 <aui:option value="0" label="Chọn" />
-						 <%
-						for (int i = nam - 5; i <= nam + 5; i++) {
-					%>
-					<aui:option value="<%=i%>" label='<%="Năm " + i%>'
-						selected="<%=i == nam + 1%>" />
-					<%
-						}
-					%>
-					</aui:select>
-				</td>
 				<td>
 					<aui:select name="hoatDongSearch" label="Hoạt động"  onchange="search();">
 						 <aui:option value="0" label="Tất cả" />
@@ -81,7 +64,6 @@ AUI().ready(['aui-base'], function(A) {
 	Liferay.provide(window,'search', function(){
 		loadingMask.show();
 		var data = {
-			'<portlet:namespace/>namSearch' : A.one('#<portlet:namespace />namSearch').val(),
         	'<portlet:namespace/>hoatDongSearch' : A.one('#<portlet:namespace />hoatDongSearch').val()
         }
 		contentDataTable.plug(A.Plugin.IO,{
@@ -117,6 +99,7 @@ AUI().ready(['aui-base'], function(A) {
 		if(dialog){
 			dialog.destroy();
 		}
+		search();
 	});
 	Liferay.provide(window,'thongBao', function(){
 		toastr.success('Thêm cấu hình thành công', 'Thông báo!');

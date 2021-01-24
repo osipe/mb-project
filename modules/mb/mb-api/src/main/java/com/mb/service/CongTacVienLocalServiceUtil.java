@@ -82,6 +82,13 @@ public class CongTacVienLocalServiceUtil {
 		return getService().countBase(ma, hoTen, soCMND, diaChi, hoatDong);
 	}
 
+	public static int countCTVSaoKe(
+			long chiNhanhId, String maCTV, java.util.Date ngayTaoTu)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return getService().countCTVSaoKe(chiNhanhId, maCTV, ngayTaoTu);
+	}
+
 	/**
 	 * Creates a new cong tac vien with the primary key. Does not add the cong tac vien to the database.
 	 *
@@ -296,10 +303,19 @@ public class CongTacVienLocalServiceUtil {
 	}
 
 	public static java.util.List<com.mb.model.CongTacVien> getCTVSaoKe(
-			String maCTV, java.util.Date ngayTaoTu)
+			long chiNhanhId, String maCTV, java.util.Date ngayTaoTu)
 		throws com.liferay.portal.kernel.exception.SystemException {
 
-		return getService().getCTVSaoKe(maCTV, ngayTaoTu);
+		return getService().getCTVSaoKe(chiNhanhId, maCTV, ngayTaoTu);
+	}
+
+	public static java.util.List<com.mb.model.CongTacVien> getCTVSaoKePhanTrang(
+			long chiNhanhId, String maCTV, java.util.Date ngayTaoTu, int start,
+			int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return getService().getCTVSaoKePhanTrang(
+			chiNhanhId, maCTV, ngayTaoTu, start, end);
 	}
 
 	public static java.util.List<com.mb.model.CongTacVien> getCTVThuPhatChi(

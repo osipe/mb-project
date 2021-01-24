@@ -76,15 +76,16 @@ public class PhatVayModelImpl
 		{"phatVayId", Types.BIGINT}, {"companyId", Types.BIGINT},
 		{"groupId", Types.BIGINT}, {"userId", Types.BIGINT},
 		{"userName", Types.VARCHAR}, {"ngayTao", Types.TIMESTAMP},
-		{"modifiedDate", Types.TIMESTAMP}, {"maCTV", Types.VARCHAR},
-		{"maKhachHang", Types.VARCHAR}, {"soKU", Types.VARCHAR},
-		{"createDate", Types.TIMESTAMP}, {"ngayBatDau", Types.TIMESTAMP},
-		{"ngayKetThuc", Types.TIMESTAMP}, {"loaiPhatVay", Types.INTEGER},
-		{"soLanDaThu", Types.INTEGER}, {"ngayDaThuCuoi", Types.TIMESTAMP},
-		{"soTienVay", Types.DOUBLE}, {"thoiHan", Types.INTEGER},
-		{"laiSuatVay", Types.DOUBLE}, {"gocNgay", Types.DOUBLE},
-		{"laiNgay", Types.DOUBLE}, {"gocNgayCuoi", Types.DOUBLE},
-		{"soNgayThuTruoc", Types.INTEGER}, {"ngayThuTruocTu", Types.TIMESTAMP},
+		{"modifiedDate", Types.TIMESTAMP}, {"chiNhanhId", Types.BIGINT},
+		{"maCTV", Types.VARCHAR}, {"maKhachHang", Types.VARCHAR},
+		{"soKU", Types.VARCHAR}, {"createDate", Types.TIMESTAMP},
+		{"ngayBatDau", Types.TIMESTAMP}, {"ngayKetThuc", Types.TIMESTAMP},
+		{"loaiPhatVay", Types.INTEGER}, {"soLanDaThu", Types.INTEGER},
+		{"ngayDaThuCuoi", Types.TIMESTAMP}, {"soTienVay", Types.DOUBLE},
+		{"thoiHan", Types.INTEGER}, {"laiSuatVay", Types.DOUBLE},
+		{"gocNgay", Types.DOUBLE}, {"laiNgay", Types.DOUBLE},
+		{"gocNgayCuoi", Types.DOUBLE}, {"soNgayThuTruoc", Types.INTEGER},
+		{"ngayThuTruocTu", Types.TIMESTAMP},
 		{"ngayThuTruocDen", Types.TIMESTAMP}, {"ngayTatToan", Types.TIMESTAMP},
 		{"trangThai", Types.INTEGER}
 	};
@@ -100,6 +101,7 @@ public class PhatVayModelImpl
 		TABLE_COLUMNS_MAP.put("userName", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("ngayTao", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
+		TABLE_COLUMNS_MAP.put("chiNhanhId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("maCTV", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("maKhachHang", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("soKU", Types.VARCHAR);
@@ -123,7 +125,7 @@ public class PhatVayModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table mb_phatvay (phatVayId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,ngayTao DATE null,modifiedDate DATE null,maCTV VARCHAR(75) null,maKhachHang VARCHAR(75) null,soKU VARCHAR(75) null,createDate DATE null,ngayBatDau DATE null,ngayKetThuc DATE null,loaiPhatVay INTEGER,soLanDaThu INTEGER,ngayDaThuCuoi DATE null,soTienVay DOUBLE,thoiHan INTEGER,laiSuatVay DOUBLE,gocNgay DOUBLE,laiNgay DOUBLE,gocNgayCuoi DOUBLE,soNgayThuTruoc INTEGER,ngayThuTruocTu DATE null,ngayThuTruocDen DATE null,ngayTatToan DATE null,trangThai INTEGER)";
+		"create table mb_phatvay (phatVayId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,ngayTao DATE null,modifiedDate DATE null,chiNhanhId LONG,maCTV VARCHAR(75) null,maKhachHang VARCHAR(75) null,soKU VARCHAR(75) null,createDate DATE null,ngayBatDau DATE null,ngayKetThuc DATE null,loaiPhatVay INTEGER,soLanDaThu INTEGER,ngayDaThuCuoi DATE null,soTienVay DOUBLE,thoiHan INTEGER,laiSuatVay DOUBLE,gocNgay DOUBLE,laiNgay DOUBLE,gocNgayCuoi DOUBLE,soNgayThuTruoc INTEGER,ngayThuTruocTu DATE null,ngayThuTruocDen DATE null,ngayTatToan DATE null,trangThai INTEGER)";
 
 	public static final String TABLE_SQL_DROP = "drop table mb_phatvay";
 
@@ -180,6 +182,7 @@ public class PhatVayModelImpl
 		model.setUserName(soapModel.getUserName());
 		model.setNgayTao(soapModel.getNgayTao());
 		model.setModifiedDate(soapModel.getModifiedDate());
+		model.setChiNhanhId(soapModel.getChiNhanhId());
 		model.setMaCTV(soapModel.getMaCTV());
 		model.setMaKhachHang(soapModel.getMaKhachHang());
 		model.setSoKU(soapModel.getSoKU());
@@ -463,6 +466,26 @@ public class PhatVayModelImpl
 				@Override
 				public void accept(PhatVay phatVay, Object modifiedDate) {
 					phatVay.setModifiedDate((Date)modifiedDate);
+				}
+
+			});
+		attributeGetterFunctions.put(
+			"chiNhanhId",
+			new Function<PhatVay, Object>() {
+
+				@Override
+				public Object apply(PhatVay phatVay) {
+					return phatVay.getChiNhanhId();
+				}
+
+			});
+		attributeSetterBiConsumers.put(
+			"chiNhanhId",
+			new BiConsumer<PhatVay, Object>() {
+
+				@Override
+				public void accept(PhatVay phatVay, Object chiNhanhId) {
+					phatVay.setChiNhanhId((Long)chiNhanhId);
 				}
 
 			});
@@ -981,6 +1004,17 @@ public class PhatVayModelImpl
 
 	@JSON
 	@Override
+	public long getChiNhanhId() {
+		return _chiNhanhId;
+	}
+
+	@Override
+	public void setChiNhanhId(long chiNhanhId) {
+		_chiNhanhId = chiNhanhId;
+	}
+
+	@JSON
+	@Override
 	public String getMaCTV() {
 		if (_maCTV == null) {
 			return "";
@@ -1273,6 +1307,7 @@ public class PhatVayModelImpl
 		phatVayImpl.setUserName(getUserName());
 		phatVayImpl.setNgayTao(getNgayTao());
 		phatVayImpl.setModifiedDate(getModifiedDate());
+		phatVayImpl.setChiNhanhId(getChiNhanhId());
 		phatVayImpl.setMaCTV(getMaCTV());
 		phatVayImpl.setMaKhachHang(getMaKhachHang());
 		phatVayImpl.setSoKU(getSoKU());
@@ -1407,6 +1442,8 @@ public class PhatVayModelImpl
 		else {
 			phatVayCacheModel.modifiedDate = Long.MIN_VALUE;
 		}
+
+		phatVayCacheModel.chiNhanhId = getChiNhanhId();
 
 		phatVayCacheModel.maCTV = getMaCTV();
 
@@ -1595,6 +1632,7 @@ public class PhatVayModelImpl
 	private Date _ngayTao;
 	private Date _modifiedDate;
 	private boolean _setModifiedDate;
+	private long _chiNhanhId;
 	private String _maCTV;
 	private String _originalMaCTV;
 	private String _maKhachHang;

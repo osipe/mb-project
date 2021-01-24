@@ -106,10 +106,10 @@ public class CauHinhThuTienTruocModelImpl
 		"drop table dm_cauhinhthutientruoc";
 
 	public static final String ORDER_BY_JPQL =
-		" ORDER BY cauHinhThuTienTruoc.nam ASC";
+		" ORDER BY cauHinhThuTienTruoc.nam DESC";
 
 	public static final String ORDER_BY_SQL =
-		" ORDER BY dm_cauhinhthutientruoc.nam ASC";
+		" ORDER BY dm_cauhinhthutientruoc.nam DESC";
 
 	public static final String DATA_SOURCE = "liferayDataSource";
 
@@ -771,6 +771,8 @@ public class CauHinhThuTienTruocModelImpl
 		else {
 			value = 0;
 		}
+
+		value = value * -1;
 
 		if (value != 0) {
 			return value;

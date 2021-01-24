@@ -23,6 +23,15 @@ import aQute.bnd.annotation.ProviderType;
 @ProviderType
 public interface CongTacVienFinder {
 
+	public int countCTVSaoKe(
+			long chiNhanhId, String maCTV, java.util.Date createDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<com.mb.model.CongTacVien> getCTVSaoKePhanTrang(
+			long chiNhanhId, String maCTV, java.util.Date createDate, int start,
+			int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public java.util.List<com.mb.model.CongTacVien> getCTVThuPhatChi(
 			String maCTV, java.util.Date ngayTaoTu, java.util.Date ngayTaoDen)
 		throws com.liferay.portal.kernel.exception.SystemException;
@@ -32,7 +41,7 @@ public interface CongTacVienFinder {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public java.util.List<com.mb.model.CongTacVien> getCTVSaoKe(
-			String maCTV, java.util.Date createDate)
+			long chiNhanhId, String maCTV, java.util.Date createDate)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public java.util.List<com.mb.model.CongTacVien> findBase(

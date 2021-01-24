@@ -105,12 +105,12 @@
 			 	%>
 			 </liferay-ui:search-container-column-text>
 			 <liferay-ui:search-container-column-text name="Ngày">
-			 	<span style="color:#ff3d00e8;font-weight: bold;"> </span>
+			 	<span style="color:#ff3d00e8;font-weight: bold;">#####</span>
 			 	<%
 			 		for(Object[] item : lichSuThuPhatChDTOs){
 			 	%>
 			 		<br/>
-			 		<span style="font-style: italic;"><%=GetterUtil.getString(item[1]) %></span>
+			 		<span style="font-style: italic;"><%=GetterUtil.getString(item[1],"#####") %></span>
 			 	<%
 			 		}
 			 	%>

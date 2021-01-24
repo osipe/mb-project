@@ -20,6 +20,19 @@ create table dm_cauhinhthutientruoc (
 	hoatDong BOOLEAN
 );
 
+create table dm_chinhanh (
+	chiNhanhId LONG not null primary key,
+	companyId LONG,
+	groupId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	createDate DATE null,
+	modifiedDate DATE null,
+	ma VARCHAR(75) null,
+	ten VARCHAR(75) null,
+	hoatDong BOOLEAN
+);
+
 create table dm_congtacvien (
 	congTacVienId LONG not null primary key,
 	companyId LONG,
@@ -28,6 +41,8 @@ create table dm_congtacvien (
 	userName VARCHAR(75) null,
 	createDate DATE null,
 	modifiedDate DATE null,
+	chiNhanhId LONG,
+	tenChiNhanh VARCHAR(75) null,
 	ma VARCHAR(75) null,
 	hoTen VARCHAR(75) null,
 	soCMND VARCHAR(75) null,
@@ -207,6 +222,7 @@ create table mb_lichsuthuphatchi (
 	userName VARCHAR(75) null,
 	createDate DATE null,
 	modifiedDate DATE null,
+	chiNhanhId LONG,
 	phatVayId LONG,
 	maCTV VARCHAR(75) null,
 	soTien DOUBLE,
@@ -225,6 +241,7 @@ create table mb_phatvay (
 	userName VARCHAR(75) null,
 	ngayTao DATE null,
 	modifiedDate DATE null,
+	chiNhanhId LONG,
 	maCTV VARCHAR(75) null,
 	maKhachHang VARCHAR(75) null,
 	soKU VARCHAR(75) null,

@@ -14,6 +14,18 @@
 		<field name="ngayDen" type="Date" />
 		<field name="hoatDong" type="Boolean" />
 	</model>
+	<model name="com.mb.model.ChiNhanh">
+		<field name="chiNhanhId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="ma" type="String" />
+		<field name="ten" type="String" />
+		<field name="hoatDong" type="Boolean" />
+	</model>
 	<model name="com.mb.model.CongTacVien">
 		<field name="congTacVienId" type="long" />
 		<field name="companyId" type="long" />
@@ -22,6 +34,8 @@
 		<field name="userName" type="String" />
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
+		<field name="chiNhanhId" type="long" />
+		<field name="tenChiNhanh" type="String" />
 		<field name="ma" type="String" />
 		<field name="hoTen" type="String" />
 		<field name="soCMND" type="String" />
@@ -105,6 +119,7 @@
 		<field name="userName" type="String" />
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
+		<field name="chiNhanhId" type="long" />
 		<field name="phatVayId" type="long" />
 		<field name="maCTV" type="String" />
 		<field name="soTien" type="Double" />
@@ -160,6 +175,7 @@
 		<field name="userName" type="String" />
 		<field name="ngayTao" type="Date" />
 		<field name="modifiedDate" type="Date" />
+		<field name="chiNhanhId" type="long" />
 		<field name="maCTV" type="String" />
 		<field name="maKhachHang" type="String" />
 		<field name="soKU" type="String" />

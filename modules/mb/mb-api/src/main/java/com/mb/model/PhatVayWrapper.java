@@ -64,6 +64,7 @@ public class PhatVayWrapper implements PhatVay, ModelWrapper<PhatVay> {
 		attributes.put("userName", getUserName());
 		attributes.put("ngayTao", getNgayTao());
 		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("chiNhanhId", getChiNhanhId());
 		attributes.put("maCTV", getMaCTV());
 		attributes.put("maKhachHang", getMaKhachHang());
 		attributes.put("soKU", getSoKU());
@@ -130,6 +131,12 @@ public class PhatVayWrapper implements PhatVay, ModelWrapper<PhatVay> {
 
 		if (modifiedDate != null) {
 			setModifiedDate(modifiedDate);
+		}
+
+		Long chiNhanhId = (Long)attributes.get("chiNhanhId");
+
+		if (chiNhanhId != null) {
+			setChiNhanhId(chiNhanhId);
 		}
 
 		String maCTV = (String)attributes.get("maCTV");
@@ -261,6 +268,16 @@ public class PhatVayWrapper implements PhatVay, ModelWrapper<PhatVay> {
 	@Override
 	public int compareTo(PhatVay phatVay) {
 		return _phatVay.compareTo(phatVay);
+	}
+
+	/**
+	 * Returns the chi nhanh ID of this phat vay.
+	 *
+	 * @return the chi nhanh ID of this phat vay
+	 */
+	@Override
+	public long getChiNhanhId() {
+		return _phatVay.getChiNhanhId();
 	}
 
 	/**
@@ -618,6 +635,16 @@ public class PhatVayWrapper implements PhatVay, ModelWrapper<PhatVay> {
 	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_phatVay.setCachedModel(cachedModel);
+	}
+
+	/**
+	 * Sets the chi nhanh ID of this phat vay.
+	 *
+	 * @param chiNhanhId the chi nhanh ID of this phat vay
+	 */
+	@Override
+	public void setChiNhanhId(long chiNhanhId) {
+		_phatVay.setChiNhanhId(chiNhanhId);
 	}
 
 	/**

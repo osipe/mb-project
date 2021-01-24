@@ -89,6 +89,9 @@ public interface CongTacVienLocalService
 			String ma, String hoTen, String soCMND, String diaChi, int hoatDong)
 		throws SystemException;
 
+	public int countCTVSaoKe(long chiNhanhId, String maCTV, Date ngayTaoTu)
+		throws SystemException;
+
 	/**
 	 * Creates a new cong tac vien with the primary key. Does not add the cong tac vien to the database.
 	 *
@@ -246,7 +249,13 @@ public interface CongTacVienLocalService
 		throws SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<CongTacVien> getCTVSaoKe(String maCTV, Date ngayTaoTu)
+	public List<CongTacVien> getCTVSaoKe(
+			long chiNhanhId, String maCTV, Date ngayTaoTu)
+		throws SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<CongTacVien> getCTVSaoKePhanTrang(
+			long chiNhanhId, String maCTV, Date ngayTaoTu, int start, int end)
 		throws SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

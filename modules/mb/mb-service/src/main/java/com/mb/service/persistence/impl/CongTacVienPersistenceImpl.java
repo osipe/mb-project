@@ -550,6 +550,1067 @@ public class CongTacVienPersistenceImpl
 	private static final String _FINDER_COLUMN_SOCMND_SOCMND_3 =
 		"(congTacVien.soCMND IS NULL OR congTacVien.soCMND = '')";
 
+	private FinderPath _finderPathWithPaginationFindByChiNhanh_HoatDong;
+	private FinderPath _finderPathWithoutPaginationFindByChiNhanh_HoatDong;
+	private FinderPath _finderPathCountByChiNhanh_HoatDong;
+
+	/**
+	 * Returns all the cong tac viens where chiNhanhId = &#63; and hoatDong = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 * @return the matching cong tac viens
+	 */
+	@Override
+	public List<CongTacVien> findByChiNhanh_HoatDong(
+		long chiNhanhId, Boolean hoatDong) {
+
+		return findByChiNhanh_HoatDong(
+			chiNhanhId, hoatDong, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the cong tac viens where chiNhanhId = &#63; and hoatDong = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CongTacVienModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 * @param start the lower bound of the range of cong tac viens
+	 * @param end the upper bound of the range of cong tac viens (not inclusive)
+	 * @return the range of matching cong tac viens
+	 */
+	@Override
+	public List<CongTacVien> findByChiNhanh_HoatDong(
+		long chiNhanhId, Boolean hoatDong, int start, int end) {
+
+		return findByChiNhanh_HoatDong(chiNhanhId, hoatDong, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the cong tac viens where chiNhanhId = &#63; and hoatDong = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CongTacVienModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 * @param start the lower bound of the range of cong tac viens
+	 * @param end the upper bound of the range of cong tac viens (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching cong tac viens
+	 */
+	@Override
+	public List<CongTacVien> findByChiNhanh_HoatDong(
+		long chiNhanhId, Boolean hoatDong, int start, int end,
+		OrderByComparator<CongTacVien> orderByComparator) {
+
+		return findByChiNhanh_HoatDong(
+			chiNhanhId, hoatDong, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the cong tac viens where chiNhanhId = &#63; and hoatDong = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CongTacVienModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 * @param start the lower bound of the range of cong tac viens
+	 * @param end the upper bound of the range of cong tac viens (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @return the ordered range of matching cong tac viens
+	 */
+	@Override
+	public List<CongTacVien> findByChiNhanh_HoatDong(
+		long chiNhanhId, Boolean hoatDong, int start, int end,
+		OrderByComparator<CongTacVien> orderByComparator,
+		boolean retrieveFromCache) {
+
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			pagination = false;
+			finderPath = _finderPathWithoutPaginationFindByChiNhanh_HoatDong;
+			finderArgs = new Object[] {chiNhanhId, hoatDong};
+		}
+		else {
+			finderPath = _finderPathWithPaginationFindByChiNhanh_HoatDong;
+			finderArgs = new Object[] {
+				chiNhanhId, hoatDong, start, end, orderByComparator
+			};
+		}
+
+		List<CongTacVien> list = null;
+
+		if (retrieveFromCache) {
+			list = (List<CongTacVien>)finderCache.getResult(
+				finderPath, finderArgs, this);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (CongTacVien congTacVien : list) {
+					if ((chiNhanhId != congTacVien.getChiNhanhId()) ||
+						!Objects.equals(hoatDong, congTacVien.getHoatDong())) {
+
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(
+					4 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_CONGTACVIEN_WHERE);
+
+			query.append(_FINDER_COLUMN_CHINHANH_HOATDONG_CHINHANHID_2);
+
+			query.append(_FINDER_COLUMN_CHINHANH_HOATDONG_HOATDONG_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					query, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else if (pagination) {
+				query.append(CongTacVienModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(chiNhanhId);
+
+				qPos.add(hoatDong.booleanValue());
+
+				if (!pagination) {
+					list = (List<CongTacVien>)QueryUtil.list(
+						q, getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = Collections.unmodifiableList(list);
+				}
+				else {
+					list = (List<CongTacVien>)QueryUtil.list(
+						q, getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				finderCache.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				finderCache.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first cong tac vien in the ordered set where chiNhanhId = &#63; and hoatDong = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching cong tac vien
+	 * @throws NoSuchCongTacVienException if a matching cong tac vien could not be found
+	 */
+	@Override
+	public CongTacVien findByChiNhanh_HoatDong_First(
+			long chiNhanhId, Boolean hoatDong,
+			OrderByComparator<CongTacVien> orderByComparator)
+		throws NoSuchCongTacVienException {
+
+		CongTacVien congTacVien = fetchByChiNhanh_HoatDong_First(
+			chiNhanhId, hoatDong, orderByComparator);
+
+		if (congTacVien != null) {
+			return congTacVien;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("chiNhanhId=");
+		msg.append(chiNhanhId);
+
+		msg.append(", hoatDong=");
+		msg.append(hoatDong);
+
+		msg.append("}");
+
+		throw new NoSuchCongTacVienException(msg.toString());
+	}
+
+	/**
+	 * Returns the first cong tac vien in the ordered set where chiNhanhId = &#63; and hoatDong = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching cong tac vien, or <code>null</code> if a matching cong tac vien could not be found
+	 */
+	@Override
+	public CongTacVien fetchByChiNhanh_HoatDong_First(
+		long chiNhanhId, Boolean hoatDong,
+		OrderByComparator<CongTacVien> orderByComparator) {
+
+		List<CongTacVien> list = findByChiNhanh_HoatDong(
+			chiNhanhId, hoatDong, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last cong tac vien in the ordered set where chiNhanhId = &#63; and hoatDong = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching cong tac vien
+	 * @throws NoSuchCongTacVienException if a matching cong tac vien could not be found
+	 */
+	@Override
+	public CongTacVien findByChiNhanh_HoatDong_Last(
+			long chiNhanhId, Boolean hoatDong,
+			OrderByComparator<CongTacVien> orderByComparator)
+		throws NoSuchCongTacVienException {
+
+		CongTacVien congTacVien = fetchByChiNhanh_HoatDong_Last(
+			chiNhanhId, hoatDong, orderByComparator);
+
+		if (congTacVien != null) {
+			return congTacVien;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("chiNhanhId=");
+		msg.append(chiNhanhId);
+
+		msg.append(", hoatDong=");
+		msg.append(hoatDong);
+
+		msg.append("}");
+
+		throw new NoSuchCongTacVienException(msg.toString());
+	}
+
+	/**
+	 * Returns the last cong tac vien in the ordered set where chiNhanhId = &#63; and hoatDong = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching cong tac vien, or <code>null</code> if a matching cong tac vien could not be found
+	 */
+	@Override
+	public CongTacVien fetchByChiNhanh_HoatDong_Last(
+		long chiNhanhId, Boolean hoatDong,
+		OrderByComparator<CongTacVien> orderByComparator) {
+
+		int count = countByChiNhanh_HoatDong(chiNhanhId, hoatDong);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<CongTacVien> list = findByChiNhanh_HoatDong(
+			chiNhanhId, hoatDong, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the cong tac viens before and after the current cong tac vien in the ordered set where chiNhanhId = &#63; and hoatDong = &#63;.
+	 *
+	 * @param congTacVienId the primary key of the current cong tac vien
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next cong tac vien
+	 * @throws NoSuchCongTacVienException if a cong tac vien with the primary key could not be found
+	 */
+	@Override
+	public CongTacVien[] findByChiNhanh_HoatDong_PrevAndNext(
+			long congTacVienId, long chiNhanhId, Boolean hoatDong,
+			OrderByComparator<CongTacVien> orderByComparator)
+		throws NoSuchCongTacVienException {
+
+		CongTacVien congTacVien = findByPrimaryKey(congTacVienId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			CongTacVien[] array = new CongTacVienImpl[3];
+
+			array[0] = getByChiNhanh_HoatDong_PrevAndNext(
+				session, congTacVien, chiNhanhId, hoatDong, orderByComparator,
+				true);
+
+			array[1] = congTacVien;
+
+			array[2] = getByChiNhanh_HoatDong_PrevAndNext(
+				session, congTacVien, chiNhanhId, hoatDong, orderByComparator,
+				false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected CongTacVien getByChiNhanh_HoatDong_PrevAndNext(
+		Session session, CongTacVien congTacVien, long chiNhanhId,
+		Boolean hoatDong, OrderByComparator<CongTacVien> orderByComparator,
+		boolean previous) {
+
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(
+				5 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			query = new StringBundler(4);
+		}
+
+		query.append(_SQL_SELECT_CONGTACVIEN_WHERE);
+
+		query.append(_FINDER_COLUMN_CHINHANH_HOATDONG_CHINHANHID_2);
+
+		query.append(_FINDER_COLUMN_CHINHANH_HOATDONG_HOATDONG_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(CongTacVienModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(chiNhanhId);
+
+		qPos.add(hoatDong.booleanValue());
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(congTacVien)) {
+
+				qPos.add(orderByConditionValue);
+			}
+		}
+
+		List<CongTacVien> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the cong tac viens where chiNhanhId = &#63; and hoatDong = &#63; from the database.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 */
+	@Override
+	public void removeByChiNhanh_HoatDong(long chiNhanhId, Boolean hoatDong) {
+		for (CongTacVien congTacVien :
+				findByChiNhanh_HoatDong(
+					chiNhanhId, hoatDong, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+					null)) {
+
+			remove(congTacVien);
+		}
+	}
+
+	/**
+	 * Returns the number of cong tac viens where chiNhanhId = &#63; and hoatDong = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 * @return the number of matching cong tac viens
+	 */
+	@Override
+	public int countByChiNhanh_HoatDong(long chiNhanhId, Boolean hoatDong) {
+		FinderPath finderPath = _finderPathCountByChiNhanh_HoatDong;
+
+		Object[] finderArgs = new Object[] {chiNhanhId, hoatDong};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_CONGTACVIEN_WHERE);
+
+			query.append(_FINDER_COLUMN_CHINHANH_HOATDONG_CHINHANHID_2);
+
+			query.append(_FINDER_COLUMN_CHINHANH_HOATDONG_HOATDONG_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(chiNhanhId);
+
+				qPos.add(hoatDong.booleanValue());
+
+				count = (Long)q.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				finderCache.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_CHINHANH_HOATDONG_CHINHANHID_2 =
+		"congTacVien.chiNhanhId = ? AND ";
+
+	private static final String _FINDER_COLUMN_CHINHANH_HOATDONG_HOATDONG_2 =
+		"congTacVien.hoatDong = ?";
+
+	private FinderPath _finderPathWithPaginationFindByChiNhanh;
+	private FinderPath _finderPathWithoutPaginationFindByChiNhanh;
+	private FinderPath _finderPathCountByChiNhanh;
+
+	/**
+	 * Returns all the cong tac viens where chiNhanhId = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @return the matching cong tac viens
+	 */
+	@Override
+	public List<CongTacVien> findByChiNhanh(long chiNhanhId) {
+		return findByChiNhanh(
+			chiNhanhId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the cong tac viens where chiNhanhId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CongTacVienModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param start the lower bound of the range of cong tac viens
+	 * @param end the upper bound of the range of cong tac viens (not inclusive)
+	 * @return the range of matching cong tac viens
+	 */
+	@Override
+	public List<CongTacVien> findByChiNhanh(
+		long chiNhanhId, int start, int end) {
+
+		return findByChiNhanh(chiNhanhId, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the cong tac viens where chiNhanhId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CongTacVienModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param start the lower bound of the range of cong tac viens
+	 * @param end the upper bound of the range of cong tac viens (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching cong tac viens
+	 */
+	@Override
+	public List<CongTacVien> findByChiNhanh(
+		long chiNhanhId, int start, int end,
+		OrderByComparator<CongTacVien> orderByComparator) {
+
+		return findByChiNhanh(chiNhanhId, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the cong tac viens where chiNhanhId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CongTacVienModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param start the lower bound of the range of cong tac viens
+	 * @param end the upper bound of the range of cong tac viens (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @return the ordered range of matching cong tac viens
+	 */
+	@Override
+	public List<CongTacVien> findByChiNhanh(
+		long chiNhanhId, int start, int end,
+		OrderByComparator<CongTacVien> orderByComparator,
+		boolean retrieveFromCache) {
+
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			pagination = false;
+			finderPath = _finderPathWithoutPaginationFindByChiNhanh;
+			finderArgs = new Object[] {chiNhanhId};
+		}
+		else {
+			finderPath = _finderPathWithPaginationFindByChiNhanh;
+			finderArgs = new Object[] {
+				chiNhanhId, start, end, orderByComparator
+			};
+		}
+
+		List<CongTacVien> list = null;
+
+		if (retrieveFromCache) {
+			list = (List<CongTacVien>)finderCache.getResult(
+				finderPath, finderArgs, this);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (CongTacVien congTacVien : list) {
+					if ((chiNhanhId != congTacVien.getChiNhanhId())) {
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(
+					3 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_CONGTACVIEN_WHERE);
+
+			query.append(_FINDER_COLUMN_CHINHANH_CHINHANHID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					query, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else if (pagination) {
+				query.append(CongTacVienModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(chiNhanhId);
+
+				if (!pagination) {
+					list = (List<CongTacVien>)QueryUtil.list(
+						q, getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = Collections.unmodifiableList(list);
+				}
+				else {
+					list = (List<CongTacVien>)QueryUtil.list(
+						q, getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				finderCache.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				finderCache.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first cong tac vien in the ordered set where chiNhanhId = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching cong tac vien
+	 * @throws NoSuchCongTacVienException if a matching cong tac vien could not be found
+	 */
+	@Override
+	public CongTacVien findByChiNhanh_First(
+			long chiNhanhId, OrderByComparator<CongTacVien> orderByComparator)
+		throws NoSuchCongTacVienException {
+
+		CongTacVien congTacVien = fetchByChiNhanh_First(
+			chiNhanhId, orderByComparator);
+
+		if (congTacVien != null) {
+			return congTacVien;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("chiNhanhId=");
+		msg.append(chiNhanhId);
+
+		msg.append("}");
+
+		throw new NoSuchCongTacVienException(msg.toString());
+	}
+
+	/**
+	 * Returns the first cong tac vien in the ordered set where chiNhanhId = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching cong tac vien, or <code>null</code> if a matching cong tac vien could not be found
+	 */
+	@Override
+	public CongTacVien fetchByChiNhanh_First(
+		long chiNhanhId, OrderByComparator<CongTacVien> orderByComparator) {
+
+		List<CongTacVien> list = findByChiNhanh(
+			chiNhanhId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last cong tac vien in the ordered set where chiNhanhId = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching cong tac vien
+	 * @throws NoSuchCongTacVienException if a matching cong tac vien could not be found
+	 */
+	@Override
+	public CongTacVien findByChiNhanh_Last(
+			long chiNhanhId, OrderByComparator<CongTacVien> orderByComparator)
+		throws NoSuchCongTacVienException {
+
+		CongTacVien congTacVien = fetchByChiNhanh_Last(
+			chiNhanhId, orderByComparator);
+
+		if (congTacVien != null) {
+			return congTacVien;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("chiNhanhId=");
+		msg.append(chiNhanhId);
+
+		msg.append("}");
+
+		throw new NoSuchCongTacVienException(msg.toString());
+	}
+
+	/**
+	 * Returns the last cong tac vien in the ordered set where chiNhanhId = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching cong tac vien, or <code>null</code> if a matching cong tac vien could not be found
+	 */
+	@Override
+	public CongTacVien fetchByChiNhanh_Last(
+		long chiNhanhId, OrderByComparator<CongTacVien> orderByComparator) {
+
+		int count = countByChiNhanh(chiNhanhId);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<CongTacVien> list = findByChiNhanh(
+			chiNhanhId, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the cong tac viens before and after the current cong tac vien in the ordered set where chiNhanhId = &#63;.
+	 *
+	 * @param congTacVienId the primary key of the current cong tac vien
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next cong tac vien
+	 * @throws NoSuchCongTacVienException if a cong tac vien with the primary key could not be found
+	 */
+	@Override
+	public CongTacVien[] findByChiNhanh_PrevAndNext(
+			long congTacVienId, long chiNhanhId,
+			OrderByComparator<CongTacVien> orderByComparator)
+		throws NoSuchCongTacVienException {
+
+		CongTacVien congTacVien = findByPrimaryKey(congTacVienId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			CongTacVien[] array = new CongTacVienImpl[3];
+
+			array[0] = getByChiNhanh_PrevAndNext(
+				session, congTacVien, chiNhanhId, orderByComparator, true);
+
+			array[1] = congTacVien;
+
+			array[2] = getByChiNhanh_PrevAndNext(
+				session, congTacVien, chiNhanhId, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected CongTacVien getByChiNhanh_PrevAndNext(
+		Session session, CongTacVien congTacVien, long chiNhanhId,
+		OrderByComparator<CongTacVien> orderByComparator, boolean previous) {
+
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_CONGTACVIEN_WHERE);
+
+		query.append(_FINDER_COLUMN_CHINHANH_CHINHANHID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(CongTacVienModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(chiNhanhId);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(congTacVien)) {
+
+				qPos.add(orderByConditionValue);
+			}
+		}
+
+		List<CongTacVien> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the cong tac viens where chiNhanhId = &#63; from the database.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 */
+	@Override
+	public void removeByChiNhanh(long chiNhanhId) {
+		for (CongTacVien congTacVien :
+				findByChiNhanh(
+					chiNhanhId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+
+			remove(congTacVien);
+		}
+	}
+
+	/**
+	 * Returns the number of cong tac viens where chiNhanhId = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @return the number of matching cong tac viens
+	 */
+	@Override
+	public int countByChiNhanh(long chiNhanhId) {
+		FinderPath finderPath = _finderPathCountByChiNhanh;
+
+		Object[] finderArgs = new Object[] {chiNhanhId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_CONGTACVIEN_WHERE);
+
+			query.append(_FINDER_COLUMN_CHINHANH_CHINHANHID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(chiNhanhId);
+
+				count = (Long)q.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				finderCache.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_CHINHANH_CHINHANHID_2 =
+		"congTacVien.chiNhanhId = ?";
+
 	public CongTacVienPersistenceImpl() {
 		setModelClass(CongTacVien.class);
 	}
@@ -879,9 +1940,69 @@ public class CongTacVienPersistenceImpl
 			finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 		else if (isNew) {
+			Object[] args = new Object[] {
+				congTacVienModelImpl.getChiNhanhId(),
+				congTacVienModelImpl.getHoatDong()
+			};
+
+			finderCache.removeResult(_finderPathCountByChiNhanh_HoatDong, args);
+			finderCache.removeResult(
+				_finderPathWithoutPaginationFindByChiNhanh_HoatDong, args);
+
+			args = new Object[] {congTacVienModelImpl.getChiNhanhId()};
+
+			finderCache.removeResult(_finderPathCountByChiNhanh, args);
+			finderCache.removeResult(
+				_finderPathWithoutPaginationFindByChiNhanh, args);
+
 			finderCache.removeResult(_finderPathCountAll, FINDER_ARGS_EMPTY);
 			finderCache.removeResult(
 				_finderPathWithoutPaginationFindAll, FINDER_ARGS_EMPTY);
+		}
+		else {
+			if ((congTacVienModelImpl.getColumnBitmask() &
+				 _finderPathWithoutPaginationFindByChiNhanh_HoatDong.
+					 getColumnBitmask()) != 0) {
+
+				Object[] args = new Object[] {
+					congTacVienModelImpl.getOriginalChiNhanhId(),
+					congTacVienModelImpl.getOriginalHoatDong()
+				};
+
+				finderCache.removeResult(
+					_finderPathCountByChiNhanh_HoatDong, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByChiNhanh_HoatDong, args);
+
+				args = new Object[] {
+					congTacVienModelImpl.getChiNhanhId(),
+					congTacVienModelImpl.getHoatDong()
+				};
+
+				finderCache.removeResult(
+					_finderPathCountByChiNhanh_HoatDong, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByChiNhanh_HoatDong, args);
+			}
+
+			if ((congTacVienModelImpl.getColumnBitmask() &
+				 _finderPathWithoutPaginationFindByChiNhanh.
+					 getColumnBitmask()) != 0) {
+
+				Object[] args = new Object[] {
+					congTacVienModelImpl.getOriginalChiNhanhId()
+				};
+
+				finderCache.removeResult(_finderPathCountByChiNhanh, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByChiNhanh, args);
+
+				args = new Object[] {congTacVienModelImpl.getChiNhanhId()};
+
+				finderCache.removeResult(_finderPathCountByChiNhanh, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByChiNhanh, args);
+			}
 		}
 
 		entityCache.putResult(
@@ -1340,6 +2461,56 @@ public class CongTacVienPersistenceImpl
 			CongTacVienModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countBySoCMND",
 			new String[] {String.class.getName()});
+
+		_finderPathWithPaginationFindByChiNhanh_HoatDong = new FinderPath(
+			CongTacVienModelImpl.ENTITY_CACHE_ENABLED,
+			CongTacVienModelImpl.FINDER_CACHE_ENABLED, CongTacVienImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByChiNhanh_HoatDong",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+
+		_finderPathWithoutPaginationFindByChiNhanh_HoatDong = new FinderPath(
+			CongTacVienModelImpl.ENTITY_CACHE_ENABLED,
+			CongTacVienModelImpl.FINDER_CACHE_ENABLED, CongTacVienImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByChiNhanh_HoatDong",
+			new String[] {Long.class.getName(), Boolean.class.getName()},
+			CongTacVienModelImpl.CHINHANHID_COLUMN_BITMASK |
+			CongTacVienModelImpl.HOATDONG_COLUMN_BITMASK |
+			CongTacVienModelImpl.MA_COLUMN_BITMASK);
+
+		_finderPathCountByChiNhanh_HoatDong = new FinderPath(
+			CongTacVienModelImpl.ENTITY_CACHE_ENABLED,
+			CongTacVienModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByChiNhanh_HoatDong",
+			new String[] {Long.class.getName(), Boolean.class.getName()});
+
+		_finderPathWithPaginationFindByChiNhanh = new FinderPath(
+			CongTacVienModelImpl.ENTITY_CACHE_ENABLED,
+			CongTacVienModelImpl.FINDER_CACHE_ENABLED, CongTacVienImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByChiNhanh",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			});
+
+		_finderPathWithoutPaginationFindByChiNhanh = new FinderPath(
+			CongTacVienModelImpl.ENTITY_CACHE_ENABLED,
+			CongTacVienModelImpl.FINDER_CACHE_ENABLED, CongTacVienImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByChiNhanh",
+			new String[] {Long.class.getName()},
+			CongTacVienModelImpl.CHINHANHID_COLUMN_BITMASK |
+			CongTacVienModelImpl.MA_COLUMN_BITMASK);
+
+		_finderPathCountByChiNhanh = new FinderPath(
+			CongTacVienModelImpl.ENTITY_CACHE_ENABLED,
+			CongTacVienModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByChiNhanh",
+			new String[] {Long.class.getName()});
 	}
 
 	public void destroy() {

@@ -81,8 +81,8 @@
 					String editAction = "openDialogEdit('" + editURL + "');";
 					String xoaAction = "xoaAction('" + xoaURL + "');";
 					String soLanDaThuStr = String.valueOf(phatVay.getSoLanDaThu());
-					if(phatVay.getTrangThai() == 4){
-						soLanDaThuStr =  String.valueOf(phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc()) + " (Thu trước " + phatVay.getSoNgayThuTruoc() + " Ngày)";
+					if(phatVay.getSoNgayThuTruoc() > 0){
+						soLanDaThuStr =  String.valueOf(phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc()) + " (Thu tết " + phatVay.getSoNgayThuTruoc() + " Ngày)";
 					}
 			 	%>
 		 	 <liferay-ui:search-container-column-text name="Thông tin khách hàng"  orderable="true" orderableProperty="soKU">
@@ -116,7 +116,7 @@
 			 	Số ngày đã thu : <span style="font-style: italic;color:#108dfb;"><%=soLanDaThuStr %></span>
 			 	<br/>
 			 	<%
-			 		if(phatVay.getTrangThai() == 4 && phatVay.getNgayThuTruocTu() != null && phatVay.getNgayThuTruocDen() != null){
+			 		if(phatVay.getNgayThuTruocTu() != null && phatVay.getNgayThuTruocDen() != null){
 			 	%>
 				 	Ngày tết đã thu trước : <span style="font-style: italic;color:#108dfb;"><%=sdf.format(phatVay.getNgayThuTruocTu()) + " - " + sdf.format(phatVay.getNgayThuTruocDen()) %></span>
 				 	<br/>

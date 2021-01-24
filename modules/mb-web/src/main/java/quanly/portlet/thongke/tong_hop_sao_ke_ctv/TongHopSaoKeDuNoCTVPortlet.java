@@ -1,5 +1,18 @@
 package quanly.portlet.thongke.tong_hop_sao_ke_ctv;
 
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.mb.model.CongTacVien;
+import com.mb.service.CongTacVienLocalServiceUtil;
+import com.mb.service.LichSuThuPhatChiLocalServiceUtil;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -20,22 +33,6 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
 import org.osgi.service.component.annotations.Component;
-
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
-import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.kernel.util.WebKeys;
-import com.mb.model.CongTacVien;
-import com.mb.model.LichSuThuPhatChi;
-import com.mb.model.PhatVay;
-import com.mb.service.CongTacVienLocalServiceUtil;
-import com.mb.service.LichSuThuPhatChiLocalServiceUtil;
-import com.mb.service.PhatVayLocalServiceUtil;
 
 import quanly.constants.FileType;
 import quanly.constants.QuanlyPortletKeys;
@@ -87,13 +84,14 @@ public class TongHopSaoKeDuNoCTVPortlet extends MVCPortlet {
 		JSONObject kq = JSONFactoryUtil.createJSONObject();
 		InputStream in = null;
 		OutputStream outStream = resourceResponse.getPortletOutputStream();
+		long chiNhanhId = ParamUtil.getLong(resourceRequest, "chiNhanhId");
 		String maCTVSearch = ParamUtil.getString(resourceRequest, "maCTVSearch");
 		long ngayTime = ParamUtil.getLong(resourceRequest, "ngayTime");
 		Date ngaySearch = ngayTime != 0 ? new Date(ngayTime) : null;
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			Locale localeEn = new Locale("en", "EN");
-		    NumberFormat df = NumberFormat.getInstance(localeEn);
+			NumberFormat df = NumberFormat.getInstance(localeEn);
 			resourceResponse.setContentType("application/DOCX");
 			resourceResponse.setProperty("Content-Disposition", "attachment; filename=\"TONG_HOP_SAO_KE_CTV.DOCX\"");
 			in = getServletContext().getResourceAsStream("report/SAO_KE_DU_NO_CTV.jasper");
@@ -107,85 +105,77 @@ public class TongHopSaoKeDuNoCTVPortlet extends MVCPortlet {
 			Double tongDuNoGocAll = GetterUtil.getDouble("0");
 			Double tongDuNoGocToiDaAll = GetterUtil.getDouble("0");
 			Collection<Object> collections = new ArrayList<Object>();
-			List<CongTacVien> congTacViens = CongTacVienLocalServiceUtil.getCTVSaoKe(maCTVSearch,ngaySearch);
+			List<CongTacVien> congTacViens = CongTacVienLocalServiceUtil.getCTVSaoKe(chiNhanhId, maCTVSearch,
+					ngaySearch);
 			int stt = 0;
 			for (CongTacVien ctv : congTacViens) {
 				stt++;
-				Double tongTienVay = GetterUtil.getDouble("0");
-				Double tongGocNgay = GetterUtil.getDouble("0");
-				Double tongLaiNgay = GetterUtil.getDouble("0");
-				Double tongGocDaThu = GetterUtil.getDouble("0");
-				Double tongLaiDaThu = GetterUtil.getDouble("0");
-				Double tongDuNoGoc = GetterUtil.getDouble("0");
+				Object[] sumDaTra = LichSuThuPhatChiLocalServiceUtil.getTongLichSuTraTien_CTV_TAINGAY(chiNhanhId,
+						maCTVSearch, ngaySearch, null, 0);
+				Object[] sumPhatVay = LichSuThuPhatChiLocalServiceUtil.getSumPhatVay_CTV_TAINGAY(chiNhanhId,
+						maCTVSearch, ngaySearch, 0);
 
-				Double tongTienVayTinChap = GetterUtil.getDouble("0");
-				Double tongGocNgayTinChap = GetterUtil.getDouble("0");
-				Double tongLaiNgayTinChap = GetterUtil.getDouble("0");
-				Double tongGocDaThuTinChap = GetterUtil.getDouble("0");
-				Double tongLaiDaThuTinChap = GetterUtil.getDouble("0");
-				Double tongDuNoGocTinChap = GetterUtil.getDouble("0");
+				Double tongTienVay = GetterUtil.getDouble(sumPhatVay[0], 0.0);
+				Double tongGocNgay = GetterUtil.getDouble(sumPhatVay[1], 0.0);
+				Double tongLaiNgay = GetterUtil.getDouble(sumPhatVay[2], 0.0);
 
-				Double tongTienVayTheChap = GetterUtil.getDouble("0");
-				Double tongGocNgayTheChap = GetterUtil.getDouble("0");
-				Double tongLaiNgayTheChap = GetterUtil.getDouble("0");
-				Double tongGocDaThuTheChap = GetterUtil.getDouble("0");
-				Double tongLaiDaThuTheChap = GetterUtil.getDouble("0");
-				Double tongDuNoGocTheChap = GetterUtil.getDouble("0");
+				Double tongLaiDaThu = GetterUtil.getDouble(sumDaTra[1], 0.0);
+				Double tongGocDaThu = GetterUtil.getDouble(sumDaTra[2], 0.0);
+				Double tongDuNoGoc = tongTienVayAll - tongGocDaThuAll;
 
-				List<PhatVay> phatVays = PhatVayLocalServiceUtil.getPhatVaySaoKe(ctv.getMa(),0, ngaySearch);
-				for (PhatVay pv : phatVays) {
-					Double gocDaThu = GetterUtil.getDouble("0");
-		 			Double laiDaThu = GetterUtil.getDouble("0");
-		 			Double duGoc =  pv.getSoTienVay();
-					List<LichSuThuPhatChi> lichSuThuPhatChis = LichSuThuPhatChiLocalServiceUtil.findByPhatVay_Createdate_Loai(pv.getPhatVayId(), null, ngaySearch, "3,4");
-		 			for(LichSuThuPhatChi lichSuThuPhatChi : lichSuThuPhatChis){
-		 				gocDaThu += lichSuThuPhatChi.getTongSoTienVonTra();
-		 				laiDaThu += lichSuThuPhatChi.getTongSoTienLaiTra();
-		 				duGoc -= lichSuThuPhatChi.getTongSoTienVonTra();
-		 			}
-					
-					if (pv.getLoaiPhatVay() != 1) {
-						tongTienVayTinChap += pv.getSoTienVay();
-						tongGocNgayTinChap += pv.getGocNgay();
-						tongLaiNgayTinChap += pv.getLaiNgay();
-						
-						tongGocDaThuTinChap += gocDaThu;
-						tongLaiDaThuTinChap += laiDaThu;
-						tongDuNoGocTinChap += duGoc;
-					} else {
-						tongTienVayTheChap += pv.getSoTienVay();
-						tongGocNgayTheChap += pv.getGocNgay();
-						tongLaiNgayTheChap += pv.getLaiNgay();
-						
-						
-						tongGocDaThuTheChap+= gocDaThu;
-						tongLaiDaThuTheChap +=laiDaThu;
-						tongDuNoGocTheChap += duGoc;
-					}
-					
-					
-					tongTienVay += pv.getSoTienVay();
-					tongGocNgay += pv.getGocNgay();
-					tongLaiNgay += pv.getLaiNgay();
-					
-					tongGocDaThu += gocDaThu;
-					tongLaiDaThu += laiDaThu;
-					tongDuNoGoc += duGoc;
-					
-					tongTienVayAll += pv.getSoTienVay();
-					tongGocNgayAll += pv.getGocNgay();
-					tongLaiNgayAll += pv.getLaiNgay();
-					
-					tongGocDaThuAll += gocDaThu;
-					tongLaiDaThuAll += laiDaThu;
-					tongDuNoGocAll += duGoc;
+				Object[] sumDaTraTinChap = LichSuThuPhatChiLocalServiceUtil.getTongLichSuTraTien_CTV_TAINGAY(chiNhanhId,
+						maCTVSearch, ngaySearch, null, 2);
+				Object[] sumPhatVayTinChap = LichSuThuPhatChiLocalServiceUtil.getSumPhatVay_CTV_TAINGAY(chiNhanhId,
+						maCTVSearch, ngaySearch, 2);
+
+				Double tongTienVayTinChap = GetterUtil.getDouble(sumPhatVayTinChap[0], 0.0);
+				Double tongGocNgayTinChap = GetterUtil.getDouble(sumPhatVayTinChap[1], 0.0);
+				Double tongLaiNgayTinChap = GetterUtil.getDouble(sumPhatVayTinChap[2], 0.0);
+				Double tongGocDaThuTinChap = GetterUtil.getDouble(sumDaTraTinChap[2], 0.0);
+				Double tongLaiDaThuTinChap = GetterUtil.getDouble(sumDaTraTinChap[1], 0.0);
+				Double tongDuNoGocTinChap = tongTienVayTinChap - tongGocDaThuTinChap;
+
+				Object[] sumDaTraTheChap = LichSuThuPhatChiLocalServiceUtil.getTongLichSuTraTien_CTV_TAINGAY(chiNhanhId,
+						maCTVSearch, ngaySearch, null, 1);
+				Object[] sumPhatVayTheChap = LichSuThuPhatChiLocalServiceUtil.getSumPhatVay_CTV_TAINGAY(chiNhanhId,
+						maCTVSearch, ngaySearch, 1);
+
+				Double tongTienVayTheChap = GetterUtil.getDouble(sumPhatVayTheChap[0], 0.0);
+				Double tongGocNgayTheChap = GetterUtil.getDouble(sumPhatVayTheChap[1], 0.0);
+				Double tongLaiNgayTheChap = GetterUtil.getDouble(sumPhatVayTheChap[2], 0.0);
+				Double tongGocDaThuTheChap = GetterUtil.getDouble(sumDaTraTheChap[2], 0.0);
+				Double tongLaiDaThuTheChap = GetterUtil.getDouble(sumDaTraTheChap[1], 0.0);
+				Double tongDuNoGocTheChap = tongTienVayTinChap - tongGocDaThuTinChap;
+
+				collections.add(new PhatVayDTO(ctv.getMa(), ctv.getHoTen(), PropsUtil.get("viethoa.tong"),
+						ctv.getDuNoToiDa() > 0 ? df.format(ctv.getDuNoToiDa()) : "",
+						tongTienVay > 0 ? df.format(tongTienVay) : "", tongGocNgay > 0 ? df.format(tongGocNgay) : "",
+						tongLaiNgay > 0 ? df.format(tongLaiNgay) : "", tongGocDaThu > 0 ? df.format(tongGocDaThu) : "",
+						tongLaiDaThu > 0 ? df.format(tongLaiDaThu) : "", tongDuNoGoc > 0 ? df.format(tongDuNoGoc) : "",
+						String.valueOf(stt), "", "", "", "", "", "", ""));
+				if (tongDuNoGocTheChap > 0) {
+					collections.add(new PhatVayDTO("", "", PropsUtil.get("viethoa.thue-chap"),
+							ctv.getDuNoToiDaTheChap() > 0 ? df.format(ctv.getDuNoToiDaTheChap()) : "",
+							tongTienVayTheChap > 0 ? df.format(tongTienVayTheChap) : "",
+							tongGocNgayTheChap > 0 ? df.format(tongGocNgayTheChap) : "",
+							tongLaiNgayTheChap > 0 ? df.format(tongLaiNgayTheChap) : "",
+							tongGocDaThuTheChap > 0 ? df.format(tongGocDaThuTheChap) : "",
+							tongLaiDaThuTheChap > 0 ? df.format(tongLaiDaThuTheChap) : "",
+							tongDuNoGocTheChap > 0 ? df.format(tongDuNoGocTheChap) : "", "", "", "", "", "", "", "",
+							""));
 				}
-				collections.add(new PhatVayDTO(ctv.getMa(), ctv.getHoTen(),  PropsUtil.get("viethoa.tong"), ctv.getDuNoToiDa() > 0 ? df.format(ctv.getDuNoToiDa()) : "",  tongTienVay > 0 ? df.format(tongTienVay) : "", tongGocNgay > 0 ? df.format(tongGocNgay) : "", tongLaiNgay > 0 ? df.format(tongLaiNgay) : "",tongGocDaThu > 0 ? df.format(tongGocDaThu) : "" , tongLaiDaThu > 0 ? df.format(tongLaiDaThu) : "",tongDuNoGoc > 0 ? df.format(tongDuNoGoc) : "" , String.valueOf(stt), "", "", "", "", "", "", ""));
-				if(tongDuNoGocTheChap > 0) {
-					collections.add(new PhatVayDTO("", "", PropsUtil.get("viethoa.thue-chap"), ctv.getDuNoToiDaTheChap() > 0 ? df.format(ctv.getDuNoToiDaTheChap()) : "",  tongTienVayTheChap > 0 ? df.format(tongTienVayTheChap) : "", tongGocNgayTheChap > 0 ? df.format(tongGocNgayTheChap) : "", tongLaiNgayTheChap > 0 ? df.format(tongLaiNgayTheChap) : "",tongGocDaThuTheChap > 0 ? df.format(tongGocDaThuTheChap) : "" , tongLaiDaThuTheChap > 0 ? df.format(tongLaiDaThuTheChap) : "",tongDuNoGocTheChap > 0 ? df.format(tongDuNoGocTheChap) : "" , "", "", "", "", "", "", "", ""));
-				}
-				if(tongDuNoGocTinChap > 0) {
-					collections.add(new PhatVayDTO("", "", PropsUtil.get("viethoa.tin-chap"), (ctv.getDuNoToiDa() - ctv.getDuNoToiDaTheChap()) > 0 ? df.format(ctv.getDuNoToiDa() - ctv.getDuNoToiDaTheChap()) : "",  tongTienVayTinChap > 0 ? df.format(tongTienVayTinChap) : "", tongGocNgayTinChap > 0 ? df.format(tongGocNgayTinChap) : "", tongLaiNgayTinChap > 0 ? df.format(tongLaiNgayTinChap) : "",tongGocDaThuTinChap > 0 ? df.format(tongGocDaThuTinChap) : "" , tongLaiDaThuTinChap > 0 ? df.format(tongLaiDaThuTinChap) : "",tongDuNoGocTinChap > 0 ? df.format(tongDuNoGocTinChap) : "" , "", "", "", "", "", "", "", ""));
+				if (tongDuNoGocTinChap > 0) {
+					collections.add(new PhatVayDTO("", "", PropsUtil.get("viethoa.tin-chap"),
+							(ctv.getDuNoToiDa() - ctv.getDuNoToiDaTheChap()) > 0
+									? df.format(ctv.getDuNoToiDa() - ctv.getDuNoToiDaTheChap())
+									: "",
+							tongTienVayTinChap > 0 ? df.format(tongTienVayTinChap) : "",
+							tongGocNgayTinChap > 0 ? df.format(tongGocNgayTinChap) : "",
+							tongLaiNgayTinChap > 0 ? df.format(tongLaiNgayTinChap) : "",
+							tongGocDaThuTinChap > 0 ? df.format(tongGocDaThuTinChap) : "",
+							tongLaiDaThuTinChap > 0 ? df.format(tongLaiDaThuTinChap) : "",
+							tongDuNoGocTinChap > 0 ? df.format(tongDuNoGocTinChap) : "", "", "", "", "", "", "", "",
+							""));
 				}
 				tongDuNoGocToiDaAll += ctv.getDuNoToiDa();
 			}

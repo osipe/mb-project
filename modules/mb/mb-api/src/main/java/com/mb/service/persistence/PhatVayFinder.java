@@ -23,11 +23,15 @@ import aQute.bnd.annotation.ProviderType;
 @ProviderType
 public interface PhatVayFinder {
 
+	public void updateChiNhanh(String maCTV, long chiNhanhId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public java.util.List<com.mb.model.PhatVay> getPhatVayInIds(String ids)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public java.util.List<com.mb.model.PhatVay> getPhatVaySaoKe(
-			String maCTV, int loaiPhatVay, java.util.Date createDate)
+			long chiNhanhId, String maCTV, int loaiPhatVay,
+			java.util.Date createDate)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public com.mb.model.PhatVay getPhatVayByNgayThuTruocLast()

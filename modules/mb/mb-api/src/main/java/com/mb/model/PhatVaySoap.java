@@ -41,6 +41,7 @@ public class PhatVaySoap implements Serializable {
 		soapModel.setUserName(model.getUserName());
 		soapModel.setNgayTao(model.getNgayTao());
 		soapModel.setModifiedDate(model.getModifiedDate());
+		soapModel.setChiNhanhId(model.getChiNhanhId());
 		soapModel.setMaCTV(model.getMaCTV());
 		soapModel.setMaKhachHang(model.getMaKhachHang());
 		soapModel.setSoKU(model.getSoKU());
@@ -168,6 +169,14 @@ public class PhatVaySoap implements Serializable {
 
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
+	}
+
+	public long getChiNhanhId() {
+		return _chiNhanhId;
+	}
+
+	public void setChiNhanhId(long chiNhanhId) {
+		_chiNhanhId = chiNhanhId;
 	}
 
 	public String getMaCTV() {
@@ -337,6 +346,7 @@ public class PhatVaySoap implements Serializable {
 	private String _userName;
 	private Date _ngayTao;
 	private Date _modifiedDate;
+	private long _chiNhanhId;
 	private String _maCTV;
 	private String _maKhachHang;
 	private String _soKU;

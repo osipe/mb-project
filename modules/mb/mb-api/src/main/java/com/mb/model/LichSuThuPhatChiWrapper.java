@@ -65,6 +65,7 @@ public class LichSuThuPhatChiWrapper
 		attributes.put("userName", getUserName());
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("chiNhanhId", getChiNhanhId());
 		attributes.put("phatVayId", getPhatVayId());
 		attributes.put("maCTV", getMaCTV());
 		attributes.put("soTien", getSoTien());
@@ -119,6 +120,12 @@ public class LichSuThuPhatChiWrapper
 
 		if (modifiedDate != null) {
 			setModifiedDate(modifiedDate);
+		}
+
+		Long chiNhanhId = (Long)attributes.get("chiNhanhId");
+
+		if (chiNhanhId != null) {
+			setChiNhanhId(chiNhanhId);
 		}
 
 		Long phatVayId = (Long)attributes.get("phatVayId");
@@ -180,6 +187,16 @@ public class LichSuThuPhatChiWrapper
 	@Override
 	public int compareTo(LichSuThuPhatChi lichSuThuPhatChi) {
 		return _lichSuThuPhatChi.compareTo(lichSuThuPhatChi);
+	}
+
+	/**
+	 * Returns the chi nhanh ID of this lich su thu phat chi.
+	 *
+	 * @return the chi nhanh ID of this lich su thu phat chi
+	 */
+	@Override
+	public long getChiNhanhId() {
+		return _lichSuThuPhatChi.getChiNhanhId();
 	}
 
 	/**
@@ -390,6 +407,16 @@ public class LichSuThuPhatChiWrapper
 	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_lichSuThuPhatChi.setCachedModel(cachedModel);
+	}
+
+	/**
+	 * Sets the chi nhanh ID of this lich su thu phat chi.
+	 *
+	 * @param chiNhanhId the chi nhanh ID of this lich su thu phat chi
+	 */
+	@Override
+	public void setChiNhanhId(long chiNhanhId) {
+		_lichSuThuPhatChi.setChiNhanhId(chiNhanhId);
 	}
 
 	/**

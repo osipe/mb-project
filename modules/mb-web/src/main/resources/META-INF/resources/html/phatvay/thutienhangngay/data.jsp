@@ -100,17 +100,6 @@
 			 		}
 			 	%>
 			 </liferay-ui:search-container-column-text>
-			  <liferay-ui:search-container-column-text cssClass="aui-w5" name="Mã">
-			 	<span style="color:#ff3d00e8;font-weight: bold;"><%=congTacVien.getMa() %></span>
-			 	<%
-			 		for(PhatVay item : phatVays){
-			 	%>
-			 		<br/>
-			 		<span><%=item.getKhachHang() != null ? item.getKhachHang().getMa() : "" %></span>
-			 	<%
-			 		}
-			 	%>
-			 </liferay-ui:search-container-column-text>
 			  <liferay-ui:search-container-column-text  name="TÊN">
 			 	<span style="color:#ff3d00e8;font-weight: bold;"><%=congTacVien.getHoTen() %></span>
 			 	<%
@@ -129,6 +118,17 @@
 			 	%>
 			 		<br/>
 			 		<span style="font-style: italic;"><%=item.getSoTienVay() > 0 ? df.format(item.getSoTienVay()) : "0"%></span>
+			 	<%
+			 		}
+			 	%>
+			 </liferay-ui:search-container-column-text>
+			  <liferay-ui:search-container-column-text cssClass="aui-w10 text-right" name="THỜI HẠN">
+			 	<span style="color:#ff3d00e8;font-weight: bold;">&nbsp;</span>
+			 	<%
+			 		for(PhatVay item : phatVays){
+			 	%>
+			 		<br/>
+			 		<span style="font-style: italic;"><%=item.getThoiHan()%></span>
 			 	<%
 			 		}
 			 	%>
@@ -183,7 +183,7 @@
 			 		for(PhatVay item : phatVays){
 			 			String ngayThuTruoc = "&nbsp;";
 			 			if(item.getTrangThai() == TrangThaiPhatVayEnum.CO_THU_TIEN_TRUOC.getValue() && item.getNgayThuTruocTu() != null && item.getNgayThuTruocDen() != null){
-			 				ngayThuTruoc = "Đã thu trước tết" + "( " + sdf.format(item.getNgayThuTruocTu()) + " - " + sdf.format(item.getNgayThuTruocDen()) + " )";
+			 				ngayThuTruoc = "Đã thu tết" + "( " + sdf.format(item.getNgayThuTruocTu()) + " - " + sdf.format(item.getNgayThuTruocDen()) + " )";
 			 			}
 			 	%>
 			 		<br/>

@@ -68,7 +68,7 @@ public class LichSuThuPhatChiCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(33);
 
 		sb.append("{lichSuThuPhatChiId=");
 		sb.append(lichSuThuPhatChiId);
@@ -84,6 +84,8 @@ public class LichSuThuPhatChiCacheModel
 		sb.append(createDate);
 		sb.append(", modifiedDate=");
 		sb.append(modifiedDate);
+		sb.append(", chiNhanhId=");
+		sb.append(chiNhanhId);
 		sb.append(", phatVayId=");
 		sb.append(phatVayId);
 		sb.append(", maCTV=");
@@ -135,6 +137,7 @@ public class LichSuThuPhatChiCacheModel
 			lichSuThuPhatChiImpl.setModifiedDate(new Date(modifiedDate));
 		}
 
+		lichSuThuPhatChiImpl.setChiNhanhId(chiNhanhId);
 		lichSuThuPhatChiImpl.setPhatVayId(phatVayId);
 
 		if (maCTV == null) {
@@ -177,6 +180,8 @@ public class LichSuThuPhatChiCacheModel
 		createDate = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
 
+		chiNhanhId = objectInput.readLong();
+
 		phatVayId = objectInput.readLong();
 		maCTV = objectInput.readUTF();
 
@@ -212,6 +217,8 @@ public class LichSuThuPhatChiCacheModel
 		objectOutput.writeLong(createDate);
 		objectOutput.writeLong(modifiedDate);
 
+		objectOutput.writeLong(chiNhanhId);
+
 		objectOutput.writeLong(phatVayId);
 
 		if (maCTV == null) {
@@ -240,6 +247,7 @@ public class LichSuThuPhatChiCacheModel
 	public String userName;
 	public long createDate;
 	public long modifiedDate;
+	public long chiNhanhId;
 	public long phatVayId;
 	public String maCTV;
 	public double soTien;

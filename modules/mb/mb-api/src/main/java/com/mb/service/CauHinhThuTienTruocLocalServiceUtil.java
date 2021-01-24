@@ -228,6 +228,12 @@ public class CauHinhThuTienTruocLocalServiceUtil {
 		return getService().fetchCauHinhThuTienTruoc(cauHinhThuTienTruocId);
 	}
 
+	public static java.util.List<com.mb.model.CauHinhThuTienTruoc> findAll()
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return getService().findAll();
+	}
+
 	public static java.util.List<com.mb.model.CauHinhThuTienTruoc> findBase(
 			int nam, int hoatDong, int start, int end,
 			com.liferay.portal.kernel.util.OrderByComparator obc)

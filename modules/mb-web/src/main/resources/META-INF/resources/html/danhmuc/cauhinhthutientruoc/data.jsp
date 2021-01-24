@@ -10,13 +10,11 @@
 <%@ include file="/html/danhmuc/init.jsp"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%	
-	int namSearch = ParamUtil.getInteger(request, "namSearch");
 	int hoatDongSearch = ParamUtil.getInteger(request, "hoatDongSearch");
-	int count = CauHinhThuTienTruocLocalServiceUtil.countBase(namSearch, hoatDongSearch);
+	int count = CauHinhThuTienTruocLocalServiceUtil.countBase(0, hoatDongSearch);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 %>
 <liferay-portlet:renderURL varImpl="iteratorURL">
-	<portlet:param name="namSearch" value="<%= String.valueOf(namSearch) %>" />
 	<portlet:param name="hoatDongSearch" value="<%= String.valueOf(hoatDongSearch)%>" />
 	<portlet:param name="mvcPath" value="/html/danhmuc/cauhinhthutientruoc/data.jsp" />
 </liferay-portlet:renderURL>
@@ -40,7 +38,7 @@
 		 	searchContainer.setOrderByType(orderByType);
 		 	searchContainer.setOrderByComparator(obc);
 		 
-			List<CauHinhThuTienTruoc> items = CauHinhThuTienTruocLocalServiceUtil.findBase(namSearch, hoatDongSearch, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
+			List<CauHinhThuTienTruoc> items = CauHinhThuTienTruocLocalServiceUtil.findBase(0, hoatDongSearch, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 					
 		 %>
 		 <liferay-ui:search-container-results results="<%= items %>" />
@@ -57,7 +55,6 @@
 					String hoatDongAction = "hoatDong('" + hoatDongURL + "');";
 			 	%>
 		 
-			 <liferay-ui:search-container-column-text cssClass="aui-w10 text-center" name="Năm" value="${cauHinhThuTienTruoc.nam} " orderable="true" orderableProperty="nam"/>
 			 <liferay-ui:search-container-column-text cssClass="aui-w10 text-center" name="Từ ngày" value="<%=cauHinhThuTienTruoc.getNgayTu() != null ? sdf.format(cauHinhThuTienTruoc.getNgayTu()) : ""%>" orderable="true" />
 			 <liferay-ui:search-container-column-text cssClass="aui-w10 text-center" name="Đến ngày" value="<%=cauHinhThuTienTruoc.getNgayDen() != null ? sdf.format(cauHinhThuTienTruoc.getNgayDen()) : ""%>" orderable="true"/>
 			  <liferay-ui:search-container-column-text name="Thao tác" cssClass="aui-w10 text-center">

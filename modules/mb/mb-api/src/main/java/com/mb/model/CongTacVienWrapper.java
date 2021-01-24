@@ -65,6 +65,8 @@ public class CongTacVienWrapper
 		attributes.put("userName", getUserName());
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("chiNhanhId", getChiNhanhId());
+		attributes.put("tenChiNhanh", getTenChiNhanh());
 		attributes.put("ma", getMa());
 		attributes.put("hoTen", getHoTen());
 		attributes.put("soCMND", getSoCMND());
@@ -119,6 +121,18 @@ public class CongTacVienWrapper
 
 		if (modifiedDate != null) {
 			setModifiedDate(modifiedDate);
+		}
+
+		Long chiNhanhId = (Long)attributes.get("chiNhanhId");
+
+		if (chiNhanhId != null) {
+			setChiNhanhId(chiNhanhId);
+		}
+
+		String tenChiNhanh = (String)attributes.get("tenChiNhanh");
+
+		if (tenChiNhanh != null) {
+			setTenChiNhanh(tenChiNhanh);
 		}
 
 		String ma = (String)attributes.get("ma");
@@ -178,6 +192,16 @@ public class CongTacVienWrapper
 	@Override
 	public int compareTo(CongTacVien congTacVien) {
 		return _congTacVien.compareTo(congTacVien);
+	}
+
+	/**
+	 * Returns the chi nhanh ID of this cong tac vien.
+	 *
+	 * @return the chi nhanh ID of this cong tac vien
+	 */
+	@Override
+	public long getChiNhanhId() {
+		return _congTacVien.getChiNhanhId();
 	}
 
 	/**
@@ -331,6 +355,16 @@ public class CongTacVienWrapper
 	}
 
 	/**
+	 * Returns the ten chi nhanh of this cong tac vien.
+	 *
+	 * @return the ten chi nhanh of this cong tac vien
+	 */
+	@Override
+	public String getTenChiNhanh() {
+		return _congTacVien.getTenChiNhanh();
+	}
+
+	/**
 	 * Returns the user ID of this cong tac vien.
 	 *
 	 * @return the user ID of this cong tac vien
@@ -388,6 +422,16 @@ public class CongTacVienWrapper
 	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_congTacVien.setCachedModel(cachedModel);
+	}
+
+	/**
+	 * Sets the chi nhanh ID of this cong tac vien.
+	 *
+	 * @param chiNhanhId the chi nhanh ID of this cong tac vien
+	 */
+	@Override
+	public void setChiNhanhId(long chiNhanhId) {
+		_congTacVien.setChiNhanhId(chiNhanhId);
 	}
 
 	/**
@@ -555,6 +599,16 @@ public class CongTacVienWrapper
 	@Override
 	public void setSoCMND(String soCMND) {
 		_congTacVien.setSoCMND(soCMND);
+	}
+
+	/**
+	 * Sets the ten chi nhanh of this cong tac vien.
+	 *
+	 * @param tenChiNhanh the ten chi nhanh of this cong tac vien
+	 */
+	@Override
+	public void setTenChiNhanh(String tenChiNhanh) {
+		_congTacVien.setTenChiNhanh(tenChiNhanh);
 	}
 
 	/**

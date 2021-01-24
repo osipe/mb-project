@@ -30,31 +30,14 @@
 	<liferay-portlet:renderURL varImpl="iteratorURL">
 		<portlet:param name="soKUSearch" value="<%= String.valueOf(soKUSearch) %>" />
 		<portlet:param name="maCTVSearch" value="<%= String.valueOf(maCTVSearch) %>" />
-		<portlet:param name="arrayChecked" value="<%= arrayChecked%>" />
+		<portlet:param name="phatVayIdAdds" value="<%= arrayChecked%>" />
 		<portlet:param name="mvcPath" value="/html/phatvay/tattoan/danh_sach_phat_vay_chua_thanh_toan.jsp" />
 	</liferay-portlet:renderURL>
 		<div style="text-align: right;"><span class="note-span">(Đơn vị : VND)</span></div>
 		<h4>Danh sách KU chưa tất toán</h4>
-		<liferay-ui:search-container  delta="20"  emptyResultsMessage="Không có kết quả nào được tìm thấy!" iteratorURL="<%=iteratorURL %>" total="<%=count %>" rowChecker="<%=rowChecker%>">
+		<liferay-ui:search-container  delta="<%=count %>"  emptyResultsMessage="Không có kết quả nào được tìm thấy!" iteratorURL="<%=iteratorURL %>" total="<%=count %>" rowChecker="<%=rowChecker%>">
 			 <%
-			 	String orderByType = ParamUtil.getString(request, "orderByType"); 
-			 	String orderByCol = ParamUtil.getString(request, "orderByCol"); 
-			 	if(Validator.isNull(orderByType)){
-			 		orderByType = "asc";
-			 	}
-			 	if(Validator.isNull(orderByCol)){
-			 		orderByCol = "soKU";
-			 	}
-			 	boolean ascending = true;
-			 	if("desc".equals(orderByType)){
-			 		ascending = false;
-			 	}
-			 	PhatVayComparator obc = new PhatVayComparator(orderByCol,ascending);
-			 	searchContainer.setOrderByCol(orderByCol);
-			 	searchContainer.setOrderByType(orderByType);
-			 	searchContainer.setOrderByComparator(obc);
-			 
-				List<PhatVay> items =  PhatVayLocalServiceUtil.findBase(soKUSearch, maCTVSearch, "",null,null, null, null,null,null, "1,4", searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
+				List<PhatVay> items =  PhatVayLocalServiceUtil.findBase(soKUSearch, maCTVSearch, "",null,null, null, null,null,null, "1,4", searchContainer.getStart(), searchContainer.getEnd(), null);
 		 %>
 			 <liferay-ui:search-container-results results="<%= items %>" />
 			 <liferay-ui:search-container-row className="com.mb.model.PhatVay" modelVar="phatVay" keyProperty="phatVayId"> 
@@ -130,8 +113,9 @@ AUI().ready(['aui-base'], function(A) {
     });
     recordSearchContainer.all('ul.lfr-pagination-buttons.pager a').on('click', function(e) {
     	e.preventDefault();
+    	var contentDataTable = A.one('#<portlet:namespace />contentDataTable');
+    	var phatVayIds = Liferay.Util.listCheckedExcept(contentDataTable, '<portlet:namespace />allRowIds');
     	Liferay.Data.redirectURL = e.currentTarget.get('href');
-    	var url = e.currentTarget.get('href');
     	pageIO.set('uri', url);
     	pageIO.start();
     });

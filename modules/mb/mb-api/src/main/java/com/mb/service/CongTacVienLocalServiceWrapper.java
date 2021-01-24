@@ -84,6 +84,15 @@ public class CongTacVienLocalServiceWrapper
 			ma, hoTen, soCMND, diaChi, hoatDong);
 	}
 
+	@Override
+	public int countCTVSaoKe(
+			long chiNhanhId, String maCTV, java.util.Date ngayTaoTu)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return _congTacVienLocalService.countCTVSaoKe(
+			chiNhanhId, maCTV, ngayTaoTu);
+	}
+
 	/**
 	 * Creates a new cong tac vien with the primary key. Does not add the cong tac vien to the database.
 	 *
@@ -313,10 +322,21 @@ public class CongTacVienLocalServiceWrapper
 
 	@Override
 	public java.util.List<com.mb.model.CongTacVien> getCTVSaoKe(
-			String maCTV, java.util.Date ngayTaoTu)
+			long chiNhanhId, String maCTV, java.util.Date ngayTaoTu)
 		throws com.liferay.portal.kernel.exception.SystemException {
 
-		return _congTacVienLocalService.getCTVSaoKe(maCTV, ngayTaoTu);
+		return _congTacVienLocalService.getCTVSaoKe(
+			chiNhanhId, maCTV, ngayTaoTu);
+	}
+
+	@Override
+	public java.util.List<com.mb.model.CongTacVien> getCTVSaoKePhanTrang(
+			long chiNhanhId, String maCTV, java.util.Date ngayTaoTu, int start,
+			int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return _congTacVienLocalService.getCTVSaoKePhanTrang(
+			chiNhanhId, maCTV, ngayTaoTu, start, end);
 	}
 
 	@Override

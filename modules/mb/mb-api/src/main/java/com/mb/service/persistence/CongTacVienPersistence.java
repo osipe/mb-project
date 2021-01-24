@@ -136,6 +136,304 @@ public interface CongTacVienPersistence extends BasePersistence<CongTacVien> {
 	public int countBySoCMND(String soCMND);
 
 	/**
+	 * Returns all the cong tac viens where chiNhanhId = &#63; and hoatDong = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 * @return the matching cong tac viens
+	 */
+	public java.util.List<CongTacVien> findByChiNhanh_HoatDong(
+		long chiNhanhId, Boolean hoatDong);
+
+	/**
+	 * Returns a range of all the cong tac viens where chiNhanhId = &#63; and hoatDong = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CongTacVienModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 * @param start the lower bound of the range of cong tac viens
+	 * @param end the upper bound of the range of cong tac viens (not inclusive)
+	 * @return the range of matching cong tac viens
+	 */
+	public java.util.List<CongTacVien> findByChiNhanh_HoatDong(
+		long chiNhanhId, Boolean hoatDong, int start, int end);
+
+	/**
+	 * Returns an ordered range of all the cong tac viens where chiNhanhId = &#63; and hoatDong = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CongTacVienModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 * @param start the lower bound of the range of cong tac viens
+	 * @param end the upper bound of the range of cong tac viens (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching cong tac viens
+	 */
+	public java.util.List<CongTacVien> findByChiNhanh_HoatDong(
+		long chiNhanhId, Boolean hoatDong, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<CongTacVien>
+			orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the cong tac viens where chiNhanhId = &#63; and hoatDong = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CongTacVienModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 * @param start the lower bound of the range of cong tac viens
+	 * @param end the upper bound of the range of cong tac viens (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @return the ordered range of matching cong tac viens
+	 */
+	public java.util.List<CongTacVien> findByChiNhanh_HoatDong(
+		long chiNhanhId, Boolean hoatDong, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<CongTacVien>
+			orderByComparator,
+		boolean retrieveFromCache);
+
+	/**
+	 * Returns the first cong tac vien in the ordered set where chiNhanhId = &#63; and hoatDong = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching cong tac vien
+	 * @throws NoSuchCongTacVienException if a matching cong tac vien could not be found
+	 */
+	public CongTacVien findByChiNhanh_HoatDong_First(
+			long chiNhanhId, Boolean hoatDong,
+			com.liferay.portal.kernel.util.OrderByComparator<CongTacVien>
+				orderByComparator)
+		throws NoSuchCongTacVienException;
+
+	/**
+	 * Returns the first cong tac vien in the ordered set where chiNhanhId = &#63; and hoatDong = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching cong tac vien, or <code>null</code> if a matching cong tac vien could not be found
+	 */
+	public CongTacVien fetchByChiNhanh_HoatDong_First(
+		long chiNhanhId, Boolean hoatDong,
+		com.liferay.portal.kernel.util.OrderByComparator<CongTacVien>
+			orderByComparator);
+
+	/**
+	 * Returns the last cong tac vien in the ordered set where chiNhanhId = &#63; and hoatDong = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching cong tac vien
+	 * @throws NoSuchCongTacVienException if a matching cong tac vien could not be found
+	 */
+	public CongTacVien findByChiNhanh_HoatDong_Last(
+			long chiNhanhId, Boolean hoatDong,
+			com.liferay.portal.kernel.util.OrderByComparator<CongTacVien>
+				orderByComparator)
+		throws NoSuchCongTacVienException;
+
+	/**
+	 * Returns the last cong tac vien in the ordered set where chiNhanhId = &#63; and hoatDong = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching cong tac vien, or <code>null</code> if a matching cong tac vien could not be found
+	 */
+	public CongTacVien fetchByChiNhanh_HoatDong_Last(
+		long chiNhanhId, Boolean hoatDong,
+		com.liferay.portal.kernel.util.OrderByComparator<CongTacVien>
+			orderByComparator);
+
+	/**
+	 * Returns the cong tac viens before and after the current cong tac vien in the ordered set where chiNhanhId = &#63; and hoatDong = &#63;.
+	 *
+	 * @param congTacVienId the primary key of the current cong tac vien
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next cong tac vien
+	 * @throws NoSuchCongTacVienException if a cong tac vien with the primary key could not be found
+	 */
+	public CongTacVien[] findByChiNhanh_HoatDong_PrevAndNext(
+			long congTacVienId, long chiNhanhId, Boolean hoatDong,
+			com.liferay.portal.kernel.util.OrderByComparator<CongTacVien>
+				orderByComparator)
+		throws NoSuchCongTacVienException;
+
+	/**
+	 * Removes all the cong tac viens where chiNhanhId = &#63; and hoatDong = &#63; from the database.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 */
+	public void removeByChiNhanh_HoatDong(long chiNhanhId, Boolean hoatDong);
+
+	/**
+	 * Returns the number of cong tac viens where chiNhanhId = &#63; and hoatDong = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param hoatDong the hoat dong
+	 * @return the number of matching cong tac viens
+	 */
+	public int countByChiNhanh_HoatDong(long chiNhanhId, Boolean hoatDong);
+
+	/**
+	 * Returns all the cong tac viens where chiNhanhId = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @return the matching cong tac viens
+	 */
+	public java.util.List<CongTacVien> findByChiNhanh(long chiNhanhId);
+
+	/**
+	 * Returns a range of all the cong tac viens where chiNhanhId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CongTacVienModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param start the lower bound of the range of cong tac viens
+	 * @param end the upper bound of the range of cong tac viens (not inclusive)
+	 * @return the range of matching cong tac viens
+	 */
+	public java.util.List<CongTacVien> findByChiNhanh(
+		long chiNhanhId, int start, int end);
+
+	/**
+	 * Returns an ordered range of all the cong tac viens where chiNhanhId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CongTacVienModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param start the lower bound of the range of cong tac viens
+	 * @param end the upper bound of the range of cong tac viens (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching cong tac viens
+	 */
+	public java.util.List<CongTacVien> findByChiNhanh(
+		long chiNhanhId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<CongTacVien>
+			orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the cong tac viens where chiNhanhId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CongTacVienModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param start the lower bound of the range of cong tac viens
+	 * @param end the upper bound of the range of cong tac viens (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @return the ordered range of matching cong tac viens
+	 */
+	public java.util.List<CongTacVien> findByChiNhanh(
+		long chiNhanhId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<CongTacVien>
+			orderByComparator,
+		boolean retrieveFromCache);
+
+	/**
+	 * Returns the first cong tac vien in the ordered set where chiNhanhId = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching cong tac vien
+	 * @throws NoSuchCongTacVienException if a matching cong tac vien could not be found
+	 */
+	public CongTacVien findByChiNhanh_First(
+			long chiNhanhId,
+			com.liferay.portal.kernel.util.OrderByComparator<CongTacVien>
+				orderByComparator)
+		throws NoSuchCongTacVienException;
+
+	/**
+	 * Returns the first cong tac vien in the ordered set where chiNhanhId = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching cong tac vien, or <code>null</code> if a matching cong tac vien could not be found
+	 */
+	public CongTacVien fetchByChiNhanh_First(
+		long chiNhanhId,
+		com.liferay.portal.kernel.util.OrderByComparator<CongTacVien>
+			orderByComparator);
+
+	/**
+	 * Returns the last cong tac vien in the ordered set where chiNhanhId = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching cong tac vien
+	 * @throws NoSuchCongTacVienException if a matching cong tac vien could not be found
+	 */
+	public CongTacVien findByChiNhanh_Last(
+			long chiNhanhId,
+			com.liferay.portal.kernel.util.OrderByComparator<CongTacVien>
+				orderByComparator)
+		throws NoSuchCongTacVienException;
+
+	/**
+	 * Returns the last cong tac vien in the ordered set where chiNhanhId = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching cong tac vien, or <code>null</code> if a matching cong tac vien could not be found
+	 */
+	public CongTacVien fetchByChiNhanh_Last(
+		long chiNhanhId,
+		com.liferay.portal.kernel.util.OrderByComparator<CongTacVien>
+			orderByComparator);
+
+	/**
+	 * Returns the cong tac viens before and after the current cong tac vien in the ordered set where chiNhanhId = &#63;.
+	 *
+	 * @param congTacVienId the primary key of the current cong tac vien
+	 * @param chiNhanhId the chi nhanh ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next cong tac vien
+	 * @throws NoSuchCongTacVienException if a cong tac vien with the primary key could not be found
+	 */
+	public CongTacVien[] findByChiNhanh_PrevAndNext(
+			long congTacVienId, long chiNhanhId,
+			com.liferay.portal.kernel.util.OrderByComparator<CongTacVien>
+				orderByComparator)
+		throws NoSuchCongTacVienException;
+
+	/**
+	 * Removes all the cong tac viens where chiNhanhId = &#63; from the database.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 */
+	public void removeByChiNhanh(long chiNhanhId);
+
+	/**
+	 * Returns the number of cong tac viens where chiNhanhId = &#63;.
+	 *
+	 * @param chiNhanhId the chi nhanh ID
+	 * @return the number of matching cong tac viens
+	 */
+	public int countByChiNhanh(long chiNhanhId);
+
+	/**
 	 * Caches the cong tac vien in the entity cache if it is enabled.
 	 *
 	 * @param congTacVien the cong tac vien

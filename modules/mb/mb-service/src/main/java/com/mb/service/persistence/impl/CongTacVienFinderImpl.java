@@ -55,9 +55,103 @@ public class CongTacVienFinderImpl extends CongTacVienFinderBaseImpl implements 
 	public static final String FIND_BASE = CongTacVienFinder.class.getName() + ".findBase";
 	public static final String COUNT_BASE = CongTacVienFinder.class.getName() + ".countBase";
 	public static final String GET_CTV_SAOKE = CongTacVienFinder.class.getName() + ".getCTVSaoKe";
+	public static final String COUNT_CTV_SAOKE = CongTacVienFinder.class.getName() + ".countCTVSaoKe";
 	public static final String GET_CTV_PHATVAYNGAY = CongTacVienFinder.class.getName() + ".getCTVPhatVayNgay";
 	public static final String GET_CTV_THUPHATCHI = CongTacVienFinder.class.getName() + ".getCTVThuPhatChi";
 	
+	
+	@SuppressWarnings("unchecked")
+	public int countCTVSaoKe(long chiNhanhId, String maCTV,Date createDate) throws SystemException {
+		Session session = null;
+		try {
+			session = openSession();
+			String sql = _customSQL.get(getClass(), COUNT_CTV_SAOKE);
+			if(chiNhanhId <= 0) {
+				sql = sql.replace("AND chinhanhid = ?", "");
+			}
+			if (Validator.isNull(maCTV)) {
+				sql = sql.replace("and mactv = ?", "");
+			}
+			if(createDate == null) {
+				sql = sql.replace("and ngayketthuc >= ?", "");
+				sql = sql.replace("and createdate <= ?", "");
+				sql = sql.replace("and createdate <= ?", "");
+			}
+			SQLQuery q = session.createSQLQuery(sql);
+			q.addScalar("COUNT_VALUE", Type.LONG);
+			QueryPos qPos = QueryPos.getInstance(q);
+			if(chiNhanhId > 0) {
+				qPos.add(chiNhanhId);
+			}
+			if (Validator.isNotNull(maCTV)) {
+				qPos.add(maCTV);
+			}
+			if(createDate != null) {
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(createDate);
+				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getGTDate(cal)));
+				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getLTDate(cal)));
+				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getLTDate(cal)));
+			}else {
+			}
+			Iterator<Long> iter = q.list().iterator();
+			if (iter.hasNext()) {
+				Long value = iter.next();
+				if (Validator.isNotNull(value)) {
+					return value.intValue();
+				}
+			}
+			return 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SystemException(e);
+		} finally {
+			closeSession(session);
+		}
+	}
+	@SuppressWarnings("unchecked")
+	public List<CongTacVien> getCTVSaoKePhanTrang(long chiNhanhId,String maCTV,Date createDate,int start,int end) throws SystemException {
+		Session session = null;
+		try {
+			session = openSession();
+			String sql = _customSQL.get(getClass(), GET_CTV_SAOKE);
+			if(chiNhanhId <= 0) {
+				sql = sql.replace("AND chinhanhid = ?", "");
+			}
+			if (Validator.isNull(maCTV)) {
+				sql = sql.replace("and mactv = ?", "");
+			}
+			if(createDate == null) {
+				sql = sql.replace("and ngayketthuc >= ?", "");
+				sql = sql.replace("and createdate <= ?", "");
+				sql = sql.replace("and createdate <= ?", "");
+			}
+			sql = _customSQL.replaceOrderBy(sql, null);
+			SQLQuery q = session.createSQLQuery(sql);
+			q.addEntity("CongTacVien", CongTacVienImpl.class);
+			QueryPos qPos = QueryPos.getInstance(q);
+			if(chiNhanhId > 0) {
+				qPos.add(chiNhanhId);
+			}
+			if (Validator.isNotNull(maCTV)) {
+				qPos.add(maCTV);
+			}
+			if(createDate != null) {
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(createDate);
+				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getGTDate(cal)));
+				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getLTDate(cal)));
+				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getLTDate(cal)));
+			}else {
+			}
+			return (List<CongTacVien>) QueryUtil.list(q, getDialect(), start, end);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SystemException(e);
+		} finally {
+			closeSession(session);
+		}
+	}
 	
 	@SuppressWarnings("unchecked")
 	public List<CongTacVien> getCTVThuPhatChi(String maCTV,Date ngayTaoTu,Date ngayTaoDen) throws SystemException {
@@ -133,11 +227,14 @@ public class CongTacVienFinderImpl extends CongTacVienFinderBaseImpl implements 
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<CongTacVien> getCTVSaoKe(String maCTV,Date createDate) throws SystemException {
+	public List<CongTacVien> getCTVSaoKe(long chiNhanhId,String maCTV,Date createDate) throws SystemException {
 		Session session = null;
 		try {
 			session = openSession();
 			String sql = _customSQL.get(getClass(), GET_CTV_SAOKE);
+			if(chiNhanhId <= 0) {
+				sql = sql.replace("AND chinhanhid = ?", "");
+			}
 			if (Validator.isNull(maCTV)) {
 				sql = sql.replace("and mactv = ?", "");
 			}
@@ -150,6 +247,9 @@ public class CongTacVienFinderImpl extends CongTacVienFinderBaseImpl implements 
 			SQLQuery q = session.createSQLQuery(sql);
 			q.addEntity("CongTacVien", CongTacVienImpl.class);
 			QueryPos qPos = QueryPos.getInstance(q);
+			if(chiNhanhId > 0) {
+				qPos.add(chiNhanhId);
+			}
 			if (Validator.isNotNull(maCTV)) {
 				qPos.add(maCTV);
 			}

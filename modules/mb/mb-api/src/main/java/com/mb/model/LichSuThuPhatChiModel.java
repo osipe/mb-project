@@ -191,6 +191,20 @@ public interface LichSuThuPhatChiModel
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
+	 * Returns the chi nhanh ID of this lich su thu phat chi.
+	 *
+	 * @return the chi nhanh ID of this lich su thu phat chi
+	 */
+	public long getChiNhanhId();
+
+	/**
+	 * Sets the chi nhanh ID of this lich su thu phat chi.
+	 *
+	 * @param chiNhanhId the chi nhanh ID of this lich su thu phat chi
+	 */
+	public void setChiNhanhId(long chiNhanhId);
+
+	/**
 	 * Returns the phat vay ID of this lich su thu phat chi.
 	 *
 	 * @return the phat vay ID of this lich su thu phat chi

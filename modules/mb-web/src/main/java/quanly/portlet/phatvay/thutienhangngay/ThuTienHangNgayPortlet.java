@@ -33,9 +33,11 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.mb.model.CauHinhThuTienTruoc;
 import com.mb.model.CongTacVien;
 import com.mb.model.LichSuThuPhatChi;
 import com.mb.model.PhatVay;
+import com.mb.service.CauHinhThuTienTruocLocalServiceUtil;
 import com.mb.service.CongTacVienLocalServiceUtil;
 import com.mb.service.LichSuThuPhatChiLocalServiceUtil;
 import com.mb.service.PhatVayLocalServiceUtil;
@@ -99,6 +101,99 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 
 	}
 
+	private JSONObject getSoNgayPhaiThu(Date ngayThuTien, PhatVay pv) {
+		JSONObject result = JSONFactoryUtil.createJSONObject();
+
+		Calendar ngayBatDau = Calendar.getInstance();
+		ngayBatDau.setTime(pv.getNgayBatDau());
+		Calendar ngayKetThuc = Calendar.getInstance();
+		ngayKetThuc.setTime(pv.getNgayKetThuc());
+
+		List<CauHinhThuTienTruoc> cauHinhs = CauHinhThuTienTruocLocalServiceUtil.findAll();
+
+		Calendar ngayThuTienCal = Calendar.getInstance();
+		ngayThuTienCal.setTime(ngayThuTien);
+		int soNgayKhongThu = 0;
+
+		if (CollectionUtils.isNotEmpty(cauHinhs)) {
+			Calendar ngayBatDauThuTet = Calendar.getInstance();
+			ngayBatDauThuTet.setTime(cauHinhs.get(0).getNgayTu());
+			Calendar ngayKetThucThuTet = Calendar.getInstance();
+			ngayKetThucThuTet.setTime(cauHinhs.get(0).getNgayDen());
+
+			Date ngayStart = null;
+			Date ngayEnd = null;
+			// Xác định những ngày thu tiền tết có trong phát vay
+			if (CalendarUtil.getGTDate(ngayBatDauThuTet).getTime() <= CalendarUtil.getGTDate(ngayBatDau).getTime()) {
+				if (CalendarUtil.getLTDate(ngayKetThucThuTet).getTime() >= CalendarUtil.getGTDate(ngayBatDau)
+						.getTime()) {
+					if (CalendarUtil.getLTDate(ngayKetThucThuTet).getTime() <= CalendarUtil.getLTDate(ngayKetThuc)
+							.getTime()) {
+						ngayStart = CalendarUtil.getGTDate(ngayBatDau);
+						ngayEnd = CalendarUtil.getLTDate(ngayKetThucThuTet);
+					} else {
+						ngayStart = CalendarUtil.getGTDate(ngayBatDau);
+						ngayEnd = CalendarUtil.getLTDate(ngayKetThuc);
+					}
+				} else {
+					// Thu tiền tết nằm ngoài phát vay
+				}
+			} else if (CalendarUtil.getGTDate(ngayBatDauThuTet).getTime() <= CalendarUtil.getLTDate(ngayKetThuc)
+					.getTime()) {
+				if (CalendarUtil.getLTDate(ngayKetThucThuTet).getTime() <= CalendarUtil.getLTDate(ngayKetThuc)
+						.getTime()) {
+					ngayStart = CalendarUtil.getGTDate(ngayBatDauThuTet);
+					ngayEnd = CalendarUtil.getLTDate(ngayKetThucThuTet);
+				} else {
+					ngayStart = CalendarUtil.getGTDate(ngayBatDauThuTet);
+					ngayEnd = CalendarUtil.getLTDate(ngayKetThuc);
+				}
+			} else {
+				// Thu tiền tết nằm ngoài phát vay
+			}
+
+			// Xác định những ngày thu tiền tết có trong phát vay - có trong ngày thu tiền
+			if (ngayStart != null && ngayEnd != null) {
+				if (CalendarUtil.getGTDate(ngayThuTienCal).getTime() >= ngayStart.getTime()) {
+					if (CalendarUtil.getLTDate(ngayThuTienCal).getTime() <= ngayEnd.getTime()) {
+						soNgayKhongThu = (int) ((CalendarUtil.getLTDate(ngayThuTienCal).getTime() - ngayStart.getTime())
+								/ time1Ngay);
+					} else {
+						soNgayKhongThu = (int) ((ngayEnd.getTime() - ngayStart.getTime()) / time1Ngay);
+					}
+				} else {
+					// Ngày thu tiền chưa đến thời gian thu tiền tết
+				}
+			}
+
+		}
+
+		int soNgayPhaiThu = 0;
+
+		if (CalendarUtil.getLTDate(ngayThuTienCal).getTime() > CalendarUtil.getGTDate(ngayBatDau).getTime()) {
+			if (CalendarUtil.getLTDate(ngayThuTienCal).getTime() <= CalendarUtil.getLTDate(ngayKetThuc).getTime()) {
+				soNgayPhaiThu = (int) ((CalendarUtil.getLTDate(ngayThuTienCal).getTime()
+						- CalendarUtil.getGTDate(ngayBatDau).getTime()) / time1Ngay);
+			} else {
+				soNgayPhaiThu = (int) ((CalendarUtil.getLTDate(ngayKetThuc).getTime()
+						- CalendarUtil.getGTDate(ngayBatDau).getTime()) / time1Ngay);
+			}
+		} else {
+			soNgayPhaiThu = 0;
+		}
+		if (soNgayPhaiThu > soNgayKhongThu) {
+			result.put("soNgayThu", soNgayPhaiThu - soNgayKhongThu);
+		} else {
+			result.put("soNgayThu", 0);
+		}
+		int tongSoNgayDaThu = soNgayPhaiThu - soNgayKhongThu + pv.getSoNgayThuTruoc();
+
+		if (tongSoNgayDaThu == pv.getThoiHan()) {
+			result.put("daThanhToan", true);
+		}
+		return result;
+	}
+
 	public JSONObject thuTienURL(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
 			ServiceContext serviceContext) {
 		JSONObject kq = JSONFactoryUtil.createJSONObject();
@@ -110,115 +205,46 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 				List<CongTacVien> items = CongTacVienLocalServiceUtil.findBase(maCTVSearch, "", "", "", 1, -1, -1,
 						null);
 				for (CongTacVien item : items) {
+					List<PhatVay> phatVays = PhatVayLocalServiceUtil.findCTV_NgayThuTien(item.getMa(), ngayThuTien);
 					Double tongVonTra = GetterUtil.getDouble("0");
 					Double tongLaiTra = GetterUtil.getDouble("0");
-					List<PhatVay> phatVays = PhatVayLocalServiceUtil.findCTV_NgayThuTien(item.getMa(), ngayThuTien);
 					if (CollectionUtils.isNotEmpty(phatVays)) {
 						for (PhatVay pv : phatVays) {
 							Double vonTra = GetterUtil.getDouble("0");
 							Double laiTra = GetterUtil.getDouble("0");
-							if (pv.getTrangThai() == 4) {
-								Calendar calNgayThuTien = Calendar.getInstance();
-								calNgayThuTien.setTime(ngayThuTien);
-								Calendar calNgayKetThuc = Calendar.getInstance();
-								calNgayKetThuc.setTime(pv.getNgayKetThuc());
-								Calendar calNgayBatDau = Calendar.getInstance();
-								calNgayBatDau.setTime(pv.getNgayBatDau());
-								Calendar calNgayDaThuTruocTu = Calendar.getInstance();
-								calNgayDaThuTruocTu.setTime(pv.getNgayThuTruocTu());
-								Calendar calNgayDaThuTruocDen = Calendar.getInstance();
-								calNgayDaThuTruocDen.setTime(pv.getNgayThuTruocDen());
-								if (CalendarUtil.getGTDate(calNgayThuTien).getTime() >= CalendarUtil
-										.getGTDate(calNgayKetThuc).getTime()) {
-									tongVonTra += pv.getDuNoGoc();
-									vonTra = pv.getDuNoGoc();
-									tongLaiTra += (pv.getLaiNgay()
-											* (pv.getThoiHan() - (pv.getSoLanDaThu() + pv.getSoNgayThuTruoc())));
-									laiTra = (pv.getLaiNgay()
-											* (pv.getThoiHan() - (pv.getSoLanDaThu() + pv.getSoNgayThuTruoc())));
-									pv.setNgayDaThuCuoi(pv.getNgayKetThuc());
-									pv.setSoLanDaThu(pv.getThoiHan());
-									pv.setTrangThai(TrangThaiPhatVayEnum.DA_THANH_TOAN.getValue());
-									pv.setNgayThuTruocTu(null);
-									pv.setNgayThuTruocDen(null);
-									pv.setSoNgayThuTruoc(0);
-								} else if (CalendarUtil.getGTDate(calNgayThuTien).getTime() >= CalendarUtil
-										.getGTDate(calNgayDaThuTruocTu).getTime()) {
-									if (CalendarUtil.getGTDate(calNgayThuTien).getTime() >= CalendarUtil
-											.getGTDate(calNgayDaThuTruocDen).getTime()) {
-										int tongNgayDaThu = (int) ((CalendarUtil.getLTDate(calNgayThuTien).getTime()
-												- CalendarUtil.getGTDate(calNgayBatDau).getTime()) / time1Ngay);
-										int soNgayPhaiThu = tongNgayDaThu
-												- (pv.getSoNgayThuTruoc() + pv.getSoLanDaThu());
-										tongVonTra += (soNgayPhaiThu * pv.getGocNgay());
-										tongLaiTra += (soNgayPhaiThu * pv.getLaiNgay());
-										vonTra = (soNgayPhaiThu * pv.getGocNgay());
-										laiTra = (soNgayPhaiThu * pv.getLaiNgay());
-										pv.setNgayDaThuCuoi(CalendarUtil.getLTDate(calNgayThuTien));
-										pv.setSoLanDaThu(tongNgayDaThu);
-										pv.setTrangThai(TrangThaiPhatVayEnum.CHUA_THANH_TOAN.getValue());
-										pv.setNgayThuTruocTu(null);
-										pv.setNgayThuTruocDen(null);
-										pv.setSoNgayThuTruoc(0);
-									} else {
-										int tongNgayDaThu = (int) ((CalendarUtil.getLTDate(calNgayDaThuTruocDen)
-												.getTime() - CalendarUtil.getGTDate(calNgayBatDau).getTime())
-												/ time1Ngay);
-										int soNgayPhaiThu = tongNgayDaThu
-												- (pv.getSoNgayThuTruoc() + pv.getSoLanDaThu());
-										tongVonTra += (soNgayPhaiThu * pv.getGocNgay());
-										tongLaiTra += (soNgayPhaiThu * pv.getLaiNgay());
-										vonTra = (soNgayPhaiThu * pv.getGocNgay());
-										laiTra = (soNgayPhaiThu * pv.getLaiNgay());
-										pv.setNgayDaThuCuoi(CalendarUtil.getLTDate(calNgayDaThuTruocDen));
-										pv.setSoLanDaThu(tongNgayDaThu);
-										pv.setTrangThai(TrangThaiPhatVayEnum.CHUA_THANH_TOAN.getValue());
-										pv.setNgayThuTruocTu(null);
-										pv.setNgayThuTruocDen(null);
-										pv.setSoNgayThuTruoc(0);
-									}
-								} else {
-									pv.setNgayDaThuCuoi(ngayThuTien);
-									int soLanDaThu = (int) ((CalendarUtil.getLTDate(calNgayThuTien).getTime()
-											- CalendarUtil.getGTDate(calNgayBatDau).getTime()) / time1Ngay);
-									tongVonTra += ((soLanDaThu - pv.getSoLanDaThu()) * pv.getGocNgay());
-									tongLaiTra += ((soLanDaThu - pv.getSoLanDaThu()) * pv.getLaiNgay());
-									vonTra = ((soLanDaThu - pv.getSoLanDaThu()) * pv.getGocNgay());
-									laiTra = ((soLanDaThu - pv.getSoLanDaThu()) * pv.getLaiNgay());
-									pv.setSoLanDaThu(soLanDaThu);
-								}
+
+							JSONObject thongTinThanhToan = getSoNgayPhaiThu(ngayThuTien, pv);
+							if (thongTinThanhToan.getBoolean("daThanhToan")) {
+								pv.setTrangThai(TrangThaiPhatVayEnum.DA_THANH_TOAN.getValue());
+								vonTra = pv.getSoTienVay()
+										- ((pv.getSoLanDaThu() + pv.getSoNgayThuTruoc()) * pv.getGocNgay());
 							} else {
-								Calendar calNgayThuTien = Calendar.getInstance();
-								calNgayThuTien.setTime(ngayThuTien);
-								Calendar calNgayKetThuc = Calendar.getInstance();
-								calNgayKetThuc.setTime(pv.getNgayKetThuc());
-								Calendar calNgayBatDau = Calendar.getInstance();
-								calNgayBatDau.setTime(pv.getNgayBatDau());
-								if (CalendarUtil.getGTDate(calNgayThuTien).getTime() >= CalendarUtil
-										.getGTDate(calNgayKetThuc).getTime()) {
-									tongVonTra += pv.getDuNoGoc();
-									tongLaiTra += (pv.getLaiNgay() * (pv.getThoiHan() - pv.getSoLanDaThu()));
-									vonTra = pv.getDuNoGoc();
-									laiTra = (pv.getLaiNgay() * (pv.getThoiHan() - pv.getSoLanDaThu()));
-									pv.setNgayDaThuCuoi(pv.getNgayKetThuc());
-									pv.setSoLanDaThu(pv.getThoiHan());
-									pv.setTrangThai(TrangThaiPhatVayEnum.DA_THANH_TOAN.getValue());
-								} else {
-									int soLanDaThu = (int) ((CalendarUtil.getLTDate(calNgayThuTien).getTime()
-											- CalendarUtil.getGTDate(calNgayBatDau).getTime()) / time1Ngay);
-									tongVonTra += ((soLanDaThu - pv.getSoLanDaThu()) * pv.getGocNgay());
-									tongLaiTra += ((soLanDaThu - pv.getSoLanDaThu()) * pv.getLaiNgay());
-									vonTra = ((soLanDaThu - pv.getSoLanDaThu()) * pv.getGocNgay());
-									laiTra = ((soLanDaThu - pv.getSoLanDaThu()) * pv.getLaiNgay());
-									pv.setNgayDaThuCuoi(ngayThuTien);
-									pv.setSoLanDaThu(soLanDaThu);
-								}
+								vonTra = ((thongTinThanhToan.getInt("soNgayThu") - pv.getSoLanDaThu())
+										* pv.getGocNgay());
 							}
+
+							laiTra = ((thongTinThanhToan.getInt("soNgayThu") - pv.getSoLanDaThu()) * pv.getLaiNgay());
+							Calendar calNgayThuTien = Calendar.getInstance();
+							calNgayThuTien.setTime(ngayThuTien);
+							Calendar calKetThuc = Calendar.getInstance();
+							calKetThuc.setTime(pv.getNgayKetThuc());
+							if (CalendarUtil.getLTDate(calNgayThuTien).getTime() >= CalendarUtil.getLTDate(calKetThuc)
+									.getTime()) {
+								pv.setNgayDaThuCuoi(CalendarUtil.getLTDate(calKetThuc));
+							} else {
+								pv.setNgayDaThuCuoi(CalendarUtil.getLTDate(calNgayThuTien));
+							}
+
+							pv.setSoLanDaThu(thongTinThanhToan.getInt("soNgayThu"));
+							tongVonTra += vonTra;
+							tongLaiTra += laiTra;
+
 							PhatVayLocalServiceUtil.addOrUpdatePhatVay(pv, serviceContext);
 							LichSuThuPhatChi lichSuThuPhatChi = LichSuThuPhatChiLocalServiceUtil
 									.createLichSuThuPhatChi(0L);
 							lichSuThuPhatChi.setMaCTV(item.getMa());
 							lichSuThuPhatChi.setPhatVayId(pv.getPhatVayId());
+							lichSuThuPhatChi.setChiNhanhId(pv.getChiNhanhId());
 							lichSuThuPhatChi.setLoai(3);
 							lichSuThuPhatChi.setSoTien(vonTra + laiTra);
 							lichSuThuPhatChi.setTongSoTienLaiTra(laiTra);
@@ -259,76 +285,26 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 						Double tongVonTra = GetterUtil.getDouble("0");
 						Double tongLaiTra = GetterUtil.getDouble("0");
 						Double tongduNoGoc = GetterUtil.getDouble("0");
+
 						for (PhatVay pv : phatVays) {
-							if (pv.getTrangThai() == 4) {
-								Calendar calNgayThuTien = Calendar.getInstance();
-								calNgayThuTien.setTime(ngayThuTien);
-								Calendar calNgayKetThuc = Calendar.getInstance();
-								calNgayKetThuc.setTime(pv.getNgayKetThuc());
-								Calendar calNgayBatDau = Calendar.getInstance();
-								calNgayBatDau.setTime(pv.getNgayBatDau());
-								Calendar calNgayDaThuTruocTu = Calendar.getInstance();
-								calNgayDaThuTruocTu.setTime(pv.getNgayThuTruocTu());
-								Calendar calNgayDaThuTruocDen = Calendar.getInstance();
-								calNgayDaThuTruocDen.setTime(pv.getNgayThuTruocDen());
-								if (CalendarUtil.getGTDate(calNgayThuTien).getTime() >= CalendarUtil
-										.getGTDate(calNgayKetThuc).getTime()) {
-									tongVonTra += pv.getDuNoGoc();
-									tongLaiTra += (pv.getLaiNgay()
-											* (pv.getThoiHan() - (pv.getSoLanDaThu() + pv.getSoNgayThuTruoc())));
-
-								} else if (CalendarUtil.getGTDate(calNgayThuTien).getTime() >= CalendarUtil
-										.getGTDate(calNgayDaThuTruocTu).getTime()) {
-									if (CalendarUtil.getGTDate(calNgayThuTien).getTime() >= CalendarUtil
-											.getGTDate(calNgayDaThuTruocDen).getTime()) {
-										int tongNgayDaThu = (int) ((CalendarUtil.getLTDate(calNgayThuTien).getTime()
-												- CalendarUtil.getGTDate(calNgayBatDau).getTime()) / time1Ngay);
-										int soNgayPhaiThu = tongNgayDaThu
-												- (pv.getSoNgayThuTruoc() + pv.getSoLanDaThu());
-										tongVonTra += (soNgayPhaiThu * pv.getGocNgay());
-										tongLaiTra += (soNgayPhaiThu * pv.getLaiNgay());
-										tongduNoGoc += (pv.getDuNoGoc() - (soNgayPhaiThu * pv.getGocNgay()));
-									} else {
-										int tongNgayDaThu = (int) ((CalendarUtil.getLTDate(calNgayDaThuTruocDen)
-												.getTime() - CalendarUtil.getGTDate(calNgayBatDau).getTime())
-												/ time1Ngay);
-										int soNgayPhaiThu = tongNgayDaThu
-												- (pv.getSoNgayThuTruoc() + pv.getSoLanDaThu());
-										tongVonTra += (soNgayPhaiThu * pv.getGocNgay());
-										tongLaiTra += (soNgayPhaiThu * pv.getLaiNgay());
-										tongduNoGoc += (pv.getDuNoGoc() - (soNgayPhaiThu * pv.getGocNgay()));
-									}
-								} else {
-									int soLanDaThu = (int) ((CalendarUtil.getLTDate(calNgayThuTien).getTime()
-											- CalendarUtil.getGTDate(calNgayBatDau).getTime()) / time1Ngay);
-									tongVonTra += ((soLanDaThu - pv.getSoLanDaThu()) * pv.getGocNgay());
-									tongLaiTra += ((soLanDaThu - pv.getSoLanDaThu()) * pv.getLaiNgay());
-									tongduNoGoc += (pv.getDuNoGoc()
-											- ((soLanDaThu - pv.getSoLanDaThu()) * pv.getGocNgay()));
-								}
-
+							Double vonTra = GetterUtil.getDouble("0");
+							Double laiTra = GetterUtil.getDouble("0");
+							JSONObject thongTinThanhToan = getSoNgayPhaiThu(ngayThuTien, pv);
+							int soLanThuDotHienTai = thongTinThanhToan.getInt("soNgayThu") - pv.getSoLanDaThu();
+							if (thongTinThanhToan.getBoolean("daThanhToan")) {
+								vonTra = pv.getSoTienVay()
+										- ((pv.getSoLanDaThu() + pv.getSoNgayThuTruoc()) * pv.getGocNgay());
 							} else {
-								Calendar calNgayThuTien = Calendar.getInstance();
-								calNgayThuTien.setTime(ngayThuTien);
-								Calendar calNgayKetThuc = Calendar.getInstance();
-								calNgayKetThuc.setTime(pv.getNgayKetThuc());
-								Calendar calNgayBatDau = Calendar.getInstance();
-								calNgayBatDau.setTime(pv.getNgayBatDau());
-								if (CalendarUtil.getGTDate(calNgayThuTien).getTime() >= CalendarUtil
-										.getGTDate(calNgayKetThuc).getTime()) {
-									tongVonTra += pv.getDuNoGoc();
-									tongLaiTra += (pv.getLaiNgay() * (pv.getThoiHan() - pv.getSoLanDaThu()));
-								} else {
-									int soLanDaThu = (int) ((CalendarUtil.getLTDate(calNgayThuTien).getTime()
-											- CalendarUtil.getGTDate(calNgayBatDau).getTime()) / time1Ngay);
-									tongVonTra += ((soLanDaThu - pv.getSoLanDaThu()) * pv.getGocNgay());
-									tongLaiTra += ((soLanDaThu - pv.getSoLanDaThu()) * pv.getLaiNgay());
-									tongduNoGoc += (pv.getDuNoGoc()
-											- ((soLanDaThu - pv.getSoLanDaThu()) * pv.getGocNgay()));
-								}
+								vonTra = soLanThuDotHienTai * pv.getGocNgay();
 							}
+							laiTra = soLanThuDotHienTai * pv.getLaiNgay();
+
+							tongVonTra += vonTra;
+							tongLaiTra += laiTra;
+							tongduNoGoc += (pv.getDuNoGoc() - vonTra);
 
 						}
+
 						congTacVienDTOs.add(new CongTacVienDTO(
 								item.getMa() + "/" + new SimpleDateFormat("ddMMyyyy").format(ngayThuTien), item.getMa(),
 								item.getHoTen(), item.getDiaChi(), df.format(tongVonTra).replaceAll(",", "."),
@@ -386,179 +362,90 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 		JSONObject kq = JSONFactoryUtil.createJSONObject();
 		long ngayThuTienTuTime = ParamUtil.getLong(resourceRequest, "ngayThuTienTuTime");
 		long ngayThuTienDenTime = ParamUtil.getLong(resourceRequest, "ngayThuTienDenTime");
-		String maCTV = ParamUtil.getString(resourceRequest, "maCTV");
 		Date ngayThuTienTu = ngayThuTienTuTime != 0 ? new Date(ngayThuTienTuTime) : null;
 		Date ngayThuTienDen = ngayThuTienDenTime != 0 ? new Date(ngayThuTienDenTime) : null;
+		String maCTV = ParamUtil.getString(resourceRequest, "maCTV");
+		String phatVayIds = ParamUtil.getString(resourceRequest, "phatVayIds");
 		if (Validator.isNotNull(maCTV) && ngayThuTienTu != null && ngayThuTienDen != null) {
+			Calendar calTu = Calendar.getInstance();
+			calTu.setTime(ngayThuTienTu);
+			Calendar calDen = Calendar.getInstance();
+			calDen.setTime(ngayThuTienDen);
 			try {
-				List<PhatVay> phatVays = PhatVayLocalServiceUtil.getPhatVayDeThuTienTruoc(maCTV, ngayThuTienTu);
 				Double tongVonTra = GetterUtil.getDouble("0");
 				Double tongLaiTra = GetterUtil.getDouble("0");
-				if (CollectionUtils.isNotEmpty(phatVays)) {
-					for (PhatVay pv : phatVays) {
-						Double vonTra = GetterUtil.getDouble("0");
-						Double laiTra = GetterUtil.getDouble("0");
-						Calendar calTu = Calendar.getInstance();
-						calTu.setTime(ngayThuTienTu);
-						Calendar calDen = Calendar.getInstance();
-						calDen.setTime(ngayThuTienDen);
-						Calendar calNgayKetThuc = Calendar.getInstance();
-						calNgayKetThuc.setTime(pv.getNgayKetThuc());
-						Calendar calNgayBatDau = Calendar.getInstance();
-						calNgayBatDau.setTime(pv.getNgayBatDau());
-						Calendar calNgayThuCuoi = null;
-						if (pv.getNgayDaThuCuoi() != null) {
-							calNgayThuCuoi = Calendar.getInstance();
-							calNgayThuCuoi.setTime(pv.getNgayDaThuCuoi());
-							if (CalendarUtil.getGTDate(calNgayThuCuoi).getTime() == CalendarUtil.getGTDate(calTu)
+				String[] pvIds = phatVayIds.split(",");
+				for (int i = 0; i < pvIds.length; i++) {
+					if (Validator.isNotNull(pvIds[i]) && Long.valueOf(pvIds[i]) > 0) {
+						PhatVay pv = PhatVayLocalServiceUtil.fetchPhatVay(Long.valueOf(pvIds[i]));
+						if (pv != null) {
+							Calendar calNgayKetThuc = Calendar.getInstance();
+							calNgayKetThuc.setTime(pv.getNgayKetThuc());
+							Calendar calNgayBatDau = Calendar.getInstance();
+							calNgayBatDau.setTime(pv.getNgayBatDau());
+							Double vonTra = GetterUtil.getDouble("0");
+							Double laiTra = GetterUtil.getDouble("0");
+
+							Date startDate = null;
+							Date endDate = null;
+
+							if (CalendarUtil.getGTDate(calTu).getTime() <= CalendarUtil.getGTDate(calNgayBatDau)
 									.getTime()) {
-								if (CalendarUtil.getGTDate(calDen).getTime() >= CalendarUtil.getGTDate(calNgayKetThuc)
+								startDate = CalendarUtil.getGTDate(calNgayBatDau);
+							} else {
+								if (CalendarUtil.getGTDate(calTu).getTime() <= CalendarUtil.getLTDate(calNgayKetThuc)
 										.getTime()) {
-									tongVonTra += pv.getDuNoGoc();
-									tongLaiTra += (pv.getLaiNgay()
-											* (pv.getThoiHan() - (pv.getSoLanDaThu() + pv.getSoNgayThuTruoc())));
-
-									vonTra = pv.getDuNoGoc();
-									laiTra = (pv.getLaiNgay()
-											* (pv.getThoiHan() - (pv.getSoLanDaThu() + pv.getSoNgayThuTruoc())));
-									pv.setNgayDaThuCuoi(pv.getNgayKetThuc());
-									pv.setSoLanDaThu(pv.getThoiHan());
-									pv.setTrangThai(TrangThaiPhatVayEnum.DA_THANH_TOAN.getValue());
-									pv.setNgayThuTruocTu(null);
-									pv.setNgayThuTruocDen(null);
-									pv.setSoNgayThuTruoc(0);
-								} else {
-									int soLanPhaiThu = (int) ((CalendarUtil.getLTDate(calNgayKetThuc).getTime()
-											- CalendarUtil.getGTDate(calTu).getTime()) / time1Ngay);
-									tongVonTra += (soLanPhaiThu * pv.getGocNgay());
-									tongLaiTra += (soLanPhaiThu * pv.getLaiNgay());
-
-									vonTra = (soLanPhaiThu * pv.getGocNgay());
-									laiTra += (soLanPhaiThu * pv.getLaiNgay());
-
-									int soLanDaThu = (int) ((CalendarUtil.getLTDate(calDen).getTime()
-											- CalendarUtil.getGTDate(calNgayBatDau).getTime()) / time1Ngay);
-									pv.setNgayDaThuCuoi(calDen.getTime());
-									pv.setSoLanDaThu(soLanDaThu);
-									pv.setTrangThai(TrangThaiPhatVayEnum.CHUA_THANH_TOAN.getValue());
-									pv.setNgayThuTruocTu(null);
-									pv.setNgayThuTruocDen(null);
-									pv.setSoNgayThuTruoc(0);
+									startDate = CalendarUtil.getGTDate(calTu);
 								}
-							} else if (CalendarUtil.getGTDate(calNgayThuCuoi).getTime() < CalendarUtil.getGTDate(calTu)
+							}
+							if (CalendarUtil.getLTDate(calDen).getTime() >= CalendarUtil.getGTDate(calNgayBatDau)
 									.getTime()) {
-								if (CalendarUtil.getGTDate(calDen).getTime() >= CalendarUtil.getGTDate(calNgayKetThuc)
-										.getTime()) {
-									if (CalendarUtil.getGTDate(calNgayKetThuc).getTime() >= CalendarUtil
-											.getGTDate(calTu).getTime()) {
-										int soLanPhaiThu = (int) ((CalendarUtil.getLTDate(calNgayKetThuc).getTime()
-												- CalendarUtil.getGTDate(calTu).getTime()) / time1Ngay);
-										tongVonTra += (soLanPhaiThu * pv.getGocNgay());
-										tongLaiTra += (soLanPhaiThu * pv.getLaiNgay());
+								endDate = CalendarUtil.getLTDate(calDen);
+								if (endDate.getTime() >= CalendarUtil.getLTDate(calNgayKetThuc).getTime()) {
+									endDate = CalendarUtil.getLTDate(calNgayKetThuc);
+								}
+							}
 
-										vonTra = (soLanPhaiThu * pv.getGocNgay());
-										laiTra = (soLanPhaiThu * pv.getLaiNgay());
-
+							if (startDate != null && endDate != null) {
+								int soNgayThuTet = (int) ((endDate.getTime() - startDate.getTime()) / time1Ngay);
+								if (soNgayThuTet + pv.getSoLanDaThu() == pv.getThoiHan()) {
+									vonTra = pv.getDuNoGoc();
+									pv.setTrangThai(TrangThaiPhatVayEnum.DA_THANH_TOAN.getValue());
+								} else {
+									vonTra = soNgayThuTet * pv.getGocNgay();
+									if (soNgayThuTet > 0) {
 										pv.setTrangThai(TrangThaiPhatVayEnum.CO_THU_TIEN_TRUOC.getValue());
-										pv.setNgayThuTruocTu(calTu.getTime());
-										pv.setNgayThuTruocDen(calNgayKetThuc.getTime());
-										pv.setSoNgayThuTruoc(soLanPhaiThu);
 									}
-								} else {
-									int soLanPhaiThu = (int) ((CalendarUtil.getLTDate(calDen).getTime()
-											- CalendarUtil.getGTDate(calTu).getTime()) / time1Ngay);
-									tongVonTra += (soLanPhaiThu * pv.getGocNgay());
-									tongLaiTra += (soLanPhaiThu * pv.getLaiNgay());
 
-									vonTra = (soLanPhaiThu * pv.getGocNgay());
-									laiTra = (soLanPhaiThu * pv.getLaiNgay());
-
-									pv.setTrangThai(TrangThaiPhatVayEnum.CO_THU_TIEN_TRUOC.getValue());
-									pv.setNgayThuTruocTu(calTu.getTime());
-									pv.setNgayThuTruocDen(calDen.getTime());
-									pv.setSoNgayThuTruoc(soLanPhaiThu);
 								}
+								laiTra = soNgayThuTet * pv.getLaiNgay();
+								tongVonTra += vonTra;
+								tongLaiTra += laiTra;
+
+								pv.setNgayThuTruocTu(startDate);
+								pv.setNgayThuTruocDen(endDate);
+								pv.setSoNgayThuTruoc(pv.getSoNgayThuTruoc() + soNgayThuTet);
+
+								PhatVayLocalServiceUtil.addOrUpdatePhatVay(pv, serviceContext);
+								LichSuThuPhatChi lichSuThuPhatChi = LichSuThuPhatChiLocalServiceUtil
+										.createLichSuThuPhatChi(0L);
+								lichSuThuPhatChi.setMaCTV(pv.getMaCTV());
+								lichSuThuPhatChi.setPhatVayId(pv.getPhatVayId());
+								lichSuThuPhatChi.setLoai(4);
+								lichSuThuPhatChi.setSoTien(vonTra + laiTra);
+								lichSuThuPhatChi.setChiNhanhId(pv.getChiNhanhId());
+								lichSuThuPhatChi.setTongSoTienLaiTra(laiTra);
+								lichSuThuPhatChi.setTongSoTienVonTra(vonTra);
+								lichSuThuPhatChi.setTrangThaiPhatVayHienTai(pv.getTrangThai());
+								LichSuThuPhatChiLocalServiceUtil.addLichSuThuPhatChi(lichSuThuPhatChi, serviceContext);
 							}
-						} else {
-							if (CalendarUtil.getGTDate(calNgayBatDau).getTime() == CalendarUtil.getGTDate(calTu)
-									.getTime()) {
-								if (CalendarUtil.getGTDate(calDen).getTime() >= CalendarUtil.getGTDate(calNgayKetThuc)
-										.getTime()) {
-									tongVonTra += pv.getDuNoGoc();
-									tongLaiTra += (pv.getLaiNgay()
-											* (pv.getThoiHan() - (pv.getSoLanDaThu() + pv.getSoNgayThuTruoc())));
 
-									vonTra = pv.getDuNoGoc();
-									laiTra = (pv.getLaiNgay()
-											* (pv.getThoiHan() - (pv.getSoLanDaThu() + pv.getSoNgayThuTruoc())));
-									pv.setNgayDaThuCuoi(pv.getNgayKetThuc());
-									pv.setSoLanDaThu(pv.getThoiHan());
-									pv.setTrangThai(TrangThaiPhatVayEnum.DA_THANH_TOAN.getValue());
-									pv.setNgayThuTruocTu(null);
-									pv.setNgayThuTruocDen(null);
-									pv.setSoNgayThuTruoc(0);
-								} else {
-									int soLanPhaiThu = (int) ((CalendarUtil.getLTDate(calDen).getTime()
-											- CalendarUtil.getGTDate(calTu).getTime()) / time1Ngay);
-									tongVonTra += (soLanPhaiThu * pv.getGocNgay());
-									tongLaiTra += (soLanPhaiThu * pv.getLaiNgay());
-
-									vonTra = (soLanPhaiThu * pv.getGocNgay());
-									laiTra = (soLanPhaiThu * pv.getLaiNgay());
-
-									int soLanDaThu = (int) ((CalendarUtil.getLTDate(calDen).getTime()
-											- CalendarUtil.getGTDate(calNgayBatDau).getTime()) / time1Ngay);
-									pv.setNgayDaThuCuoi(calDen.getTime());
-									pv.setSoLanDaThu(soLanDaThu);
-									pv.setTrangThai(TrangThaiPhatVayEnum.CHUA_THANH_TOAN.getValue());
-									pv.setNgayThuTruocTu(null);
-									pv.setNgayThuTruocDen(null);
-									pv.setSoNgayThuTruoc(0);
-								}
-							} else if (CalendarUtil.getGTDate(calNgayBatDau).getTime() < CalendarUtil.getGTDate(calTu)
-									.getTime()) {
-								if (CalendarUtil.getGTDate(calDen).getTime() >= CalendarUtil.getGTDate(calNgayKetThuc)
-										.getTime()) {
-									int soLanPhaiThu = (int) ((CalendarUtil.getLTDate(calNgayKetThuc).getTime()
-											- CalendarUtil.getGTDate(calTu).getTime()) / time1Ngay);
-									tongVonTra += (soLanPhaiThu * pv.getGocNgay());
-									tongLaiTra += (soLanPhaiThu * pv.getLaiNgay());
-
-									vonTra = (soLanPhaiThu * pv.getGocNgay());
-									laiTra = (soLanPhaiThu * pv.getLaiNgay());
-
-									pv.setTrangThai(TrangThaiPhatVayEnum.CO_THU_TIEN_TRUOC.getValue());
-									pv.setNgayThuTruocTu(calTu.getTime());
-									pv.setNgayThuTruocDen(calNgayKetThuc.getTime());
-									pv.setSoNgayThuTruoc(soLanPhaiThu);
-								} else {
-									int soLanPhaiThu = (int) ((CalendarUtil.getLTDate(calDen).getTime()
-											- CalendarUtil.getGTDate(calTu).getTime()) / time1Ngay);
-									tongVonTra += (soLanPhaiThu * pv.getGocNgay());
-									tongLaiTra += (soLanPhaiThu * pv.getLaiNgay());
-
-									vonTra = (soLanPhaiThu * pv.getGocNgay());
-									laiTra = (soLanPhaiThu * pv.getLaiNgay());
-
-									pv.setTrangThai(TrangThaiPhatVayEnum.CO_THU_TIEN_TRUOC.getValue());
-									pv.setNgayThuTruocTu(calTu.getTime());
-									pv.setNgayThuTruocDen(calDen.getTime());
-									pv.setSoNgayThuTruoc(soLanPhaiThu);
-								}
-							}
 						}
-						PhatVayLocalServiceUtil.addOrUpdatePhatVay(pv, serviceContext);
-						LichSuThuPhatChi lichSuThuPhatChi = LichSuThuPhatChiLocalServiceUtil.createLichSuThuPhatChi(0L);
-						lichSuThuPhatChi.setMaCTV(pv.getMaCTV());
-						lichSuThuPhatChi.setPhatVayId(pv.getPhatVayId());
-						lichSuThuPhatChi.setLoai(4);
-						lichSuThuPhatChi.setSoTien(vonTra + laiTra);
-						lichSuThuPhatChi.setTongSoTienLaiTra(laiTra);
-						lichSuThuPhatChi.setTongSoTienVonTra(vonTra);
-						lichSuThuPhatChi.setTrangThaiPhatVayHienTai(pv.getTrangThai());
-						LichSuThuPhatChiLocalServiceUtil.addLichSuThuPhatChi(lichSuThuPhatChi, serviceContext);
+
 					}
+
 				}
+
 			} catch (Exception e) {
 				e.printStackTrace();
 				kq.putException(e);
@@ -570,121 +457,116 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 	public JSONObject printPhieuThuTienTruoc(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
 			ServiceContext serviceContext) throws IOException {
 		JSONObject kq = JSONFactoryUtil.createJSONObject();
+
+		String phatVayIds = ParamUtil.getString(resourceRequest, "phatVayIds");
 		long ngayThuTienTuTime = ParamUtil.getLong(resourceRequest, "ngayThuTienTuTime");
 		long ngayThuTienDenTime = ParamUtil.getLong(resourceRequest, "ngayThuTienDenTime");
 		Date ngayThuTienTu = ngayThuTienTuTime != 0 ? new Date(ngayThuTienTuTime) : null;
 		Date ngayThuTienDen = ngayThuTienDenTime != 0 ? new Date(ngayThuTienDenTime) : null;
 		String maCTVSearch = ParamUtil.getString(resourceRequest, "maCTVSearch");
+		long chiNhanhId = ParamUtil.getLong(resourceRequest, "chiNhanhIdSearch");
+
+		Calendar calTu = Calendar.getInstance();
+		calTu.setTime(ngayThuTienTu);
+		Calendar calDen = Calendar.getInstance();
+		calDen.setTime(ngayThuTienDen);
+
 		InputStream in = null;
 		OutputStream outStream = resourceResponse.getPortletOutputStream();
 		if (ngayThuTienTu != null && ngayThuTienDen != null) {
 			try {
+				CongTacVien ctv = CongTacVienLocalServiceUtil.fetchByMa(maCTVSearch);
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 				Locale localeEn = new Locale("en", "EN");
-			    NumberFormat df = NumberFormat.getInstance(localeEn);
-				List<CongTacVien> items = CongTacVienLocalServiceUtil.findBase(maCTVSearch, "", "", "", 1, -1, -1,
-						null);
+				NumberFormat df = NumberFormat.getInstance(localeEn);
 				List<CongTacVienDTO> congTacVienDTOs = new ArrayList<CongTacVienDTO>();
-				for (CongTacVien item : items) {
-					List<PhatVay> phatVays = PhatVayLocalServiceUtil.getPhatVayDeThuTienTruoc(maCTVSearch,
-							ngayThuTienTu);
-					if (CollectionUtils.isNotEmpty(phatVays)) {
-						Double tongVonTra = GetterUtil.getDouble("0");
-						Double tongLaiTra = GetterUtil.getDouble("0");
-						Double tongduNoGoc = GetterUtil.getDouble("0");
-						String ngayThuTienTruoc = "";
-						for (PhatVay pv : phatVays) {
-							Calendar calTu = Calendar.getInstance();
-							calTu.setTime(ngayThuTienTu);
-							Calendar calDen = Calendar.getInstance();
-							calDen.setTime(ngayThuTienDen);
-							Calendar calNgayKetThuc = Calendar.getInstance();
-							calNgayKetThuc.setTime(pv.getNgayKetThuc());
-							Calendar calNgayBatDau = Calendar.getInstance();
-							calNgayBatDau.setTime(pv.getNgayBatDau());
-							Calendar calNgayThuCuoi = null;
-							ngayThuTienTruoc = sdf.format(ngayThuTienTu) + " - " + sdf.format(ngayThuTienDen);
-							if (pv.getNgayDaThuCuoi() != null) {
-								calNgayThuCuoi = Calendar.getInstance();
-								calNgayThuCuoi.setTime(pv.getNgayDaThuCuoi());
-								if (CalendarUtil.getGTDate(calNgayThuCuoi).getTime() == CalendarUtil.getGTDate(calTu)
+				if (Validator.isNotNull(phatVayIds)) {
+					Double tongVonTra = GetterUtil.getDouble("0");
+					Double tongLaiTra = GetterUtil.getDouble("0");
+					String ngayThuTienTruoc = sdf.format(ngayThuTienTu) + " - " + sdf.format(ngayThuTienDen);
+					Object[] sums = LichSuThuPhatChiLocalServiceUtil.getTongLichSuTraTien_CTV_TAINGAY(chiNhanhId,maCTVSearch,
+							new Date(), null, 0);
+					Double tongSoTienvay = LichSuThuPhatChiLocalServiceUtil.getSoTienVay_CTV_TAINGAY(chiNhanhId, maCTVSearch,
+							new Date());
+
+					Double tongduNoGoc = tongSoTienvay - GetterUtil.getDouble(sums[2]);
+
+					String[] pvIds = phatVayIds.split(",");
+					for (int i = 0; i < pvIds.length; i++) {
+						if (Validator.isNotNull(pvIds[i]) && Long.valueOf(pvIds[i]) > 0) {
+							PhatVay pv = PhatVayLocalServiceUtil.fetchPhatVay(Long.valueOf(pvIds[i]));
+							if (pv != null) {
+								Calendar calNgayKetThuc = Calendar.getInstance();
+								calNgayKetThuc.setTime(pv.getNgayKetThuc());
+								Calendar calNgayBatDau = Calendar.getInstance();
+								calNgayBatDau.setTime(pv.getNgayBatDau());
+								Double vonTra = GetterUtil.getDouble("0");
+								Double laiTra = GetterUtil.getDouble("0");
+
+								Date startDate = null;
+								Date endDate = null;
+
+								if (CalendarUtil.getGTDate(calTu).getTime() <= CalendarUtil.getGTDate(calNgayBatDau)
 										.getTime()) {
-									if (CalendarUtil.getGTDate(calDen).getTime() >= CalendarUtil
-											.getGTDate(calNgayKetThuc).getTime()) {
-										tongVonTra += pv.getDuNoGoc();
-										tongLaiTra += (pv.getLaiNgay()
-												* (pv.getThoiHan() - (pv.getSoLanDaThu() + pv.getSoNgayThuTruoc())));
-									} else {
-										int soLanPhaiThu = (int) ((CalendarUtil.getLTDate(calDen).getTime()
-												- CalendarUtil.getGTDate(calTu).getTime()) / time1Ngay);
-										tongVonTra += (soLanPhaiThu * pv.getGocNgay());
-										tongLaiTra += (soLanPhaiThu * pv.getLaiNgay());
-										tongduNoGoc += (pv.getDuNoGoc() - (soLanPhaiThu * pv.getGocNgay()));
-									}
-								} else if (CalendarUtil.getGTDate(calNgayThuCuoi).getTime() < CalendarUtil
-										.getGTDate(calTu).getTime()) {
-									if (CalendarUtil.getGTDate(calNgayKetThuc).getTime() >= CalendarUtil
-											.getGTDate(calTu).getTime()) {
-										if (CalendarUtil.getGTDate(calDen).getTime() >= CalendarUtil
-												.getGTDate(calNgayKetThuc).getTime()) {
-											int soLanPhaiThu = (int) ((CalendarUtil.getLTDate(calNgayKetThuc).getTime()
-													- CalendarUtil.getGTDate(calTu).getTime()) / time1Ngay);
-											tongVonTra += (soLanPhaiThu * pv.getGocNgay());
-											tongLaiTra += (soLanPhaiThu * pv.getLaiNgay());
-											tongduNoGoc += (pv.getDuNoGoc() - (soLanPhaiThu * pv.getGocNgay()));
+									if (CalendarUtil.getLTDate(calDen).getTime() >= CalendarUtil
+											.getGTDate(calNgayBatDau).getTime()) {
+										if (CalendarUtil.getLTDate(calDen).getTime() <= CalendarUtil
+												.getLTDate(calNgayKetThuc).getTime()) {
+											startDate = CalendarUtil.getGTDate(calNgayBatDau);
+											endDate = CalendarUtil.getLTDate(calDen);
 										} else {
-											int soLanPhaiThu = (int) ((CalendarUtil.getLTDate(calDen).getTime()
-													- CalendarUtil.getGTDate(calTu).getTime()) / time1Ngay);
-											tongVonTra += (soLanPhaiThu * pv.getGocNgay());
-											tongLaiTra += (soLanPhaiThu * pv.getLaiNgay());
-											tongduNoGoc += (pv.getDuNoGoc() - (soLanPhaiThu * pv.getGocNgay()));
+											startDate = CalendarUtil.getGTDate(calNgayBatDau);
+											endDate = CalendarUtil.getLTDate(calNgayKetThuc);
 										}
+									} else {
+										// Thu tiền tết nằm ngoài phát vay
+									}
+								} else {
+									if (CalendarUtil.getGTDate(calTu).getTime() <= CalendarUtil
+											.getLTDate(calNgayKetThuc).getTime()) {
+										if (CalendarUtil.getLTDate(calDen).getTime() <= CalendarUtil
+												.getLTDate(calNgayKetThuc).getTime()) {
+											startDate = CalendarUtil.getGTDate(calTu);
+											endDate = CalendarUtil.getLTDate(calDen);
+										} else {
+											startDate = CalendarUtil.getGTDate(calTu);
+											endDate = CalendarUtil.getLTDate(calNgayKetThuc);
+										}
+									} else {
+										// Thu tiền tết nằm ngoài phát vay
 									}
 								}
-							} else {
-								if (CalendarUtil.getGTDate(calNgayBatDau).getTime() == CalendarUtil.getGTDate(calTu)
-										.getTime()) {
-									if (CalendarUtil.getGTDate(calDen).getTime() >= CalendarUtil
-											.getGTDate(calNgayKetThuc).getTime()) {
-										tongVonTra += pv.getDuNoGoc();
-										tongLaiTra += (pv.getLaiNgay()
-												* (pv.getThoiHan() - (pv.getSoLanDaThu() + pv.getSoNgayThuTruoc())));
+
+								if (startDate != null && endDate != null) {
+									int soNgayThuTet = (int) ((endDate.getTime() - startDate.getTime()) / time1Ngay);
+									if (soNgayThuTet + pv.getSoLanDaThu() == pv.getThoiHan()) {
+										vonTra = pv.getDuNoGoc();
 									} else {
-										int soLanPhaiThu = (int) ((CalendarUtil.getLTDate(calDen).getTime()
-												- CalendarUtil.getGTDate(calTu).getTime()) / time1Ngay);
-										tongVonTra += (soLanPhaiThu * pv.getGocNgay());
-										tongLaiTra += (soLanPhaiThu * pv.getLaiNgay());
-										tongduNoGoc += (pv.getDuNoGoc() - (soLanPhaiThu * pv.getGocNgay()));
+										vonTra = soNgayThuTet * pv.getGocNgay();
 									}
-								} else if (CalendarUtil.getGTDate(calNgayBatDau).getTime() < CalendarUtil
-										.getGTDate(calTu).getTime()) {
-									if (CalendarUtil.getGTDate(calDen).getTime() >= CalendarUtil
-											.getGTDate(calNgayKetThuc).getTime()) {
-										int soLanPhaiThu = (int) ((CalendarUtil.getLTDate(calNgayKetThuc).getTime()
-												- CalendarUtil.getGTDate(calTu).getTime()) / time1Ngay);
-										tongVonTra += (soLanPhaiThu * pv.getGocNgay());
-										tongLaiTra += (soLanPhaiThu * pv.getLaiNgay());
-										tongduNoGoc += (pv.getDuNoGoc() - (soLanPhaiThu * pv.getGocNgay()));
-									} else {
-										int soLanPhaiThu = (int) ((CalendarUtil.getLTDate(calDen).getTime()
-												- CalendarUtil.getGTDate(calTu).getTime()) / time1Ngay);
-										tongVonTra += (soLanPhaiThu * pv.getGocNgay());
-										tongLaiTra += (soLanPhaiThu * pv.getLaiNgay());
-										tongduNoGoc += (pv.getDuNoGoc() - (soLanPhaiThu * pv.getGocNgay()));
-									}
+									System.out.println(pv.getSoKU() + " : " + soNgayThuTet + " : " + vonTra);
+									laiTra = soNgayThuTet * pv.getLaiNgay();
+									tongVonTra += vonTra;
+									tongLaiTra += laiTra;
+
+									tongduNoGoc -= vonTra;
 								}
+
 							}
+
 						}
-						congTacVienDTOs.add(new CongTacVienDTO(
-								item.getMa() + "/" + new SimpleDateFormat("ddMMyyyy").format(new Date()), item.getMa(),
-								item.getHoTen(), item.getDiaChi(), df.format(tongVonTra).replaceAll(",", "."),
-								df.format(tongLaiTra).replaceAll(",", "."),
-								df.format(tongLaiTra + tongVonTra).replaceAll(",", "."),
-								DocSo.docSo(GetterUtil.getLong(tongLaiTra + tongVonTra)),
-								df.format(tongduNoGoc).replaceAll(",", "."), ngayThuTienTruoc, "", "", "", null, null,
-								sdf.format(new Date()).substring(0, 2), sdf.format(new Date()).substring(3, 5),
-								sdf.format(new Date()).substring(6, 10)));
+
 					}
+					congTacVienDTOs.add(new CongTacVienDTO(
+							ctv.getMa() + "/" + new SimpleDateFormat("ddMMyyyy").format(new Date()), ctv.getMa(),
+							ctv.getHoTen(), ctv.getDiaChi(), df.format(tongVonTra).replaceAll(",", "."),
+							df.format(tongLaiTra).replaceAll(",", "."),
+							df.format(tongLaiTra + tongVonTra).replaceAll(",", "."),
+							DocSo.docSo(GetterUtil.getLong(tongLaiTra + tongVonTra)),
+							df.format(tongduNoGoc).replaceAll(",", "."), ngayThuTienTruoc, "", "", "", null, null,
+							sdf.format(new Date()).substring(0, 2), sdf.format(new Date()).substring(3, 5),
+							sdf.format(new Date()).substring(6, 10)));
+
 				}
 				String nameFile = "THU_TIEN_TRUOC_NGAY_" + new SimpleDateFormat("ddMMyyyy").format(new Date());
 				if (Validator.isNotNull(maCTVSearch)) {
@@ -700,6 +582,10 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 				map.put("TEN_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.ten")));
 				map.put("DIA_CHI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.diachi")));
 				map.put("SO_DIEN_THOAI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.sodienthoai")));
+
+				map.put("NGAY", Calendar.getInstance().get(Calendar.DATE));
+				map.put("THANG", Calendar.getInstance().get(Calendar.MONTH) + 1);
+				map.put("NAM", Calendar.getInstance().get(Calendar.YEAR));
 
 				FieldsMetadata metadata = new FieldsMetadata();
 				metadata.addFieldAsList("ctvs.so");
@@ -722,8 +608,10 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 				kq.putException(e);
 			} finally {
 			}
+
 		}
 		outStream.flush();
 		return kq;
+
 	}
 }

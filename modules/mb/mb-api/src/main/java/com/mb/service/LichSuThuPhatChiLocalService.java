@@ -201,7 +201,8 @@ public interface LichSuThuPhatChiLocalService
 		throws SystemException;
 
 	public List<LichSuThuPhatChi> findByPhatVay_Createdate_Loai(
-			long phatVayId, Date ngayTaoTu, Date ngayTaoDen, String loai)
+			long chiNhanhId, long phatVayId, Date ngayTaoTu, Date ngayTaoDen,
+			String loai)
 		throws SystemException;
 
 	public List<LichSuThuPhatChi> findByPhatVayId_Loai(long phatVayId, int loai)
@@ -264,12 +265,18 @@ public interface LichSuThuPhatChiLocalService
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public Double getSoTienVay_CTV_TAINGAY(String maCTV, Date ngay)
+	public Double getSoTienVay_CTV_TAINGAY(
+			long chiNhanhId, String maCTV, Date ngay)
+		throws SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Object[] getSumPhatVay_CTV_TAINGAY(
+			long chiNhanhId, String maCTV, Date ngay, int loaiPV)
 		throws SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Object[] getTongLichSuTraTien_CTV_TAINGAY(
-			String maCTV, Date ngay, Date ngayXuLy)
+			long chiNhanhId, String maCTV, Date ngay, Date ngayXuLy, int loaiPV)
 		throws SystemException;
 
 	public void removeByPhatVayId(long phatVayId) throws SystemException;

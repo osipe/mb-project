@@ -41,6 +41,8 @@ public class CongTacVienSoap implements Serializable {
 		soapModel.setUserName(model.getUserName());
 		soapModel.setCreateDate(model.getCreateDate());
 		soapModel.setModifiedDate(model.getModifiedDate());
+		soapModel.setChiNhanhId(model.getChiNhanhId());
+		soapModel.setTenChiNhanh(model.getTenChiNhanh());
 		soapModel.setMa(model.getMa());
 		soapModel.setHoTen(model.getHoTen());
 		soapModel.setSoCMND(model.getSoCMND());
@@ -158,6 +160,22 @@ public class CongTacVienSoap implements Serializable {
 		_modifiedDate = modifiedDate;
 	}
 
+	public long getChiNhanhId() {
+		return _chiNhanhId;
+	}
+
+	public void setChiNhanhId(long chiNhanhId) {
+		_chiNhanhId = chiNhanhId;
+	}
+
+	public String getTenChiNhanh() {
+		return _tenChiNhanh;
+	}
+
+	public void setTenChiNhanh(String tenChiNhanh) {
+		_tenChiNhanh = tenChiNhanh;
+	}
+
 	public String getMa() {
 		return _ma;
 	}
@@ -229,6 +247,8 @@ public class CongTacVienSoap implements Serializable {
 	private String _userName;
 	private Date _createDate;
 	private Date _modifiedDate;
+	private long _chiNhanhId;
+	private String _tenChiNhanh;
 	private String _ma;
 	private String _hoTen;
 	private String _soCMND;

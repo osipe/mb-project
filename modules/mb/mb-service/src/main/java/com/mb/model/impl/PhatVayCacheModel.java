@@ -64,7 +64,7 @@ public class PhatVayCacheModel implements CacheModel<PhatVay>, Externalizable {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(55);
+		StringBundler sb = new StringBundler(57);
 
 		sb.append("{phatVayId=");
 		sb.append(phatVayId);
@@ -80,6 +80,8 @@ public class PhatVayCacheModel implements CacheModel<PhatVay>, Externalizable {
 		sb.append(ngayTao);
 		sb.append(", modifiedDate=");
 		sb.append(modifiedDate);
+		sb.append(", chiNhanhId=");
+		sb.append(chiNhanhId);
 		sb.append(", maCTV=");
 		sb.append(maCTV);
 		sb.append(", maKhachHang=");
@@ -154,6 +156,8 @@ public class PhatVayCacheModel implements CacheModel<PhatVay>, Externalizable {
 		else {
 			phatVayImpl.setModifiedDate(new Date(modifiedDate));
 		}
+
+		phatVayImpl.setChiNhanhId(chiNhanhId);
 
 		if (maCTV == null) {
 			phatVayImpl.setMaCTV("");
@@ -255,6 +259,8 @@ public class PhatVayCacheModel implements CacheModel<PhatVay>, Externalizable {
 		userName = objectInput.readUTF();
 		ngayTao = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
+
+		chiNhanhId = objectInput.readLong();
 		maCTV = objectInput.readUTF();
 		maKhachHang = objectInput.readUTF();
 		soKU = objectInput.readUTF();
@@ -306,6 +312,8 @@ public class PhatVayCacheModel implements CacheModel<PhatVay>, Externalizable {
 
 		objectOutput.writeLong(ngayTao);
 		objectOutput.writeLong(modifiedDate);
+
+		objectOutput.writeLong(chiNhanhId);
 
 		if (maCTV == null) {
 			objectOutput.writeUTF("");
@@ -364,6 +372,7 @@ public class PhatVayCacheModel implements CacheModel<PhatVay>, Externalizable {
 	public String userName;
 	public long ngayTao;
 	public long modifiedDate;
+	public long chiNhanhId;
 	public String maCTV;
 	public String maKhachHang;
 	public String soKU;

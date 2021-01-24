@@ -32,21 +32,6 @@
 	<table class="info table-pa5 aui-w100">
 		<tr>
 			<td>
-				<aui:select name="nam" label="Năm"  cssClass="input-select2">
-					<aui:option value=" " label="Chọn"/>
-					<%
-						for (int i = namNow - 5; i <= namNow + 5; i++) {
-					%>
-						<aui:option value="<%=i%>" label='<%="Năm " + i%>' selected="<%=i == nam%>" />
-					<%
-						}
-					%>
-					<aui:validator name="required" errorMessage="Năm không được bỏ trống!" />
-				</aui:select>
-			</td>
-		</tr>
-		<tr>
-			<td>
 				<aui:input cssClass="input-date" name="ngayTu" label="Ngày từ" placeholder="dd/MM/yyyy" value="<%=kh.getNgayTu() != null ? sdf.format(kh.getNgayTu()) : ngayBatDauThuTienCauHinh%>">
 				</aui:input>
 			</td>
@@ -108,7 +93,6 @@ AUI().ready(['aui-base'], function(A) {
 			
 			var data = {
 				<portlet:namespace />cauHinhThuTienTruocId : '<%=cauHinhThuTienTruocId %>',
-				<portlet:namespace />nam : form.one('#<portlet:namespace />nam').val(),
 				<portlet:namespace />ngayTuTime : ngayTuTime,
 				<portlet:namespace />ngayDenTime : ngayDenTime
 			}

@@ -57,9 +57,10 @@
 		<tfoot>
 			<tr id="<portlet:namespace />footTatToan" class="hide">
 				<td colspan="4" style="color:#ff3d00e8;font-weight: bold;" class=" text-center">TỔNG</td>
-				<td style="font-weight: bold;" class=" text-center">
-					Trả vốn : <span id="<portlet:namespace />tongTraVon" style="font-style: italic;color:#ff3d00e8;"></span><br/>
-					Trả lãi : <span id="<portlet:namespace />tongTraLai" style="font-style: italic;color:#ff3d00e8;"></span>
+				<td style="font-weight: bold;">
+					Vốn trả : <span id="<portlet:namespace />tongTraVon" style="font-style: italic;color:#ff3d00e8;"></span><br/>
+					Lãi trả : <span id="<portlet:namespace />tongTraLai" style="font-style: italic;color:#ff3d00e8;"></span><br/>
+					Tổng trả : <span id="<portlet:namespace />tongTra" style="font-style: italic;color:#ff3d00e8;"></span>
 				</td>
 			</tr>
 	  </tfoot>
@@ -151,7 +152,6 @@ AUI().ready(['aui-base'], function(A) {
 	                   success: function() {
 	                   		if(this.get('responseData')){
 	                   			var data = JSON.parse(this.get('responseData'));
-	                   			console.log('aaaaaa : ',data);
 	                   			for (var i = 0; i < data.data.length; i++) {
 	                   				var tableNode = A.one('#<portlet:namespace />tableTatToan');
 	                   				var tbody = tableNode.getElementsByTagName('tbody');
@@ -233,9 +233,9 @@ AUI().ready(['aui-base'], function(A) {
 	                   success: function() {
 	                   		if(this.get('responseData')){
 	                   			var data = JSON.parse(this.get('responseData'));
-	                   			console.log('getTongTienTatToan : ',data);
                    				A.one('#<portlet:namespace />tongTraVon').html(data.tongVonTatToanStr);	
                    				A.one('#<portlet:namespace />tongTraLai').html(data.tongLaiTatToanStr);	
+                   				A.one('#<portlet:namespace />tongTra').html(data.tongTatToanStr);	
 	                   		}
 	                   		loadingMask.hide();
 	                   }
@@ -254,7 +254,6 @@ AUI().ready(['aui-base'], function(A) {
 			var table = currentNode.ancestor('table');
 			var tbody = table.getElementsByTagName('tbody');
 			var row = currentNode.ancestor('tr');
-			console.log( '123 : ', row.attr('id'));
 			
 			listPhatVayIds.splice(row.attr('id') - 1, 1);
 			

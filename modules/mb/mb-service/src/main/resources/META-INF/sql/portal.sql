@@ -20,6 +20,19 @@ create table dm_cauhinhthutientruoc (
 	hoatDong BOOLEAN
 );
 
+create table dm_chinhanh (
+	chiNhanhId LONG not null primary key,
+	companyId LONG,
+	groupId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	createDate DATE null,
+	modifiedDate DATE null,
+	ma VARCHAR(75) null,
+	ten VARCHAR(75) null,
+	hoatDong BOOLEAN
+);
+
 create table dm_congtacvien (
 	congTacVienId LONG not null primary key,
 	companyId LONG,
@@ -28,6 +41,7 @@ create table dm_congtacvien (
 	userName VARCHAR(75) null,
 	createDate DATE null,
 	modifiedDate DATE null,
+	chiNhanhId LONG,
 	ma VARCHAR(75) null,
 	hoTen VARCHAR(75) null,
 	soCMND VARCHAR(75) null,

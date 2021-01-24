@@ -11,6 +11,10 @@
 	<bean class="com.mb.service.impl.CauHinhThuTienTruocServiceImpl" id="com.mb.service.CauHinhThuTienTruocService" />
 	<bean class="com.mb.service.persistence.impl.CauHinhThuTienTruocPersistenceImpl" id="com.mb.service.persistence.CauHinhThuTienTruocPersistence" parent="basePersistence" />
 	<bean class="com.mb.service.persistence.impl.CauHinhThuTienTruocFinderImpl" id="com.mb.service.persistence.CauHinhThuTienTruocFinder" parent="basePersistence" />
+	<bean class="com.mb.service.impl.ChiNhanhLocalServiceImpl" id="com.mb.service.ChiNhanhLocalService" />
+	<bean class="com.mb.service.impl.ChiNhanhServiceImpl" id="com.mb.service.ChiNhanhService" />
+	<bean class="com.mb.service.persistence.impl.ChiNhanhPersistenceImpl" id="com.mb.service.persistence.ChiNhanhPersistence" parent="basePersistence" />
+	<bean class="com.mb.service.persistence.impl.ChiNhanhFinderImpl" id="com.mb.service.persistence.ChiNhanhFinder" parent="basePersistence" />
 	<bean class="com.mb.service.impl.CongTacVienLocalServiceImpl" id="com.mb.service.CongTacVienLocalService" />
 	<bean class="com.mb.service.impl.CongTacVienServiceImpl" id="com.mb.service.CongTacVienService" />
 	<bean class="com.mb.service.persistence.impl.CongTacVienPersistenceImpl" id="com.mb.service.persistence.CongTacVienPersistence" parent="basePersistence" />

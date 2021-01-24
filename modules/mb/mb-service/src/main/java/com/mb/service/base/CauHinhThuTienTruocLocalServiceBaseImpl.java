@@ -46,6 +46,8 @@ import com.mb.model.CauHinhThuTienTruoc;
 import com.mb.service.CauHinhThuTienTruocLocalService;
 import com.mb.service.persistence.CauHinhThuTienTruocFinder;
 import com.mb.service.persistence.CauHinhThuTienTruocPersistence;
+import com.mb.service.persistence.ChiNhanhFinder;
+import com.mb.service.persistence.ChiNhanhPersistence;
 import com.mb.service.persistence.CongTacVienFinder;
 import com.mb.service.persistence.CongTacVienPersistence;
 import com.mb.service.persistence.DsPhieuTaiKhoanFinder;
@@ -443,6 +445,64 @@ public abstract class CauHinhThuTienTruocLocalServiceBaseImpl
 		CauHinhThuTienTruocFinder cauHinhThuTienTruocFinder) {
 
 		this.cauHinhThuTienTruocFinder = cauHinhThuTienTruocFinder;
+	}
+
+	/**
+	 * Returns the chi nhanh local service.
+	 *
+	 * @return the chi nhanh local service
+	 */
+	public com.mb.service.ChiNhanhLocalService getChiNhanhLocalService() {
+		return chiNhanhLocalService;
+	}
+
+	/**
+	 * Sets the chi nhanh local service.
+	 *
+	 * @param chiNhanhLocalService the chi nhanh local service
+	 */
+	public void setChiNhanhLocalService(
+		com.mb.service.ChiNhanhLocalService chiNhanhLocalService) {
+
+		this.chiNhanhLocalService = chiNhanhLocalService;
+	}
+
+	/**
+	 * Returns the chi nhanh persistence.
+	 *
+	 * @return the chi nhanh persistence
+	 */
+	public ChiNhanhPersistence getChiNhanhPersistence() {
+		return chiNhanhPersistence;
+	}
+
+	/**
+	 * Sets the chi nhanh persistence.
+	 *
+	 * @param chiNhanhPersistence the chi nhanh persistence
+	 */
+	public void setChiNhanhPersistence(
+		ChiNhanhPersistence chiNhanhPersistence) {
+
+		this.chiNhanhPersistence = chiNhanhPersistence;
+	}
+
+	/**
+	 * Returns the chi nhanh finder.
+	 *
+	 * @return the chi nhanh finder
+	 */
+	public ChiNhanhFinder getChiNhanhFinder() {
+		return chiNhanhFinder;
+	}
+
+	/**
+	 * Sets the chi nhanh finder.
+	 *
+	 * @param chiNhanhFinder the chi nhanh finder
+	 */
+	public void setChiNhanhFinder(ChiNhanhFinder chiNhanhFinder) {
+		this.chiNhanhFinder = chiNhanhFinder;
 	}
 
 	/**
@@ -1487,6 +1547,15 @@ public abstract class CauHinhThuTienTruocLocalServiceBaseImpl
 
 	@BeanReference(type = CauHinhThuTienTruocFinder.class)
 	protected CauHinhThuTienTruocFinder cauHinhThuTienTruocFinder;
+
+	@BeanReference(type = com.mb.service.ChiNhanhLocalService.class)
+	protected com.mb.service.ChiNhanhLocalService chiNhanhLocalService;
+
+	@BeanReference(type = ChiNhanhPersistence.class)
+	protected ChiNhanhPersistence chiNhanhPersistence;
+
+	@BeanReference(type = ChiNhanhFinder.class)
+	protected ChiNhanhFinder chiNhanhFinder;
 
 	@BeanReference(type = com.mb.service.CongTacVienLocalService.class)
 	protected com.mb.service.CongTacVienLocalService congTacVienLocalService;

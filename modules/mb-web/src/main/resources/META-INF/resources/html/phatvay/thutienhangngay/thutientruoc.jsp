@@ -1,3 +1,5 @@
+<%@page import="org.apache.commons.collections.CollectionUtils"%>
+<%@page import="java.util.List"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.mb.service.CauHinhThuTienTruocLocalServiceUtil"%>
 <%@page import="com.mb.model.CauHinhThuTienTruoc"%>
@@ -16,12 +18,14 @@
 	CongTacVien ctv = CongTacVienLocalServiceUtil.fetchByMa(maCTVSearch);
 	int namNow = Calendar.getInstance().get(Calendar.YEAR);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	CauHinhThuTienTruoc cauHinh =  CauHinhThuTienTruocLocalServiceUtil.fetchByNam(namNow + 1);
+	List<CauHinhThuTienTruoc> cauHinhs = CauHinhThuTienTruocLocalServiceUtil.findAll();
+	CauHinhThuTienTruoc cauHinh = CollectionUtils.isNotEmpty(cauHinhs) ? cauHinhs.get(0) : null;
 	if(ctv == null){
 	 	ctv = CongTacVienLocalServiceUtil.createCongTacVien(0L);
 	}
 %>
 <aui:form name="frmThuTienTruoc">
+	
 	<h3 align="center"><%=ctv.getHoTen() %></h3>
 	<table class="info table-pa5 aui-w100">
 			<tr>
@@ -47,10 +51,20 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2">
-					<div id="<portlet:namespace />contentDataTableThuTienTruoc" style="overflow-x: scroll;font-size: small;" name="<portlet:namespace />contentDataTableThuTienTruoc"></div>
-				<td>
-			</tr>
+				<%
+					if(cauHinh != null){
+						
+				%>
+					<td colspan="2">
+						<div id="<portlet:namespace />contentDataTableThuTienTruoc" style="overflow-x: scroll;font-size: small;" name="<portlet:namespace />contentDataTableThuTienTruoc"></div>
+					<td>
+				<%} else{ %>
+					<td colspan="2">
+						<div id="<portlet:namespace />contentDataTableThuTienTruoc" style="overflow-x: scroll;font-size: small;" name="<portlet:namespace />contentDataTableThuTienTruoc">
+							Chưa có cấu hinh thu tiền tết.
+						</div>
+					<td>
+				<%} %>
 	</table>
 </aui:form>
 <portlet:resourceURL var="thuTienTruocURL" id="thuTienTruocURL"></portlet:resourceURL>
@@ -70,22 +84,7 @@ AUI().ready(['aui-base','node-event-simulate'], function(A) {
 	);
 	var contentDataTableThuTienTruocNode = A.one('#<portlet:namespace />contentDataTableThuTienTruoc');
 	Liferay.provide(window,'searchURL', function(){
-		var ngayThuTienTu = 0;
-		var ngayThuTienDen = 0;
-		var pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
-		var ngayThuTienTuVal = A.one('#<portlet:namespace />ngayThuTienTu').val();
-		if (('' != ngayThuTienTuVal && pattern.test(ngayThuTienTuVal)) && 'dd/MM/yyyy' != ngayThuTienTuVal) {
-			var date = new Date(ngayThuTienTuVal.replace(pattern, '$3-$2-$1'));
-			ngayThuTienTu = date.getTime();
-		}
-		var ngayThuTienDenVal = A.one('#<portlet:namespace />ngayThuTienDen').val();
-		if (('' != ngayThuTienDenVal && pattern.test(ngayThuTienDenVal)) && 'dd/MM/yyyy' != ngayThuTienDenVal) {
-			var date = new Date(ngayThuTienDenVal.replace(pattern, '$3-$2-$1'));
-			ngayThuTienDen = date.getTime();
-		}
 		var data = {
-			'<portlet:namespace/>ngayThuTienTu' : ngayThuTienTu,
-			'<portlet:namespace/>ngayThuTienDen' : ngayThuTienDen,
         	'<portlet:namespace/>maCTVSearch' : '<%=maCTVSearch %>'
         }
 		contentDataTableThuTienTruocNode.plug(A.Plugin.IO,{
@@ -101,79 +100,65 @@ AUI().ready(['aui-base','node-event-simulate'], function(A) {
 	var form  = A.one('#<portlet:namespace />frmThuTienTruoc');
 	var formValidator = Liferay.Form.get('<portlet:namespace />frmThuTienTruoc').formValidator;
 	Liferay.provide(window,'thuTienTruoc', function(){
-		var check = confirm('Bạn có chắc thực hiện thao tác này ?');
-		if (check) {
-			loadingMask.show();
-			formValidator.validate();
-			if(!formValidator.hasErrors()){
-				var ngayThuTienTu = 0;
-				var ngayThuTienDen = 0;
-				var pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
-				var ngayThuTienTuVal = A.one('#<portlet:namespace />ngayThuTienTu').val();
-				if (('' != ngayThuTienTuVal && pattern.test(ngayThuTienTuVal)) && 'dd/MM/yyyy' != ngayThuTienTuVal) {
-					var date = new Date(ngayThuTienTuVal.replace(pattern, '$3-$2-$1'));
-					ngayThuTienTu = date.getTime();
+		if('<%=cauHinh != null %>'){
+			var check = confirm('Bạn có chắc thực hiện thao tác này ?');
+			if (check) {
+				loadingMask.show();
+				formValidator.validate();
+				if(!formValidator.hasErrors()){
+					console.log('getNgayTu ' , <%= cauHinh.getNgayTu().getTime()%>);
+					console.log('getNgayDen ' , <%= cauHinh.getNgayDen().getTime()%>);
+					if(<%= cauHinh.getNgayTu().getTime()%> <=  <%= cauHinh.getNgayDen().getTime()%>){
+						var phatVayIds = Liferay.Util.listCheckedExcept(contentDataTableThuTienTruocNode, '<portlet:namespace />allRowIds');
+						var data = {
+						'<portlet:namespace/>phatVayIds' : phatVayIds,
+						'<portlet:namespace/>ngayThuTienTuTime' : '<%= cauHinh.getNgayTu().getTime()%>',
+			        	'<portlet:namespace/>ngayThuTienDenTime' : '<%= cauHinh.getNgayDen().getTime()%>',
+			        	'<portlet:namespace/>maCTV' : '<%=maCTVSearch %>'
+			       	 	}
+						A.io.request('${thuTienTruocURL}', {
+				               method: 'post',
+				               data : data,
+				               on: {
+				                   success: function() {
+				                   		if(this.get('responseData')){
+				                   			var data = JSON.parse(this.get('responseData'));
+			                   				if(!data.exception){
+				                   				Liferay.Util.getOpener().searchURL();
+				                   				dongPopup();
+			                   					Liferay.Util.getOpener().thongBao("Đã xác nhận thu tiền thành công");
+				                   			}else{
+			                   					toastr.error('Yêu cầu thực hiện không thành công', 'Lỗi!');
+				                   			}
+				                   		}
+				                   }
+				              }
+			        	});
+					}else{
+						toastr.warning('Ngày thu tiền từ phải nhỏ hơn ngày thu tiền đến', 'Cảnh báo!');
+					}
 				}
-				var ngayThuTienDenVal = A.one('#<portlet:namespace />ngayThuTienDen').val();
-				if (('' != ngayThuTienDenVal && pattern.test(ngayThuTienDenVal)) && 'dd/MM/yyyy' != ngayThuTienDenVal) {
-					var date = new Date(ngayThuTienDenVal.replace(pattern, '$3-$2-$1'));
-					ngayThuTienDen = date.getTime();
-				}
-				if(ngayThuTienTu <=  ngayThuTienDen){
-					var data = {
-					'<portlet:namespace/>ngayThuTienTuTime' : ngayThuTienTu,
-		        	'<portlet:namespace/>ngayThuTienDenTime' : ngayThuTienDen,
-		        	'<portlet:namespace/>maCTV' : '<%=maCTVSearch %>'
-		       	 	}
-					A.io.request('${thuTienTruocURL}', {
-			               method: 'post',
-			               data : data,
-			               on: {
-			                   success: function() {
-			                   		if(this.get('responseData')){
-			                   			var data = JSON.parse(this.get('responseData'));
-		                   				if(!data.exception){
-			                   				Liferay.Util.getOpener().searchURL();
-			                   				dongPopup();
-		                   					Liferay.Util.getOpener().thongBao("Đã xác nhận thu tiền thành công");
-			                   			}else{
-		                   					toastr.error('Yêu cầu thực hiện không thành công', 'Lỗi!');
-			                   			}
-			                   		}
-			                   }
-			              }
-		        	});
-				}else{
-					toastr.warning('Ngày thu tiền từ phải nhỏ hơn ngày thu tiền đến', 'Cảnh báo!');
-				}
+			 	loadingMask.hide();
 			}
-		 	loadingMask.hide();
+		}else{
+		toastr.warning('Chưa cấu hình thu tiền tết', 'Cảnh báo!');
 		}
 	});
 	Liferay.provide(window,'dongPopup', function(){
 		Liferay.Util.getOpener().dongPopup('<%=dialogId %>');
 	});
 	Liferay.provide(window,'printPhieuThuTienTruoc', function(){
+		var phatVayIds = Liferay.Util.listCheckedExcept(contentDataTableThuTienTruocNode, '<portlet:namespace />allRowIds');
 		var url = '${printPhieuThuTienTruoc}';
-		var ngayThuTienTu = 0;
-		var ngayThuTienDen = 0;
-		var pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
-		var ngayThuTienTuVal = A.one('#<portlet:namespace />ngayThuTienTu').val();
-		if (('' != ngayThuTienTuVal && pattern.test(ngayThuTienTuVal)) && 'dd/MM/yyyy' != ngayThuTienTuVal) {
-			var date = new Date(ngayThuTienTuVal.replace(pattern, '$3-$2-$1'));
-			ngayThuTienTu = date.getTime();
-		}
-		var ngayThuTienDenVal = A.one('#<portlet:namespace />ngayThuTienDen').val();
-		if (('' != ngayThuTienDenVal && pattern.test(ngayThuTienDenVal)) && 'dd/MM/yyyy' != ngayThuTienDenVal) {
-			var date = new Date(ngayThuTienDenVal.replace(pattern, '$3-$2-$1'));
-			ngayThuTienDen = date.getTime();
-		}
-		url += '&<portlet:namespace/>ngayThuTienTuTime=' + ngayThuTienTu;
-		url += '&<portlet:namespace/>ngayThuTienDenTime=' + ngayThuTienDen;
+		url += '&<portlet:namespace/>ngayThuTienTuTime=' + '<%= cauHinh.getNgayTu().getTime()%>';
+		url += '&<portlet:namespace/>ngayThuTienDenTime=' + '<%= cauHinh.getNgayDen().getTime()%>';
+		url += '&<portlet:namespace/>phatVayIds=' + phatVayIds;
 		url += '&<portlet:namespace/>maCTVSearch=' + '<%=maCTVSearch %>';
 		window.location.href = url;
 	});
-	searchURL();
+	if('<%=cauHinh != null %>'){
+		searchURL();
+	}
 	
 });
 </aui:script>

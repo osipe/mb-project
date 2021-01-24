@@ -201,6 +201,8 @@ public interface CauHinhThuTienTruocLocalService
 	public CauHinhThuTienTruoc fetchCauHinhThuTienTruoc(
 		long cauHinhThuTienTruocId);
 
+	public List<CauHinhThuTienTruoc> findAll() throws SystemException;
+
 	public List<CauHinhThuTienTruoc> findBase(
 			int nam, int hoatDong, int start, int end, OrderByComparator obc)
 		throws SystemException;

@@ -16,6 +16,7 @@
 
 package com.listener;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -80,21 +81,23 @@ public class SoScheduler extends BaseMessageListener {
 		}
 	}
 
-	private void capNhatDuLieu() {
-		Calendar cal = Calendar.getInstance();
-		int namNow = cal.get(Calendar.YEAR);
-		int monthNow = cal.get(Calendar.MONTH) + 1;
-
-		_log.info("Thang :" + monthNow);
-		_log.info("nam :" + namNow);
+	private void capNhatDuLieu(int nam, int month) {
+		_log.info("Thang :" + month);
+		_log.info("nam :" + nam);
 		Calendar calTu = Calendar.getInstance();
+		calTu.set(Calendar.YEAR, nam);
+		calTu.set(Calendar.MONTH, month - 1);
 		calTu.set(Calendar.DATE, 1);
 		Date ngayChungTuTu = calTu.getTime();
 
 		Calendar calDen = Calendar.getInstance();
-		calDen.set(Calendar.DATE, CalendarUtil.getDaysInMonth(calDen));
+		calDen.set(Calendar.YEAR, nam);
+		calDen.set(Calendar.MONTH, calTu.get(Calendar.MONTH));
+		calDen.set(Calendar.DATE, CalendarUtil.getDaysInMonth(calTu));
 		Date ngayChungTuDen = calDen.getTime();
-		
+
+		_log.info("Ngay tu :" + new SimpleDateFormat("dd/MM/yyyy").format(ngayChungTuTu));
+		_log.info("Ngay Den :" + new SimpleDateFormat("dd/MM/yyyy").format(ngayChungTuDen));
 		List<TaiKhoanDoiUng> taiKhoanDoiUngCTVs = TaiKhoanDoiUngLocalServiceUtil.findByLoaiTaiKhoan_HoatDong(2, true);
 		if (CollectionUtils.isNotEmpty(taiKhoanDoiUngCTVs)) {
 			TaiKhoanDoiUng taiKhoanThuVon = TaiKhoanDoiUngLocalServiceUtil
@@ -106,17 +109,23 @@ public class SoScheduler extends BaseMessageListener {
 									ngayChungTuTu, ngayChungTuDen, 1, -1, -1, null);
 					try {
 						LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil
-								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namNow, monthNow);
+								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), nam, month);
+						int mounthCuoiKy = month + 1;
+						int namCuoiKy = nam;
+						if(month == 12) {
+							mounthCuoiKy = 1;
+							namCuoiKy = nam + 1;
+						}
 						LichSuTaiKhoanDauKy cuoiKy = LichSuTaiKhoanDauKyLocalServiceUtil
-								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namNow, monthNow + 1);
+								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namCuoiKy, mounthCuoiKy);
 						if (dauKy == null) {
 							dauKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
 						}
 						if (cuoiKy == null) {
 							cuoiKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
 							cuoiKy.setTaiKhoanDoiUngId(item.getTaiKhoanDoiUngId());
-							cuoiKy.setThang(monthNow + 1);
-							cuoiKy.setNam(namNow);
+							cuoiKy.setThang(mounthCuoiKy);
+							cuoiKy.setNam(namCuoiKy);
 						}
 						Double soTienTon = dauKy.getSoTienTon() != null ? dauKy.getSoTienTon()
 								: GetterUtil.getDouble("0");
@@ -158,17 +167,23 @@ public class SoScheduler extends BaseMessageListener {
 				if (item.getSoHieu().equals(PropsUtil.get("config.taikhoanthuvon"))) {
 					try {
 						LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil
-								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namNow, monthNow);
+								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), nam, month);
+						int mounthCuoiKy = month + 1;
+						int namCuoiKy = nam;
+						if(month == 12) {
+							mounthCuoiKy = 1;
+							namCuoiKy = nam + 1;
+						}
 						LichSuTaiKhoanDauKy cuoiKy = LichSuTaiKhoanDauKyLocalServiceUtil
-								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namNow, monthNow + 1);
+								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namCuoiKy, mounthCuoiKy);
 						if (dauKy == null) {
 							dauKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
 						}
 						if (cuoiKy == null) {
 							cuoiKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
 							cuoiKy.setTaiKhoanDoiUngId(item.getTaiKhoanDoiUngId());
-							cuoiKy.setThang(monthNow + 1);
-							cuoiKy.setNam(namNow);
+							cuoiKy.setThang(mounthCuoiKy);
+							cuoiKy.setNam(namCuoiKy);
 						}
 						Double soTienTon = dauKy.getSoTienTon() != null ? dauKy.getSoTienTon()
 								: GetterUtil.getDouble("0");
@@ -205,17 +220,23 @@ public class SoScheduler extends BaseMessageListener {
 				} else {
 					try {
 						LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil
-								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namNow, monthNow);
+								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), nam, month);
+						int mounthCuoiKy = month + 1;
+						int namCuoiKy = nam;
+						if(month == 12) {
+							mounthCuoiKy = 1;
+							namCuoiKy = nam + 1;
+						}
 						LichSuTaiKhoanDauKy cuoiKy = LichSuTaiKhoanDauKyLocalServiceUtil
-								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namNow, monthNow + 1);
+								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), namCuoiKy, mounthCuoiKy);
 						if (dauKy == null) {
 							dauKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
 						}
 						if (cuoiKy == null) {
 							cuoiKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
 							cuoiKy.setTaiKhoanDoiUngId(item.getTaiKhoanDoiUngId());
-							cuoiKy.setThang(monthNow + 1);
-							cuoiKy.setNam(namNow);
+							cuoiKy.setThang(mounthCuoiKy);
+							cuoiKy.setNam(namCuoiKy);
 						}
 						Double soTienTon = dauKy.getSoTienTon() != null ? dauKy.getSoTienTon()
 								: GetterUtil.getDouble("0");
@@ -253,6 +274,18 @@ public class SoScheduler extends BaseMessageListener {
 				}
 
 			}
+		}
+	}
+
+	private void capNhatDuLieu() {
+		Calendar cal = Calendar.getInstance();
+		int namNow = cal.get(Calendar.YEAR);
+		int monthNow = cal.get(Calendar.MONTH) + 1;
+		for (int i = 1; i <= monthNow; i++) {
+			if(i == 1) {
+				capNhatDuLieu(namNow - 1, 12);
+			}
+			capNhatDuLieu(namNow, i);
 		}
 	}
 

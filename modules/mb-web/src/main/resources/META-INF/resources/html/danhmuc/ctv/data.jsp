@@ -76,6 +76,9 @@
 			 	<span style="color:#ff3d00e8" >${ congTacVien.hoTen}</span>
 			 </liferay-ui:search-container-column-text>
 			 <liferay-ui:search-container-column-text cssClass="aui-w10 text-center" name="Số CMND" value="${congTacVien.soCMND} " orderable="true" orderableProperty="soCMND" /> 
+			 <liferay-ui:search-container-column-text cssClass="aui-w10 text-center" name="Chi nhánh" orderable="true" orderableProperty="tenChiNhanh" > 
+			 	<span style="color:#ff3d00e8" >${ congTacVien.tenChiNhanh}</span>
+			 </liferay-ui:search-container-column-text>
 			  <liferay-ui:search-container-column-text cssClass="aui-w10 text-center" name="DN tối đa" value="<%=congTacVien.getDuNoToiDa() > 0 ? df.format(congTacVien.getDuNoToiDa()) : "0" %>"/>
 			  <liferay-ui:search-container-column-text cssClass="aui-w10 text-center" name="DN thế chấp" value="<%=congTacVien.getDuNoToiDaTheChap() > 0 ? df.format(congTacVien.getDuNoToiDaTheChap()) : "0" %>"/> 
 			  <liferay-ui:search-container-column-text cssClass="aui-w10 text-center" name="DN tín chấp" value="<%=duNoToiDaTinChap > 0 ? df.format(duNoToiDaTinChap) : "0" %>"/>       

@@ -1,3 +1,22 @@
+
+--10.01.2021
+create table dm_chinhanh (
+	chiNhanhId bigint not null primary key,
+	companyId bigint,
+	groupId bigint,
+	userId bigint,
+	userName varchar(75) null,
+	createDate timestamp null,
+	modifiedDate timestamp null,
+	ma varchar(75) null,
+	ten varchar(255) null,
+	hoatDong bool
+);
+
+ALTER TABLE public.dm_congtacvien  ADD COLUMN tenChiNhanh character varying(255);
+ALTER TABLE public.dm_congtacvien  ADD COLUMN chiNhanhId bigint;
+ALTER TABLE public.mb_lichsuthuphatchi  ADD COLUMN chiNhanhId bigint;
+ALTER TABLE public.mb_phatvay  ADD COLUMN chiNhanhId bigint;
 --07.08.2020
 ALTER TABLE public.mb_lichsuthuphatchi ADD COLUMN ngayXuLy timestamp without time zone;
 --16.07.2020

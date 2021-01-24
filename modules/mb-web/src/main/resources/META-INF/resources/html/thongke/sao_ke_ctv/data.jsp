@@ -3,9 +3,6 @@
 <%@page import="com.mb.service.LichSuThuPhatChiLocalServiceUtil"%>
 <%@page import="com.mb.model.LichSuThuPhatChi"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
-<%@page import="quanly.portlet.phatvay.phatvay.PhatVayComparator"%>
-<%@page import="com.mb.service.PhatVayLocalServiceUtil"%>
-<%@page import="com.mb.model.PhatVay"%>
 <%@page import="java.util.Date"%>
 <%@page import="quanly.portlet.danhmuc.ctv.CongTacVienComparator"%>
 <%@page import="com.mb.model.CongTacVien"%>
@@ -24,20 +21,29 @@
 }
 </style>
 <%
+	long chiNhanhIdSearch = ParamUtil.getLong(request, "chiNhanhIdSearch");
 	String maCTVSearch = ParamUtil.getString(request, "maCTVSearch");
 	long ngayBatDauTuSearchTime = ParamUtil.getLong(request, "ngayBatDauTuSearchTime");
 	Date ngay = ngayBatDauTuSearchTime > 0 ? new Date(ngayBatDauTuSearchTime) : null;
-	List<CongTacVien> items = CongTacVienLocalServiceUtil.getCTVSaoKe(maCTVSearch,ngay);
+	List<CongTacVien> items = CongTacVienLocalServiceUtil.getCTVSaoKe(chiNhanhIdSearch,maCTVSearch,ngay);
 	int count = items.size();
 	Double tongDuNoToiDaAll = GetterUtil.getDouble("0");
-	Double tongTienVayAll = GetterUtil.getDouble("0");
-	Double tongGocNgayAll = GetterUtil.getDouble("0");
-	Double tongLaiNgayAll = GetterUtil.getDouble("0");
-	Double tongGocDaThuAll = GetterUtil.getDouble("0");
-	Double tongLaiDaThuAll = GetterUtil.getDouble("0");
-	Double tongDuNoGocAll = GetterUtil.getDouble("0");
+	
 	Locale localeEn = new Locale("en", "EN");
     NumberFormat df = NumberFormat.getInstance(localeEn);
+    
+    Object[] sumDaTra = LichSuThuPhatChiLocalServiceUtil.getTongLichSuTraTien_CTV_TAINGAY(chiNhanhIdSearch,maCTVSearch, ngay ,null,0);
+	Object[] sumPhatVay = LichSuThuPhatChiLocalServiceUtil.getSumPhatVay_CTV_TAINGAY(chiNhanhIdSearch, maCTVSearch, ngay,0);
+	
+	Double tongTienVayAll = GetterUtil.getDouble(sumPhatVay[0],0.0);
+	Double tongGocNgayAll = GetterUtil.getDouble(sumPhatVay[1],0.0);
+	Double tongLaiNgayAll = GetterUtil.getDouble(sumPhatVay[2],0.0);
+	
+	Double tongLaiDaThuAll = GetterUtil.getDouble(sumDaTra[1],0.0);
+	Double tongGocDaThuAll = GetterUtil.getDouble(sumDaTra[2],0.0);
+	Double tongDuNoGocAll = tongTienVayAll - tongGocDaThuAll;
+	
+    
 %>
 <liferay-portlet:renderURL varImpl="iteratorURL">
 	<portlet:param name="mvcPath" value="/html/thongke/sao_ke_ctv/data.jsp" />
@@ -68,73 +74,47 @@
 		 <liferay-ui:search-container-results results="<%= items %>" />
 		 <liferay-ui:search-container-row className="com.mb.model.CongTacVien" modelVar="congTacVien" keyProperty="congTacVienId" indexVar="index"> 
 			 <%
-			 	
-			 	Double tongTienVay1 = GetterUtil.getDouble("0");
-				Double tongGocNgay1 = GetterUtil.getDouble("0");
-				Double tongLaiNgay1 = GetterUtil.getDouble("0");
+			 
+				Object[] sumDaTraCTVTheChap = LichSuThuPhatChiLocalServiceUtil.getTongLichSuTraTien_CTV_TAINGAY(chiNhanhIdSearch,congTacVien.getMa(), ngay ,null,1);
+				Object[] sumPhatVayCTVTheChap = LichSuThuPhatChiLocalServiceUtil.getSumPhatVay_CTV_TAINGAY(chiNhanhIdSearch,congTacVien.getMa(), ngay,1);
 				
-				Double tongGocDaThu1 = GetterUtil.getDouble("0");
-				Double tongLaiDaThu1 = GetterUtil.getDouble("0");
-				Double tongDuNoGoc1 = GetterUtil.getDouble("0");
+				Double tongTienVay1 = GetterUtil.getDouble(sumPhatVayCTVTheChap[0],0.0);
+				Double tongGocNgay1 = GetterUtil.getDouble(sumPhatVayCTVTheChap[1],0.0);
+				Double tongLaiNgay1 = GetterUtil.getDouble(sumPhatVayCTVTheChap[2],0.0);
 				
-				Double tongTienVay2 = GetterUtil.getDouble("0");
-				Double tongGocNgay2 = GetterUtil.getDouble("0");
-				Double tongLaiNgay2 = GetterUtil.getDouble("0");
+				Double tongGocDaThu1 = GetterUtil.getDouble(sumDaTraCTVTheChap[2],0.0);
+				Double tongLaiDaThu1 = GetterUtil.getDouble(sumDaTraCTVTheChap[1],0.0);
+				Double tongDuNoGoc1 = tongTienVay1 - tongGocDaThu1;
 				
-				Double tongGocDaThu2 = GetterUtil.getDouble("0");
-				Double tongLaiDaThu2 = GetterUtil.getDouble("0");
-				Double tongDuNoGoc2 = GetterUtil.getDouble("0");
+				Object[] sumDaTraCTVTinChap = LichSuThuPhatChiLocalServiceUtil.getTongLichSuTraTien_CTV_TAINGAY(chiNhanhIdSearch,congTacVien.getMa(), ngay ,null,2);
+				Object[] sumPhatVayCTVTinChap = LichSuThuPhatChiLocalServiceUtil.getSumPhatVay_CTV_TAINGAY(chiNhanhIdSearch,congTacVien.getMa(), ngay,2);
+				
+				Double tongTienVay2 = GetterUtil.getDouble(sumPhatVayCTVTinChap[0],0.0);
+				Double tongGocNgay2 = GetterUtil.getDouble(sumPhatVayCTVTinChap[1],0.0);
+				Double tongLaiNgay2 = GetterUtil.getDouble(sumPhatVayCTVTinChap[2],0.0);
+				
+				Double tongGocDaThu2 = GetterUtil.getDouble(sumDaTraCTVTinChap[2],0.0);
+				Double tongLaiDaThu2 = GetterUtil.getDouble(sumDaTraCTVTinChap[1],0.0);
+				Double tongDuNoGoc2 = tongTienVay2 - tongGocDaThu2;
 				
 				Double duNoToiDaTinChap = GetterUtil.getDouble("0");
 		 		if(congTacVien.getDuNoToiDa() > congTacVien.getDuNoToiDaTheChap()){
 		 			duNoToiDaTinChap = congTacVien.getDuNoToiDa() - congTacVien.getDuNoToiDaTheChap();
 		 		}
 				
-				PhatVayComparator obcPhatVay = new PhatVayComparator("createdate",true);
-				List<PhatVay> phatVays = PhatVayLocalServiceUtil.getPhatVaySaoKe(congTacVien.getMa(),0, ngay);
-		 		for(PhatVay item : phatVays){
-		 			Double gocDaThu = GetterUtil.getDouble("0");
-		 			Double laiDaThu = GetterUtil.getDouble("0");
-		 			Double duGoc =  item.getSoTienVay();
-		 			List<LichSuThuPhatChi> lichSuThuPhatChis = LichSuThuPhatChiLocalServiceUtil.findByPhatVay_Createdate_Loai(item.getPhatVayId(), null, ngay, "3,4");
-		 			for(LichSuThuPhatChi lichSuThuPhatChi : lichSuThuPhatChis){
-		 				gocDaThu += lichSuThuPhatChi.getTongSoTienVonTra();
-		 				laiDaThu += lichSuThuPhatChi.getTongSoTienLaiTra();
-		 				duGoc -= lichSuThuPhatChi.getTongSoTienVonTra();
-		 			}
-		 			if(item.getLoaiPhatVay() == 1){
-		 				tongTienVay1 += item.getSoTienVay();
-		 				tongGocNgay1 += item.getGocNgay();
-			 			tongLaiNgay1 += item.getLaiNgay();
-			 			
-			 			tongGocDaThu1 += gocDaThu;
-			 			tongLaiDaThu1 += laiDaThu;
-			 			tongDuNoGoc1 += duGoc;
-			 			
-		 			}else {
-		 				tongTienVay2 += item.getSoTienVay();
-		 				tongGocNgay2 += item.getGocNgay();
-			 			tongLaiNgay2 += item.getLaiNgay();
-			 			
-			 			tongGocDaThu2 += gocDaThu;
-			 			tongLaiDaThu2 += laiDaThu;
-			 			tongDuNoGoc2 += duGoc;
-		 			}
-		 		}
-		 		Double tongTienVay = tongTienVay1 + tongTienVay2;
-				Double tongGocNgay = tongGocNgay1 + tongGocNgay2;
-				Double tongLaiNgay = tongLaiNgay1 + tongLaiNgay2;
-				Double tongGocDaThu = tongGocDaThu1 + tongGocDaThu2;
-				Double tongLaiDaThu = tongLaiDaThu1 + tongLaiDaThu2 ;
-				Double tongDuNoGoc = tongDuNoGoc1 + tongDuNoGoc2;
+				Object[] sumDaTraCTV = LichSuThuPhatChiLocalServiceUtil.getTongLichSuTraTien_CTV_TAINGAY(chiNhanhIdSearch,congTacVien.getMa(), ngay ,null,0);
+				Object[] sumPhatVayCTV = LichSuThuPhatChiLocalServiceUtil.getSumPhatVay_CTV_TAINGAY(chiNhanhIdSearch,congTacVien.getMa(), ngay,0);
+				
+				Double tongTienVay = GetterUtil.getDouble(sumPhatVayCTV[0],0.0);
+				Double tongGocNgay = GetterUtil.getDouble(sumPhatVayCTV[1],0.0);
+				Double tongLaiNgay = GetterUtil.getDouble(sumPhatVayCTV[2],0.0);
+				
+				Double tongGocDaThu = GetterUtil.getDouble(sumDaTraCTV[2],0.0);
+				Double tongLaiDaThu = GetterUtil.getDouble(sumDaTraCTV[1],0.0);
+				Double tongDuNoGoc = tongTienVay - tongGocDaThu;
+				
 				tongDuNoToiDaAll += congTacVien.getDuNoToiDa();
-				tongTienVayAll +=tongTienVay;
-		 		tongGocNgayAll += tongGocNgay;
-		 		tongLaiNgayAll += tongLaiNgay;
-		 		tongGocDaThuAll += tongGocDaThu;
-		 		tongLaiDaThuAll += tongLaiDaThu;
-		 		tongDuNoGocAll += tongDuNoGoc;
-		 		%>
+	 		%>
 			 <liferay-ui:search-container-column-text cssClass="aui-w3" name="STT">
 			 	<span style="font-weight: bold;"><%=index + 1 %></span>
 		 		<br/>

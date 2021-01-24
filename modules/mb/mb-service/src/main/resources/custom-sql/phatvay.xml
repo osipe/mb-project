@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <custom-sql>
+	<sql id="com.mb.service.persistence.PhatVayFinder.updateChiNhanh">
+		<![CDATA[
+			UPDATE mb_phatvay set chinhanhid = ? WHERE mactv = ?;
+			UPDATE mb_lichsuthuphatchi set chinhanhid = ? WHERE mactv = ?;
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.LichSuThuPhatChiFinder.getSumPhatVay_CTV_TAINGAY">
+		<![CDATA[
+			select SUM(sotienvay) as sotienvay,SUM(gocngay) as gocngay,SUM(laingay) as laingay
+			from mb_phatvay 
+			where TRUE
+			AND chinhanhid = ?
+			and mactv = ?
+			and loaiPhatVay = ?
+			and phatvayid not in ( select phatvayid 
+						from mb_lichsuthuphatchi 
+						where trangThaiPhatVayHienTai in (2,3) 
+						and createdate <= ?
+						)
+		]]>
+	</sql>
 	<sql id="com.mb.service.persistence.PhatVayFinder.getPhatVayInIds">
 		<![CDATA[
 			SELECT *
@@ -14,6 +35,7 @@
 			SELECT SUM(sotien) as sotien,SUM(tongsotienlaitra) as tongsotienlaitra,SUM(tongsotienvontra) as tongsotienvontra
 			FROM mb_lichsuthuphatchi 
 			where TRUE
+			AND chinhanhid = ?
 			AND loai IN (3,4)
 			AND createdate <= ?
 			AND ((loai = 3 AND ngayxuly <= ?) OR (loai = 4 AND ngayxuly IS NULL))
@@ -21,8 +43,7 @@
 				from mb_phatvay 
 				where 1 = 1
 				and mactv = ?
-				and ngayketthuc >= ?
-				and createdate <= ?
+				and loaiPhatVay = ?
 				and phatvayid not in ( select phatvayid 
 							from mb_lichsuthuphatchi 
 							where trangThaiPhatVayHienTai in (2,3) 
@@ -36,9 +57,8 @@
 			select SUM(sotienvay) as sotienvay
 			from mb_phatvay 
 			where TRUE
+			and chinhanhid = ?
 			and mactv = ?
-			and ngayketthuc >= ? 
-			and createdate <= ?
 			and phatvayid not in ( select phatvayid 
 						from mb_lichsuthuphatchi 
 						where trangThaiPhatVayHienTai in (2,3) 
@@ -52,8 +72,6 @@
 			from mb_phatvay 
 			where TRUE
 			and mactv = ?
-			and ngayketthuc >= ? 
-			and createdate <= ?
 			and phatvayid not in ( select phatvayid 
 						from mb_lichsuthuphatchi 
 						where trangThaiPhatVayHienTai in (2,3) 
@@ -72,7 +90,7 @@
 			AND (ls.createDate >= ?)
 			AND (ls.ngayXuLy <= ?)
 			AND (ls.ngayXuLy >= ?)
-			ORDER BY pv.soKU ASC,pv.createDate ASC
+			ORDER BY CAST(substring(soku,length(pv.mactv) +1,length(pv.soku)) as integer) ASC,pv.createDate ASC
 		]]>
 	</sql>
 	<sql id="com.mb.service.persistence.LichSuThuPhatChiFinder.getLichSuThuPhatChi_MaCTV_Createdate">
@@ -92,16 +110,15 @@
 			select * 
 			from mb_phatvay 
 			where 1 = 1
+			AND chinhanhid = ?
 			and mactv = ?
 			and loaiphatvay = ?
-			and ngayketthuc >= ? 
-			and createdate <= ?
 			and phatvayid not in ( select phatvayid 
 									from mb_lichsuthuphatchi 
 									where trangThaiPhatVayHienTai in (2,3) 
 									and createdate <= ?
 									)
-			ORDER BY soKU ASC,createDate ASC
+			ORDER BY CAST(substring(soku,length(mactv) +1,length(soku)) as integer) ASC,createDate ASC
 			
 		]]>
 	</sql>
@@ -110,11 +127,12 @@
 			SELECT  ls.*
 			FROM mb_lichsuthuphatchi ls INNER JOIN mb_phatvay pv ON ls.phatVayId = pv.phatVayId
 			WHERE TRUE
+			AND ls.chinhanhid = ?
 			AND (ls.phatVayId = ?)
 			AND (ls.createDate <= ?)
 			AND (ls.createDate >= ?)
 			AND [$QUERY_LOAI$]
-			ORDER BY pv.soKU ASC,pv.createDate ASC
+			ORDER BY CAST(substring(soku,length(pv.mactv) +1,length(pv.soku)) as integer) ASC,pv.createDate ASC
 		]]>
 	</sql>
 	<sql id="com.mb.service.persistence.PhatVayFinder.getPhatVayByNgayThuTruocLast">
@@ -137,7 +155,7 @@
 			AND (ls.loai = ?)
 			AND (ls.createDate <= ?)
 			AND (ls.createDate >= ?)
-			ORDER BY pv.soKU ASC,pv.createDate ASC
+			ORDER BY CAST(substring(soku,length(pv.mactv) +1,length(pv.soku)) as integer) ASC,pv.createDate ASC
 		]]>
 	</sql>
 	<sql id="com.mb.service.persistence.TaiSanThueChapFinder.findBase">
@@ -177,6 +195,7 @@
 			AND (ngayTatToan >= ?)
 			AND (ngayTatToan <= ?)
 			AND $QUERY_TRANGTHAI$
+			ORDER BY CAST(substring(soku,length(mactv) +1,length(soku)) as integer) ASC
 		]]>
 	</sql>
 	<sql id="com.mb.service.persistence.PhatVayFinder.countBase">
@@ -206,6 +225,7 @@
 			AND (ngayBatDau <= ?)
 			AND (ngayDaThuCuoi < ? OR ngayDaThuCuoi IS NULL)
 			AND (trangThai = 1 OR trangThai = 4)
+			ORDER BY CAST(substring(soku,length(pv.mactv) +1,length(pv.soku)) as integer) ASC
 		]]>
 	</sql>
 	<sql
@@ -217,8 +237,8 @@
 			AND (maCTV = ?)
 			AND (ngayBatDau <= ?)
 			AND (ngayKetThuc >= ?)
-			AND (ngayDaThuCuoi < ? OR ngayDaThuCuoi IS NULL)
 			AND (trangThai = 1)
+			ORDER BY CAST(substring(soku,length(pv.mactv) +1,length(pv.soku)) as integer) ASC
 		]]>
 	</sql>
 </custom-sql>

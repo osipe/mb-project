@@ -91,9 +91,9 @@ public class LichSuThuPhatChiLocalServiceImpl extends LichSuThuPhatChiLocalServi
 		return lichSuThuPhatChiFinder.findByCTV_Loai_Createdate(maCTV, loai, ngayTaoTu, ngayTaoDen, start, end, obc);
 	}
 
-	public List<LichSuThuPhatChi> findByPhatVay_Createdate_Loai(long phatVayId, Date ngayTaoTu, Date ngayTaoDen,
+	public List<LichSuThuPhatChi> findByPhatVay_Createdate_Loai(long chiNhanhId, long phatVayId, Date ngayTaoTu, Date ngayTaoDen,
 			String loai) throws SystemException {
-		return lichSuThuPhatChiFinder.findByPhatVay_Createdate_Loai(phatVayId, ngayTaoTu, ngayTaoDen, loai);
+		return lichSuThuPhatChiFinder.findByPhatVay_Createdate_Loai(chiNhanhId, phatVayId, ngayTaoTu, ngayTaoDen, loai);
 	}
 
 	public void removeByPhatVayId(long phatVayId) throws SystemException {
@@ -111,12 +111,17 @@ public class LichSuThuPhatChiLocalServiceImpl extends LichSuThuPhatChiLocalServi
 				ngayXuLyDen, start, end, obc);
 	}
 
-	public Object[] getTongLichSuTraTien_CTV_TAINGAY(String maCTV, Date ngay, Date ngayXuLy) throws SystemException {
-		return lichSuThuPhatChiFinder.getTongLichSuTraTien_CTV_TAINGAY(maCTV, ngay,ngayXuLy);
+	public Object[] getTongLichSuTraTien_CTV_TAINGAY(long chiNhanhId, String maCTV, Date ngay, Date ngayXuLy, int loaiPV)
+			throws SystemException {
+		return lichSuThuPhatChiFinder.getTongLichSuTraTien_CTV_TAINGAY(chiNhanhId, maCTV, ngay, ngayXuLy, loaiPV);
 	}
 
-	public Double getSoTienVay_CTV_TAINGAY(String maCTV, Date ngay) throws SystemException {
-		return lichSuThuPhatChiFinder.getSoTienVay_CTV_TAINGAY(maCTV, ngay);
+	public Object[] getSumPhatVay_CTV_TAINGAY(long chiNhanhId, String maCTV, Date ngay, int loaiPV) throws SystemException {
+		return lichSuThuPhatChiFinder.getSumPhatVay_CTV_TAINGAY(chiNhanhId, maCTV, ngay, loaiPV);
+	}
+
+	public Double getSoTienVay_CTV_TAINGAY(long chiNhanhId,String maCTV, Date ngay) throws SystemException {
+		return lichSuThuPhatChiFinder.getSoTienVay_CTV_TAINGAY(chiNhanhId , maCTV, ngay);
 	}
 
 }

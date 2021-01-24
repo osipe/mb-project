@@ -122,8 +122,14 @@ public class CongTacVienLocalServiceImpl
 		return congTacVienFinder.countBase( ma, hoTen, soCMND, diaChi, hoatDong);
 
 	}
-	public List<CongTacVien> getCTVSaoKe(String maCTV,Date ngayTaoTu) throws SystemException {
-		return congTacVienFinder.getCTVSaoKe(maCTV,ngayTaoTu);
+	public List<CongTacVien> getCTVSaoKe(long chiNhanhId, String maCTV,Date ngayTaoTu) throws SystemException {
+		return congTacVienFinder.getCTVSaoKe(chiNhanhId, maCTV,ngayTaoTu);
+	}
+	public List<CongTacVien> getCTVSaoKePhanTrang(long chiNhanhId,String maCTV,Date ngayTaoTu,int start,int end) throws SystemException {
+		return congTacVienFinder.getCTVSaoKePhanTrang(chiNhanhId,maCTV,ngayTaoTu,start,end);
+	}
+	public int countCTVSaoKe(long chiNhanhId,String maCTV,Date ngayTaoTu) throws SystemException {
+		return congTacVienFinder.countCTVSaoKe(chiNhanhId, maCTV,ngayTaoTu);
 	}
 	public List<CongTacVien> getCTVPhatVayNgay(Date ngayTaoTu,Date ngayTaoDen) throws SystemException {
 		return congTacVienFinder.getCTVPhatVayNgay(ngayTaoTu, ngayTaoDen);

@@ -150,21 +150,25 @@ public class TatToanPortlet extends MVCPortlet {
 			Double tongVonTatToan = 0.0;
 			if (array != null && array.length > 0) {
 				for (int i = 0; i < array.length; i++) {
-					long phatVayId = Long.valueOf(array[i]);
-					if (phatVayId > 0) {
-						PhatVay phatVay = PhatVayLocalServiceUtil.fetchPhatVay(phatVayId);
-						if(phatVay != null) {
-							int tongSoLanDaThu = phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc();
-							tongLaiTatToan +=  ((phatVay.getThoiHan() - tongSoLanDaThu) * phatVay.getLaiNgay());
-							tongVonTatToan += phatVay.getDuNoGoc();
+					if(Validator.isNotNull(array[i]) && Long.valueOf(array[i]) > 0) {
+						long phatVayId =  Long.valueOf(array[i]);
+						if (phatVayId > 0) {
+							PhatVay phatVay = PhatVayLocalServiceUtil.fetchPhatVay(phatVayId);
+							if(phatVay != null) {
+								int tongSoLanDaThu = phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc();
+								tongLaiTatToan +=  ((phatVay.getThoiHan() - tongSoLanDaThu) * phatVay.getLaiNgay());
+								tongVonTatToan += phatVay.getDuNoGoc();
+							}
 						}
 					}
 				}
 			}
 			kq.put("tongLaiTatToan", tongLaiTatToan);
 			kq.put("tongVonTatToan", tongVonTatToan);
+			kq.put("tongTatToan", tongLaiTatToan + tongVonTatToan);
 			kq.put("tongLaiTatToanStr", df.format(tongLaiTatToan));
 			kq.put("tongVonTatToanStr", df.format(tongVonTatToan));
+			kq.put("tongTatToanStr", df.format(tongLaiTatToan + tongVonTatToan));
 		} catch (Exception e) {
 			e.printStackTrace();
 			kq.putException(e);
@@ -243,31 +247,34 @@ public class TatToanPortlet extends MVCPortlet {
 			String maCTV = "";
 			if (array != null && array.length > 0) {
 				for (int i = 0; i < array.length; i++) {
-					long phatVayId = Long.valueOf(array[i]);
-					if (phatVayId > 0) {
-						PhatVay phatVay = PhatVayLocalServiceUtil.fetchPhatVay(phatVayId);
-						if (phatVay != null) {
-							maCTV = phatVay.getMaCTV();
-							soTienGocPhaiThu += phatVay.getDuNoGoc();
-							soTienLaiPhaiThu += ((phatVay.getThoiHan()
-									- (phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc())) * phatVay.getLaiNgay());
-							Double gocPhaithu = phatVay.getDuNoGoc();
-							Double laiPhaiThu = ((phatVay.getThoiHan()
-									- (phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc())) * phatVay.getLaiNgay());
-							phatVay.setNgayTatToan(new Date());
-							phatVay.setTrangThai(TrangThaiPhatVayEnum.DA_TAT_TOAN.getValue());
-							PhatVayLocalServiceUtil.addOrUpdatePhatVay(phatVay, serviceContext);
+					if(Validator.isNotNull(array[i])) {
+						long phatVayId = Long.valueOf(array[i]);
+						if (phatVayId > 0) {
+							PhatVay phatVay = PhatVayLocalServiceUtil.fetchPhatVay(phatVayId);
+							if (phatVay != null) {
+								maCTV = phatVay.getMaCTV();
+								soTienGocPhaiThu += phatVay.getDuNoGoc();
+								soTienLaiPhaiThu += ((phatVay.getThoiHan()
+										- (phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc())) * phatVay.getLaiNgay());
+								Double gocPhaithu = phatVay.getDuNoGoc();
+								Double laiPhaiThu = ((phatVay.getThoiHan()
+										- (phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc())) * phatVay.getLaiNgay());
+								phatVay.setNgayTatToan(new Date());
+								phatVay.setTrangThai(TrangThaiPhatVayEnum.DA_TAT_TOAN.getValue());
+								PhatVayLocalServiceUtil.updatePhatVay(phatVay, serviceContext);
 
-							LichSuThuPhatChi lichSuThuPhatChi = LichSuThuPhatChiLocalServiceUtil
-									.createLichSuThuPhatChi(0L);
-							lichSuThuPhatChi.setMaCTV(maCTV);
-							lichSuThuPhatChi.setLoai(2);
-							lichSuThuPhatChi.setPhatVayId(phatVayId);
-							lichSuThuPhatChi.setSoTien(gocPhaithu + laiPhaiThu);
-							lichSuThuPhatChi.setTongSoTienLaiTra(laiPhaiThu);
-							lichSuThuPhatChi.setTrangThaiPhatVayHienTai(TrangThaiPhatVayEnum.DA_TAT_TOAN.getValue());
-							lichSuThuPhatChi.setTongSoTienVonTra(gocPhaithu);
-							LichSuThuPhatChiLocalServiceUtil.addLichSuThuPhatChi(lichSuThuPhatChi, serviceContext);
+								LichSuThuPhatChi lichSuThuPhatChi = LichSuThuPhatChiLocalServiceUtil
+										.createLichSuThuPhatChi(0L);
+								lichSuThuPhatChi.setMaCTV(maCTV);
+								lichSuThuPhatChi.setLoai(2);
+								lichSuThuPhatChi.setPhatVayId(phatVayId);
+								lichSuThuPhatChi.setChiNhanhId(phatVay.getChiNhanhId());
+								lichSuThuPhatChi.setSoTien(gocPhaithu + laiPhaiThu);
+								lichSuThuPhatChi.setTongSoTienLaiTra(laiPhaiThu);
+								lichSuThuPhatChi.setTrangThaiPhatVayHienTai(TrangThaiPhatVayEnum.DA_TAT_TOAN.getValue());
+								lichSuThuPhatChi.setTongSoTienVonTra(gocPhaithu);
+								LichSuThuPhatChiLocalServiceUtil.addLichSuThuPhatChi(lichSuThuPhatChi, serviceContext);
+							}
 						}
 					}
 				}

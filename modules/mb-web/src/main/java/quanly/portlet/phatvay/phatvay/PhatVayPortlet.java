@@ -399,8 +399,10 @@ public class PhatVayPortlet extends MVCPortlet {
 				JSONArray taiSanTheChaps = JSONFactoryUtil.createJSONArray(taiSanTheChapString);
 				phatVay.setTaiSanThueChapJSONArray(taiSanTheChaps);
 			}
+			CongTacVien ctv = CongTacVienLocalServiceUtil.fetchByMa(maCTV);
 			phatVay.setMaKhachHang(maKhachHang);
 			phatVay.setMaCTV(maCTV);
+			phatVay.setChiNhanhId(ctv.getChiNhanhId());
 			phatVay.setLoaiPhatVay(loaiPhatVay);
 			phatVay.setNgayKetThuc(ngayKetThuc);
 			phatVay.setTrangThai(TrangThaiPhatVayEnum.CHUA_THANH_TOAN.getValue());

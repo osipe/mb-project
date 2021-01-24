@@ -45,18 +45,15 @@ public class PhatVayImpl extends PhatVayBaseImpl {
 	private Double soTienThuNgay;
 
 	public Double getDuNoGoc() {
-		if (getTrangThai() == 4) {
-			int soLanDaThu = getSoLanDaThu() + getSoNgayThuTruoc();
-			if (soLanDaThu < getThoiHan()) {
-				duNoGoc = getSoTienVay() - (soLanDaThu * getGocNgay());
-			} else {
-				duNoGoc = GetterUtil.getDouble(0);
-			}
+		// Nếu phát vay đã tất toán
+		if (getTrangThai() == 3) {
+			duNoGoc = GetterUtil.getDouble(0);
 		} else {
-			if (getSoLanDaThu() < getThoiHan()) {
-				duNoGoc = getSoTienVay() - (getSoLanDaThu() * getGocNgay());
-			} else {
+			int soLanDaThu = getSoLanDaThu() + getSoNgayThuTruoc();
+			if (soLanDaThu == getThoiHan()) {
 				duNoGoc = GetterUtil.getDouble(0);
+			} else if (soLanDaThu < getThoiHan()) {
+				duNoGoc = getSoTienVay() - (soLanDaThu * getGocNgay());
 			}
 		}
 		return duNoGoc;

@@ -14,13 +14,6 @@
 
 package com.mb.service.persistence.impl;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.portal.dao.orm.custom.sql.CustomSQL;
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -35,6 +28,13 @@ import com.liferay.portal.spring.extender.service.ServiceReference;
 import com.mb.model.PhatVay;
 import com.mb.model.impl.PhatVayImpl;
 import com.mb.service.persistence.PhatVayFinder;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * The persistence implementation for the cong tac vien service.
@@ -61,6 +61,28 @@ public class PhatVayFinderImpl extends PhatVayFinderBaseImpl implements PhatVayF
 			+ ".getPhatVayByNgayThuTruocLast";
 	public static final String GET_PHATVAY_SAOKE = PhatVayFinder.class.getName() + ".getPhatVaySaoKe";
 	public static final String GET_PHATVAY_INIDS = PhatVayFinder.class.getName() + ".getPhatVayInIds";
+	public static final String UPDATE_CHI_NHANH = PhatVayFinder.class.getName() + ".updateChiNhanh";
+
+	public void updateChiNhanh(String maCTV, long chiNhanhId) throws SystemException {
+		Session session = null;
+		try {
+			session = openSession();
+			String sql = _customSQL.get(getClass(), UPDATE_CHI_NHANH);
+			SQLQuery q = session.createSQLQuery(sql);
+			QueryPos qPos = QueryPos.getInstance(q);
+			qPos.add(chiNhanhId);
+			qPos.add(maCTV);
+			qPos.add(chiNhanhId);
+			qPos.add(maCTV);
+			q.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SystemException(e);
+		} finally {
+			closeSession(session);
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<PhatVay> getPhatVayInIds(String ids) throws SystemException {
 		Session session = null;
@@ -85,12 +107,17 @@ public class PhatVayFinderImpl extends PhatVayFinderBaseImpl implements PhatVayF
 			closeSession(session);
 		}
 	}
+
 	@SuppressWarnings("unchecked")
-	public List<PhatVay> getPhatVaySaoKe(String maCTV,int loaiPhatVay, Date createDate) throws SystemException {
+	public List<PhatVay> getPhatVaySaoKe(long chiNhanhId, String maCTV, int loaiPhatVay, Date createDate)
+			throws SystemException {
 		Session session = null;
 		try {
 			session = openSession();
 			String sql = _customSQL.get(getClass(), GET_PHATVAY_SAOKE);
+			if (chiNhanhId <= 0) {
+				sql = sql.replace("AND chinhanhid = ?", "");
+			}
 			if (Validator.isNull(maCTV)) {
 				sql = sql.replace("and mactv = ?", "");
 			}
@@ -98,14 +125,15 @@ public class PhatVayFinderImpl extends PhatVayFinderBaseImpl implements PhatVayF
 				sql = sql.replace("and loaiphatvay = ?", "");
 			}
 			if (createDate == null) {
-				sql = sql.replace("and ngayketthuc >= ?", "");
-				sql = sql.replace("and createdate <= ?", "");
 				sql = sql.replace("and createdate <= ?", "");
 			}
 			sql = _customSQL.replaceOrderBy(sql, null);
 			SQLQuery q = session.createSQLQuery(sql);
 			q.addEntity("PhatVay", PhatVayImpl.class);
 			QueryPos qPos = QueryPos.getInstance(q);
+			if (chiNhanhId > 0) {
+				qPos.add(chiNhanhId);
+			}
 			if (Validator.isNotNull(maCTV)) {
 				qPos.add(maCTV);
 			}
@@ -115,8 +143,6 @@ public class PhatVayFinderImpl extends PhatVayFinderBaseImpl implements PhatVayF
 			if (createDate != null) {
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(createDate);
-				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getGTDate(cal)));
-				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getLTDate(cal)));
 				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getLTDate(cal)));
 			}
 			return (List<PhatVay>) QueryUtil.list(q, getDialect(), -1, -1);
@@ -162,7 +188,6 @@ public class PhatVayFinderImpl extends PhatVayFinderBaseImpl implements PhatVayF
 			}
 			if (Validator.isNull(ngayThuTienTu)) {
 				sql = sql.replace("AND (ngayBatDau <= ?)", "");
-				sql = sql.replace("AND (ngayDaThuCuoi < ? OR ngayDaThuCuoi IS NULL)", "");
 			}
 			SQLQuery q = session.createSQLQuery(sql);
 			q.addEntity("PhatVay", PhatVayImpl.class);
@@ -175,7 +200,6 @@ public class PhatVayFinderImpl extends PhatVayFinderBaseImpl implements PhatVayF
 				cal.setTime(ngayThuTienTu);
 				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getGTDate(cal)));
 				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getLTDate(cal)));
-				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getGTDate(cal)));
 			}
 			return (List<PhatVay>) QueryUtil.list(q, getDialect(), -1, -1);
 		} catch (Exception e) {
@@ -261,7 +285,9 @@ public class PhatVayFinderImpl extends PhatVayFinderBaseImpl implements PhatVayF
 				String queryTrangThai = "trangThai in (" + trangThai + ")";
 				sql = sql.replace("$QUERY_TRANGTHAI$", queryTrangThai);
 			}
-			sql = _customSQL.replaceOrderBy(sql, obc);
+			if (obc != null) {
+				sql = _customSQL.replaceOrderBy(sql, obc);
+			}
 			SQLQuery q = session.createSQLQuery(sql);
 			q.addEntity("PhatVay", PhatVayImpl.class);
 			QueryPos qPos = QueryPos.getInstance(q);

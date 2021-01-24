@@ -76,7 +76,8 @@ public class CongTacVienModelImpl
 		{"congTacVienId", Types.BIGINT}, {"companyId", Types.BIGINT},
 		{"groupId", Types.BIGINT}, {"userId", Types.BIGINT},
 		{"userName", Types.VARCHAR}, {"createDate", Types.TIMESTAMP},
-		{"modifiedDate", Types.TIMESTAMP}, {"ma", Types.VARCHAR},
+		{"modifiedDate", Types.TIMESTAMP}, {"chiNhanhId", Types.BIGINT},
+		{"tenChiNhanh", Types.VARCHAR}, {"ma", Types.VARCHAR},
 		{"hoTen", Types.VARCHAR}, {"soCMND", Types.VARCHAR},
 		{"duNoToiDa", Types.DOUBLE}, {"duNoToiDaTheChap", Types.DOUBLE},
 		{"diaChi", Types.VARCHAR}, {"ghiChu", Types.VARCHAR},
@@ -94,6 +95,8 @@ public class CongTacVienModelImpl
 		TABLE_COLUMNS_MAP.put("userName", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("createDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
+		TABLE_COLUMNS_MAP.put("chiNhanhId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("tenChiNhanh", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("ma", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("hoTen", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("soCMND", Types.VARCHAR);
@@ -105,7 +108,7 @@ public class CongTacVienModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table dm_congtacvien (congTacVienId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,ma VARCHAR(75) null,hoTen VARCHAR(75) null,soCMND VARCHAR(75) null,duNoToiDa DOUBLE,duNoToiDaTheChap DOUBLE,diaChi VARCHAR(75) null,ghiChu VARCHAR(75) null,hoatDong BOOLEAN)";
+		"create table dm_congtacvien (congTacVienId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,chiNhanhId LONG,tenChiNhanh VARCHAR(75) null,ma VARCHAR(75) null,hoTen VARCHAR(75) null,soCMND VARCHAR(75) null,duNoToiDa DOUBLE,duNoToiDaTheChap DOUBLE,diaChi VARCHAR(75) null,ghiChu VARCHAR(75) null,hoatDong BOOLEAN)";
 
 	public static final String TABLE_SQL_DROP = "drop table dm_congtacvien";
 
@@ -134,9 +137,13 @@ public class CongTacVienModelImpl
 			"value.object.column.bitmask.enabled.com.mb.model.CongTacVien"),
 		true);
 
-	public static final long MA_COLUMN_BITMASK = 1L;
+	public static final long CHINHANHID_COLUMN_BITMASK = 1L;
 
-	public static final long SOCMND_COLUMN_BITMASK = 2L;
+	public static final long HOATDONG_COLUMN_BITMASK = 2L;
+
+	public static final long MA_COLUMN_BITMASK = 4L;
+
+	public static final long SOCMND_COLUMN_BITMASK = 8L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -158,6 +165,8 @@ public class CongTacVienModelImpl
 		model.setUserName(soapModel.getUserName());
 		model.setCreateDate(soapModel.getCreateDate());
 		model.setModifiedDate(soapModel.getModifiedDate());
+		model.setChiNhanhId(soapModel.getChiNhanhId());
+		model.setTenChiNhanh(soapModel.getTenChiNhanh());
 		model.setMa(soapModel.getMa());
 		model.setHoTen(soapModel.getHoTen());
 		model.setSoCMND(soapModel.getSoCMND());
@@ -439,6 +448,48 @@ public class CongTacVienModelImpl
 
 			});
 		attributeGetterFunctions.put(
+			"chiNhanhId",
+			new Function<CongTacVien, Object>() {
+
+				@Override
+				public Object apply(CongTacVien congTacVien) {
+					return congTacVien.getChiNhanhId();
+				}
+
+			});
+		attributeSetterBiConsumers.put(
+			"chiNhanhId",
+			new BiConsumer<CongTacVien, Object>() {
+
+				@Override
+				public void accept(CongTacVien congTacVien, Object chiNhanhId) {
+					congTacVien.setChiNhanhId((Long)chiNhanhId);
+				}
+
+			});
+		attributeGetterFunctions.put(
+			"tenChiNhanh",
+			new Function<CongTacVien, Object>() {
+
+				@Override
+				public Object apply(CongTacVien congTacVien) {
+					return congTacVien.getTenChiNhanh();
+				}
+
+			});
+		attributeSetterBiConsumers.put(
+			"tenChiNhanh",
+			new BiConsumer<CongTacVien, Object>() {
+
+				@Override
+				public void accept(
+					CongTacVien congTacVien, Object tenChiNhanh) {
+
+					congTacVien.setTenChiNhanh((String)tenChiNhanh);
+				}
+
+			});
+		attributeGetterFunctions.put(
 			"ma",
 			new Function<CongTacVien, Object>() {
 
@@ -713,6 +764,45 @@ public class CongTacVienModelImpl
 
 	@JSON
 	@Override
+	public long getChiNhanhId() {
+		return _chiNhanhId;
+	}
+
+	@Override
+	public void setChiNhanhId(long chiNhanhId) {
+		_columnBitmask |= CHINHANHID_COLUMN_BITMASK;
+
+		if (!_setOriginalChiNhanhId) {
+			_setOriginalChiNhanhId = true;
+
+			_originalChiNhanhId = _chiNhanhId;
+		}
+
+		_chiNhanhId = chiNhanhId;
+	}
+
+	public long getOriginalChiNhanhId() {
+		return _originalChiNhanhId;
+	}
+
+	@JSON
+	@Override
+	public String getTenChiNhanh() {
+		if (_tenChiNhanh == null) {
+			return "";
+		}
+		else {
+			return _tenChiNhanh;
+		}
+	}
+
+	@Override
+	public void setTenChiNhanh(String tenChiNhanh) {
+		_tenChiNhanh = tenChiNhanh;
+	}
+
+	@JSON
+	@Override
 	public String getMa() {
 		if (_ma == null) {
 			return "";
@@ -841,7 +931,19 @@ public class CongTacVienModelImpl
 
 	@Override
 	public void setHoatDong(Boolean hoatDong) {
+		_columnBitmask |= HOATDONG_COLUMN_BITMASK;
+
+		if (!_setOriginalHoatDong) {
+			_setOriginalHoatDong = true;
+
+			_originalHoatDong = _hoatDong;
+		}
+
 		_hoatDong = hoatDong;
+	}
+
+	public Boolean getOriginalHoatDong() {
+		return _originalHoatDong;
 	}
 
 	public long getColumnBitmask() {
@@ -883,6 +985,8 @@ public class CongTacVienModelImpl
 		congTacVienImpl.setUserName(getUserName());
 		congTacVienImpl.setCreateDate(getCreateDate());
 		congTacVienImpl.setModifiedDate(getModifiedDate());
+		congTacVienImpl.setChiNhanhId(getChiNhanhId());
+		congTacVienImpl.setTenChiNhanh(getTenChiNhanh());
 		congTacVienImpl.setMa(getMa());
 		congTacVienImpl.setHoTen(getHoTen());
 		congTacVienImpl.setSoCMND(getSoCMND());
@@ -953,9 +1057,18 @@ public class CongTacVienModelImpl
 
 		congTacVienModelImpl._setModifiedDate = false;
 
+		congTacVienModelImpl._originalChiNhanhId =
+			congTacVienModelImpl._chiNhanhId;
+
+		congTacVienModelImpl._setOriginalChiNhanhId = false;
+
 		congTacVienModelImpl._originalMa = congTacVienModelImpl._ma;
 
 		congTacVienModelImpl._originalSoCMND = congTacVienModelImpl._soCMND;
+
+		congTacVienModelImpl._originalHoatDong = congTacVienModelImpl._hoatDong;
+
+		congTacVienModelImpl._setOriginalHoatDong = false;
 
 		congTacVienModelImpl._columnBitmask = 0;
 	}
@@ -997,6 +1110,16 @@ public class CongTacVienModelImpl
 		}
 		else {
 			congTacVienCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		congTacVienCacheModel.chiNhanhId = getChiNhanhId();
+
+		congTacVienCacheModel.tenChiNhanh = getTenChiNhanh();
+
+		String tenChiNhanh = congTacVienCacheModel.tenChiNhanh;
+
+		if ((tenChiNhanh != null) && (tenChiNhanh.length() == 0)) {
+			congTacVienCacheModel.tenChiNhanh = null;
 		}
 
 		congTacVienCacheModel.ma = getMa();
@@ -1125,6 +1248,10 @@ public class CongTacVienModelImpl
 	private Date _createDate;
 	private Date _modifiedDate;
 	private boolean _setModifiedDate;
+	private long _chiNhanhId;
+	private long _originalChiNhanhId;
+	private boolean _setOriginalChiNhanhId;
+	private String _tenChiNhanh;
 	private String _ma;
 	private String _originalMa;
 	private String _hoTen;
@@ -1135,6 +1262,8 @@ public class CongTacVienModelImpl
 	private String _diaChi;
 	private String _ghiChu;
 	private Boolean _hoatDong;
+	private Boolean _originalHoatDong;
+	private boolean _setOriginalHoatDong;
 	private long _columnBitmask;
 	private CongTacVien _escapedModel;
 

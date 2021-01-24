@@ -246,6 +246,13 @@ public class CauHinhThuTienTruocLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<com.mb.model.CauHinhThuTienTruoc> findAll()
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return _cauHinhThuTienTruocLocalService.findAll();
+	}
+
+	@Override
 	public java.util.List<com.mb.model.CauHinhThuTienTruoc> findBase(
 			int nam, int hoatDong, int start, int end,
 			com.liferay.portal.kernel.util.OrderByComparator obc)

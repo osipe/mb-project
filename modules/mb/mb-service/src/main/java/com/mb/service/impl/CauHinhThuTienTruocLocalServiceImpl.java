@@ -84,7 +84,11 @@ public class CauHinhThuTienTruocLocalServiceImpl extends CauHinhThuTienTruocLoca
 	public CauHinhThuTienTruoc fetchByNam(int nam) throws SystemException {
 		return cauHinhThuTienTruocPersistence.fetchByNam(nam);
 	}
-
+	
+	public List<CauHinhThuTienTruoc> findAll() throws SystemException {
+		return cauHinhThuTienTruocPersistence.findAll();
+	}
+	
 	public List<CauHinhThuTienTruoc> findBase(int nam, int hoatDong, int start, int end, OrderByComparator obc)
 			throws SystemException {
 		return cauHinhThuTienTruocFinder.findBase(nam, hoatDong, start, end, obc);

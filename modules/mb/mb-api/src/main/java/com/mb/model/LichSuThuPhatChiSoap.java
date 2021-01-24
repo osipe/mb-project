@@ -41,6 +41,7 @@ public class LichSuThuPhatChiSoap implements Serializable {
 		soapModel.setUserName(model.getUserName());
 		soapModel.setCreateDate(model.getCreateDate());
 		soapModel.setModifiedDate(model.getModifiedDate());
+		soapModel.setChiNhanhId(model.getChiNhanhId());
 		soapModel.setPhatVayId(model.getPhatVayId());
 		soapModel.setMaCTV(model.getMaCTV());
 		soapModel.setSoTien(model.getSoTien());
@@ -167,6 +168,14 @@ public class LichSuThuPhatChiSoap implements Serializable {
 		_modifiedDate = modifiedDate;
 	}
 
+	public long getChiNhanhId() {
+		return _chiNhanhId;
+	}
+
+	public void setChiNhanhId(long chiNhanhId) {
+		_chiNhanhId = chiNhanhId;
+	}
+
 	public long getPhatVayId() {
 		return _phatVayId;
 	}
@@ -238,6 +247,7 @@ public class LichSuThuPhatChiSoap implements Serializable {
 	private String _userName;
 	private Date _createDate;
 	private Date _modifiedDate;
+	private long _chiNhanhId;
 	private long _phatVayId;
 	private String _maCTV;
 	private Double _soTien;

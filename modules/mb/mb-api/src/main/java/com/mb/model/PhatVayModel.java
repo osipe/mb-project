@@ -189,6 +189,20 @@ public interface PhatVayModel
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
+	 * Returns the chi nhanh ID of this phat vay.
+	 *
+	 * @return the chi nhanh ID of this phat vay
+	 */
+	public long getChiNhanhId();
+
+	/**
+	 * Sets the chi nhanh ID of this phat vay.
+	 *
+	 * @param chiNhanhId the chi nhanh ID of this phat vay
+	 */
+	public void setChiNhanhId(long chiNhanhId);
+
+	/**
 	 * Returns the ma ctv of this phat vay.
 	 *
 	 * @return the ma ctv of this phat vay

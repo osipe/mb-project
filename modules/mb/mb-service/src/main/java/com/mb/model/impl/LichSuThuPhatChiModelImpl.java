@@ -76,11 +76,11 @@ public class LichSuThuPhatChiModelImpl
 		{"lichSuThuPhatChiId", Types.BIGINT}, {"companyId", Types.BIGINT},
 		{"groupId", Types.BIGINT}, {"userId", Types.BIGINT},
 		{"userName", Types.VARCHAR}, {"createDate", Types.TIMESTAMP},
-		{"modifiedDate", Types.TIMESTAMP}, {"phatVayId", Types.BIGINT},
-		{"maCTV", Types.VARCHAR}, {"soTien", Types.DOUBLE},
-		{"tongSoTienVonTra", Types.DOUBLE}, {"tongSoTienLaiTra", Types.DOUBLE},
-		{"ngayXuLy", Types.TIMESTAMP}, {"loai", Types.INTEGER},
-		{"trangThaiPhatVayHienTai", Types.INTEGER}
+		{"modifiedDate", Types.TIMESTAMP}, {"chiNhanhId", Types.BIGINT},
+		{"phatVayId", Types.BIGINT}, {"maCTV", Types.VARCHAR},
+		{"soTien", Types.DOUBLE}, {"tongSoTienVonTra", Types.DOUBLE},
+		{"tongSoTienLaiTra", Types.DOUBLE}, {"ngayXuLy", Types.TIMESTAMP},
+		{"loai", Types.INTEGER}, {"trangThaiPhatVayHienTai", Types.INTEGER}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -94,6 +94,7 @@ public class LichSuThuPhatChiModelImpl
 		TABLE_COLUMNS_MAP.put("userName", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("createDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
+		TABLE_COLUMNS_MAP.put("chiNhanhId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("phatVayId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("maCTV", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("soTien", Types.DOUBLE);
@@ -105,7 +106,7 @@ public class LichSuThuPhatChiModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table mb_lichsuthuphatchi (lichSuThuPhatChiId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,phatVayId LONG,maCTV VARCHAR(75) null,soTien DOUBLE,tongSoTienVonTra DOUBLE,tongSoTienLaiTra DOUBLE,ngayXuLy DATE null,loai INTEGER,trangThaiPhatVayHienTai INTEGER)";
+		"create table mb_lichsuthuphatchi (lichSuThuPhatChiId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,chiNhanhId LONG,phatVayId LONG,maCTV VARCHAR(75) null,soTien DOUBLE,tongSoTienVonTra DOUBLE,tongSoTienLaiTra DOUBLE,ngayXuLy DATE null,loai INTEGER,trangThaiPhatVayHienTai INTEGER)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table mb_lichsuthuphatchi";
@@ -165,6 +166,7 @@ public class LichSuThuPhatChiModelImpl
 		model.setUserName(soapModel.getUserName());
 		model.setCreateDate(soapModel.getCreateDate());
 		model.setModifiedDate(soapModel.getModifiedDate());
+		model.setChiNhanhId(soapModel.getChiNhanhId());
 		model.setPhatVayId(soapModel.getPhatVayId());
 		model.setMaCTV(soapModel.getMaCTV());
 		model.setSoTien(soapModel.getSoTien());
@@ -459,6 +461,28 @@ public class LichSuThuPhatChiModelImpl
 					LichSuThuPhatChi lichSuThuPhatChi, Object modifiedDate) {
 
 					lichSuThuPhatChi.setModifiedDate((Date)modifiedDate);
+				}
+
+			});
+		attributeGetterFunctions.put(
+			"chiNhanhId",
+			new Function<LichSuThuPhatChi, Object>() {
+
+				@Override
+				public Object apply(LichSuThuPhatChi lichSuThuPhatChi) {
+					return lichSuThuPhatChi.getChiNhanhId();
+				}
+
+			});
+		attributeSetterBiConsumers.put(
+			"chiNhanhId",
+			new BiConsumer<LichSuThuPhatChi, Object>() {
+
+				@Override
+				public void accept(
+					LichSuThuPhatChi lichSuThuPhatChi, Object chiNhanhId) {
+
+					lichSuThuPhatChi.setChiNhanhId((Long)chiNhanhId);
 				}
 
 			});
@@ -759,6 +783,17 @@ public class LichSuThuPhatChiModelImpl
 
 	@JSON
 	@Override
+	public long getChiNhanhId() {
+		return _chiNhanhId;
+	}
+
+	@Override
+	public void setChiNhanhId(long chiNhanhId) {
+		_chiNhanhId = chiNhanhId;
+	}
+
+	@JSON
+	@Override
 	public long getPhatVayId() {
 		return _phatVayId;
 	}
@@ -923,6 +958,7 @@ public class LichSuThuPhatChiModelImpl
 		lichSuThuPhatChiImpl.setUserName(getUserName());
 		lichSuThuPhatChiImpl.setCreateDate(getCreateDate());
 		lichSuThuPhatChiImpl.setModifiedDate(getModifiedDate());
+		lichSuThuPhatChiImpl.setChiNhanhId(getChiNhanhId());
 		lichSuThuPhatChiImpl.setPhatVayId(getPhatVayId());
 		lichSuThuPhatChiImpl.setMaCTV(getMaCTV());
 		lichSuThuPhatChiImpl.setSoTien(getSoTien());
@@ -1061,6 +1097,8 @@ public class LichSuThuPhatChiModelImpl
 			lichSuThuPhatChiCacheModel.modifiedDate = Long.MIN_VALUE;
 		}
 
+		lichSuThuPhatChiCacheModel.chiNhanhId = getChiNhanhId();
+
 		lichSuThuPhatChiCacheModel.phatVayId = getPhatVayId();
 
 		lichSuThuPhatChiCacheModel.maCTV = getMaCTV();
@@ -1171,6 +1209,7 @@ public class LichSuThuPhatChiModelImpl
 	private Date _createDate;
 	private Date _modifiedDate;
 	private boolean _setModifiedDate;
+	private long _chiNhanhId;
 	private long _phatVayId;
 	private long _originalPhatVayId;
 	private boolean _setOriginalPhatVayId;

@@ -1,4 +1,6 @@
 
+<%@page import="com.mb.service.ChiNhanhLocalServiceUtil"%>
+<%@page import="com.mb.model.ChiNhanh"%>
 <%@page import="quanly.portlet.danhmuc.ctv.CongTacVienComparator"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -13,6 +15,7 @@
 </portlet:renderURL>
 <%
 	CongTacVienComparator congTacVienComparator = new  CongTacVienComparator("ma",true);
+	List<ChiNhanh> chiNhanhs = ChiNhanhLocalServiceUtil.findByHoatDong(true);
 	List<CongTacVien> ctvs = CongTacVienLocalServiceUtil.findBase( "", "", "", "", 1, -1, -1, congTacVienComparator);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	Date now = new Date();
@@ -21,6 +24,14 @@
 <h3 style="text-align: center;">TỔNG HỢP SAO KÊ DƯ NỢ KHÁCH HÀNG</h3>
 <table class="info table-pa5 aui-w100">
 	<tr>
+		<td>
+			<aui:select name="chiNhanhIdSearch" label="Chi nhánh" cssClass="input-select2" onchange="search();">
+				 <aui:option value=" " label="Tất cả" />
+				 <c:forEach items="<%= chiNhanhs%>" var="item">
+				 	<aui:option value="${item.chiNhanhId}" label="${item.ten} - ${item.ma}"/>
+				</c:forEach>
+			</aui:select>
+		</td>
 		<td>
 			<aui:select name="maCTVSearch" label="Cộng tác viên" cssClass="input-select2" onchange="search();">
 				 <aui:option value=" " label="Tất cả" />
@@ -73,6 +84,7 @@ AUI().ready(['aui-base'], function(A) {
 			ngayBatDauTuSearch = dateTu.getTime();
 		}
 		var data = {
+			'<portlet:namespace/>chiNhanhIdSearch' : A.one('#<portlet:namespace />chiNhanhIdSearch').val(),
         	'<portlet:namespace/>maCTVSearch' : A.one('#<portlet:namespace />maCTVSearch').val(),
         	'<portlet:namespace/>ngayBatDauTuSearchTime' : ngayBatDauTuSearch
         }
@@ -96,6 +108,7 @@ AUI().ready(['aui-base'], function(A) {
 			ngayBatDauSearch = date.getTime();
 		}
 		var url = '${inSaoKeDuNoKHURL}';
+		url += '&<portlet:namespace/>chiNhanhId=' + A.one('#<portlet:namespace />chiNhanhIdSearch').val();
 		url += '&<portlet:namespace/>ngayTime=' + ngayBatDauSearch;
 		url += '&<portlet:namespace/>maCTVSearch=' + A.one('#<portlet:namespace />maCTVSearch').val();
 		window.location.href = url;

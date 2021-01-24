@@ -1,3 +1,6 @@
+<%@page import="com.mb.service.ChiNhanhLocalServiceUtil"%>
+<%@page import="com.mb.model.ChiNhanh"%>
+<%@page import="java.util.List"%>
 <%@page import="com.mb.model.CongTacVien"%>
 <%@page import="com.mb.service.CongTacVienLocalServiceUtil"%>
 <%@page import="java.util.Locale"%>
@@ -9,6 +12,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
+	List<ChiNhanh> chiNhanhs = ChiNhanhLocalServiceUtil.findByHoatDong(true);
 	long congTacVienId = ParamUtil.getLong(request, "congTacVienId");
 	CongTacVien ctv = CongTacVienLocalServiceUtil.createCongTacVien(0L);
 	if(congTacVienId > 0){
@@ -28,6 +32,15 @@
 					<aui:validator name="required" errorMessage="Mã CTV không được bỏ trống!" />
 				</aui:input></td>
 			<td>
+				<aui:select name="chiNhanhId" label="Chi nhánh" cssClass="input-select2" onchange="search();">
+				 <c:forEach items="<%= chiNhanhs%>" var="item">
+					 	<aui:option value="${item.chiNhanhId}" label="${item.ten} - ${item.ma}"/>
+					</c:forEach>
+				</aui:select>
+			</td>
+		</tr>
+		<tr>
+			<td>
 				<aui:input name="hoTen" class="input-text" label="Họ tên" value="<%=ctv.getHoTen() %>">
 					<aui:validator name="required" errorMessage="Họ tên không được bỏ trống!" />
 				</aui:input>
@@ -39,7 +52,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan="2">
+			<td>
 				<aui:input name="duNoToiDa" onkeypress="_formatNumber();" class="input-text" label="Dư nợ tối đa" value="<%=ctv.getDuNoToiDa() == null ? "0" : df.format(ctv.getDuNoToiDa()) %>">
 				</aui:input>
 			</td>
@@ -49,19 +62,19 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan="3">
+			<td colspan="2">
 				<aui:input name="diaChi" class="input-text" label="Địa chỉ" value="<%=ctv.getDiaChi() %>">
 				</aui:input>
 			</td>
 		</tr>
 		<tr>
-			<td colspan="3">
+			<td colspan="2">
 				<aui:input name="ghiChu" class="input-text" label="Ghi chú" value="<%=ctv.getGhiChu() %>">
 				</aui:input>
 			</td>
 		</tr>
 		<tr>
-			<td colspan="3">
+			<td colspan="2">
 				<button id="<portlet:namespace />luu" type="button" class="btn btn-labeled btn-default" onclick="save(true);">
 					<span class="btn-label"><i class="glyphicon glyphicon-floppy-disk"></i></span><%=congTacVienId == 0 ? "Lưu" : "Cập nhật" %>
 				</button>
@@ -97,6 +110,7 @@ AUI().ready(['aui-base'], function(A) {
 		if(!formValidator.hasErrors()){
 			var data = {
 				<portlet:namespace />congTacVienId : '<%=congTacVienId %>',
+				<portlet:namespace />chiNhanhId : A.one('#<portlet:namespace />chiNhanhId').val(),
 				<portlet:namespace />maCongTacVien : A.one('#<portlet:namespace />maCongTacVien').val(),
 				<portlet:namespace />hoTen : A.one('#<portlet:namespace />hoTen').val(),
 				<portlet:namespace />soCMND : A.one('#<portlet:namespace />soCMND').val(),

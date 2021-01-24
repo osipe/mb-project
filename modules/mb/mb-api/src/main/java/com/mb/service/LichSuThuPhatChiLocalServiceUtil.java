@@ -239,12 +239,12 @@ public class LichSuThuPhatChiLocalServiceUtil {
 
 	public static java.util.List<com.mb.model.LichSuThuPhatChi>
 			findByPhatVay_Createdate_Loai(
-				long phatVayId, java.util.Date ngayTaoTu,
+				long chiNhanhId, long phatVayId, java.util.Date ngayTaoTu,
 				java.util.Date ngayTaoDen, String loai)
 		throws com.liferay.portal.kernel.exception.SystemException {
 
 		return getService().findByPhatVay_Createdate_Loai(
-			phatVayId, ngayTaoTu, ngayTaoDen, loai);
+			chiNhanhId, phatVayId, ngayTaoTu, ngayTaoDen, loai);
 	}
 
 	public static java.util.List<com.mb.model.LichSuThuPhatChi>
@@ -332,18 +332,27 @@ public class LichSuThuPhatChiLocalServiceUtil {
 	}
 
 	public static Double getSoTienVay_CTV_TAINGAY(
-			String maCTV, java.util.Date ngay)
+			long chiNhanhId, String maCTV, java.util.Date ngay)
 		throws com.liferay.portal.kernel.exception.SystemException {
 
-		return getService().getSoTienVay_CTV_TAINGAY(maCTV, ngay);
+		return getService().getSoTienVay_CTV_TAINGAY(chiNhanhId, maCTV, ngay);
+	}
+
+	public static Object[] getSumPhatVay_CTV_TAINGAY(
+			long chiNhanhId, String maCTV, java.util.Date ngay, int loaiPV)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return getService().getSumPhatVay_CTV_TAINGAY(
+			chiNhanhId, maCTV, ngay, loaiPV);
 	}
 
 	public static Object[] getTongLichSuTraTien_CTV_TAINGAY(
-			String maCTV, java.util.Date ngay, java.util.Date ngayXuLy)
+			long chiNhanhId, String maCTV, java.util.Date ngay,
+			java.util.Date ngayXuLy, int loaiPV)
 		throws com.liferay.portal.kernel.exception.SystemException {
 
 		return getService().getTongLichSuTraTien_CTV_TAINGAY(
-			maCTV, ngay, ngayXuLy);
+			chiNhanhId, maCTV, ngay, ngayXuLy, loaiPV);
 	}
 
 	public static void removeByPhatVayId(long phatVayId)

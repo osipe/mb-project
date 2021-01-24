@@ -5,6 +5,7 @@ package quanly.constants;
  */
 public class QuanlyPortletKeys {
 
+	public static final String chinhanh = "chinhanh";
 	public static final String khachHang = "khachhang";
 	public static final String ctv = "congtacvien";
 	public static final String laiSuat = "laisuat";
