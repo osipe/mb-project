@@ -15,6 +15,7 @@ public class QuanlyPortletKeys {
 	public static final String phatVayNgay = "phatvayngay";
 	public static final String tatToan = "tattoan";
 	public static final String thuTienHangNgay = "thutienhangngay";
+	public static final String thuTienHangNgay_Thue = "thutienhangngay_thue";
 	public static final String tongHopSaoKeDuNoCTV = "tonghopsaokedunoctv";
 	public static final String thuPhatChiNgay = "thuphatchingay";
 	public static final String saoKeDuNoChiTietKH = "saokedunochitietkh";
