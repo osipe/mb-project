@@ -37,10 +37,12 @@ import com.mb.model.CauHinhThuTienTruoc;
 import com.mb.model.CongTacVien;
 import com.mb.model.LichSuThuPhatChi;
 import com.mb.model.PhatVay;
+import com.mb.model.SoKheUoc;
 import com.mb.service.CauHinhThuTienTruocLocalServiceUtil;
 import com.mb.service.CongTacVienLocalServiceUtil;
 import com.mb.service.LichSuThuPhatChiLocalServiceUtil;
 import com.mb.service.PhatVayLocalServiceUtil;
+import com.mb.service.SoKheUocLocalServiceUtil;
 
 import fr.opensagres.xdocreport.document.IXDocReport;
 import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
@@ -258,6 +260,19 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 							lichSuThuPhatChi.setNgayXuLy(ngayThuTien);
 							LichSuThuPhatChiLocalServiceUtil.addLichSuThuPhatChi(lichSuThuPhatChi, serviceContext);
 						}
+						SoKheUoc soKheUoc = null;
+						try {
+							Calendar cal = Calendar.getInstance();
+							soKheUoc = SoKheUocLocalServiceUtil.fetchByCauTruc(item.getMa() + "-THUE" + cal.get(Calendar.YEAR));
+							if (soKheUoc != null) {
+								soKheUoc.setSo(soKheUoc.getSo() + 1);
+								soKheUoc = SoKheUocLocalServiceUtil.addSoKheUoc(soKheUoc, serviceContext);
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+							kq.putException(e);
+						}
+						
 					}
 				}
 			} catch (Exception e) {
@@ -316,10 +331,31 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 							BangKeDTO bangKeDTO = new BangKeDTO(String.valueOf(i),pv.getKhachHang() != null ? pv.getKhachHang() .getHoTen() : "", df.format(vonTra), df.format(laiTra) , df.format(thueTra) , "");
 							bangKeDTOs.add(bangKeDTO);
 						}
-
-						CongTacVienBangKe congTacVienBangKe = new CongTacVienBangKe(item.getHoTen(), item.getMa(),
-								df.format(tongVon), df.format(tongLai), df.format(tongThue), bangKeDTOs);
+						SoKheUoc soKheUoc = null;
+						try {
+							Calendar cal = Calendar.getInstance();
+							soKheUoc = SoKheUocLocalServiceUtil.fetchByCauTruc(item.getMa() + "-THUE" + cal.get(Calendar.YEAR));
+						} catch (Exception e) {
+							e.printStackTrace();
+							kq.putException(e);
+						}
+						if (soKheUoc == null) {
+							Calendar cal = Calendar.getInstance();
+							soKheUoc = SoKheUocLocalServiceUtil.createSoKheUoc(0L);
+							soKheUoc.setCauTruc(item.getMa() + "-THUE" + cal.get(Calendar.YEAR));
+							soKheUoc.setSo(1);
+							soKheUoc = SoKheUocLocalServiceUtil.addSoKheUoc(soKheUoc, serviceContext);
+						}
+						CongTacVienBangKe congTacVienBangKe = new CongTacVienBangKe();
+						congTacVienBangKe.setTen(item.getHoTen());
+						congTacVienBangKe.setMa(item.getMa());
+						congTacVienBangKe.setSoThue(soKheUoc.getSo() + "/" + soKheUoc.getCauTruc());
+						congTacVienBangKe.setTongLai(df.format(tongLai));
+						congTacVienBangKe.setTongVon(df.format(tongVon));
+						congTacVienBangKe.setTongThue(df.format(tongThue));
+						congTacVienBangKe.setBangKes(bangKeDTOs);
 						congTacVienBangKes.add(congTacVienBangKe);
+						
 					}
 				}
 				String nameFile = "BANG_KE_" + new SimpleDateFormat("ddMMyyyy").format(ngayThuTien);
@@ -330,7 +366,7 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 				resourceResponse.setProperty("Content-Disposition", "attachment; filename=\"" + nameFile + ".docx\"");
 				in = getServletContext().getResourceAsStream("report/BANG_KE.docx");
 
-				IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Velocity);
+			    IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker);
 				IContext iContext = report.createContext();
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("ngayThongKe", sdf.format(ngayThuTien));
@@ -411,7 +447,7 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 				resourceResponse.setProperty("Content-Disposition", "attachment; filename=\"" + nameFile + ".docx\"");
 				in = getServletContext().getResourceAsStream("report/MAU_THU_TIEN_HANG_NGAY.docx");
 
-				IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Velocity);
+				IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker);
 				IContext iContext = report.createContext();
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("TRA_CUU", sdf.format(new Date()));
@@ -663,9 +699,10 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 				resourceResponse.setProperty("Content-Disposition", "attachment; filename=\"" + nameFile + ".docx\"");
 				in = getServletContext().getResourceAsStream("report/MAU_THU_TIEN_TRUOC.docx");
 
-				IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Velocity);
+				IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker);
 				IContext iContext = report.createContext();
 				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("TRA_CUU", sdf.format(new Date()));
 				map.put("TEN_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.ten")));
 				map.put("DIA_CHI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.diachi")));
 				map.put("SO_DIEN_THOAI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.sodienthoai")));

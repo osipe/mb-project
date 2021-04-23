@@ -8,7 +8,9 @@ Include-Resource:@fr.opensagres.xdocreport.document-1.0.4.jar,\
 @fr.opensagres.xdocreport.template.velocity-1.0.4.jar,\
 @fr.opensagres.xdocreport.core-1.0.4.jar,\
 @fr.opensagres.xdocreport.converter-1.0.4.jar,\
+@fr.opensagres.xdocreport.template.freemarker-1.0.4.jar,\
 @velocity-1.7.jar,\
+@freemarker-2.3.20.jar,\
 @werken-xpath-0.9.4.jar,\
 @commons-collections-3.2.2.jar,\
 @commons-lang-2.6.jar,\
@@ -25,6 +27,7 @@ lib/fr.opensagres.xdocreport.document-1.0.4.jar,\
 lib/fr.opensagres.xdocreport.document.docx-1.0.4.jar,\
 lib/fr.opensagres.xdocreport.template-1.0.4.jar,\
 lib/fr.opensagres.xdocreport.template.velocity-1.0.4.jar,\
+lib/fr.opensagres.xdocreport.template.freemarker-1.0.4.jar,\
 lib/fr.opensagres.xdocreport.converter-1.0.4.jar
 lib/fr.opensagres.xdocreport.core-1.0.4.jar,\
 lib/velocity-1.7.jar,\
@@ -42,9 +45,14 @@ Import-Package:\
 !fr.opensagres.xdocreport.document.*,\
 !fr.opensagres.xdocreport.template.*,\
 !fr.opensagres.xdocreport.template.velocity.*,\
+!fr.opensagres.xdocreport.template.freemarker.*,\
 !fr.opensagres.xdocreport.converter.*,\
-!fr.opensagres.xdocreport.document.doc.*,\
+!fr.opensagres.xdocreport.document.docx.*,\
 !org.apache.*,\
+!org.freemarker.*,\
+!freemarker.*,\
+!org.python.*,\
+!org.zeroturnaround.*,\
 !com.werken.xpath.*,\
 !antlr.*,\
 !org.slf4j.impl.*,\

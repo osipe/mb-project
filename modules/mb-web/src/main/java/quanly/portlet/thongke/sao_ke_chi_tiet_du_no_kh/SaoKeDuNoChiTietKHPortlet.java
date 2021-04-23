@@ -102,8 +102,8 @@ public class SaoKeDuNoChiTietKHPortlet extends MVCPortlet {
 			NumberFormat df = NumberFormat.getInstance(localeEn);
 			resourceResponse.setContentType("application/DOCX");
 			resourceResponse.setProperty("Content-Disposition", "attachment; filename=\"TONG_HOP_SAO_KE_KH.docx\"");
-			in = getServletContext().getResourceAsStream("report/SAO_KE_DU_NO_CHI_TIET.docx");
-			IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Velocity);
+			in = getServletContext().getResourceAsStream("report/SAO_KE_DU_NO_CHI_TIET_NEW.docx");
+			IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker);
 			IContext iContext = report.createContext();
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("ngayThongKe", sdf.format(ngaySearch));

@@ -324,7 +324,7 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 				resourceResponse.setProperty("Content-Disposition", "attachment; filename=\"" + nameFile + ".docx\"");
 				in = getServletContext().getResourceAsStream("report/MAU_THU_TIEN_HANG_NGAY.docx");
 
-				IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Velocity);
+				IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker);
 				IContext iContext = report.createContext();
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("TRA_CUU", sdf.format(new Date()));
@@ -576,9 +576,10 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 				resourceResponse.setProperty("Content-Disposition", "attachment; filename=\"" + nameFile + ".docx\"");
 				in = getServletContext().getResourceAsStream("report/MAU_THU_TIEN_TRUOC.docx");
 
-				IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Velocity);
+				IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker);
 				IContext iContext = report.createContext();
 				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("TRA_CUU", sdf.format(new Date()));
 				map.put("TEN_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.ten")));
 				map.put("DIA_CHI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.diachi")));
 				map.put("SO_DIEN_THOAI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.sodienthoai")));

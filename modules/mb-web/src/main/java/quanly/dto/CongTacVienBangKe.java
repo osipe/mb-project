@@ -9,25 +9,45 @@ import java.util.List;
 public class CongTacVienBangKe {
 	private String ten;
 	private String ma;
+	private String soThue;
 	private String tongVon;
 	private String tongLai;
 	private String tongThue;
 	private List<BangKeDTO> bangKes;
-
+	
 	public CongTacVienBangKe() {
 		super();
 	}
 
-	public CongTacVienBangKe(String ten, String ma, String tongVon, String tongLai, String tongThue,
+
+
+
+	public CongTacVienBangKe(String ten, String ma, String soThue, String tongVon, String tongLai, String tongThue,
 			List<BangKeDTO> bangKes) {
 		super();
 		this.ten = ten;
 		this.ma = ma;
+		this.soThue = soThue;
 		this.tongVon = tongVon;
 		this.tongLai = tongLai;
 		this.tongThue = tongThue;
 		this.bangKes = bangKes;
 	}
+
+
+
+
+	public String getSoThue() {
+		return soThue;
+	}
+
+
+
+	public void setSoThue(String soThue) {
+		this.soThue = soThue;
+	}
+
+
 
 	public List<BangKeDTO> getBangKes() {
 		return bangKes;

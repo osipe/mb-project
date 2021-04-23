@@ -207,12 +207,14 @@ public class TatToanPortlet extends MVCPortlet {
 				resourceResponse.setProperty("Content-Disposition",
 						"attachment; filename=\"PHIEU_THU_TAT_TOAN_" + maCTV.toUpperCase() + ".docx\"");
 				in = getServletContext().getResourceAsStream("report/MAU_TAT_TOAN.docx");
-				IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Velocity);
+				IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker);
 				IContext iContext = report.createContext();
 				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("TRA_CUU", sdf.format(new Date()));
 				map.put("TEN_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.ten")));
 				map.put("DIA_CHI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.diachi")));
 				map.put("SO_DIEN_THOAI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.sodienthoai")));
+				
 				map.put("SO", maCTV + "/" + new SimpleDateFormat("ddMMyyyy").format(new Date()));
 				map.put("MA_SO", maCTV);
 				map.put("NGAY", sdf.format(new Date()).substring(0, 2));
