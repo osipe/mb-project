@@ -62,7 +62,7 @@
 			List<CongTacVien> items = CongTacVienLocalServiceUtil.findBase( maCTVSearch, "", "", "", 1, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 		 %>
 		 <liferay-ui:search-container-results results="<%= items %>" />
-		 <liferay-ui:search-container-row className="com.mb.model.CongTacVien" modelVar="congTacVien" keyProperty="congTacVienId" indexVar="index"> 
+		<liferay-ui:search-container-row className="com.mb.model.CongTacVien" modelVar="congTacVien" keyProperty="congTacVienId" indexVar="index"> 
 			 <%
 			 	Double tongTienVay = GetterUtil.getDouble("0");
 				Double tongGocNgay = GetterUtil.getDouble("0");
@@ -172,7 +172,7 @@
 			 		for(PhatVay item : phatVays){
 			 	%>
 			 		<br/>
-			 		<span style="font-style: italic;"><%=item.getNgayDaThuCuoi() != null ? sdf.format(item.getNgayDaThuCuoi()) : ("Chưa thu : " + sdf.format(item.getNgayBatDau()))%></span>
+			 		<span title="<%="Chưa thu ngày : " + sdf.format(item.getNgayBatDau())%>" style="font-style: italic;"><%=item.getNgayDaThuCuoi() != null ? sdf.format(item.getNgayDaThuCuoi()) : "Chưa thu đủ"%></span>
 			 	<%
 			 		}
 			 	%>
@@ -181,39 +181,17 @@
 			 		<span style="color:#ff3d00e8;font-weight: bold;">&nbsp;</span>
 			 	<%
 			 		for(PhatVay item : phatVays){
-			 			String ngayThuTruoc = "&nbsp;";
+			 			String ngayThuTruoc = "";
 			 			if(item.getTrangThai() == TrangThaiPhatVayEnum.CO_THU_TIEN_TRUOC.getValue() && item.getNgayThuTruocTu() != null && item.getNgayThuTruocDen() != null){
 			 				ngayThuTruoc = "Đã thu tết" + "( " + sdf.format(item.getNgayThuTruocTu()) + " - " + sdf.format(item.getNgayThuTruocDen()) + " )";
 			 			}
 			 	%>
 			 		<br/>
-			 		<span style="font-style: italic;"><%=ngayThuTruoc%></span>
+			 		<span title="<%=ngayThuTruoc%>" style="font-style: italic;">Đã thu tết</span>
 			 	<%
 			 		}
 			 	%>
 			 </liferay-ui:search-container-column-text>
-			  <%-- <liferay-ui:search-container-column-text cssClass="aui-w10" name="DƯ NỢ GỐC HIỆN TẠI">
-			 		<span style="color:#ff3d00e8;font-weight: bold;"><%=tongDuNoGoc > 0 ? df.format(tongDuNoGoc)  : "0"%></span>
-			 	<%
-			 		for(PhatVay item : phatVays){
-			 	%>
-			 		<br/>
-			 		<span style="font-style: italic;"><%=item.getDuNoGoc() > 0 ? df.format(item.getDuNoGoc()) : "0"%></span>
-			 	<%
-			 		}
-			 	%>
-			 </liferay-ui:search-container-column-text>
-			  <liferay-ui:search-container-column-text cssClass="aui-w10" name="DƯ NỢ GỐC SAU KHI THU">
-			 		<span style="color:#ff3d00e8;font-weight: bold;"><%=(tongDuNoGoc - tongGocNgay) > 0 ? df.format(tongDuNoGoc - tongGocNgay)  : "0"%></span>
-			 	<%
-			 		for(PhatVay item : phatVays){
-			 	%>
-			 		<br/>
-			 		<span style="font-style: italic;"><%=(item.getDuNoGoc() - item.getGocNgay()) > 0 ? df.format(item.getDuNoGoc() - item.getGocNgay()) : "0"%></span>
-			 	<%
-			 		}
-			 	%>
-			 </liferay-ui:search-container-column-text> --%>
 		 </liferay-ui:search-container-row >
 		 <liferay-ui:search-iterator />
 	</liferay-ui:search-container >
@@ -252,7 +230,6 @@ AUI().ready(['aui-base'], function(A) {
     	pageIO.start();
     });
     var table = recordSearchContainer.one('table');
-    console.log(<%= Validator.isNull(maCTVSearch) %>);
     if(table && <%= Validator.isNull(maCTVSearch) %>){
     	var tbody = table.one('tbody');
     	var trNode = A.Node.create('<tr/>');

@@ -56,6 +56,9 @@ public class PhatVayImpl extends PhatVayBaseImpl {
 				duNoGoc = getSoTienVay() - (soLanDaThu * getGocNgay());
 			}
 		}
+		if(duNoGoc == null) {
+			duNoGoc = GetterUtil.getDouble(0);
+		}
 		return duNoGoc;
 	}
 
