@@ -211,6 +211,22 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 			try {
 				List<CongTacVien> items = CongTacVienLocalServiceUtil.findBase(maCTVSearch, "", "", "", 1, -1, -1,
 						null);
+				SoKheUoc soKheUoc = null;
+				try {
+					Calendar cal = Calendar.getInstance();
+					soKheUoc = SoKheUocLocalServiceUtil.fetchByCauTruc("BANGKE-" + cal.get(Calendar.YEAR));
+				} catch (Exception e) {
+					e.printStackTrace();
+					kq.putException(e);
+				}
+				if (soKheUoc == null) {
+					Calendar cal = Calendar.getInstance();
+					soKheUoc = SoKheUocLocalServiceUtil.createSoKheUoc(0L);
+					soKheUoc.setCauTruc("BANGKE-" + cal.get(Calendar.YEAR));
+					soKheUoc.setSo(0);
+					soKheUoc = SoKheUocLocalServiceUtil.addSoKheUoc(soKheUoc, serviceContext);
+				}
+				int so = soKheUoc.getSo();
 				for (CongTacVien item : items) {
 					List<PhatVay> phatVays = PhatVayLocalServiceUtil.findCTV_NgayThuTien(item.getMa(), ngayThuTien);
 					Double tongVonTra = GetterUtil.getDouble("0");
@@ -260,20 +276,18 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 							lichSuThuPhatChi.setNgayXuLy(ngayThuTien);
 							LichSuThuPhatChiLocalServiceUtil.addLichSuThuPhatChi(lichSuThuPhatChi, serviceContext);
 						}
-						SoKheUoc soKheUoc = null;
-						try {
-							Calendar cal = Calendar.getInstance();
-							soKheUoc = SoKheUocLocalServiceUtil.fetchByCauTruc(item.getMa() + "-THUE" + cal.get(Calendar.YEAR));
-							if (soKheUoc != null) {
-								soKheUoc.setSo(soKheUoc.getSo() + 1);
-								soKheUoc = SoKheUocLocalServiceUtil.addSoKheUoc(soKheUoc, serviceContext);
-							}
-						} catch (Exception e) {
-							e.printStackTrace();
-							kq.putException(e);
-						}
 						
 					}
+					so++;
+				}
+				try {
+					if (soKheUoc != null) {
+						soKheUoc.setSo(so);
+						soKheUoc = SoKheUocLocalServiceUtil.updateSoKheUoc(soKheUoc, serviceContext);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					kq.putException(e);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -299,7 +313,25 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 				CongTacVienComparator obc = new CongTacVienComparator("ma", true);
 				List<CongTacVien> items = CongTacVienLocalServiceUtil.findBase(maCTVSearch, "", "", "", 1, -1, -1, obc);
 				List<CongTacVienBangKe> congTacVienBangKes = new ArrayList<CongTacVienBangKe>();
-
+				int so = 0;
+				SoKheUoc soKheUoc = null;
+				try {
+					Calendar cal = Calendar.getInstance();
+					soKheUoc = SoKheUocLocalServiceUtil.fetchByCauTruc("BANGKE-" + cal.get(Calendar.YEAR));
+				} catch (Exception e) {
+					e.printStackTrace();
+					kq.putException(e);
+				}
+				if (soKheUoc == null) {
+					Calendar cal = Calendar.getInstance();
+					soKheUoc = SoKheUocLocalServiceUtil.createSoKheUoc(0L);
+					soKheUoc.setCauTruc("BANGKE-" + cal.get(Calendar.YEAR));
+					soKheUoc.setSo(0);
+					soKheUoc = SoKheUocLocalServiceUtil.addSoKheUoc(soKheUoc, serviceContext);
+				}
+				so = soKheUoc.getSo();
+				String nam = soKheUoc.getCauTruc().split("-")[1];
+				String soDayDu = "0000000";
 				for (CongTacVien item : items) {
 					List<PhatVay> phatVays = PhatVayLocalServiceUtil.findCTV_NgayThuTien(item.getMa(), ngayThuTien);
 					List<BangKeDTO> bangKeDTOs = new ArrayList<BangKeDTO>();
@@ -331,25 +363,16 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 							BangKeDTO bangKeDTO = new BangKeDTO(String.valueOf(i),pv.getKhachHang() != null ? pv.getKhachHang() .getHoTen() : "", df.format(vonTra), df.format(laiTra) , df.format(thueTra) , "");
 							bangKeDTOs.add(bangKeDTO);
 						}
-						SoKheUoc soKheUoc = null;
-						try {
-							Calendar cal = Calendar.getInstance();
-							soKheUoc = SoKheUocLocalServiceUtil.fetchByCauTruc(item.getMa() + "-THUE" + cal.get(Calendar.YEAR));
-						} catch (Exception e) {
-							e.printStackTrace();
-							kq.putException(e);
-						}
-						if (soKheUoc == null) {
-							Calendar cal = Calendar.getInstance();
-							soKheUoc = SoKheUocLocalServiceUtil.createSoKheUoc(0L);
-							soKheUoc.setCauTruc(item.getMa() + "-THUE" + cal.get(Calendar.YEAR));
-							soKheUoc.setSo(1);
-							soKheUoc = SoKheUocLocalServiceUtil.addSoKheUoc(soKheUoc, serviceContext);
+						so++;
+						
+						String soString = String.valueOf(so);
+						if(soString.length() < 7) {
+							soString = soDayDu.substring(0,6 - soString.length()) + soString;
 						}
 						CongTacVienBangKe congTacVienBangKe = new CongTacVienBangKe();
 						congTacVienBangKe.setTen(item.getHoTen());
 						congTacVienBangKe.setMa(item.getMa());
-						congTacVienBangKe.setSoThue(soKheUoc.getSo() + "/" + soKheUoc.getCauTruc());
+						congTacVienBangKe.setSoThue(soString + "/" + nam);
 						congTacVienBangKe.setTongLai(df.format(tongLai));
 						congTacVienBangKe.setTongVon(df.format(tongVon));
 						congTacVienBangKe.setTongThue(df.format(tongThue));
@@ -365,11 +388,14 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 				resourceResponse.setContentType("application/DOCX");
 				resourceResponse.setProperty("Content-Disposition", "attachment; filename=\"" + nameFile + ".docx\"");
 				in = getServletContext().getResourceAsStream("report/BANG_KE.docx");
-
 			    IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker);
 				IContext iContext = report.createContext();
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("ngayThongKe", sdf.format(ngayThuTien));
+				map.put("TEN_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.ten")));
+				map.put("DIA_CHI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.diachi")));
+				map.put("SO_DIEN_THOAI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.sodienthoai")));
+				map.put("MA_SO_THUE", GetterUtil.getString(PropsUtil.get("thongtin.cty.masothue")));
 
 				FieldsMetadata metadata = new FieldsMetadata();
 				report.setFieldsMetadata(metadata);
@@ -445,7 +471,7 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 				}
 				resourceResponse.setContentType("application/DOCX");
 				resourceResponse.setProperty("Content-Disposition", "attachment; filename=\"" + nameFile + ".docx\"");
-				in = getServletContext().getResourceAsStream("report/MAU_THU_TIEN_HANG_NGAY.docx");
+				in = getServletContext().getResourceAsStream("report/MAU_THU_TIEN_HANG_NGAY_THUE.docx");
 
 				IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker);
 				IContext iContext = report.createContext();

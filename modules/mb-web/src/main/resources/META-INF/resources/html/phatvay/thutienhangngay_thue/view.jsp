@@ -41,9 +41,6 @@
 					<button id="<portlet:namespace />thuTienBtn" type="button" class="btn btn-labeled btn-danger" onclick="thuTien();">
 						<span class="btn-label"><i class="glyphicon glyphicon-ok"></i></span>Xác nhận đã thu
 					</button>
-					<button id="<portlet:namespace />thuTienTruocBtn" type="button" class="btn-labeled btn btn-success" onclick="<%=oppenThuTienTruoc%>">
-						<span class="btn-label"><i class="glyphicon glyphicon-send"></i></span>Thu tiền tết
-					</button>
 					<button id="<portlet:namespace />inPhieuThuHangNgay" type="button" class="btn btn-labeled btn-info" onclick="printPhieuThuTienHangNgay();">
 						<span class="btn-label"><i class="glyphicon glyphicon-print "></i></span>In Phiếu Thu
 					</button>
@@ -88,15 +85,6 @@ AUI().ready(['aui-base'], function(A) {
 		}
 	);
 	var maCTVSearchNode = A.one('#<portlet:namespace />maCTVSearch');
-	var thuTienTruocBtnNode = A.one('#<portlet:namespace />thuTienTruocBtn');
-	thuTienTruocBtnNode.hide();
-	Liferay.provide(window,'showHideThuTienTet', function(){
-		if(maCTVSearchNode.val() != '' && maCTVSearchNode.val() != ' '){
-			thuTienTruocBtnNode.show();
-		}else{
-			thuTienTruocBtnNode.hide();
-		}
-	});
 	Liferay.provide(window,'searchURL', function(){
 		var ngayThuTien = 0;
 		var pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
