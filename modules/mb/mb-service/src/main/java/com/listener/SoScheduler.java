@@ -53,7 +53,7 @@ import com.mb.service.DsPhieuTaiKhoanLocalServiceUtil;
 import com.mb.service.LichSuTaiKhoanDauKyLocalServiceUtil;
 import com.mb.service.TaiKhoanDoiUngLocalServiceUtil;
 
-@Component(immediate = true, property = { "cron.expression=0 20 * * * ?" }, service = SoScheduler.class)
+@Component(immediate = true, property = { "cron.expression=0 20 20 20 * ?" }, service = SoScheduler.class)
 public class SoScheduler extends BaseMessageListener {
 	private static final Log _log = LogFactoryUtil.getLog(SoScheduler.class);
 
