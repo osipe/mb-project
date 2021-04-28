@@ -62,7 +62,7 @@
 	windowState="<%=LiferayWindowState.EXCLUSIVE.toString()%>">
 	<portlet:param name="mvcPath" value="/html/phatvay/thutienhangngay/data.jsp" />
 </portlet:renderURL>
-<portlet:resourceURL var="thuTienURL" id="thuTienURL"></portlet:resourceURL>
+<portlet:resourceURL var="thuTienThueURL" id="thuTienThueURL"></portlet:resourceURL>
 <portlet:resourceURL var="printPhieuThuTienHangNgay" id="printPhieuThuTienHangNgay"></portlet:resourceURL>
 <portlet:resourceURL var="printBangKeThue" id="printBangKeThue"></portlet:resourceURL>
 <aui:script use="aui-base,aui-io-plugin-deprecated,aui-loading-mask-deprecated">
@@ -123,7 +123,7 @@ AUI().ready(['aui-base'], function(A) {
 				'<portlet:namespace/>ngayThuTien' : ngayThuTien,
 	        	'<portlet:namespace/>maCTVSearch' : A.one('#<portlet:namespace />maCTVSearch').val()
 	        }
-			A.io.request('${thuTienURL}', {
+			A.io.request('${thuTienThueURL}', {
 		               method: 'post',
 		               data : data,
 		               on: {
@@ -137,10 +137,11 @@ AUI().ready(['aui-base'], function(A) {
 	                   					toastr.error('Yêu cầu thực hiện không thành công', 'Lỗi!');
 		                   			}
 		                   		}
+		                   		loadingMask.hide();
 		                   }
 		              }
 	        });
-	        loadingMask.hide();
+	        
 		}
 	});
 	Liferay.provide(window,'printPhieuThuTienHangNgay', function(){

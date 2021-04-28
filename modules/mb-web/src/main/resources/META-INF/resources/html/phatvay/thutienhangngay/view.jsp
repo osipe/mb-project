@@ -145,10 +145,10 @@ AUI().ready(['aui-base'], function(A) {
 	                   					toastr.error('Yêu cầu thực hiện không thành công', 'Lỗi!');
 		                   			}
 		                   		}
+               			       loadingMask.hide();
 		                   }
 		              }
 	        });
-	        loadingMask.hide();
 		}
 	});
 	Liferay.provide(window,'printPhieuThuTienHangNgay', function(){

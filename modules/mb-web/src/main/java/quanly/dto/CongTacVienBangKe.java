@@ -13,7 +13,7 @@ public class CongTacVienBangKe {
 	private String tongVon;
 	private String tongLai;
 	private String tongThue;
-	private List<BangKeDTO> bangKes;
+	private List<BangKeDTO> bks;
 	
 	public CongTacVienBangKe() {
 		super();
@@ -31,7 +31,7 @@ public class CongTacVienBangKe {
 		this.tongVon = tongVon;
 		this.tongLai = tongLai;
 		this.tongThue = tongThue;
-		this.bangKes = bangKes;
+		this.bks = bangKes;
 	}
 
 
@@ -47,15 +47,19 @@ public class CongTacVienBangKe {
 		this.soThue = soThue;
 	}
 
-
-
-	public List<BangKeDTO> getBangKes() {
-		return bangKes;
+	public List<BangKeDTO> getBks() {
+		return bks;
 	}
 
-	public void setBangKes(List<BangKeDTO> bangKes) {
-		this.bangKes = bangKes;
+
+
+
+	public void setBks(List<BangKeDTO> bks) {
+		this.bks = bks;
 	}
+
+
+
 
 	public String getTen() {
 		return ten;

@@ -90,8 +90,8 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 		serviceContext.setScopeGroupId(themeDisplay.getScopeGroupId());
 		serviceContext.setCompanyId(themeDisplay.getCompanyGroupId());
 		serviceContext.setUserId(themeDisplay.getUserId());
-		if (resourceId.equals("thuTienURL")) {
-			kq = thuTienURL(resourceRequest, resourceResponse, serviceContext);
+		if (resourceId.equals("thuTienThueURL")) {
+			kq = thuTienThueURL(resourceRequest, resourceResponse, serviceContext);
 		} else if (resourceId.equals("printPhieuThuTienHangNgay")) {
 			kq = printPhieuThuTienHangNgay(resourceRequest, resourceResponse, serviceContext);
 		} else if (resourceId.equals("thuTienTruocURL")) {
@@ -201,7 +201,7 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 		return result;
 	}
 
-	public JSONObject thuTienURL(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
+	public JSONObject thuTienThueURL(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
 			ServiceContext serviceContext) {
 		JSONObject kq = JSONFactoryUtil.createJSONObject();
 		long ngayThuTienTime = ParamUtil.getLong(resourceRequest, "ngayThuTien");
@@ -376,7 +376,7 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 						congTacVienBangKe.setTongLai(df.format(tongLai));
 						congTacVienBangKe.setTongVon(df.format(tongVon));
 						congTacVienBangKe.setTongThue(df.format(tongThue));
-						congTacVienBangKe.setBangKes(bangKeDTOs);
+						congTacVienBangKe.setBks(bangKeDTOs);
 						congTacVienBangKes.add(congTacVienBangKe);
 						
 					}
