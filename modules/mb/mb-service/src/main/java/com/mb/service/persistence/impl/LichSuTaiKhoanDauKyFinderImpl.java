@@ -26,11 +26,13 @@ import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.spring.extender.service.ServiceReference;
 import com.mb.model.LichSuTaiKhoanDauKy;
 import com.mb.model.impl.LichSuTaiKhoanDauKyImpl;
+import com.mb.service.LichSuTaiKhoanDauKyLocalServiceUtil;
 import com.mb.service.persistence.LichSuTaiKhoanDauKyFinder;
 
 /**
@@ -52,7 +54,65 @@ public class LichSuTaiKhoanDauKyFinderImpl extends LichSuTaiKhoanDauKyFinderBase
 
 	public static final String FIND_BASE = LichSuTaiKhoanDauKyFinder.class.getName() + ".findBase";
 	public static final String COUNT_BASE = LichSuTaiKhoanDauKyFinder.class.getName() + ".countBase";
-
+	public static final String SUM_BY_NAM_THANG = LichSuTaiKhoanDauKyFinder.class.getName() + ".sumByNamThang";
+	
+	
+	@SuppressWarnings("unchecked")
+	public LichSuTaiKhoanDauKy sumByNamThang(long taiKhoanDoiUngChaId,int loaiTaiKhoan,int nam, int thang) throws SystemException {
+		Session session = null;
+		try {
+			session = openSession();
+			String sql = _customSQL.get(getClass(), SUM_BY_NAM_THANG);
+			if (taiKhoanDoiUngChaId <= 0) {
+				sql = sql.replace("OR dm.taiKhoanDoiUngChaId = ?", "");
+			}
+			if (loaiTaiKhoan <= 0) {
+				sql = sql.replace("AND (dm.loaitaikhoan = ?)", "");
+			}
+			if (nam <= 0) {
+				sql = sql.replace("AND (ls.nam <= ?)", "");
+			}
+			if (thang <= 0) {
+				sql = sql.replace("AND (ls.thang = ?)", "");
+			}
+			SQLQuery q = session.createSQLQuery(sql);
+			q.addScalar("sotienton", Type.DOUBLE);
+			q.addScalar("sotienthu", Type.DOUBLE);
+			q.addScalar("sotienchi", Type.DOUBLE);
+			QueryPos qPos = QueryPos.getInstance(q);
+			if (loaiTaiKhoan > 0) {
+				qPos.add(loaiTaiKhoan);
+			}
+			if (taiKhoanDoiUngChaId > 0) {
+				qPos.add(taiKhoanDoiUngChaId);
+			}
+			if (nam > 0) {
+				qPos.add(nam);
+			}
+			if (thang > 0) {
+				qPos.add(thang);
+			}
+			@SuppressWarnings("unchecked")
+			Iterator<Object[]> iter = q.list().iterator();
+			if (iter.hasNext()) {
+				Object[] result = iter.next();
+				if (result != null) {
+					LichSuTaiKhoanDauKy lichSuTaiKhoanDauKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
+					lichSuTaiKhoanDauKy.setSoTienTon(result[0] != null ? GetterUtil.getDouble(result[0]) : 0  );
+					lichSuTaiKhoanDauKy.setSoTienThu(result[1] != null ? GetterUtil.getDouble(result[1]) : 0  );
+					lichSuTaiKhoanDauKy.setSoTienThu(result[2] != null ? GetterUtil.getDouble(result[2]) : 0  );
+					return lichSuTaiKhoanDauKy;
+				}
+			}
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SystemException(e);
+		} finally {
+			closeSession(session);
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<LichSuTaiKhoanDauKy> findBase(int nam, int thang, long taiKhoanDoiUngId, int start, int end,
 			OrderByComparator obc) throws SystemException {

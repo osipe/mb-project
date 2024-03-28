@@ -23,6 +23,10 @@ import aQute.bnd.annotation.ProviderType;
 @ProviderType
 public interface LichSuTaiKhoanDauKyFinder {
 
+	public com.mb.model.LichSuTaiKhoanDauKy sumByNamThang(
+			long taiKhoanDoiUngChaId, int loaiTaiKhoan, int nam, int thang)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public java.util.List<com.mb.model.LichSuTaiKhoanDauKy> findBase(
 			int nam, int thang, long taiKhoanDoiUngId, int start, int end,
 			com.liferay.portal.kernel.util.OrderByComparator obc)

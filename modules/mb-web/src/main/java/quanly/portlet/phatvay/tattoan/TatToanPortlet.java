@@ -6,8 +6,10 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.osgi.service.component.annotations.Component;
 
 import com.liferay.portal.kernel.json.JSONArray;
@@ -24,15 +27,18 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.CalendarUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.mb.model.CauHinhThuTienTruoc;
 import com.mb.model.CongTacVien;
 import com.mb.model.LichSuThuPhatChi;
 import com.mb.model.PhatVay;
+import com.mb.service.CauHinhThuTienTruocLocalServiceUtil;
 import com.mb.service.CongTacVienLocalServiceUtil;
 import com.mb.service.LichSuThuPhatChiLocalServiceUtil;
 import com.mb.service.PhatVayLocalServiceUtil;
@@ -43,6 +49,7 @@ import fr.opensagres.xdocreport.template.IContext;
 import fr.opensagres.xdocreport.template.TemplateEngineKind;
 import quanly.constants.QuanlyPortletKeys;
 import quanly.constants.TrangThaiPhatVayEnum;
+import quanly.portlet.danhmuc.cauhinhthutientruoc.CauHinhThuTienTruocComparator;
 import quanly.util.DocSo;
 
 /**
@@ -65,6 +72,8 @@ import quanly.util.DocSo;
 		"javax.portlet.security-role-ref=power-user,user",
 		"com.liferay.portlet.footer-portlet-javascript=/js/main.js", }, service = Portlet.class)
 public class TatToanPortlet extends MVCPortlet {
+	private static long time1Ngay = 86399990;
+
 	@Override
 	public void serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws IOException, PortletException {
@@ -99,33 +108,49 @@ public class TatToanPortlet extends MVCPortlet {
 		try {
 			JSONArray arrayList = JSONFactoryUtil.createJSONArray();
 			String phatVayIds = ParamUtil.getString(resourceRequest, "phatVayIds");
+			long ngayTatToanTime = ParamUtil.getLong(resourceRequest, "ngayTatToan");
+			Date ngayTatToan = ngayTatToanTime != 0 ? new Date(ngayTatToanTime) : null;
 			Locale localeEn = new Locale("en", "EN");
-		    NumberFormat df = NumberFormat.getInstance(localeEn);
+			NumberFormat df = NumberFormat.getInstance(localeEn);
 			String[] array = StringUtil.split(phatVayIds, ",");
 			if (array != null && array.length > 0) {
 				for (int i = 0; i < array.length; i++) {
 					long phatVayId = Long.valueOf(array[i]);
 					if (phatVayId > 0) {
 						PhatVay phatVay = PhatVayLocalServiceUtil.fetchPhatVay(phatVayId);
-						if(phatVay != null) {
-							
-							JSONObject jsonPhatVay = JSONFactoryUtil.createJSONObject(JSONFactoryUtil.looseSerialize(phatVay));
-							
-							int tongSoLanDaThu = phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc();
-							jsonPhatVay.put("tongSoLanDaThu",tongSoLanDaThu );
-							Double tongLaiTatToan =  (phatVay.getThoiHan() - tongSoLanDaThu) * phatVay.getLaiNgay();
-							Double tongVonTatToan = phatVay.getDuNoGoc();
-							jsonPhatVay.put("tongLaiTatToan",tongLaiTatToan);
-							jsonPhatVay.put("tongVonTatToan", tongVonTatToan);
-							jsonPhatVay.put("tongLaiTatToanStr", df.format(tongLaiTatToan));
-							jsonPhatVay.put("tongVonTatToanStr",  df.format(tongVonTatToan));
-							jsonPhatVay.put("soTienVayStr",  df.format(phatVay.getSoTienVay()));
-							jsonPhatVay.put("laiNgayStr",  df.format(phatVay.getLaiNgay()));
-							jsonPhatVay.put("gocNgayStr",  df.format(phatVay.getGocNgay()));
-							jsonPhatVay.put("gocNgayCuoiStr",  df.format(phatVay.getGocNgayCuoi()));
-							jsonPhatVay.put("duNoGocStr",  df.format(phatVay.getDuNoGoc()));
-							jsonPhatVay.put("hoTenKhachHang",  phatVay.getKhachHang() != null ? phatVay.getKhachHang().getHoTen() : "");
-							jsonPhatVay.put("hoTenCTV",  phatVay.getCongTacVien() != null ? phatVay.getCongTacVien().getHoTen() : "");
+						if (phatVay != null) {
+							JSONObject jsonPhatVay = JSONFactoryUtil
+									.createJSONObject(JSONFactoryUtil.looseSerialize(phatVay));
+							if (ngayTatToan != null) {
+								JSONObject thongTin = getSoNgayPhaiThu(ngayTatToan, phatVay);
+								int soNgayConLaiPhaiThu = thongTin.getInt("soNgayConLaiPhaiThu");
+								Double tongLaiTatToan = (soNgayConLaiPhaiThu * phatVay.getLaiNgay());
+								Double tongVonTatToan = (soNgayConLaiPhaiThu * phatVay.getGocNgay());
+								jsonPhatVay.put("tongLaiTatToan", tongLaiTatToan);
+								jsonPhatVay.put("tongVonTatToan", tongVonTatToan);
+								jsonPhatVay.put("tongLaiTatToanStr", df.format(tongLaiTatToan));
+								jsonPhatVay.put("tongVonTatToanStr", df.format(tongVonTatToan));
+								int tongSoLanDaThu = phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc();
+								jsonPhatVay.put("tongSoLanDaThu", tongSoLanDaThu);
+							} else {
+								int tongSoLanDaThu = phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc();
+								jsonPhatVay.put("tongSoLanDaThu", tongSoLanDaThu);
+								Double tongLaiTatToan = (phatVay.getThoiHan() - tongSoLanDaThu) * phatVay.getLaiNgay();
+								Double tongVonTatToan = phatVay.getDuNoGoc();
+								jsonPhatVay.put("tongLaiTatToan", tongLaiTatToan);
+								jsonPhatVay.put("tongVonTatToan", tongVonTatToan);
+								jsonPhatVay.put("tongLaiTatToanStr", df.format(tongLaiTatToan));
+								jsonPhatVay.put("tongVonTatToanStr", df.format(tongVonTatToan));
+							}
+							jsonPhatVay.put("soTienVayStr", df.format(phatVay.getSoTienVay()));
+							jsonPhatVay.put("laiNgayStr", df.format(phatVay.getLaiNgay()));
+							jsonPhatVay.put("gocNgayStr", df.format(phatVay.getGocNgay()));
+							jsonPhatVay.put("gocNgayCuoiStr", df.format(phatVay.getGocNgayCuoi()));
+							jsonPhatVay.put("duNoGocStr", df.format(phatVay.getDuNoGoc()));
+							jsonPhatVay.put("hoTenKhachHang",
+									phatVay.getKhachHang() != null ? phatVay.getKhachHang().getHoTen() : "");
+							jsonPhatVay.put("hoTenCTV",
+									phatVay.getCongTacVien() != null ? phatVay.getCongTacVien().getHoTen() : "");
 							arrayList.put(jsonPhatVay);
 						}
 					}
@@ -138,26 +163,74 @@ public class TatToanPortlet extends MVCPortlet {
 		}
 		return kq;
 	}
+
+	public JSONObject getSoNgayPhaiThu(Date ngayThuTien, PhatVay pv) {
+		JSONObject result = JSONFactoryUtil.createJSONObject();
+		Calendar ngayBatDau = Calendar.getInstance();
+		ngayBatDau.setTime(pv.getNgayBatDau());
+		Calendar ngayKetThuc = Calendar.getInstance();
+		ngayKetThuc.setTime(pv.getNgayKetThuc());
+		Calendar ngayThuTienCal = Calendar.getInstance();
+		ngayThuTienCal.setTime(ngayThuTien);
+		int soNgayConLai = 0;
+		if (CalendarUtil.getLTDate(ngayThuTienCal).getTime() > CalendarUtil.getGTDate(ngayBatDau).getTime()) {
+			if (CalendarUtil.getLTDate(ngayThuTienCal).getTime() <= CalendarUtil.getLTDate(ngayKetThuc).getTime()) {
+				soNgayConLai = (int) ((CalendarUtil.getLTDate(ngayKetThuc).getTime()
+						- CalendarUtil.getGTDate(ngayThuTienCal).getTime()) / time1Ngay);
+			}
+		}
+		int soNgayConLaiDaThu = 0;
+		if (soNgayConLai > 0 && pv.getNgayThuTruocTu() != null && pv.getNgayThuTruocDen() != null) {
+			Calendar ngayBatDauThuTruoc = Calendar.getInstance();
+			ngayBatDauThuTruoc.setTime(pv.getNgayThuTruocTu());
+			Calendar ngayKetThucThuTruoc = Calendar.getInstance();
+			ngayKetThucThuTruoc.setTime(pv.getNgayThuTruocDen());
+			if (CalendarUtil.getLTDate(ngayThuTienCal).getTime() <= CalendarUtil.getLTDate(ngayBatDauThuTruoc)
+					.getTime()) {
+				soNgayConLaiDaThu = pv.getSoNgayThuTruoc();
+			} else if (CalendarUtil.getLTDate(ngayThuTienCal).getTime() <= CalendarUtil.getLTDate(ngayKetThucThuTruoc)
+					.getTime()) {
+				soNgayConLaiDaThu = (int) ((CalendarUtil.getLTDate(ngayKetThucThuTruoc).getTime()
+						- CalendarUtil.getGTDate(ngayThuTienCal).getTime()) / time1Ngay);
+			}
+		}
+		int soNgayConLaiPhaiThu = 0;
+		if (soNgayConLai > 0 && soNgayConLai > soNgayConLaiDaThu) {
+			soNgayConLaiPhaiThu = soNgayConLai - soNgayConLaiDaThu;
+		}
+		result.put("soNgayConLaiPhaiThu", soNgayConLaiPhaiThu);
+		return result;
+	}
+
 	public JSONObject getTongTienTatToan(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
 			ServiceContext serviceContext) {
 		JSONObject kq = JSONFactoryUtil.createJSONObject();
 		try {
 			String phatVayIds = ParamUtil.getString(resourceRequest, "phatVayIds");
+			long ngayTatToanTime = ParamUtil.getLong(resourceRequest, "ngayTatToan");
+			Date ngayTatToan = ngayTatToanTime != 0 ? new Date(ngayTatToanTime) : null;
 			Locale localeEn = new Locale("en", "EN");
-		    NumberFormat df = NumberFormat.getInstance(localeEn);
+			NumberFormat df = NumberFormat.getInstance(localeEn);
 			String[] array = StringUtil.split(phatVayIds, ",");
-			Double tongLaiTatToan =  0.0;
+			Double tongLaiTatToan = 0.0;
 			Double tongVonTatToan = 0.0;
 			if (array != null && array.length > 0) {
 				for (int i = 0; i < array.length; i++) {
-					if(Validator.isNotNull(array[i]) && Long.valueOf(array[i]) > 0) {
-						long phatVayId =  Long.valueOf(array[i]);
+					if (Validator.isNotNull(array[i]) && Long.valueOf(array[i]) > 0) {
+						long phatVayId = Long.valueOf(array[i]);
 						if (phatVayId > 0) {
 							PhatVay phatVay = PhatVayLocalServiceUtil.fetchPhatVay(phatVayId);
-							if(phatVay != null) {
-								int tongSoLanDaThu = phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc();
-								tongLaiTatToan +=  ((phatVay.getThoiHan() - tongSoLanDaThu) * phatVay.getLaiNgay());
-								tongVonTatToan += phatVay.getDuNoGoc();
+							if (phatVay != null) {
+								if (ngayTatToan != null) {
+									JSONObject thongTin = getSoNgayPhaiThu(ngayTatToan, phatVay);
+									int soNgayConLaiPhaiThu = thongTin.getInt("soNgayConLaiPhaiThu");
+									tongLaiTatToan += (soNgayConLaiPhaiThu * phatVay.getLaiNgay());
+									tongVonTatToan += (soNgayConLaiPhaiThu * phatVay.getGocNgay());
+								} else {
+									int tongSoLanDaThu = phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc();
+									tongLaiTatToan += ((phatVay.getThoiHan() - tongSoLanDaThu) * phatVay.getLaiNgay());
+									tongVonTatToan += phatVay.getDuNoGoc();
+								}
 							}
 						}
 					}
@@ -180,6 +253,8 @@ public class TatToanPortlet extends MVCPortlet {
 			ServiceContext serviceContext) throws IOException {
 		JSONObject kq = JSONFactoryUtil.createJSONObject();
 		String phatVayIds = ParamUtil.getString(resourceRequest, "phatVayIds");
+		long ngayTatToanTime = ParamUtil.getLong(resourceRequest, "ngayTatToan");
+		Date ngayTatToan = ngayTatToanTime != 0 ? new Date(ngayTatToanTime) : null;
 		String[] array = StringUtil.split(phatVayIds, ",");
 		Double tongLaiTatToan = Double.valueOf("0");
 		Double tongVonTatToan = Double.valueOf("0");
@@ -188,9 +263,23 @@ public class TatToanPortlet extends MVCPortlet {
 				long phatVayId = Long.valueOf(array[i]);
 				if (phatVayId > 0) {
 					PhatVay phatVay = PhatVayLocalServiceUtil.fetchPhatVay(phatVayId);
-					tongLaiTatToan += ((phatVay.getThoiHan() - (phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc()))
-							* phatVay.getLaiNgay());
-					tongVonTatToan += phatVay.getDuNoGoc();
+					if (ngayTatToan != null) {
+						JSONObject thongTin = getSoNgayPhaiThu(ngayTatToan, phatVay);
+						int soNgayConLaiPhaiThu = thongTin.getInt("soNgayConLaiPhaiThu");
+						tongLaiTatToan += (soNgayConLaiPhaiThu * phatVay.getLaiNgay());
+						tongVonTatToan += (soNgayConLaiPhaiThu * phatVay.getGocNgay());
+					} else {
+						tongLaiTatToan += ((phatVay.getThoiHan() - (phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc()))
+								* phatVay.getLaiNgay());
+						if (phatVay.getTrangThai() == 3) {
+							Double gocTra = phatVay.getSoTienVay()
+									- ((phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc()) * phatVay.getGocNgay());
+							tongVonTatToan += gocTra;
+						} else {
+							tongVonTatToan += phatVay.getDuNoGoc();
+						}
+					}
+
 				}
 			}
 		}
@@ -202,7 +291,7 @@ public class TatToanPortlet extends MVCPortlet {
 				CongTacVien ctv = CongTacVienLocalServiceUtil.fetchByMa(maCTV);
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 				Locale localeEn = new Locale("en", "EN");
-			    NumberFormat df = NumberFormat.getInstance(localeEn);
+				NumberFormat df = NumberFormat.getInstance(localeEn);
 				resourceResponse.setContentType("application/DOCX");
 				resourceResponse.setProperty("Content-Disposition",
 						"attachment; filename=\"PHIEU_THU_TAT_TOAN_" + maCTV.toUpperCase() + ".docx\"");
@@ -214,12 +303,12 @@ public class TatToanPortlet extends MVCPortlet {
 				map.put("TEN_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.ten")));
 				map.put("DIA_CHI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.diachi")));
 				map.put("SO_DIEN_THOAI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.sodienthoai")));
-				
+
 				map.put("SO", maCTV + "/" + new SimpleDateFormat("ddMMyyyy").format(new Date()));
 				map.put("MA_SO", maCTV);
-				map.put("NGAY", sdf.format(new Date()).substring(0, 2));
-				map.put("THANG", sdf.format(new Date()).substring(3, 5));
-				map.put("NAM", sdf.format(new Date()).substring(6, 10));
+				map.put("NGAY", sdf.format(ngayTatToan != null ? ngayTatToan : new Date()).substring(0, 2));
+				map.put("THANG", sdf.format(ngayTatToan != null ? ngayTatToan : new Date()).substring(3, 5));
+				map.put("NAM", sdf.format(ngayTatToan != null ? ngayTatToan : new Date()).substring(6, 10));
 				map.put("HO_TEN_CTV", ctv.getHoTen());
 				map.put("DIA_CHI_CTV", ctv.getDiaChi());
 				map.put("VON_TRA", df.format(tongVonTatToan).replaceAll(",", "."));
@@ -243,13 +332,15 @@ public class TatToanPortlet extends MVCPortlet {
 		JSONObject kq = JSONFactoryUtil.createJSONObject();
 		try {
 			String phatVayIds = ParamUtil.getString(resourceRequest, "phatVayIds");
+			long ngayTatToanTime = ParamUtil.getLong(resourceRequest, "ngayTatToan");
+			
 			String[] array = StringUtil.split(phatVayIds, ",");
 			Double soTienGocPhaiThu = GetterUtil.getDouble(0);
 			Double soTienLaiPhaiThu = GetterUtil.getDouble(0);
 			String maCTV = "";
 			if (array != null && array.length > 0) {
 				for (int i = 0; i < array.length; i++) {
-					if(Validator.isNotNull(array[i])) {
+					if (Validator.isNotNull(array[i])) {
 						long phatVayId = Long.valueOf(array[i]);
 						if (phatVayId > 0) {
 							PhatVay phatVay = PhatVayLocalServiceUtil.fetchPhatVay(phatVayId);
@@ -257,10 +348,12 @@ public class TatToanPortlet extends MVCPortlet {
 								maCTV = phatVay.getMaCTV();
 								soTienGocPhaiThu += phatVay.getDuNoGoc();
 								soTienLaiPhaiThu += ((phatVay.getThoiHan()
-										- (phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc())) * phatVay.getLaiNgay());
+										- (phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc()))
+										* phatVay.getLaiNgay());
 								Double gocPhaithu = phatVay.getDuNoGoc();
 								Double laiPhaiThu = ((phatVay.getThoiHan()
-										- (phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc())) * phatVay.getLaiNgay());
+										- (phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc()))
+										* phatVay.getLaiNgay());
 								phatVay.setNgayTatToan(new Date());
 								phatVay.setTrangThai(TrangThaiPhatVayEnum.DA_TAT_TOAN.getValue());
 								PhatVayLocalServiceUtil.updatePhatVay(phatVay, serviceContext);
@@ -270,10 +363,12 @@ public class TatToanPortlet extends MVCPortlet {
 								lichSuThuPhatChi.setMaCTV(maCTV);
 								lichSuThuPhatChi.setLoai(2);
 								lichSuThuPhatChi.setPhatVayId(phatVayId);
+								lichSuThuPhatChi.setNgayXuLy(ngayTatToanTime != 0 ? new Date(ngayTatToanTime) : new Date());
 								lichSuThuPhatChi.setChiNhanhId(phatVay.getChiNhanhId());
 								lichSuThuPhatChi.setSoTien(gocPhaithu + laiPhaiThu);
 								lichSuThuPhatChi.setTongSoTienLaiTra(laiPhaiThu);
-								lichSuThuPhatChi.setTrangThaiPhatVayHienTai(TrangThaiPhatVayEnum.DA_TAT_TOAN.getValue());
+								lichSuThuPhatChi
+										.setTrangThaiPhatVayHienTai(TrangThaiPhatVayEnum.DA_TAT_TOAN.getValue());
 								lichSuThuPhatChi.setTongSoTienVonTra(gocPhaithu);
 								LichSuThuPhatChiLocalServiceUtil.addLichSuThuPhatChi(lichSuThuPhatChi, serviceContext);
 							}

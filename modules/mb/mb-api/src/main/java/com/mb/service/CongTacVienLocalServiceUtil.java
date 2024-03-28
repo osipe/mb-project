@@ -250,6 +250,15 @@ public class CongTacVienLocalServiceUtil {
 			ma, hoTen, soCMND, diaChi, hoatDong, start, end, obc);
 	}
 
+	public static java.util.List<com.mb.model.CongTacVien>
+		findChiNhanh_Ma_HoatDong(
+			long chiNhanhId, String ma, int hoatDong, int start, int end,
+			com.liferay.portal.kernel.util.OrderByComparator obc) {
+
+		return getService().findChiNhanh_Ma_HoatDong(
+			chiNhanhId, ma, hoatDong, start, end, obc);
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -267,6 +276,13 @@ public class CongTacVienLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return getService().getCongTacVien(congTacVienId);
+	}
+
+	public static java.util.List<com.mb.model.CongTacVien>
+			getCongTacVienChuaCoTaiKhoanDU()
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return getService().getCongTacVienChuaCoTaiKhoanDU();
 	}
 
 	/**

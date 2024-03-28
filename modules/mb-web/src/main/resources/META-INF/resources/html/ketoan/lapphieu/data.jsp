@@ -18,7 +18,8 @@
 <%@page import="java.util.List"%>
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%@ include file="/html/ketoan/init.jsp"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%
 	String maCTVSearch = ParamUtil.getString(request, "maCTVSearch");
 	int loaiSearch = ParamUtil.getInteger(request, "loaiSearch");
@@ -38,17 +39,25 @@
 <c:set var="sdf" value="<%=sdf %>" />
 <liferay-portlet:renderURL varImpl="iteratorURL">
 	<portlet:param name="maCTVSearch" value="<%= maCTVSearch %>" />
-	<portlet:param name="loaiSearch" value="<%= String.valueOf(loaiSearch) %>" />
+	<portlet:param name="loaiSearch"
+		value="<%= String.valueOf(loaiSearch) %>" />
 	<portlet:param name="maMSThuChiSearch" value="<%= maMSThuChiSearch%>" />
 	<portlet:param name="soPhieuSearch" value="<%= soPhieuSearch%>" />
-	<portlet:param name="ngayChungTuTuSearch" value="<%= String.valueOf(ngayChungTuTuSearchTime)%>" />
-	<portlet:param name="ngayChungTuDenSearch" value="<%= String.valueOf(ngayChungTuDenSearchTime)%>" />
-	<portlet:param name="hoatDongSearch" value="<%= String.valueOf(hoatDongSearch)%>" />
+	<portlet:param name="ngayChungTuTuSearch"
+		value="<%= String.valueOf(ngayChungTuTuSearchTime)%>" />
+	<portlet:param name="ngayChungTuDenSearch"
+		value="<%= String.valueOf(ngayChungTuDenSearchTime)%>" />
+	<portlet:param name="hoatDongSearch"
+		value="<%= String.valueOf(hoatDongSearch)%>" />
 	<portlet:param name="mvcPath" value="/html/ketoan/lapphieu/data.jsp" />
 </liferay-portlet:renderURL>
 <div id="<portlet:namespace />recordSearchContainer">
-	<div style="text-align: right;"><span class="note-span">(Đơn vị : VND)</span></div>
-	<liferay-ui:search-container  delta="30"  emptyResultsMessage="Không có kết quả nào được tìm thấy!" iteratorURL="<%=iteratorURL %>" total="<%=count %>" >
+	<div style="text-align: right;">
+		<span class="note-span">(Đơn vị : VND)</span>
+	</div>
+	<liferay-ui:search-container delta="30"
+		emptyResultsMessage="Không có kết quả nào được tìm thấy!"
+		iteratorURL="<%=iteratorURL %>" total="<%=count %>">
 		<%
 		 	String orderByType = ParamUtil.getString(request, "orderByType"); 
 		 	String orderByCol = ParamUtil.getString(request, "orderByCol"); 
@@ -68,101 +77,125 @@
 		 	searchContainer.setOrderByComparator(obc);
 			List<CongTacVien> items = CongTacVienLocalServiceUtil.findBase(maCTVSearch, "", "", "", 1, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 		 %>
-		 <liferay-ui:search-container-results results="<%= items %>" />
-		 <liferay-ui:search-container-row className="com.mb.model.CongTacVien" modelVar="congTacVien" keyProperty="congTacVienId" indexVar="index"> 
+		<liferay-ui:search-container-results results="<%= items %>" />
+		<liferay-ui:search-container-row className="com.mb.model.CongTacVien"
+			modelVar="congTacVien" keyProperty="congTacVienId" indexVar="index">
 			<%
 				PhieuComparator obcPhieu = new PhieuComparator("createdate",false);
 				List<Phieu> phieus = PhieuLocalServiceUtil.findBase(congTacVien.getMa(), maMSThuChiSearch, soPhieuSearch, ngayChungTuTuSearch, ngayChungTuDenSearch, loaiSearch, hoatDongSearch, -1, -1, obcPhieu);
 			%>
-			<liferay-ui:search-container-column-text cssClass="text-center" name="Cộng tác viên">
-				<span style="color:#ff3d00e8;font-weight: bold;"><%=congTacVien.getHoTen()%></span>
+			<liferay-ui:search-container-column-text cssClass="text-center"
+				name="Cộng tác viên">
+				<span style="color: #ff3d00e8; font-weight: bold;"><%=congTacVien.getHoTen()%></span>
 				<%
 			 		for(Phieu item : phieus){
 			 	%>
-			 		<br/>
-			 		<span style="font-style: italic;"><%=item.getMaMSThuChi() + "-" + item.getSoPhieu() %></span>
-			 	<%
+				<br />
+				<span style="font-style: italic;"><%=item.getMaMSThuChi() + "-" + item.getSoPhieu() %></span>
+				<%
 			 		}
 			 	%>
 			</liferay-ui:search-container-column-text>
-			 <liferay-ui:search-container-column-text name="Diễn giải">
-				 <span style="color:#ff3d00e8;font-weight: bold;"> </span>
-				 <%
-			 		for(Phieu item : phieus){
-			 	%>
-			 		<br/>
-			 		<span style="font-style: italic;"><%=item.getMaSoThuChi() != null ? item.getMaSoThuChi().getDienGiai() : "" %> </span>
-			 	<%
-			 		}
-			 	%>
-			 </liferay-ui:search-container-column-text>
-			 <liferay-ui:search-container-column-text  cssClass="text-center" name="Loại Phiếu">
-			 	<span style="color:#ff3d00e8;font-weight: bold;"> </span>
-				 <%
-			 		for(Phieu item : phieus){
-			 	%>
-			 		<br/>
-			 		<span style="font-style: italic;"><%=item.getLoai() == 1 ? "Thu" : "Chi"%> </span>
-			 	<%
-			 		}
-			 	%>
-			 </liferay-ui:search-container-column-text>
-			  <liferay-ui:search-container-column-text  cssClass="text-center" name="Số tiền">
-			 	<span style="color:#ff3d00e8;font-weight: bold;"> </span>
-				 <%
-			 		for(Phieu item : phieus){
-			 	%>
-			 		<br/>
-			 		<span style="font-style: italic;"><%=item.getSoTien() > 0 ? df.format(item.getSoTien()) : "0"%> </span>
-			 	<%
-			 		}
-			 	%>
-			 </liferay-ui:search-container-column-text>
-			  <liferay-ui:search-container-column-text cssClass="text-center" name="Ngày chứng từ">
-			  	<span style="color:#ff3d00e8;font-weight: bold;"> </span>
+			<liferay-ui:search-container-column-text name="Diễn giải">
+				<span style="color: #ff3d00e8; font-weight: bold;"> </span>
 				<%
 			 		for(Phieu item : phieus){
 			 	%>
-			 		<br/>
-			 		<span style="font-style: italic;"><%=item.getNgayChungTu() != null ? sdf.format(item.getNgayChungTu()) : ""%> </span>
-			 	<%
+				<br />
+				<span style="font-style: italic;"><%=item.getMaSoThuChi() != null ? item.getMaSoThuChi().getDienGiai() : "" %>
+				</span>
+				<%
 			 		}
 			 	%>
-			  </liferay-ui:search-container-column-text>
-			 <liferay-ui:search-container-column-text name="Thao tác" cssClass="aui-w10 text-center">
-			 	<span style="color:#ff3d00e8;font-weight: bold;"> </span>
+			</liferay-ui:search-container-column-text>
+			<liferay-ui:search-container-column-text cssClass="text-center"
+				name="Loại Phiếu">
+				<span style="color: #ff3d00e8; font-weight: bold;"> </span>
 				<%
 			 		for(Phieu item : phieus){
 			 	%>
-			 		<portlet:renderURL var="editURL" windowState="<%=LiferayWindowState.POP_UP.toString()%>">
-						<portlet:param name="mvcPath" value="/html/ketoan/lapphieu/add.jsp" />
-						<portlet:param name="loai" value="<%=String.valueOf(item.getLoai())%>" />
-						<portlet:param name="phieuId" value="<%=String.valueOf(item.getPhieuId())%>" />
-					</portlet:renderURL>
-					<portlet:resourceURL var="hoatDongURL" id="hoatDongURL">
-						<portlet:param name="phieuId" value="<%=String.valueOf(item.getPhieuId())%>" />
-					</portlet:resourceURL>
-					<%
+				<br />
+				<span style="font-style: italic;"><%=item.getLoai() == 1 ? "Thu" : "Chi"%>
+				</span>
+				<%
+			 		}
+			 	%>
+			</liferay-ui:search-container-column-text>
+			<liferay-ui:search-container-column-text cssClass="text-center"
+				name="Số tiền">
+				<span style="color: #ff3d00e8; font-weight: bold;"> </span>
+				<%
+			 		for(Phieu item : phieus){
+			 	%>
+				<br />
+				<span style="font-style: italic;"><%=item.getSoTien() > 0 ? df.format(item.getSoTien()) : "0"%>
+				</span>
+				<%
+			 		}
+			 	%>
+			</liferay-ui:search-container-column-text>
+			<liferay-ui:search-container-column-text cssClass="text-center"
+				name="Ngày chứng từ">
+				<span style="color: #ff3d00e8; font-weight: bold;"> </span>
+				<%
+			 		for(Phieu item : phieus){
+			 	%>
+				<br />
+				<span style="font-style: italic;"><%=item.getNgayChungTu() != null ? sdf.format(item.getNgayChungTu()) : ""%>
+				</span>
+				<%
+			 		}
+			 	%>
+			</liferay-ui:search-container-column-text>
+			<liferay-ui:search-container-column-text name="Thao tác"
+				cssClass="aui-w10 text-center">
+				<span style="color: #ff3d00e8; font-weight: bold;"> </span>
+				<%
+			 		for(Phieu item : phieus){
+			 	%>
+				<portlet:renderURL var="editURL"
+					windowState="<%=LiferayWindowState.POP_UP.toString()%>">
+					<portlet:param name="mvcPath" value="/html/ketoan/lapphieu/add.jsp" />
+					<portlet:param name="loai"
+						value="<%=String.valueOf(item.getLoai())%>" />
+					<portlet:param name="phieuId"
+						value="<%=String.valueOf(item.getPhieuId())%>" />
+				</portlet:renderURL>
+				<portlet:resourceURL var="hoatDongURL" id="hoatDongURL">
+					<portlet:param name="phieuId"
+						value="<%=String.valueOf(item.getPhieuId())%>" />
+				</portlet:resourceURL>
+				<%
 						String editAction = "openDialogEdit('" + editURL + "');";
 						String hoatDongAction = "hoatDong('" + hoatDongURL + "');";
+						String printAction = "printPhieu('" + item.getPhieuId() + "');";
 					%>
-			 		<br/>
-			 		<a href="javascript:void(0);" onclick="<%=editAction %>" title="Sửa">
-			 			<span style="color:#ff3d00e8"><i class="glyphicon glyphicon-edit"></i></span>
-				 	</a>
-				 	<a href="javascript:void(0);" onclick="<%=hoatDongAction %>" title='<%=item.getHoatDong() ? "Ngưng hoạt động" : "Hoạt động" %>'>
-				 		<span style='<%=item.getHoatDong() ? "color:#ff3d00e8" :  "color:blue"%>'><i class='<%=item.getHoatDong() ? "glyphicon glyphicon-off" : "glyphicon glyphicon-play-circle"%>'></i></span>
-				 	</a>
-			 	<%
+				<br />
+				<a href="javascript:void(0);" onclick="<%=editAction %>" title="Sửa">
+					<span style="color: #ff3d00e8"><i
+						class="glyphicon glyphicon-edit"></i></span>
+				</a>
+				<a href="javascript:void(0);" onclick="<%=hoatDongAction %>"
+					title='<%=item.getHoatDong() ? "Ngưng hoạt động" : "Hoạt động" %>'>
+					<span
+					style='<%=item.getHoatDong() ? "color:#ff3d00e8" :  "color:blue"%>'><i
+						class='<%=item.getHoatDong() ? "glyphicon glyphicon-off" : "glyphicon glyphicon-play-circle"%>'></i></span>
+				</a>
+				<a href="javascript:void(0);" style="color:blue" onclick="<%=printAction %>"
+					title='In phiếu'> <span><i
+						class='glyphicon glyphicon-print'></i></span>
+				</a>
+				<%
 			 		}
 			 	%>
-			 </liferay-ui:search-container-column-text>
-		 </liferay-ui:search-container-row >
-		 <liferay-ui:search-iterator />
-	</liferay-ui:search-container >
+			</liferay-ui:search-container-column-text>
+		</liferay-ui:search-container-row>
+		<liferay-ui:search-iterator />
+	</liferay-ui:search-container>
 </div>
-
-<aui:script use="aui-base,aui-io-plugin-deprecated,aui-loading-mask-deprecated">
+<portlet:resourceURL var="printPhieu" id="printPhieuThuChi"></portlet:resourceURL>
+<aui:script
+	use="aui-base,aui-io-plugin-deprecated,aui-loading-mask-deprecated">
 AUI().ready(['aui-base'], function(A) {
 	Liferay.Data.redirectURL = '${iteratorURL}';
 	var recordSearchContainer = A.one('#<portlet:namespace />recordSearchContainer');
@@ -194,6 +227,11 @@ AUI().ready(['aui-base'], function(A) {
     	pageIO.set('uri', e.currentTarget.get('href'));
     	pageIO.start();
     });
+  	Liferay.provide(window,'printPhieu', function(phieuId){
+		var url = '${printPhieu}';
+		url += '&<portlet:namespace />phieuId=' + phieuId;	
+		window.location.href = url;
+	});
 	Liferay.provide(window,'openDialogEdit', function(url){
 		Liferay.Util.openWindow({
 			dialog : {

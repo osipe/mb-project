@@ -71,10 +71,12 @@ public class TaiSanThueChapLocalServiceUtil {
 	}
 
 	public static int countBase(
-			String soKU, String ten, String maKhachHang, long loaiTaiSanId)
+			String soKU, String ten, String maKhachHang, long loaiTaiSanId,
+			String thongTinTaiSan)
 		throws com.liferay.portal.kernel.exception.SystemException {
 
-		return getService().countBase(soKU, ten, maKhachHang, loaiTaiSanId);
+		return getService().countBase(
+			soKU, ten, maKhachHang, loaiTaiSanId, thongTinTaiSan);
 	}
 
 	/**
@@ -219,12 +221,13 @@ public class TaiSanThueChapLocalServiceUtil {
 
 	public static java.util.List<com.mb.model.TaiSanThueChap> findBase(
 			String soKU, String ten, String maKhachHang, long loaiTaiSanId,
-			int start, int end,
+			String thongTinTaiSan, int start, int end,
 			com.liferay.portal.kernel.util.OrderByComparator obc)
 		throws com.liferay.portal.kernel.exception.SystemException {
 
 		return getService().findBase(
-			soKU, ten, maKhachHang, loaiTaiSanId, start, end, obc);
+			soKU, ten, maKhachHang, loaiTaiSanId, thongTinTaiSan, start, end,
+			obc);
 	}
 
 	public static java.util.List<com.mb.model.TaiSanThueChap> findByPhatVayId(

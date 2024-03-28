@@ -97,6 +97,14 @@ public class LichSuTaiKhoanDauKyLocalServiceImpl extends LichSuTaiKhoanDauKyLoca
 		return lichSuTaiKhoanDauKyPersistence.findByTaiKhoanDoiUngId(taiKhoanDoiUngId);
 	}
 
+	public List<LichSuTaiKhoanDauKy> findByNam_Thang(int nam, int thang) throws SystemException {
+		return lichSuTaiKhoanDauKyPersistence.findByNam_Thang(nam, thang);
+	}
+
+	public LichSuTaiKhoanDauKy sumByNamThang(long taiKhoanDoiUngChaId,int loaiTaiKhoan,int nam, int thang) throws SystemException {
+		return lichSuTaiKhoanDauKyFinder.sumByNamThang(taiKhoanDoiUngChaId,loaiTaiKhoan, nam, thang);
+	}
+
 	public LichSuTaiKhoanDauKy fetchByTaiKhoanDoiUngId_Nam_Thang(long taiKhoanDoiUngId, int nam, int thang)
 			throws SystemException {
 		return lichSuTaiKhoanDauKyPersistence.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngId, nam, thang);

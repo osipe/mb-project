@@ -52,6 +52,12 @@
 				</td>
 			</tr>
 			<tr>
+				<td colspan="2">
+					<aui:input name="thongTinTaiSanSearch" class="input-text" label="Thông tin tài sản">
+					</aui:input>
+				</td>
+			</tr>
+			<tr>
 				<td  colspan="2">
 					<button  type="button" class="btn-search-file btn" id="idSeachBtn" onclick="search();">Tìm kiếm</button>
 				</td>
@@ -86,6 +92,7 @@ AUI().ready(['aui-base'], function(A) {
         	'<portlet:namespace/>maKhachHangSearch' : A.one('#<portlet:namespace />maKhachHangSearch').val(),
         	'<portlet:namespace/>tenSearch' : A.one('#<portlet:namespace />tenSearch').val(),
         	'<portlet:namespace/>loaiTaSanSearch' : A.one('#<portlet:namespace />loaiTaSanSearch').val(),
+        	'<portlet:namespace/>thongTinTaiSanSearch' : A.one('#<portlet:namespace />thongTinTaiSanSearch').val(),
         }
 		contentDataTable.plug(A.Plugin.IO,{
             autoLoad: false,

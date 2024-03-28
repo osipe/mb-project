@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <custom-sql>
+	<sql
+		id="com.mb.service.persistence.LichSuThuPhatChiFinder.getTongLichSuTraTien_PhayVayId_ChiNhanhId_Loai">
+		<![CDATA[
+			SELECT SUM(sotien) as tongtien,SUM(tongsotienlaitra) as laitra,SUM(tongsotienvontra) as vontra
+			FROM mb_lichsuthuphatchi 
+			where TRUE
+			AND loai = ?
+			AND phatvayid = ?
+			AND chinhanhid = ?
+		]]>
+	</sql>
 	<sql id="com.mb.service.persistence.PhatVayFinder.updateChiNhanh">
 		<![CDATA[
 			UPDATE mb_phatvay set chinhanhid = ? WHERE mactv = ?;
 			UPDATE mb_lichsuthuphatchi set chinhanhid = ? WHERE mactv = ?;
 		]]>
 	</sql>
-	<sql id="com.mb.service.persistence.LichSuThuPhatChiFinder.getSumPhatVay_CTV_TAINGAY">
+	<sql
+		id="com.mb.service.persistence.LichSuThuPhatChiFinder.getSumPhatVay_CTV_TAINGAY">
 		<![CDATA[
 			select SUM(sotienvay) as sotienvay,SUM(gocngay) as gocngay,SUM(laingay) as laingay
 			from mb_phatvay 
@@ -30,7 +42,8 @@
 			AND phatVayId IN ?
 		]]>
 	</sql>
-	<sql id="com.mb.service.persistence.LichSuThuPhatChiFinder.getTongLichSuTraTien_CTV_TAINGAY">
+	<sql
+		id="com.mb.service.persistence.LichSuThuPhatChiFinder.getTongLichSuTraTien_CTV_TAINGAY">
 		<![CDATA[
 			SELECT SUM(sotien) as sotien,SUM(tongsotienlaitra) as tongsotienlaitra,SUM(tongsotienvontra) as tongsotienvontra
 			FROM mb_lichsuthuphatchi 
@@ -52,7 +65,8 @@
 			)
 		]]>
 	</sql>
-	<sql id="com.mb.service.persistence.LichSuThuPhatChiFinder.getSoTienVay_CTV_TAINGAY">
+	<sql
+		id="com.mb.service.persistence.LichSuThuPhatChiFinder.getSoTienVay_CTV_TAINGAY">
 		<![CDATA[
 			select SUM(sotienvay) as sotienvay
 			from mb_phatvay 
@@ -66,7 +80,8 @@
 						)
 		]]>
 	</sql>
-	<sql id="com.mb.service.persistence.LichSuThuPhatChiFinder.getSoTien_CTV_TAINGAY">
+	<sql
+		id="com.mb.service.persistence.LichSuThuPhatChiFinder.getSoTien_CTV_TAINGAY">
 		<![CDATA[
 			select SUM(sotienvay) as sotienvay
 			from mb_phatvay 
@@ -79,7 +94,36 @@
 						)
 		]]>
 	</sql>
-	<sql id="com.mb.service.persistence.LichSuThuPhatChiFinder.findByCTV_Loai_Createdate_NgayXuLy">
+	<sql
+		id="com.mb.service.persistence.LichSuThuPhatChiFinder.getPhatVayByCTV_Loai_Createdate_NgayXuLy">
+		<![CDATA[
+			SELECT  pv	.*
+			FROM mb_phatvay pv INNER JOIN mb_lichsuthuphatchi ls ON ls.phatVayId = pv.phatVayId
+			WHERE TRUE
+			AND (ls.maCTV = ?)
+			AND (ls.loai = ?)
+			AND (ls.createDate <= ?)
+			AND (ls.createDate >= ?)
+			AND (ls.ngayXuLy <= ?)
+			AND (ls.ngayXuLy >= ?)
+		]]>
+	</sql>
+	<sql
+		id="com.mb.service.persistence.LichSuThuPhatChiFinder.deleteByCTV_Loai_Createdate_NgayXuLy">
+		<![CDATA[
+			DELETE
+			FROM mb_lichsuthuphatchi ls
+			WHERE TRUE
+			AND (ls.maCTV = ?)
+			AND (ls.loai = ?)
+			AND (ls.createDate <= ?)
+			AND (ls.createDate >= ?)
+			AND (ls.ngayXuLy <= ?)
+			AND (ls.ngayXuLy >= ?)
+		]]>
+	</sql>
+	<sql
+		id="com.mb.service.persistence.LichSuThuPhatChiFinder.findByCTV_Loai_Createdate_NgayXuLy">
 		<![CDATA[
 			SELECT  ls.*
 			FROM mb_lichsuthuphatchi ls INNER JOIN mb_phatvay pv ON ls.phatVayId = pv.phatVayId
@@ -93,7 +137,8 @@
 			ORDER BY CAST(substring(soku,length(pv.mactv) +1,length(pv.soku)) as integer) ASC,pv.createDate ASC
 		]]>
 	</sql>
-	<sql id="com.mb.service.persistence.LichSuThuPhatChiFinder.getLichSuThuPhatChi_MaCTV_Createdate">
+	<sql
+		id="com.mb.service.persistence.LichSuThuPhatChiFinder.getLichSuThuPhatChi_MaCTV_Createdate">
 		<![CDATA[
 			SELECT ls.loai,to_char(ls.ngayxuly,'dd/MM/yyyy') as ngayxuly,SUM(ls.tongsotienvontra) as vonthu,SUM(ls.tongsotienlaitra) as laithu,SUM(ls.sotien) as sotien
 			FROM mb_lichsuthuphatchi ls INNER JOIN mb_phatvay pv ON ls.phatVayId = pv.phatVayId
@@ -122,7 +167,8 @@
 			
 		]]>
 	</sql>
-	<sql id="com.mb.service.persistence.LichSuThuPhatChiFinder.findByPhatVay_Createdate_Loai">
+	<sql
+		id="com.mb.service.persistence.LichSuThuPhatChiFinder.findByPhatVay_Createdate_Loai">
 		<![CDATA[
 			SELECT  ls.*
 			FROM mb_lichsuthuphatchi ls INNER JOIN mb_phatvay pv ON ls.phatVayId = pv.phatVayId
@@ -135,7 +181,8 @@
 			ORDER BY CAST(substring(soku,length(pv.mactv) +1,length(pv.soku)) as integer) ASC,pv.createDate ASC
 		]]>
 	</sql>
-	<sql id="com.mb.service.persistence.PhatVayFinder.getPhatVayByNgayThuTruocLast">
+	<sql
+		id="com.mb.service.persistence.PhatVayFinder.getPhatVayByNgayThuTruocLast">
 		<![CDATA[
 			SELECT * 
 			FROM mb_phatvay
@@ -146,7 +193,8 @@
 			LIMIT 1
 		]]>
 	</sql>
-	<sql id="com.mb.service.persistence.LichSuThuPhatChiFinder.findByCTV_Loai_Createdate">
+	<sql
+		id="com.mb.service.persistence.LichSuThuPhatChiFinder.findByCTV_Loai_Createdate">
 		<![CDATA[
 			SELECT  ls.*
 			FROM mb_lichsuthuphatchi ls INNER JOIN mb_phatvay pv ON ls.phatVayId = pv.phatVayId
@@ -167,6 +215,7 @@
 			AND (maKhachHang = ?)
 			AND (loaiTaiSanId = ?)
 			AND (lower(ten) like ?)
+			AND (lower(thongTinTaiSan) like ?)
 		]]>
 	</sql>
 	<sql id="com.mb.service.persistence.TaiSanThueChapFinder.countBase">
@@ -178,6 +227,7 @@
 			AND (maKhachHang = ?)
 			AND (loaiTaiSanId = ?)
 			AND (lower(ten) like ?)
+			AND (lower(thongTinTaiSan) like ?)
 		]]>
 	</sql>
 	<sql id="com.mb.service.persistence.PhatVayFinder.findBase">
@@ -216,11 +266,26 @@
 		]]>
 	</sql>
 	<sql
+		id="com.mb.service.persistence.PhatVayFinder.countCTV_NgayThuTien">
+		<![CDATA[
+			SELECT  COUNT(1) AS VALUE
+			FROM mb_phatvay pv
+			WHERE TRUE
+			AND (chinhanhid = ?)
+			AND (maCTV = ?)
+			AND (ngayBatDau <= ?)
+			AND (ngayDaThuCuoi < ? OR ngayDaThuCuoi IS NULL)
+			AND (trangThai = 1 OR trangThai = 4)
+			ORDER BY CAST(substring(soku,length(pv.mactv) +1,length(pv.soku)) as integer) ASC
+		]]>
+	</sql>
+	<sql
 		id="com.mb.service.persistence.PhatVayFinder.findCTV_NgayThuTien">
 		<![CDATA[
 			SELECT  pv.*
 			FROM mb_phatvay pv
 			WHERE TRUE
+			AND (chinhanhid = ?)
 			AND (maCTV = ?)
 			AND (ngayBatDau <= ?)
 			AND (ngayDaThuCuoi < ? OR ngayDaThuCuoi IS NULL)

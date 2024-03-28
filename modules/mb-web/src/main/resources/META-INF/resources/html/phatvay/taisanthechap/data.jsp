@@ -18,8 +18,9 @@
 	String soKUSearch = ParamUtil.getString(request, "soKUSearch");
 	String maKhachHangSearch = ParamUtil.getString(request, "maKhachHangSearch");
 	String tenSearch = ParamUtil.getString(request, "tenSearch");
+	String thongTinTaiSanSearch = ParamUtil.getString(request, "thongTinTaiSanSearch");
 	long loaiTaSanSearch = ParamUtil.getLong(request, "loaiTaSanSearch");
-	int count = TaiSanThueChapLocalServiceUtil.countBase(soKUSearch, tenSearch, maKhachHangSearch, loaiTaSanSearch);
+	int count = TaiSanThueChapLocalServiceUtil.countBase(soKUSearch, tenSearch, maKhachHangSearch, loaiTaSanSearch,thongTinTaiSanSearch);
 	Locale localeEn = new Locale("en", "EN");
     NumberFormat df = NumberFormat.getInstance(localeEn);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -31,6 +32,7 @@
 	<portlet:param name="maKhachHangSearch" value="<%= String.valueOf(maKhachHangSearch) %>" />
 	<portlet:param name="tenSearch" value="<%= String.valueOf(tenSearch)%>" />
 	<portlet:param name="loaiTaSanSearch" value="<%= String.valueOf(loaiTaSanSearch)%>" />
+	<portlet:param name="thongTinTaiSanSearch" value="<%= thongTinTaiSanSearch%>" />
 	<portlet:param name="mvcPath" value="/html/phatvay/taisanthechap/data.jsp" />
 </liferay-portlet:renderURL>
 <div id="<portlet:namespace />recordSearchContainer">
@@ -53,12 +55,15 @@
 		 	searchContainer.setOrderByCol(orderByCol);
 		 	searchContainer.setOrderByType(orderByType);
 		 	searchContainer.setOrderByComparator(obc);
-			List<TaiSanThueChap> items =  TaiSanThueChapLocalServiceUtil.findBase(soKUSearch, tenSearch, maKhachHangSearch, loaiTaSanSearch, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
+			List<TaiSanThueChap> items =  TaiSanThueChapLocalServiceUtil.findBase(soKUSearch, tenSearch, maKhachHangSearch, loaiTaSanSearch,thongTinTaiSanSearch, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 		 %>
 		 <liferay-ui:search-container-results results="<%= items %>" />
 		 <liferay-ui:search-container-row className="com.mb.model.TaiSanThueChap" modelVar="taiSanTheChap" keyProperty="taiSanTheChapId" > 
 		 	 <liferay-ui:search-container-column-text cssClass="aui-w10" name="Số KU"  orderable="true" orderableProperty="soKU">
 		 	 	<span style="color:#108dfb" >${taiSanTheChap.soKU}</span>
+			 </liferay-ui:search-container-column-text>
+			  <liferay-ui:search-container-column-text cssClass="aui-w15" name="Ngày vay">
+			 	<span style="color:#ff3d00e8" ><%=taiSanTheChap.getPhatVay() != null && taiSanTheChap.getPhatVay().getCreateDate() != null ? sdf.format(taiSanTheChap.getPhatVay().getCreateDate()) : "" %></span>
 			 </liferay-ui:search-container-column-text>
 			 <liferay-ui:search-container-column-text cssClass="aui-w15" name="Tên khách hàng">
 			 	<span style="color:#ff3d00e8" >${taiSanTheChap.khachHang.hoTen}</span>

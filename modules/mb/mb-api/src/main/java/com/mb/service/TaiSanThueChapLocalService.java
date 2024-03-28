@@ -82,7 +82,8 @@ public interface TaiSanThueChapLocalService
 		throws NoSuchUserException, SystemException;
 
 	public int countBase(
-			String soKU, String ten, String maKhachHang, long loaiTaiSanId)
+			String soKU, String ten, String maKhachHang, long loaiTaiSanId,
+			String thongTinTaiSan)
 		throws SystemException;
 
 	/**
@@ -192,7 +193,7 @@ public interface TaiSanThueChapLocalService
 
 	public List<TaiSanThueChap> findBase(
 			String soKU, String ten, String maKhachHang, long loaiTaiSanId,
-			int start, int end, OrderByComparator obc)
+			String thongTinTaiSan, int start, int end, OrderByComparator obc)
 		throws SystemException;
 
 	public List<TaiSanThueChap> findByPhatVayId(long phatVayId)

@@ -33,12 +33,10 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.mb.model.CauHinhThuTienTruoc;
 import com.mb.model.CongTacVien;
 import com.mb.model.LichSuThuPhatChi;
 import com.mb.model.PhatVay;
 import com.mb.model.SoKheUoc;
-import com.mb.service.CauHinhThuTienTruocLocalServiceUtil;
 import com.mb.service.CongTacVienLocalServiceUtil;
 import com.mb.service.LichSuThuPhatChiLocalServiceUtil;
 import com.mb.service.PhatVayLocalServiceUtil;
@@ -116,88 +114,36 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 		Calendar ngayKetThuc = Calendar.getInstance();
 		ngayKetThuc.setTime(pv.getNgayKetThuc());
 
-		List<CauHinhThuTienTruoc> cauHinhs = CauHinhThuTienTruocLocalServiceUtil.findAll();
-
 		Calendar ngayThuTienCal = Calendar.getInstance();
 		ngayThuTienCal.setTime(ngayThuTien);
-		int soNgayKhongThu = 0;
-
-		if (CollectionUtils.isNotEmpty(cauHinhs)) {
-			Calendar ngayBatDauThuTet = Calendar.getInstance();
-			ngayBatDauThuTet.setTime(cauHinhs.get(0).getNgayTu());
-			Calendar ngayKetThucThuTet = Calendar.getInstance();
-			ngayKetThucThuTet.setTime(cauHinhs.get(0).getNgayDen());
-
-			Date ngayStart = null;
-			Date ngayEnd = null;
-			// Xác định những ngày thu tiền tết có trong phát vay
-			if (CalendarUtil.getGTDate(ngayBatDauThuTet).getTime() <= CalendarUtil.getGTDate(ngayBatDau).getTime()) {
-				if (CalendarUtil.getLTDate(ngayKetThucThuTet).getTime() >= CalendarUtil.getGTDate(ngayBatDau)
-						.getTime()) {
-					if (CalendarUtil.getLTDate(ngayKetThucThuTet).getTime() <= CalendarUtil.getLTDate(ngayKetThuc)
-							.getTime()) {
-						ngayStart = CalendarUtil.getGTDate(ngayBatDau);
-						ngayEnd = CalendarUtil.getLTDate(ngayKetThucThuTet);
-					} else {
-						ngayStart = CalendarUtil.getGTDate(ngayBatDau);
-						ngayEnd = CalendarUtil.getLTDate(ngayKetThuc);
-					}
-				} else {
-					// Thu tiền tết nằm ngoài phát vay
-				}
-			} else if (CalendarUtil.getGTDate(ngayBatDauThuTet).getTime() <= CalendarUtil.getLTDate(ngayKetThuc)
-					.getTime()) {
-				if (CalendarUtil.getLTDate(ngayKetThucThuTet).getTime() <= CalendarUtil.getLTDate(ngayKetThuc)
-						.getTime()) {
-					ngayStart = CalendarUtil.getGTDate(ngayBatDauThuTet);
-					ngayEnd = CalendarUtil.getLTDate(ngayKetThucThuTet);
-				} else {
-					ngayStart = CalendarUtil.getGTDate(ngayBatDauThuTet);
-					ngayEnd = CalendarUtil.getLTDate(ngayKetThuc);
-				}
-			} else {
-				// Thu tiền tết nằm ngoài phát vay
-			}
-
-			// Xác định những ngày thu tiền tết có trong phát vay - có trong ngày thu tiền
-			if (ngayStart != null && ngayEnd != null) {
-				if (CalendarUtil.getGTDate(ngayThuTienCal).getTime() >= ngayStart.getTime()) {
-					if (CalendarUtil.getLTDate(ngayThuTienCal).getTime() <= ngayEnd.getTime()) {
-						soNgayKhongThu = (int) ((CalendarUtil.getLTDate(ngayThuTienCal).getTime() - ngayStart.getTime())
-								/ time1Ngay);
-					} else {
-						soNgayKhongThu = (int) ((ngayEnd.getTime() - ngayStart.getTime()) / time1Ngay);
-					}
-				} else {
-					// Ngày thu tiền chưa đến thời gian thu tiền tết
-				}
-			}
-
-		}
-
-		int soNgayPhaiThu = 0;
-
+		int soNgayThuTam = 0;
 		if (CalendarUtil.getLTDate(ngayThuTienCal).getTime() > CalendarUtil.getGTDate(ngayBatDau).getTime()) {
 			if (CalendarUtil.getLTDate(ngayThuTienCal).getTime() <= CalendarUtil.getLTDate(ngayKetThuc).getTime()) {
-				soNgayPhaiThu = (int) ((CalendarUtil.getLTDate(ngayThuTienCal).getTime()
+				soNgayThuTam = (int) ((CalendarUtil.getLTDate(ngayThuTienCal).getTime()
 						- CalendarUtil.getGTDate(ngayBatDau).getTime()) / time1Ngay);
 			} else {
-				soNgayPhaiThu = (int) ((CalendarUtil.getLTDate(ngayKetThuc).getTime()
+				soNgayThuTam = (int) ((CalendarUtil.getLTDate(ngayKetThuc).getTime()
 						- CalendarUtil.getGTDate(ngayBatDau).getTime()) / time1Ngay);
 			}
-		} else {
-			soNgayPhaiThu = 0;
 		}
-		if (soNgayPhaiThu > soNgayKhongThu) {
-			result.put("soNgayThu", soNgayPhaiThu - soNgayKhongThu);
-		} else {
-			result.put("soNgayThu", 0);
-		}
-		int tongSoNgayDaThu = soNgayPhaiThu - soNgayKhongThu + pv.getSoNgayThuTruoc();
-
-		if (tongSoNgayDaThu == pv.getThoiHan()) {
+		Object[] lsTraTien = LichSuThuPhatChiLocalServiceUtil
+				.getTongLichSuTraTien_PhayVayId_ChiNhanhId_Loai(pv.getPhatVayId(), 0, 3);
+		// Double tongtienDaThu = GetterUtil.getDouble(lsTraTien[0]);
+		// Double tongLaiDaThu = GetterUtil.getDouble(lsTraTien[1]);
+		Double tongVonDaThu = GetterUtil.getDouble(lsTraTien[2]);
+		int soNgayDaThu = GetterUtil.getInteger(tongVonDaThu / pv.getGocNgay());
+		int soNgayThu = soNgayThuTam - soNgayDaThu;
+		result.put("soNgayThuTam", soNgayThuTam);
+		result.put("soNgayThu", soNgayThu);
+		result.put("soNgayDaThu", soNgayDaThu);
+		Double vonTra = soNgayThu * pv.getGocNgay();
+		Double laiTra = soNgayThu * pv.getLaiNgay();
+		if (soNgayThuTam == pv.getThoiHan()) {
 			result.put("daThanhToan", true);
+			vonTra = pv.getSoTienVay() - tongVonDaThu;
 		}
+		result.put("vonTra", vonTra);
+		result.put("laiTra", laiTra);
 		return result;
 	}
 
@@ -207,6 +153,7 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 		long ngayThuTienTime = ParamUtil.getLong(resourceRequest, "ngayThuTien");
 		Date ngayThuTien = ngayThuTienTime != 0 ? new Date(ngayThuTienTime) : null;
 		String maCTVSearch = ParamUtil.getString(resourceRequest, "maCTVSearch");
+		long chiNhanhIdSearch = ParamUtil.getLong(resourceRequest, "chiNhanhIdSearch");
 		if (Validator.isNotNull(ngayThuTien)) {
 			try {
 				List<CongTacVien> items = CongTacVienLocalServiceUtil.findBase(maCTVSearch, "", "", "", 1, -1, -1,
@@ -228,25 +175,15 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 				}
 				int so = soKheUoc.getSo();
 				for (CongTacVien item : items) {
-					List<PhatVay> phatVays = PhatVayLocalServiceUtil.findCTV_NgayThuTien(item.getMa(), ngayThuTien);
-					Double tongVonTra = GetterUtil.getDouble("0");
-					Double tongLaiTra = GetterUtil.getDouble("0");
+					List<PhatVay> phatVays = PhatVayLocalServiceUtil.findCTV_NgayThuTien(chiNhanhIdSearch,item.getMa(), ngayThuTien);
 					if (CollectionUtils.isNotEmpty(phatVays)) {
 						for (PhatVay pv : phatVays) {
-							Double vonTra = GetterUtil.getDouble("0");
-							Double laiTra = GetterUtil.getDouble("0");
-
 							JSONObject thongTinThanhToan = getSoNgayPhaiThu(ngayThuTien, pv);
+							Double vonTra = thongTinThanhToan.getDouble("vonTra");
+							Double laiTra = thongTinThanhToan.getDouble("laiTra");
 							if (thongTinThanhToan.getBoolean("daThanhToan")) {
 								pv.setTrangThai(TrangThaiPhatVayEnum.DA_THANH_TOAN.getValue());
-								vonTra = pv.getSoTienVay()
-										- ((pv.getSoLanDaThu() + pv.getSoNgayThuTruoc()) * pv.getGocNgay());
-							} else {
-								vonTra = ((thongTinThanhToan.getInt("soNgayThu") - pv.getSoLanDaThu())
-										* pv.getGocNgay());
 							}
-
-							laiTra = ((thongTinThanhToan.getInt("soNgayThu") - pv.getSoLanDaThu()) * pv.getLaiNgay());
 							Calendar calNgayThuTien = Calendar.getInstance();
 							calNgayThuTien.setTime(ngayThuTien);
 							Calendar calKetThuc = Calendar.getInstance();
@@ -257,11 +194,7 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 							} else {
 								pv.setNgayDaThuCuoi(CalendarUtil.getLTDate(calNgayThuTien));
 							}
-
-							pv.setSoLanDaThu(thongTinThanhToan.getInt("soNgayThu"));
-							tongVonTra += vonTra;
-							tongLaiTra += laiTra;
-
+							pv.setSoLanDaThu(thongTinThanhToan.getInt("soNgayThuTam"));
 							PhatVayLocalServiceUtil.addOrUpdatePhatVay(pv, serviceContext);
 							LichSuThuPhatChi lichSuThuPhatChi = LichSuThuPhatChiLocalServiceUtil
 									.createLichSuThuPhatChi(0L);
@@ -276,7 +209,7 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 							lichSuThuPhatChi.setNgayXuLy(ngayThuTien);
 							LichSuThuPhatChiLocalServiceUtil.addLichSuThuPhatChi(lichSuThuPhatChi, serviceContext);
 						}
-						
+
 					}
 					so++;
 				}
@@ -303,6 +236,7 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 		long ngayThuTienTime = ParamUtil.getLong(resourceRequest, "ngayThuTien");
 		Date ngayThuTien = ngayThuTienTime != 0 ? new Date(ngayThuTienTime) : null;
 		String maCTVSearch = ParamUtil.getString(resourceRequest, "maCTVSearch");
+		long chiNhanhIdSearch = ParamUtil.getLong(resourceRequest, "chiNhanhIdSearch");
 		InputStream in = null;
 		OutputStream outStream = resourceResponse.getPortletOutputStream();
 		if (Validator.isNotNull(ngayThuTien)) {
@@ -333,7 +267,7 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 				String nam = soKheUoc.getCauTruc().split("-")[1];
 				String soDayDu = "0000000";
 				for (CongTacVien item : items) {
-					List<PhatVay> phatVays = PhatVayLocalServiceUtil.findCTV_NgayThuTien(item.getMa(), ngayThuTien);
+					List<PhatVay> phatVays = PhatVayLocalServiceUtil.findCTV_NgayThuTien(chiNhanhIdSearch,item.getMa(), ngayThuTien);
 					List<BangKeDTO> bangKeDTOs = new ArrayList<BangKeDTO>();
 					if (CollectionUtils.isNotEmpty(phatVays)) {
 						Double tongVon = GetterUtil.getDouble("0");
@@ -342,32 +276,25 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 						int i = 0;
 						for (PhatVay pv : phatVays) {
 							i++;
-							Double vonTra = GetterUtil.getDouble("0");
-							Double laiTra = GetterUtil.getDouble("0");
-							Double thueTra = GetterUtil.getDouble("0");
 							JSONObject thongTinThanhToan = getSoNgayPhaiThu(ngayThuTien, pv);
-							int soLanThuDotHienTai = thongTinThanhToan.getInt("soNgayThu") - pv.getSoLanDaThu();
-							if (thongTinThanhToan.getBoolean("daThanhToan")) {
-								vonTra = pv.getSoTienVay()
-										- ((pv.getSoLanDaThu() + pv.getSoNgayThuTruoc()) * pv.getGocNgay());
-							} else {
-								vonTra = soLanThuDotHienTai * pv.getGocNgay();
-							}
-							laiTra = soLanThuDotHienTai * pv.getLaiNgay();
-							thueTra = laiTra * 0.05;
+							Double vonTra = thongTinThanhToan.getDouble("vonTra");
+							Double laiTra = thongTinThanhToan.getDouble("laiTra");
+							Double thueTra = laiTra * 0.05;
 
 							tongVon += vonTra;
 							tongLai += laiTra;
 							tongThue += thueTra;
-						
-							BangKeDTO bangKeDTO = new BangKeDTO(String.valueOf(i),pv.getKhachHang() != null ? pv.getKhachHang() .getHoTen() : "", df.format(vonTra), df.format(laiTra) , df.format(thueTra) , "");
+
+							BangKeDTO bangKeDTO = new BangKeDTO(String.valueOf(i),
+									pv.getKhachHang() != null ? pv.getKhachHang().getHoTen() : "", df.format(vonTra),
+									df.format(laiTra), df.format(thueTra), "");
 							bangKeDTOs.add(bangKeDTO);
 						}
 						so++;
-						
+
 						String soString = String.valueOf(so);
-						if(soString.length() < 7) {
-							soString = soDayDu.substring(0,6 - soString.length()) + soString;
+						if (soString.length() < 7) {
+							soString = soDayDu.substring(0, 6 - soString.length()) + soString;
 						}
 						CongTacVienBangKe congTacVienBangKe = new CongTacVienBangKe();
 						congTacVienBangKe.setTen(item.getHoTen());
@@ -378,7 +305,7 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 						congTacVienBangKe.setTongThue(df.format(tongThue));
 						congTacVienBangKe.setBks(bangKeDTOs);
 						congTacVienBangKes.add(congTacVienBangKe);
-						
+
 					}
 				}
 				String nameFile = "BANG_KE_" + new SimpleDateFormat("ddMMyyyy").format(ngayThuTien);
@@ -388,7 +315,7 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 				resourceResponse.setContentType("application/DOCX");
 				resourceResponse.setProperty("Content-Disposition", "attachment; filename=\"" + nameFile + ".docx\"");
 				in = getServletContext().getResourceAsStream("report/BANG_KE.docx");
-			    IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker);
+				IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker);
 				IContext iContext = report.createContext();
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("ngayThongKe", sdf.format(ngayThuTien));
@@ -418,6 +345,7 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 		long ngayThuTienTime = ParamUtil.getLong(resourceRequest, "ngayThuTien");
 		Date ngayThuTien = ngayThuTienTime != 0 ? new Date(ngayThuTienTime) : null;
 		String maCTVSearch = ParamUtil.getString(resourceRequest, "maCTVSearch");
+		long chiNhanhIdSearch = ParamUtil.getLong(resourceRequest, "chiNhanhIdSearch");
 		InputStream in = null;
 		OutputStream outStream = resourceResponse.getPortletOutputStream();
 		if (Validator.isNotNull(ngayThuTien)) {
@@ -429,31 +357,20 @@ public class ThuTienHangNgay_ThuePortlet extends MVCPortlet {
 				List<CongTacVien> items = CongTacVienLocalServiceUtil.findBase(maCTVSearch, "", "", "", 1, -1, -1, obc);
 				List<CongTacVienDTO> congTacVienDTOs = new ArrayList<CongTacVienDTO>();
 				for (CongTacVien item : items) {
-					List<PhatVay> phatVays = PhatVayLocalServiceUtil.findCTV_NgayThuTien(item.getMa(), ngayThuTien);
+					List<PhatVay> phatVays = PhatVayLocalServiceUtil.findCTV_NgayThuTien(chiNhanhIdSearch,item.getMa(), ngayThuTien);
 					if (CollectionUtils.isNotEmpty(phatVays)) {
 						Double tongVonTra = GetterUtil.getDouble("0");
 						Double tongLaiTra = GetterUtil.getDouble("0");
 						Double tongduNoGoc = GetterUtil.getDouble("0");
 
 						for (PhatVay pv : phatVays) {
-							Double vonTra = GetterUtil.getDouble("0");
-							Double laiTra = GetterUtil.getDouble("0");
 							JSONObject thongTinThanhToan = getSoNgayPhaiThu(ngayThuTien, pv);
-							int soLanThuDotHienTai = thongTinThanhToan.getInt("soNgayThu") - pv.getSoLanDaThu();
-							if (thongTinThanhToan.getBoolean("daThanhToan")) {
-								vonTra = pv.getSoTienVay()
-										- ((pv.getSoLanDaThu() + pv.getSoNgayThuTruoc()) * pv.getGocNgay());
-							} else {
-								vonTra = soLanThuDotHienTai * pv.getGocNgay();
-							}
-							laiTra = soLanThuDotHienTai * pv.getLaiNgay();
-
+							Double vonTra = thongTinThanhToan.getDouble("vonTra");
+							Double laiTra = thongTinThanhToan.getDouble("laiTra");
 							tongVonTra += vonTra;
 							tongLaiTra += laiTra;
 							tongduNoGoc += (pv.getDuNoGoc() - vonTra);
-
 						}
-
 						congTacVienDTOs.add(new CongTacVienDTO(
 								item.getMa() + "/" + new SimpleDateFormat("ddMMyyyy").format(ngayThuTien), item.getMa(),
 								item.getHoTen(), item.getDiaChi(), df.format(tongVonTra).replaceAll(",", "."),

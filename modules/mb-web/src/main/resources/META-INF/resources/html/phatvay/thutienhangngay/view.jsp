@@ -1,3 +1,5 @@
+<%@page import="com.mb.model.ChiNhanh"%>
+<%@page import="com.mb.service.ChiNhanhLocalServiceUtil"%>
 <%@page import="quanly.portlet.danhmuc.ctv.CongTacVienComparator"%>
 <%@page import="com.mb.service.CongTacVienLocalServiceUtil"%>
 <%@page import="com.mb.model.CongTacVien"%>
@@ -19,11 +21,20 @@
 	CongTacVienComparator congTacVienComparator = new  CongTacVienComparator("ma",true);
 	List<CongTacVien> ctvs = CongTacVienLocalServiceUtil.findBase( "", "", "", "", 1, -1, -1, congTacVienComparator);
 	String oppenThuTienTruoc = "openDialogThuTienTruoc('"+thuTienTruocURL.toString() + "','Thu tiền tết','dialogThuTienTruoc');";
+	List<ChiNhanh> chiNhanhs = ChiNhanhLocalServiceUtil.findByHoatDong(true);
 %>
 <aui:form name="fmLichSu">
 	<table class="info table-pa5 aui-w100">
 			<tr>
-				<td class="aui-w50">
+				<td>
+					<aui:select name="chiNhanhIdSearch" label="Chi nhánh" cssClass="input-select2" onchange="getDataCTV();searchURL();">
+						 <aui:option value=" " label="Tất cả" />
+						 <c:forEach items="<%= chiNhanhs%>" var="item">
+						 	<aui:option value="${item.chiNhanhId}" label="${item.ten} - ${item.ma}"/>
+						</c:forEach>
+					</aui:select>
+				</td>
+				<td>
 					<aui:select name="maCTVSearch" label="Cộng tác viên" cssClass="input-select2" onchange="searchURL();showHideThuTienTet();">
 						 <aui:option value=" " label="Tất cả" />
 						 <c:forEach items="<%= ctvs%>" var="item">
@@ -37,7 +48,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td  colspan="2">
+				<td  colspan="3">
 					<button id="<portlet:namespace />thuTienBtn" type="button" class="btn btn-labeled btn-danger" onclick="thuTien();">
 						<span class="btn-label"><i class="glyphicon glyphicon-ok"></i></span>Xác nhận đã thu
 					</button>
@@ -63,6 +74,7 @@
 	<portlet:param name="mvcPath" value="/html/phatvay/thutienhangngay/data.jsp" />
 </portlet:renderURL>
 <portlet:resourceURL var="thuTienURL" id="thuTienURL"></portlet:resourceURL>
+<portlet:resourceURL var="getDataCTV" id="getDataCTV"></portlet:resourceURL>
 <portlet:resourceURL var="printPhieuThuTienHangNgay" id="printPhieuThuTienHangNgay"></portlet:resourceURL>
 <aui:script use="aui-base,aui-io-plugin-deprecated,aui-loading-mask-deprecated">
 AUI().ready(['aui-base'], function(A) {
@@ -103,7 +115,8 @@ AUI().ready(['aui-base'], function(A) {
 		}
 		var data = {
 			'<portlet:namespace/>ngayThuTien' : ngayThuTien,
-        	'<portlet:namespace/>maCTVSearch' : A.one('#<portlet:namespace />maCTVSearch').val()
+        	'<portlet:namespace/>maCTVSearch' : A.one('#<portlet:namespace />maCTVSearch').val(),
+        	'<portlet:namespace />chiNhanhIdSearch' : A.one('#<portlet:namespace />chiNhanhIdSearch').val()
         }
 		contentDataTable.plug(A.Plugin.IO,{
             autoLoad: false,
@@ -129,7 +142,8 @@ AUI().ready(['aui-base'], function(A) {
 			}
 			var data = {
 				'<portlet:namespace/>ngayThuTien' : ngayThuTien,
-	        	'<portlet:namespace/>maCTVSearch' : A.one('#<portlet:namespace />maCTVSearch').val()
+	        	'<portlet:namespace/>maCTVSearch' : A.one('#<portlet:namespace />maCTVSearch').val(),
+	        	'<portlet:namespace />chiNhanhIdSearch' : A.one('#<portlet:namespace />chiNhanhIdSearch').val()
 	        }
 			A.io.request('${thuTienURL}', {
 		               method: 'post',
@@ -162,6 +176,7 @@ AUI().ready(['aui-base'], function(A) {
 		}
 		url += '&<portlet:namespace/>ngayThuTien=' + ngayThuTien;
 		url += '&<portlet:namespace/>maCTVSearch=' + A.one('#<portlet:namespace />maCTVSearch').val();
+		url += '&<portlet:namespace/>chiNhanhIdSearch=' + A.one('#<portlet:namespace />chiNhanhIdSearch').val();
 		window.location.href = url;
 	});
 	Liferay.provide(window,'openDialogThuTienTruoc', function(url,title,dialogId){
@@ -186,6 +201,37 @@ AUI().ready(['aui-base'], function(A) {
 	});
 	Liferay.provide(window,'thongBao', function(msg){
 		toastr.success(msg, 'Thông báo!');
+	});
+	Liferay.provide(window,'getDataCTV', function(){
+		loadingMask.show();
+		A.io.request('${getDataCTV}', {
+               method: 'post',
+               data: {
+               	'<portlet:namespace />chiNhanhIdSearch' : A.one('#<portlet:namespace />chiNhanhIdSearch').val()
+               },
+               on: {
+                   success: function() {
+                   		if(this.get('responseData')){
+                   			var data = JSON.parse(this.get('responseData'));
+                   			if(data.ctvs){
+                   				var ctvs = A.Array.map(data.ctvs, function(item) {
+									item.id = item.ma;
+									item.text = item.hoTen + ' - '  +item.ma;
+									return item;
+								});
+								ctvs.unshift({
+									id : '',
+									text : 'Chọn'
+								});
+								$('#<portlet:namespace />maCTVSearch').empty().select2({
+									data : ctvs
+								});
+	                   		}
+                   		}
+                   }
+              }
+        });
+        loadingMask.hide();
 	});
 });
 </aui:script>

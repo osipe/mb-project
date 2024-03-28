@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -87,12 +86,103 @@ public class SoPortlet extends MVCPortlet {
 			kq = printSoQuyTienMat(resourceRequest, resourceResponse, serviceContext);
 		} else if (resourceId.equals("inTongSoURL")) {
 			kq = printTongSo(resourceRequest, resourceResponse, serviceContext);
+		} else if (resourceId.equals("inTongSoCTVURL")) {
+			kq = printTongSoCTV(resourceRequest, resourceResponse, serviceContext);
+		} else if (resourceId.equals("inSoCTVURL")) {
+			kq = printSoCTV(resourceRequest, resourceResponse, serviceContext);
 		}
 		PrintWriter writer = resourceResponse.getWriter();
 		writer.print(kq.toString());
 		writer.flush();
 		writer.close();
 
+	}
+
+	public JSONObject printTongSoCTV(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
+			ServiceContext serviceContext) throws IOException {
+		JSONObject kq = JSONFactoryUtil.createJSONObject();
+		int thang = ParamUtil.getInteger(resourceRequest, "thang");
+		int nam = ParamUtil.getInteger(resourceRequest, "nam");
+		int typeIn = ParamUtil.getInteger(resourceRequest, "typeIn");
+		try {
+			InputStream in = null;
+			OutputStream outStream = resourceResponse.getPortletOutputStream();
+			resourceResponse.setContentType("application/XLSX");
+			String tenFile = typeIn == 1 ? "TONG_SO_CTV.docx" : "TONG_SO_CTV.xlsx";
+			resourceResponse.setProperty("Content-Disposition", "attachment; filename=\"" + tenFile + "\"");
+			in = getServletContext().getResourceAsStream("report/TONG_SO_CTV.jasper");
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			parameters.put("thang", thang);
+			parameters.put("nam", nam);
+			Calendar calTu = Calendar.getInstance();
+			calTu.set(nam, thang - 1, 1);
+			Date ngayChungTuTu = calTu.getTime();
+			Calendar calDen = Calendar.getInstance();
+			calDen.set(nam, thang - 1, CalendarUtil.getDaysInMonth(calTu));
+			Date ngayChungTuDen = calDen.getTime();
+			Collection<Object> collections = new ArrayList<Object>();
+			Locale localeEn = new Locale("en", "EN");
+			NumberFormat df = NumberFormat.getInstance(localeEn);
+
+			List<TaiKhoanDoiUng> taiKhoanDoiUngs = TaiKhoanDoiUngLocalServiceUtil.findByLoaiTaiKhoan_HoatDong(2, true);
+			int muc = 0;
+			TaiKhoanDoiUng taiKhoanThuVon = null;
+			Double tongTonDauKy = GetterUtil.getDouble("0");
+			Double tongSoTienThu = GetterUtil.getDouble("0");
+			Double tongSoTienChi = GetterUtil.getDouble("0");
+			Double tongSoTienTon = GetterUtil.getDouble("0");
+			try {
+				taiKhoanThuVon = TaiKhoanDoiUngLocalServiceUtil.fetchBySoHieu(PropsUtil.get("config.taikhoanthuvon"));
+			} catch (Exception e) {
+			}
+			for (TaiKhoanDoiUng taiKhoanDoiUng : taiKhoanDoiUngs) {
+				Double soTienThu = GetterUtil.getDouble("0");
+				Double soTienChi = GetterUtil.getDouble("0");
+				LichSuTaiKhoanDauKy lichSuTaiKhoanDauKy = LichSuTaiKhoanDauKyLocalServiceUtil
+						.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUng.getTaiKhoanDoiUngId(), nam, thang);
+				List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil
+						.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanThuVon.getTaiKhoanDoiUngId(),
+								taiKhoanDoiUng != null ? taiKhoanDoiUng.getSoHieu() : "", ngayChungTuTu, ngayChungTuDen,
+								1, -1, -1, null);
+				Double soTienTon = (lichSuTaiKhoanDauKy != null && lichSuTaiKhoanDauKy.getSoTienTon() != null)
+						? lichSuTaiKhoanDauKy.getSoTienTon()
+						: GetterUtil.getDouble("0");
+				tongTonDauKy += soTienTon;
+				for (DsPhieuTaiKhoan dsPhieuTaiKhoan : dsPhieuTaiKhoans) {
+					// 1 Thu
+					if (dsPhieuTaiKhoan.getPhieu().getLoai() == 1) {
+						soTienThu += dsPhieuTaiKhoan.getSoTien();
+						soTienTon -= dsPhieuTaiKhoan.getSoTien();
+						// 2 Chi
+					} else if (dsPhieuTaiKhoan.getPhieu().getLoai() == 2) {
+						soTienChi += dsPhieuTaiKhoan.getSoTien();
+						soTienTon += dsPhieuTaiKhoan.getSoTien();
+					}
+				}
+				tongSoTienThu += soTienThu;
+				tongSoTienChi += soTienChi;
+				tongSoTienTon += soTienTon;
+				if(soTienTon  != 0) {
+					muc++;
+					collections.add(new TongSoDTO(muc + ".", taiKhoanDoiUng.getTen(), taiKhoanDoiUng.getSoHieu(),
+							(lichSuTaiKhoanDauKy != null && lichSuTaiKhoanDauKy.getSoTienTon() != null)
+									? df.format(lichSuTaiKhoanDauKy.getSoTienTon())
+									: "",
+							df.format(soTienThu), df.format(soTienChi), df.format(soTienTon)));
+				}
+				
+			}
+			collections.add(new TongSoDTO("",PropsUtil.get("viethoa.tong"), "", (tongTonDauKy != null) ? df.format(tongTonDauKy) : "",
+					df.format(tongSoTienThu), df.format(tongSoTienChi), df.format(tongSoTienTon)));
+			JasperReportUtil.exportReport(in, outStream, parameters, collections,
+					typeIn == 1 ? FileType.DOCX : FileType.XLSX);
+			outStream.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+			kq.putException(e);
+		} finally {
+		}
+		return kq;
 	}
 
 	public JSONObject printTongSo(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
@@ -122,7 +212,7 @@ public class SoPortlet extends MVCPortlet {
 				Date ngayChungTuDen = calDen.getTime();
 				Collection<Object> collections = new ArrayList<Object>();
 				Locale localeEn = new Locale("en", "EN");
-			    NumberFormat df = NumberFormat.getInstance(localeEn);
+				NumberFormat df = NumberFormat.getInstance(localeEn);
 
 				Double soTienThuTM = GetterUtil.getDouble("0");
 				Double soTienChiTM = GetterUtil.getDouble("0");
@@ -150,7 +240,7 @@ public class SoPortlet extends MVCPortlet {
 								: "",
 						df.format(soTienThuTM), df.format(soTienChiTM), df.format(soTienTonTM)));
 
-				TaiKhoanDoiUngComparator comparator = new TaiKhoanDoiUngComparator("CAST(soHieu AS bigint)",true);
+				TaiKhoanDoiUngComparator comparator = new TaiKhoanDoiUngComparator("CAST(soHieu AS bigint)", true);
 				List<TaiKhoanDoiUng> taiKhoanDoiUngs = TaiKhoanDoiUngLocalServiceUtil
 						.findBase(taiKhoanTienMat.getTaiKhoanDoiUngId(), "", "", 1, -1, -1, comparator);
 				int muc = 0;
@@ -223,7 +313,7 @@ public class SoPortlet extends MVCPortlet {
 				parameters.put("nam", nam);
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 				Locale localeEn = new Locale("en", "EN");
-			    NumberFormat df = NumberFormat.getInstance(localeEn);
+				NumberFormat df = NumberFormat.getInstance(localeEn);
 				LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil
 						.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngId, nam, thang);
 				Double soTien = dauKy.getSoTienTon() != null ? dauKy.getSoTienTon() : GetterUtil.getDouble("0");
@@ -305,6 +395,153 @@ public class SoPortlet extends MVCPortlet {
 		return kq;
 	}
 
+	public JSONObject printSoCTV(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
+			ServiceContext serviceContext) throws IOException {
+		JSONObject kq = JSONFactoryUtil.createJSONObject();
+		int thang = ParamUtil.getInteger(resourceRequest, "thang");
+		int nam = ParamUtil.getInteger(resourceRequest, "nam");
+		int typeIn = ParamUtil.getInteger(resourceRequest, "typeIn");
+		long taiKhoanDoiUngId = ParamUtil.getLong(resourceRequest, "taiKhoanDoiUngId");
+		if (thang > 0 && nam > 0) {
+			try {
+				TaiKhoanDoiUng tkdu = null;
+				if (taiKhoanDoiUngId > 0) {
+					tkdu = TaiKhoanDoiUngLocalServiceUtil.fetchTaiKhoanDoiUng(taiKhoanDoiUngId);
+				}
+				InputStream in = null;
+				OutputStream outStream = resourceResponse.getPortletOutputStream();
+				resourceResponse.setContentType("application/XLSX");
+				String tenFile = "SO_CTV";
+				if (tkdu != null) {
+					tenFile += (typeIn == 1 ? tkdu.getSoHieu() + ".docx" : tkdu.getSoHieu() + ".xlsx");
+				} else {
+					tenFile += (typeIn == 1 ? ".docx" : ".xlsx");
+				}
+				resourceResponse.setProperty("Content-Disposition", "attachment; filename=\"" + tenFile + "\"");
+				in = getServletContext().getResourceAsStream("report/SO_CAI.jasper");
+				Map<String, Object> parameters = new HashMap<String, Object>();
+				parameters.put("tenTaiKhoan",
+						tkdu != null ? tkdu.getTen() : "T\\u1ED4NG S\\u1ED4 C\\u1ED8NG T\\u00C1C VI\\u00CAN");
+				parameters.put("soHieuTaiKhoan", tkdu != null ? tkdu.getSoHieu() : "");
+				parameters.put("tenCongTy", GetterUtil.getString(PropsUtil.get("thongtin.cty.ten")));
+				parameters.put("diaChiCongTy", GetterUtil.getString(PropsUtil.get("thongtin.cty.diachi")));
+				parameters.put("thang", thang);
+				parameters.put("nam", nam);
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+				Locale localeEn = new Locale("en", "EN");
+				NumberFormat df = NumberFormat.getInstance(localeEn);
+				TaiKhoanDoiUng taiKhoanThuVon = TaiKhoanDoiUngLocalServiceUtil
+						.fetchBySoHieu(PropsUtil.get("config.taikhoanthuvon"));
+				LichSuTaiKhoanDauKy dauKy = null;
+				if (tkdu != null) {
+					dauKy = LichSuTaiKhoanDauKyLocalServiceUtil.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngId, nam,
+							thang);
+				} else {
+					dauKy = LichSuTaiKhoanDauKyLocalServiceUtil.sumByNamThang(taiKhoanThuVon.getTaiKhoanDoiUngId(), 2,
+							nam, thang);
+				}
+				Double soTien = dauKy != null && dauKy.getSoTienTon() != null ? dauKy.getSoTienTon()
+						: GetterUtil.getDouble("0");
+				Collection<Object> collections = new ArrayList<Object>();
+				if (dauKy != null) {
+					LichSuThuChiDTO lichSuThuChiDTO = new LichSuThuChiDTO("", "", "", "", "", "DAU KY", "", "", "",
+							dauKy.getSoTienTon() != null ? df.format(dauKy.getSoTienTon()) : "");
+					collections.add(lichSuThuChiDTO);
+				}
+				Calendar calTu = Calendar.getInstance();
+				calTu.set(nam, thang - 1, 1);
+				Date ngayChungTuTu = calTu.getTime();
+				Calendar calDen = Calendar.getInstance();
+				calDen.set(nam, thang - 1, CalendarUtil.getDaysInMonth(calTu));
+				Date ngayChungTuDen = calDen.getTime();
+				List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil
+						.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanThuVon.getTaiKhoanDoiUngId(),
+								tkdu != null ? tkdu.getSoHieu() : "", ngayChungTuTu, ngayChungTuDen, 1, -1, -1, null);
+				if (CollectionUtils.isNotEmpty(dsPhieuTaiKhoans)) {
+					boolean inNgay = true;
+					boolean inNgayChungTu = true;
+					String ngayChungTu = "";
+					String ngayGhiSo = "";
+					for (DsPhieuTaiKhoan dsPhieuTaiKhoan : dsPhieuTaiKhoans) {
+						String soHieu = "";
+						String dienGiai = "";
+						String tenTaiKhoanDoiUng = "";
+						String soTienThu = "";
+						String soTienChi = "";
+						if (dsPhieuTaiKhoan.getPhieu() != null) {
+							inNgayChungTu = true;
+							inNgay = true;
+							Phieu phieu = dsPhieuTaiKhoan.getPhieu();
+							if (phieu.getNgayGhiSo() != null && !ngayGhiSo.equals(sdf.format(phieu.getNgayGhiSo()))) {
+								ngayGhiSo = sdf.format(phieu.getNgayGhiSo());
+								inNgay = true;
+							} else {
+								inNgay = false;
+							}
+							if (!ngayChungTu.equals(sdf.format(dsPhieuTaiKhoan.getNgayChungTu()))) {
+								ngayChungTu = sdf.format(dsPhieuTaiKhoan.getNgayChungTu());
+								inNgayChungTu = true;
+							} else {
+								inNgayChungTu = false;
+							}
+							soHieu = phieu.getSoPhieu();
+							dienGiai = phieu.getMaSoThuChi().getDienGiai();
+							// 1 Thu
+							if (phieu.getLoai() == 1) {
+								soTienThu = dsPhieuTaiKhoan.getSoTien() != null ? df.format(dsPhieuTaiKhoan.getSoTien())
+										: "0";
+								soTien -= dsPhieuTaiKhoan.getSoTien();
+								// 2 Chi
+							} else if (phieu.getLoai() == 2) {
+								soTienChi = dsPhieuTaiKhoan.getSoTien() != null ? df.format(dsPhieuTaiKhoan.getSoTien())
+										: "0";
+								soTien += dsPhieuTaiKhoan.getSoTien();
+							}
+//							if (tkdu == null || (tkdu != null && tkdu.getSoHieu().equals(PropsUtil.get("config.taikhoanthuvon")))) {
+//								
+//							} else {
+//								// 1 Thu
+//								if (phieu.getLoai() == 1) {
+//									soTienThu = dsPhieuTaiKhoan.getSoTien() != null
+//											? df.format(dsPhieuTaiKhoan.getSoTien())
+//											: "0";
+//									soTien += dsPhieuTaiKhoan.getSoTien();
+//									// 2 Chi
+//								} else if (phieu.getLoai() == 2) {
+//									soTienChi = dsPhieuTaiKhoan.getSoTien() != null
+//											? df.format(dsPhieuTaiKhoan.getSoTien())
+//											: "0";
+//									soTien -= dsPhieuTaiKhoan.getSoTien();
+//								}
+//							}
+						}
+						if (dsPhieuTaiKhoan.getTaiKhoanDoiUng() != null) {
+							tenTaiKhoanDoiUng = dsPhieuTaiKhoan.getTaiKhoanDoiUng().getTen() + "( "
+									+ dsPhieuTaiKhoan.getTaiKhoanDoiUng().getSoHieu() + " )";
+						}
+						LichSuThuChiDTO lichSuThuChiDTO = new LichSuThuChiDTO(inNgayChungTu ? ngayChungTu : "",
+								inNgay ? ngayGhiSo : "", soHieu, "", "", dienGiai, tenTaiKhoanDoiUng, soTienThu,
+								soTienChi, soTien != null ? df.format(soTien) : "0");
+						collections.add(lichSuThuChiDTO);
+					}
+					if (dauKy != null) {
+						LichSuThuChiDTO lichSuThuChiDTO = new LichSuThuChiDTO("", "", "", "", "", "SO CUOI THANG", "",
+								"", "", soTien != null ? df.format(soTien) : "0");
+						collections.add(lichSuThuChiDTO);
+					}
+					JasperReportUtil.exportReport(in, outStream, parameters, collections,
+							typeIn == 1 ? FileType.DOCX : FileType.XLSX);
+					outStream.flush();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				kq.putException(e);
+			} finally {
+			}
+		}
+		return kq;
+	}
+
 	public JSONObject printSoCai(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
 			ServiceContext serviceContext) throws IOException {
 		JSONObject kq = JSONFactoryUtil.createJSONObject();
@@ -312,7 +549,7 @@ public class SoPortlet extends MVCPortlet {
 		int nam = ParamUtil.getInteger(resourceRequest, "nam");
 		int typeIn = ParamUtil.getInteger(resourceRequest, "typeIn");
 		long taiKhoanDoiUngId = ParamUtil.getLong(resourceRequest, "taiKhoanDoiUngId");
-		if (taiKhoanDoiUngId > 0 && thang > 0 && nam > 0) {
+		if (thang > 0 && nam > 0) {
 			try {
 				TaiKhoanDoiUng tkdu = TaiKhoanDoiUngLocalServiceUtil.fetchTaiKhoanDoiUng(taiKhoanDoiUngId);
 				InputStream in = null;
@@ -330,7 +567,7 @@ public class SoPortlet extends MVCPortlet {
 				parameters.put("nam", nam);
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 				Locale localeEn = new Locale("en", "EN");
-			    NumberFormat df = NumberFormat.getInstance(localeEn);
+				NumberFormat df = NumberFormat.getInstance(localeEn);
 				LichSuTaiKhoanDauKy dauKy = LichSuTaiKhoanDauKyLocalServiceUtil
 						.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngId, nam, thang);
 				Double soTien = dauKy != null && dauKy.getSoTienTon() != null ? dauKy.getSoTienTon()
@@ -476,11 +713,11 @@ public class SoPortlet extends MVCPortlet {
 									for (DsPhieuTaiKhoan item : dsPhieuTaiKhoans) {
 										if (item.getPhieu() != null) {
 											if (item.getPhieu().getLoai() == 1) {
-												soTienThu  += item.getSoTien();
+												soTienThu += item.getSoTien();
 												soTienTon -= item.getSoTien();
 											} else if (item.getPhieu().getLoai() == 2) {
 												soTienTon += item.getSoTien();
-												soTienChi  += item.getSoTien();
+												soTienChi += item.getSoTien();
 											}
 										}
 									}
@@ -533,11 +770,11 @@ public class SoPortlet extends MVCPortlet {
 									for (DsPhieuTaiKhoan item : dsPhieuTaiKhoans) {
 										if (item.getPhieu() != null) {
 											if (item.getPhieu().getLoai() == 1) {
-												soTienThu  += item.getSoTien();
+												soTienThu += item.getSoTien();
 												soTienTon -= item.getSoTien();
 											} else if (item.getPhieu().getLoai() == 2) {
 												soTienTon += item.getSoTien();
-												soTienChi  += item.getSoTien();
+												soTienChi += item.getSoTien();
 											}
 										}
 									}

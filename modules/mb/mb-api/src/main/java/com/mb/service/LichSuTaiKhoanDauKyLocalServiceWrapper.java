@@ -256,6 +256,14 @@ public class LichSuTaiKhoanDauKyLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<com.mb.model.LichSuTaiKhoanDauKy> findByNam_Thang(
+			int nam, int thang)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return _lichSuTaiKhoanDauKyLocalService.findByNam_Thang(nam, thang);
+	}
+
+	@Override
 	public java.util.List<com.mb.model.LichSuTaiKhoanDauKy>
 			findByTaiKhoanDoiUngId(long taiKhoanDoiUngId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -341,6 +349,15 @@ public class LichSuTaiKhoanDauKyLocalServiceWrapper
 
 		return _lichSuTaiKhoanDauKyLocalService.getPersistedModel(
 			primaryKeyObj);
+	}
+
+	@Override
+	public com.mb.model.LichSuTaiKhoanDauKy sumByNamThang(
+			long taiKhoanDoiUngChaId, int loaiTaiKhoan, int nam, int thang)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return _lichSuTaiKhoanDauKyLocalService.sumByNamThang(
+			taiKhoanDoiUngChaId, loaiTaiKhoan, nam, thang);
 	}
 
 	/**

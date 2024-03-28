@@ -71,6 +71,10 @@ public class LichSuThuPhatChiWrapper
 		attributes.put("soTien", getSoTien());
 		attributes.put("tongSoTienVonTra", getTongSoTienVonTra());
 		attributes.put("tongSoTienLaiTra", getTongSoTienLaiTra());
+		attributes.put("soLanThuDaThuTruoc", getSoLanThuDaThuTruoc());
+		attributes.put("soLanThu", getSoLanThu());
+		attributes.put("soLanThuDaThu", getSoLanThuDaThu());
+		attributes.put("ngayDaThuCuoiTruoc", getNgayDaThuCuoiTruoc());
 		attributes.put("ngayXuLy", getNgayXuLy());
 		attributes.put("loai", getLoai());
 		attributes.put("trangThaiPhatVayHienTai", getTrangThaiPhatVayHienTai());
@@ -156,6 +160,31 @@ public class LichSuThuPhatChiWrapper
 
 		if (tongSoTienLaiTra != null) {
 			setTongSoTienLaiTra(tongSoTienLaiTra);
+		}
+
+		Integer soLanThuDaThuTruoc = (Integer)attributes.get(
+			"soLanThuDaThuTruoc");
+
+		if (soLanThuDaThuTruoc != null) {
+			setSoLanThuDaThuTruoc(soLanThuDaThuTruoc);
+		}
+
+		Integer soLanThu = (Integer)attributes.get("soLanThu");
+
+		if (soLanThu != null) {
+			setSoLanThu(soLanThu);
+		}
+
+		Integer soLanThuDaThu = (Integer)attributes.get("soLanThuDaThu");
+
+		if (soLanThuDaThu != null) {
+			setSoLanThuDaThu(soLanThuDaThu);
+		}
+
+		Date ngayDaThuCuoiTruoc = (Date)attributes.get("ngayDaThuCuoiTruoc");
+
+		if (ngayDaThuCuoiTruoc != null) {
+			setNgayDaThuCuoiTruoc(ngayDaThuCuoiTruoc);
 		}
 
 		Date ngayXuLy = (Date)attributes.get("ngayXuLy");
@@ -275,6 +304,16 @@ public class LichSuThuPhatChiWrapper
 	}
 
 	/**
+	 * Returns the ngay da thu cuoi truoc of this lich su thu phat chi.
+	 *
+	 * @return the ngay da thu cuoi truoc of this lich su thu phat chi
+	 */
+	@Override
+	public Date getNgayDaThuCuoiTruoc() {
+		return _lichSuThuPhatChi.getNgayDaThuCuoiTruoc();
+	}
+
+	/**
 	 * Returns the ngay xu ly of this lich su thu phat chi.
 	 *
 	 * @return the ngay xu ly of this lich su thu phat chi
@@ -307,6 +346,36 @@ public class LichSuThuPhatChiWrapper
 	@Override
 	public Serializable getPrimaryKeyObj() {
 		return _lichSuThuPhatChi.getPrimaryKeyObj();
+	}
+
+	/**
+	 * Returns the so lan thu of this lich su thu phat chi.
+	 *
+	 * @return the so lan thu of this lich su thu phat chi
+	 */
+	@Override
+	public int getSoLanThu() {
+		return _lichSuThuPhatChi.getSoLanThu();
+	}
+
+	/**
+	 * Returns the so lan thu da thu of this lich su thu phat chi.
+	 *
+	 * @return the so lan thu da thu of this lich su thu phat chi
+	 */
+	@Override
+	public int getSoLanThuDaThu() {
+		return _lichSuThuPhatChi.getSoLanThuDaThu();
+	}
+
+	/**
+	 * Returns the so lan thu da thu truoc of this lich su thu phat chi.
+	 *
+	 * @return the so lan thu da thu truoc of this lich su thu phat chi
+	 */
+	@Override
+	public int getSoLanThuDaThuTruoc() {
+		return _lichSuThuPhatChi.getSoLanThuDaThuTruoc();
 	}
 
 	/**
@@ -512,6 +581,16 @@ public class LichSuThuPhatChiWrapper
 	}
 
 	/**
+	 * Sets the ngay da thu cuoi truoc of this lich su thu phat chi.
+	 *
+	 * @param ngayDaThuCuoiTruoc the ngay da thu cuoi truoc of this lich su thu phat chi
+	 */
+	@Override
+	public void setNgayDaThuCuoiTruoc(Date ngayDaThuCuoiTruoc) {
+		_lichSuThuPhatChi.setNgayDaThuCuoiTruoc(ngayDaThuCuoiTruoc);
+	}
+
+	/**
 	 * Sets the ngay xu ly of this lich su thu phat chi.
 	 *
 	 * @param ngayXuLy the ngay xu ly of this lich su thu phat chi
@@ -544,6 +623,36 @@ public class LichSuThuPhatChiWrapper
 	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		_lichSuThuPhatChi.setPrimaryKeyObj(primaryKeyObj);
+	}
+
+	/**
+	 * Sets the so lan thu of this lich su thu phat chi.
+	 *
+	 * @param soLanThu the so lan thu of this lich su thu phat chi
+	 */
+	@Override
+	public void setSoLanThu(int soLanThu) {
+		_lichSuThuPhatChi.setSoLanThu(soLanThu);
+	}
+
+	/**
+	 * Sets the so lan thu da thu of this lich su thu phat chi.
+	 *
+	 * @param soLanThuDaThu the so lan thu da thu of this lich su thu phat chi
+	 */
+	@Override
+	public void setSoLanThuDaThu(int soLanThuDaThu) {
+		_lichSuThuPhatChi.setSoLanThuDaThu(soLanThuDaThu);
+	}
+
+	/**
+	 * Sets the so lan thu da thu truoc of this lich su thu phat chi.
+	 *
+	 * @param soLanThuDaThuTruoc the so lan thu da thu truoc of this lich su thu phat chi
+	 */
+	@Override
+	public void setSoLanThuDaThuTruoc(int soLanThuDaThuTruoc) {
+		_lichSuThuPhatChi.setSoLanThuDaThuTruoc(soLanThuDaThuTruoc);
 	}
 
 	/**

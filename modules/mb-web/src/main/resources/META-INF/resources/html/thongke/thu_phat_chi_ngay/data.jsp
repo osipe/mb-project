@@ -39,6 +39,12 @@
 </portlet:renderURL>
 <portlet:resourceURL var="printPhieuThuTienHangNgay" id="printPhieuThuTienHangNgay">
 </portlet:resourceURL>
+<portlet:resourceURL var="printPhieuThuTienTruoc" id="printPhieuThuTienTruoc">
+</portlet:resourceURL>
+<portlet:resourceURL var="xoaLichSuThuTienHangNgay" id="xoaLichSuThuTienHangNgay">
+</portlet:resourceURL>
+<portlet:resourceURL var="xoaThuTruoc" id="xoaThuTruoc">
+</portlet:resourceURL>
 <div id="<portlet:namespace />recordSearchContainer">
 	<div style="text-align: right;"><span class="note-span">(Đơn vị : VND)</span></div>
 	<liferay-ui:search-container  delta="<%=items.size() %>"  emptyResultsMessage="Không có kết quả nào được tìm thấy!" iteratorURL="<%=iteratorURL %>" total="<%=items.size() %>" >
@@ -73,10 +79,23 @@
 			 				Date ngayXuLy = sdf.parse(ngayXuLyStr);
 			 				long ngayXuLyTime = ngayXuLy != null ? ngayXuLy.getTime() : 0;
 			 				String clickIn = "printPhieuThuTienHangNgay('" +congTacVien.getMa() + "','"+ ngayXuLyTime +"');" ;
-			 				String clickView = "xemChiTietThuTienHangNgay('" +congTacVien.getMa() + "','"+ ngayXuLyTime +"');" ;
+			 				String clickView = "xemChiTiet('" +congTacVien.getMa() + "','"+ ngayXuLyTime + "','3');" ;
+			 				String clickXoaThuHangNgay = "xoaThuHangNgay('" +congTacVien.getMa() + "','"+ ngayXuLyTime + "','" + ngayBatDauTuSearchTime + "');"; 
 			 		%>
 				 		<a href="javascript:void(0);" onclick="<%=clickIn %>" title="In phiếu thu"><i class="glyphicon glyphicon-print"></i></a>
 				 		<a href="javascript:void(0);" onclick="<%=clickView %>" title="Xem chi tiết"><i class="glyphicon glyphicon-search"></i></a>
+				 		<a href="javascript:void(0);" onclick="<%=clickXoaThuHangNgay %>" title="Xóa thu hằng ngày"><i class="glyphicon glyphicon-trash"></i></a>
+					<%}else if(GetterUtil.getInteger(item[0]) == 4 && ngayBatDauTuSearchTime != 0){
+						String ngayXuLyStr = GetterUtil.getString(item[1]);
+		 				Date ngayXuLy = Validator.isNotNull(ngayXuLyStr) ? sdf.parse(ngayXuLyStr) : null;
+		 				long ngayXuLyTime = ngayXuLy != null ? ngayXuLy.getTime() : 0;
+		 				String clickIn = "printPhieuThuTienTruoc('" +congTacVien.getMa() + "','"+ ngayXuLyTime +"');" ;
+		 				String clickView = "xemChiTiet('" +congTacVien.getMa() + "','"+ ngayXuLyTime + "','4');" ;
+		 				String clickXoaThuTruoc = "xoaThuTruoc('" +congTacVien.getMa() + "','"+ ngayXuLyTime + "','" + ngayBatDauTuSearchTime + "');"; 
+					%>
+						<a href="javascript:void(0);" onclick="<%=clickIn %>" title="In phiếu thu"><i class="glyphicon glyphicon-print"></i></a>
+						<a href="javascript:void(0);" onclick="<%=clickView %>" title="Xem chi tiết"><i class="glyphicon glyphicon-search"></i></a>
+						<a href="javascript:void(0);" onclick="<%=clickXoaThuTruoc %>" title="Xóa thu trước"><i class="glyphicon glyphicon-trash"></i></a>
 					<%}else{%>
 						<span style="font-style: italic;"></span>
 			 	<%
@@ -105,7 +124,7 @@
 			 	%>
 			 </liferay-ui:search-container-column-text>
 			 <liferay-ui:search-container-column-text name="Ngày">
-			 	<span style="color:#ff3d00e8;font-weight: bold;">#####</span>
+			 	<span style="color:#ff3d00e8;font-weight: bold;">&nbsp;</span>
 			 	<%
 			 		for(Object[] item : lichSuThuPhatChDTOs){
 			 	%>
@@ -180,7 +199,6 @@ AUI().ready(['aui-base'], function(A) {
     });
 	var pageIO = plugin.io;
 	recordSearchContainer.all('ul.dropdown-menu.lfr-menu-list.direction-down a').on('click', function(e) {
-		console.log('123');
     	e.preventDefault();
     	Liferay.Data.redirectURL = e.currentTarget.get('href');
     	pageIO.set('uri', e.currentTarget.get('href'));
@@ -225,10 +243,11 @@ AUI().ready(['aui-base'], function(A) {
     	trNode.append(td5Node);
     	tbody.append(trNode);
     }
-    Liferay.provide(window,'xemChiTietThuTienHangNgay', function(maCTV,ngayXuLyTime){
+    Liferay.provide(window,'xemChiTiet', function(maCTV,ngayXuLyTime,loai){
     	var url = '${xemChiTietHangNgayURL}';
     	url += '&<portlet:namespace/>maCTV=' + maCTV;
     	url += '&<portlet:namespace/>ngayXuLyTime=' + ngayXuLyTime;
+    	url += '&<portlet:namespace/>loai=' + loai;
 		Liferay.Util.openWindow({
 			dialog : {
 				centered : true,
@@ -247,6 +266,68 @@ AUI().ready(['aui-base'], function(A) {
 		url += '&<portlet:namespace/>maCTV=' + maCTV;
 		url += '&<portlet:namespace/>ngayXuLyTime=' + ngayXuLyTime;
 		 window.open(url);
+	});
+	Liferay.provide(window,'printPhieuThuTienTruoc', function(maCTV,ngayXuLyTime){
+		var url = '${printPhieuThuTienTruoc}';
+		url += '&<portlet:namespace/>ngayThuTien=' + '<%=ngayBatDauTuSearchTime %>';
+		url += '&<portlet:namespace/>maCTV=' + maCTV;
+		url += '&<portlet:namespace/>ngayXuLyTime=' + ngayXuLyTime;
+		 window.open(url);
+	});
+	
+	Liferay.provide(window,'xoaThuHangNgay', function(maCTV,ngayXuLyTime,ngayBatDauTuTime){
+		loadingMask.show();
+			var data = {
+				'<portlet:namespace />maCTV' : maCTV,
+				'<portlet:namespace />ngayXuLyTime' : ngayXuLyTime,
+				'<portlet:namespace />ngayBatDauTuTime' : ngayBatDauTuTime
+			}
+			A.io.request('${xoaLichSuThuTienHangNgay}', {
+	               method: 'post',
+	               data : data,
+	               on: {
+	                   success: function() {
+	                   		if(this.get('responseData')){
+	                   			var data = JSON.parse(this.get('responseData'));
+	                   			if(!data.exception){
+	                   				toastr.success('Yêu cầu thực hiện thành công');
+	                   				pageIO.set('uri', '${iteratorURL}');
+    								pageIO.start();
+	                   			}else{
+                   					toastr.error('Yêu cầu thực hiện không thành công', 'Lỗi!');
+	                   			}
+	                   		}
+	                   }
+	              }
+	        });
+        loadingMask.hide();
+	});
+	Liferay.provide(window,'xoaThuTruoc', function(maCTV,ngayXuLyTime,ngayBatDauTuTime){
+		loadingMask.show();
+			var data = {
+				'<portlet:namespace />maCTV' : maCTV,
+				'<portlet:namespace />ngayXuLyTime' : ngayXuLyTime,
+				'<portlet:namespace />ngayBatDauTuTime' : ngayBatDauTuTime
+			}
+			A.io.request('${xoaThuTruoc}', {
+	               method: 'post',
+	               data : data,
+	               on: {
+	                   success: function() {
+	                   		if(this.get('responseData')){
+	                   			var data = JSON.parse(this.get('responseData'));
+	                   			if(!data.exception){
+	                   				toastr.success('Yêu cầu thực hiện thành công');
+	                   				pageIO.set('uri', '${iteratorURL}');
+    								pageIO.start();
+	                   			}else{
+                   					toastr.error('Yêu cầu thực hiện không thành công', 'Lỗi!');
+	                   			}
+	                   		}
+	                   }
+	              }
+	        });
+        loadingMask.hide();
 	});
 });	
 </aui:script>

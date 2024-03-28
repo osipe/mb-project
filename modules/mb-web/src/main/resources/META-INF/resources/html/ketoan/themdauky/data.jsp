@@ -26,6 +26,8 @@
 	<portlet:param name="taiKhoanDoiUngIdSearch" value="<%= String.valueOf(taiKhoanDoiUngIdSearch)%>" />
 	<portlet:param name="mvcPath" value="/html/ketoan/themdauky/data.jsp" />
 </liferay-portlet:renderURL>
+<portlet:resourceURL var="xoaDauKyURL" id="xoaDauKyURL">
+</portlet:resourceURL>
 <div id="<portlet:namespace />recordSearchContainer">
 	<div style="text-align: right;"><span class="note-span">(Đơn vị : VND)</span></div>
 	<liferay-ui:search-container  delta="10"  emptyResultsMessage="Không có kết quả nào được tìm thấy!" iteratorURL="<%=iteratorURL %>" total="<%=count %>" >
@@ -57,6 +59,7 @@
 			</portlet:renderURL>
 				<%
 					String editAction = "openDialogEdit('" + editURL + "');";
+					String xoaDauKyAction =  "xoaDauKy('" + lichSuTaiKhoanDauKy.getLichSuTaiKhoanDauKyId() + "');";
 					TaiKhoanDoiUng tkdu = TaiKhoanDoiUngLocalServiceUtil.fetchTaiKhoanDoiUng(lichSuTaiKhoanDauKy.getTaiKhoanDoiUngId());
 			 	%>
 			 <liferay-ui:search-container-column-text cssClass="aui-w10 text-center" name="Tên tài khoản đối ứng">
@@ -69,12 +72,13 @@
 			 	<%=lichSuTaiKhoanDauKy.getNam()%>
 			 </liferay-ui:search-container-column-text>
 			   <liferay-ui:search-container-column-text cssClass="aui-w10 text-center" name="Số tiền">
-			 	<%=lichSuTaiKhoanDauKy.getSoTienTon() > 0 ? df.format(lichSuTaiKhoanDauKy.getSoTienTon()) : ""%>
+			 	<%=lichSuTaiKhoanDauKy.getSoTienTon() != null ? df.format(lichSuTaiKhoanDauKy.getSoTienTon()) : ""%>
 			 </liferay-ui:search-container-column-text>
 			  <liferay-ui:search-container-column-text name="Thao tác" cssClass="aui-w10 text-center">
 			 	<a href="javascript:void(0);" onclick="<%=editAction %>" title="Sửa">
 			 		<span style="color:#ff3d00e8"><i class="glyphicon glyphicon-edit"></i></span>
 			 	</a>
+			 	<a href="javascript:void(0);" onclick="<%=xoaDauKyAction %>" title="Xóa"><i class="glyphicon glyphicon-trash"></i></a>
 			 </liferay-ui:search-container-column-text>
 		 </liferay-ui:search-container-row >
 		 <liferay-ui:search-iterator />
@@ -126,6 +130,31 @@ AUI().ready(['aui-base'], function(A) {
 			title : 'Sửa dữ liệu đầu kỳ',
 			uri : url
 		});
+	});
+	Liferay.provide(window,'xoaDauKy', function(lichSuTaiKhoanDauKyId){
+		loadingMask.show();
+			var data = {
+				'<portlet:namespace />lichSuTaiKhoanDauKyId' : lichSuTaiKhoanDauKyId,
+			}
+			A.io.request('${xoaDauKyURL}', {
+	               method: 'post',
+	               data : data,
+	               on: {
+	                   success: function() {
+	                   		if(this.get('responseData')){
+	                   			var data = JSON.parse(this.get('responseData'));
+	                   			if(!data.exception){
+	                   				toastr.success('Yêu cầu thực hiện thành công');
+	                   				pageIO.set('uri', '${iteratorURL}');
+    								pageIO.start();
+	                   			}else{
+                   					toastr.error('Yêu cầu thực hiện không thành công', 'Lỗi!');
+	                   			}
+	                   		}
+	                   }
+	              }
+	        });
+        loadingMask.hide();
 	});
 });	
 </aui:script>

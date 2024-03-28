@@ -21,7 +21,7 @@
 <aui:form name="frm">
 	<ul class="nav nav-tabs" id="myTab" role="tablist">
 		<li class="nav-item">
-			<a class="nav-link active" id="tatToanKU-tab" onclick="search();" data-toggle="tab" href="#<portlet:namespace />tatToanKU" role="tab" aria-controls="<portlet:namespace />tatToanKU" aria-selected="false">Tất toán</a>
+			<a class="nav-link active" id="tatToanKU-tab" onclick="search();"  data-toggle="tab" href="#<portlet:namespace />tatToanKU" role="tab" aria-controls="<portlet:namespace />tatToanKU" aria-selected="false">Tất toán</a>
 		</li>
 		<li class="nav-item">
 			<a class="nav-link" id="lichSuTatToan-tab" onclick="searchLichSu();" data-toggle="tab" href="#<portlet:namespace />lichSuTatToan" role="tab" aria-controls="<portlet:namespace />lichSuTatToan" aria-selected="true">Lịch sử tất toán</a>

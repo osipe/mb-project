@@ -49,7 +49,7 @@
 				</aui:select>
 			</td>
 			<td>
-				<aui:input name="soTienTon" onkeypress="_formatNumber();" class="input-text" label="Số tiền tồn" value="<%=(lichSuTaiKhoanDauKy.getSoTienTon() != null && lichSuTaiKhoanDauKy.getSoTienTon() > 0) ? df.format(lichSuTaiKhoanDauKy.getSoTienTon()) : "0"%>"/>
+				<aui:input name="soTienTon" onkeyup="_formatMoney();" class="input-text" label="Số tiền tồn" value="<%=lichSuTaiKhoanDauKy.getSoTienTon() != null ? df.format(lichSuTaiKhoanDauKy.getSoTienTon()) : "0"%>"/>
 			</td>
 		</tr>
 		<tr>

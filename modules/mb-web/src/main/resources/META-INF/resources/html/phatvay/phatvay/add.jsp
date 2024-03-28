@@ -71,11 +71,14 @@
 					<aui:validator name="required" errorMessage="Cộng tác viên không được bỏ trống!" />
 				</aui:select>
 			</td>
-			<td class="aui-w34">
+			<td class="aui-w26">
 				<aui:select name="maKhachHang" label="Khách hàng" cssClass="input-select2">
 					 <aui:option value=" " label="Chọn" />
 					 <aui:validator name="required" errorMessage="Khách hàng không được bỏ trống!" />
 				</aui:select>
+				
+			</td>
+			<td class="aui-w8">
 				<a class="icon-add" href="javascript:void(0)" title="Thêm khách hàng" onclick="openDialogAddKhachHang()"><i class="glyphicon glyphicon-plus"></i>
 			</td>
 		</tr>
@@ -237,7 +240,7 @@
 <portlet:resourceURL var="checkPhatVayKhachHang" id="checkPhatVayKhachHang"></portlet:resourceURL>
 <portlet:renderURL var="addLKhachHangURL"
 	windowState="<%=LiferayWindowState.POP_UP.toString()%>">
-	<portlet:param name="mvcPath" value="/html/danhmuc/khachhang/add_kh.jsp" />
+	<portlet:param name="mvcPath" value="/html/danhmuc/khachhang/view.jsp" />
 	<portlet:param name="manHinhPhatVay" value="true" />
 </portlet:renderURL>
 <aui:script use="aui-base,aui-io-plugin-deprecated,aui-loading-mask-deprecated,node-event-simulate">
@@ -266,10 +269,10 @@ AUI().ready(['aui-base','node-event-simulate'], function(A) {
 				centered : true,
 				height : 600,
 				modal : true,
-				width : 700
+				width : 900
 			},
-			id : '<portlet:namespace />dialogKhachHangAdd',
-			title : 'Thêm khách hàng',
+			id : '<portlet:namespace />dialogQuanLyKh',
+			title : 'Quản lý khách hàng',
 			uri : '${addLKhachHangURL}'
 		});
 	});
@@ -278,6 +281,15 @@ AUI().ready(['aui-base','node-event-simulate'], function(A) {
 	});
 	Liferay.provide(window,'thongBao', function(){
 		toastr.success('Thêm khách hàng viên thành công', 'Thông báo!');
+	});
+	Liferay.provide(window,'dongPopupById', function(dialogId){
+		var dialog = Liferay.Util.Window.getById('<portlet:namespace />dialogAdd');
+		console.log('dialog2 : ',dialog);
+		if(dialog){
+			dialog.destroy();
+		}else{
+			Liferay.Util.getOpener().dongPopup('dialogAdd');
+		}
 	});
 	<!-- Lấy dữ liệu danh mục -->
 	Liferay.provide(window,'getLoaiTaiSan', function(node){

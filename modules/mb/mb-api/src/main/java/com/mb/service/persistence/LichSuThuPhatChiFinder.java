@@ -23,6 +23,10 @@ import aQute.bnd.annotation.ProviderType;
 @ProviderType
 public interface LichSuThuPhatChiFinder {
 
+	public Object[] getTongLichSuTraTien_PhayVayId_ChiNhanhId_Loai(
+			long phatVayId, long chiNhanhId, int loai)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public Object[] getSumPhatVay_CTV_TAINGAY(
 			long chiNhanhId, String maCTV, java.util.Date ngay, int loaiPV)
 		throws com.liferay.portal.kernel.exception.SystemException;
@@ -34,6 +38,19 @@ public interface LichSuThuPhatChiFinder {
 
 	public Double getSoTienVay_CTV_TAINGAY(
 			long chiNhanhId, String maCTV, java.util.Date ngay)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public void deleteByCTV_Loai_Createdate_NgayXuLy(
+			String maCTV, int loai, java.util.Date ngayTaoTu,
+			java.util.Date ngayTaoDen, java.util.Date ngayXuLyTu,
+			java.util.Date ngayXuLyDen)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<com.mb.model.PhatVay>
+			getPhatVayByCTV_Loai_Createdate_NgayXuLy(
+				String maCTV, int loai, java.util.Date ngayTaoTu,
+				java.util.Date ngayTaoDen, java.util.Date ngayXuLyTu,
+				java.util.Date ngayXuLyDen, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public java.util.List<com.mb.model.LichSuThuPhatChi>

@@ -79,7 +79,10 @@ public class LichSuThuPhatChiModelImpl
 		{"modifiedDate", Types.TIMESTAMP}, {"chiNhanhId", Types.BIGINT},
 		{"phatVayId", Types.BIGINT}, {"maCTV", Types.VARCHAR},
 		{"soTien", Types.DOUBLE}, {"tongSoTienVonTra", Types.DOUBLE},
-		{"tongSoTienLaiTra", Types.DOUBLE}, {"ngayXuLy", Types.TIMESTAMP},
+		{"tongSoTienLaiTra", Types.DOUBLE},
+		{"soLanThuDaThuTruoc", Types.INTEGER}, {"soLanThu", Types.INTEGER},
+		{"soLanThuDaThu", Types.INTEGER},
+		{"ngayDaThuCuoiTruoc", Types.TIMESTAMP}, {"ngayXuLy", Types.TIMESTAMP},
 		{"loai", Types.INTEGER}, {"trangThaiPhatVayHienTai", Types.INTEGER}
 	};
 
@@ -100,13 +103,17 @@ public class LichSuThuPhatChiModelImpl
 		TABLE_COLUMNS_MAP.put("soTien", Types.DOUBLE);
 		TABLE_COLUMNS_MAP.put("tongSoTienVonTra", Types.DOUBLE);
 		TABLE_COLUMNS_MAP.put("tongSoTienLaiTra", Types.DOUBLE);
+		TABLE_COLUMNS_MAP.put("soLanThuDaThuTruoc", Types.INTEGER);
+		TABLE_COLUMNS_MAP.put("soLanThu", Types.INTEGER);
+		TABLE_COLUMNS_MAP.put("soLanThuDaThu", Types.INTEGER);
+		TABLE_COLUMNS_MAP.put("ngayDaThuCuoiTruoc", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("ngayXuLy", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("loai", Types.INTEGER);
 		TABLE_COLUMNS_MAP.put("trangThaiPhatVayHienTai", Types.INTEGER);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table mb_lichsuthuphatchi (lichSuThuPhatChiId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,chiNhanhId LONG,phatVayId LONG,maCTV VARCHAR(75) null,soTien DOUBLE,tongSoTienVonTra DOUBLE,tongSoTienLaiTra DOUBLE,ngayXuLy DATE null,loai INTEGER,trangThaiPhatVayHienTai INTEGER)";
+		"create table mb_lichsuthuphatchi (lichSuThuPhatChiId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,chiNhanhId LONG,phatVayId LONG,maCTV VARCHAR(75) null,soTien DOUBLE,tongSoTienVonTra DOUBLE,tongSoTienLaiTra DOUBLE,soLanThuDaThuTruoc INTEGER,soLanThu INTEGER,soLanThuDaThu INTEGER,ngayDaThuCuoiTruoc DATE null,ngayXuLy DATE null,loai INTEGER,trangThaiPhatVayHienTai INTEGER)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table mb_lichsuthuphatchi";
@@ -172,6 +179,10 @@ public class LichSuThuPhatChiModelImpl
 		model.setSoTien(soapModel.getSoTien());
 		model.setTongSoTienVonTra(soapModel.getTongSoTienVonTra());
 		model.setTongSoTienLaiTra(soapModel.getTongSoTienLaiTra());
+		model.setSoLanThuDaThuTruoc(soapModel.getSoLanThuDaThuTruoc());
+		model.setSoLanThu(soapModel.getSoLanThu());
+		model.setSoLanThuDaThu(soapModel.getSoLanThuDaThu());
+		model.setNgayDaThuCuoiTruoc(soapModel.getNgayDaThuCuoiTruoc());
 		model.setNgayXuLy(soapModel.getNgayXuLy());
 		model.setLoai(soapModel.getLoai());
 		model.setTrangThaiPhatVayHienTai(
@@ -601,6 +612,98 @@ public class LichSuThuPhatChiModelImpl
 
 			});
 		attributeGetterFunctions.put(
+			"soLanThuDaThuTruoc",
+			new Function<LichSuThuPhatChi, Object>() {
+
+				@Override
+				public Object apply(LichSuThuPhatChi lichSuThuPhatChi) {
+					return lichSuThuPhatChi.getSoLanThuDaThuTruoc();
+				}
+
+			});
+		attributeSetterBiConsumers.put(
+			"soLanThuDaThuTruoc",
+			new BiConsumer<LichSuThuPhatChi, Object>() {
+
+				@Override
+				public void accept(
+					LichSuThuPhatChi lichSuThuPhatChi,
+					Object soLanThuDaThuTruoc) {
+
+					lichSuThuPhatChi.setSoLanThuDaThuTruoc(
+						(Integer)soLanThuDaThuTruoc);
+				}
+
+			});
+		attributeGetterFunctions.put(
+			"soLanThu",
+			new Function<LichSuThuPhatChi, Object>() {
+
+				@Override
+				public Object apply(LichSuThuPhatChi lichSuThuPhatChi) {
+					return lichSuThuPhatChi.getSoLanThu();
+				}
+
+			});
+		attributeSetterBiConsumers.put(
+			"soLanThu",
+			new BiConsumer<LichSuThuPhatChi, Object>() {
+
+				@Override
+				public void accept(
+					LichSuThuPhatChi lichSuThuPhatChi, Object soLanThu) {
+
+					lichSuThuPhatChi.setSoLanThu((Integer)soLanThu);
+				}
+
+			});
+		attributeGetterFunctions.put(
+			"soLanThuDaThu",
+			new Function<LichSuThuPhatChi, Object>() {
+
+				@Override
+				public Object apply(LichSuThuPhatChi lichSuThuPhatChi) {
+					return lichSuThuPhatChi.getSoLanThuDaThu();
+				}
+
+			});
+		attributeSetterBiConsumers.put(
+			"soLanThuDaThu",
+			new BiConsumer<LichSuThuPhatChi, Object>() {
+
+				@Override
+				public void accept(
+					LichSuThuPhatChi lichSuThuPhatChi, Object soLanThuDaThu) {
+
+					lichSuThuPhatChi.setSoLanThuDaThu((Integer)soLanThuDaThu);
+				}
+
+			});
+		attributeGetterFunctions.put(
+			"ngayDaThuCuoiTruoc",
+			new Function<LichSuThuPhatChi, Object>() {
+
+				@Override
+				public Object apply(LichSuThuPhatChi lichSuThuPhatChi) {
+					return lichSuThuPhatChi.getNgayDaThuCuoiTruoc();
+				}
+
+			});
+		attributeSetterBiConsumers.put(
+			"ngayDaThuCuoiTruoc",
+			new BiConsumer<LichSuThuPhatChi, Object>() {
+
+				@Override
+				public void accept(
+					LichSuThuPhatChi lichSuThuPhatChi,
+					Object ngayDaThuCuoiTruoc) {
+
+					lichSuThuPhatChi.setNgayDaThuCuoiTruoc(
+						(Date)ngayDaThuCuoiTruoc);
+				}
+
+			});
+		attributeGetterFunctions.put(
 			"ngayXuLy",
 			new Function<LichSuThuPhatChi, Object>() {
 
@@ -876,6 +979,50 @@ public class LichSuThuPhatChiModelImpl
 
 	@JSON
 	@Override
+	public int getSoLanThuDaThuTruoc() {
+		return _soLanThuDaThuTruoc;
+	}
+
+	@Override
+	public void setSoLanThuDaThuTruoc(int soLanThuDaThuTruoc) {
+		_soLanThuDaThuTruoc = soLanThuDaThuTruoc;
+	}
+
+	@JSON
+	@Override
+	public int getSoLanThu() {
+		return _soLanThu;
+	}
+
+	@Override
+	public void setSoLanThu(int soLanThu) {
+		_soLanThu = soLanThu;
+	}
+
+	@JSON
+	@Override
+	public int getSoLanThuDaThu() {
+		return _soLanThuDaThu;
+	}
+
+	@Override
+	public void setSoLanThuDaThu(int soLanThuDaThu) {
+		_soLanThuDaThu = soLanThuDaThu;
+	}
+
+	@JSON
+	@Override
+	public Date getNgayDaThuCuoiTruoc() {
+		return _ngayDaThuCuoiTruoc;
+	}
+
+	@Override
+	public void setNgayDaThuCuoiTruoc(Date ngayDaThuCuoiTruoc) {
+		_ngayDaThuCuoiTruoc = ngayDaThuCuoiTruoc;
+	}
+
+	@JSON
+	@Override
 	public Date getNgayXuLy() {
 		return _ngayXuLy;
 	}
@@ -964,6 +1111,10 @@ public class LichSuThuPhatChiModelImpl
 		lichSuThuPhatChiImpl.setSoTien(getSoTien());
 		lichSuThuPhatChiImpl.setTongSoTienVonTra(getTongSoTienVonTra());
 		lichSuThuPhatChiImpl.setTongSoTienLaiTra(getTongSoTienLaiTra());
+		lichSuThuPhatChiImpl.setSoLanThuDaThuTruoc(getSoLanThuDaThuTruoc());
+		lichSuThuPhatChiImpl.setSoLanThu(getSoLanThu());
+		lichSuThuPhatChiImpl.setSoLanThuDaThu(getSoLanThuDaThu());
+		lichSuThuPhatChiImpl.setNgayDaThuCuoiTruoc(getNgayDaThuCuoiTruoc());
 		lichSuThuPhatChiImpl.setNgayXuLy(getNgayXuLy());
 		lichSuThuPhatChiImpl.setLoai(getLoai());
 		lichSuThuPhatChiImpl.setTrangThaiPhatVayHienTai(
@@ -1115,6 +1266,22 @@ public class LichSuThuPhatChiModelImpl
 
 		lichSuThuPhatChiCacheModel.tongSoTienLaiTra = getTongSoTienLaiTra();
 
+		lichSuThuPhatChiCacheModel.soLanThuDaThuTruoc = getSoLanThuDaThuTruoc();
+
+		lichSuThuPhatChiCacheModel.soLanThu = getSoLanThu();
+
+		lichSuThuPhatChiCacheModel.soLanThuDaThu = getSoLanThuDaThu();
+
+		Date ngayDaThuCuoiTruoc = getNgayDaThuCuoiTruoc();
+
+		if (ngayDaThuCuoiTruoc != null) {
+			lichSuThuPhatChiCacheModel.ngayDaThuCuoiTruoc =
+				ngayDaThuCuoiTruoc.getTime();
+		}
+		else {
+			lichSuThuPhatChiCacheModel.ngayDaThuCuoiTruoc = Long.MIN_VALUE;
+		}
+
 		Date ngayXuLy = getNgayXuLy();
 
 		if (ngayXuLy != null) {
@@ -1218,6 +1385,10 @@ public class LichSuThuPhatChiModelImpl
 	private Double _soTien;
 	private Double _tongSoTienVonTra;
 	private Double _tongSoTienLaiTra;
+	private int _soLanThuDaThuTruoc;
+	private int _soLanThu;
+	private int _soLanThuDaThu;
+	private Date _ngayDaThuCuoiTruoc;
 	private Date _ngayXuLy;
 	private int _loai;
 	private int _originalLoai;

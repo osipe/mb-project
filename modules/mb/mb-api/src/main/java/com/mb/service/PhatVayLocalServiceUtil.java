@@ -94,6 +94,13 @@ public class PhatVayLocalServiceUtil {
 			ngayBatDauDen, ngayTatToanTu, ngayTatToanDen, trangThai);
 	}
 
+	public static int countCTV_NgayThuTien(
+		long chiNhanhId, String maCTV, java.util.Date ngayThuTien) {
+
+		return getService().countCTV_NgayThuTien(
+			chiNhanhId, maCTV, ngayThuTien);
+	}
+
 	/**
 	 * Creates a new phat vay with the primary key. Does not add the phat vay to the database.
 	 *
@@ -254,9 +261,9 @@ public class PhatVayLocalServiceUtil {
 	}
 
 	public static java.util.List<com.mb.model.PhatVay> findCTV_NgayThuTien(
-		String maCTV, java.util.Date ngayThuTien) {
+		long chiNhanhId, String maCTV, java.util.Date ngayThuTien) {
 
-		return getService().findCTV_NgayThuTien(maCTV, ngayThuTien);
+		return getService().findCTV_NgayThuTien(chiNhanhId, maCTV, ngayThuTien);
 	}
 
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery

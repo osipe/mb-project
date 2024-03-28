@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
 import com.mb.model.LichSuThuPhatChi;
+import com.mb.model.PhatVay;
 
 import java.io.Serializable;
 
@@ -91,6 +92,11 @@ public interface LichSuThuPhatChiLocalService
 	 */
 	@Transactional(enabled = false)
 	public LichSuThuPhatChi createLichSuThuPhatChi(long lichSuThuPhatChiId);
+
+	public void deleteByCTV_Loai_Createdate_NgayXuLy(
+			String maCTV, int loai, Date ngayTaoTu, Date ngayTaoDen,
+			Date ngayXuLyTu, Date ngayXuLyDen)
+		throws SystemException;
 
 	/**
 	 * Deletes the lich su thu phat chi from the database. Also notifies the appropriate model listeners.
@@ -265,6 +271,12 @@ public interface LichSuThuPhatChiLocalService
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<PhatVay> getPhatVayByCTV_Loai_Createdate_NgayXuLy(
+			String maCTV, int loai, Date ngayTaoTu, Date ngayTaoDen,
+			Date ngayXuLyTu, Date ngayXuLyDen, int start, int end)
+		throws SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Double getSoTienVay_CTV_TAINGAY(
 			long chiNhanhId, String maCTV, Date ngay)
 		throws SystemException;
@@ -277,6 +289,11 @@ public interface LichSuThuPhatChiLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Object[] getTongLichSuTraTien_CTV_TAINGAY(
 			long chiNhanhId, String maCTV, Date ngay, Date ngayXuLy, int loaiPV)
+		throws SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Object[] getTongLichSuTraTien_PhayVayId_ChiNhanhId_Loai(
+			long phatVayId, long chiNhanhId, int loai)
 		throws SystemException;
 
 	public void removeByPhatVayId(long phatVayId) throws SystemException;

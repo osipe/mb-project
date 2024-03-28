@@ -47,6 +47,10 @@ public class LichSuThuPhatChiSoap implements Serializable {
 		soapModel.setSoTien(model.getSoTien());
 		soapModel.setTongSoTienVonTra(model.getTongSoTienVonTra());
 		soapModel.setTongSoTienLaiTra(model.getTongSoTienLaiTra());
+		soapModel.setSoLanThuDaThuTruoc(model.getSoLanThuDaThuTruoc());
+		soapModel.setSoLanThu(model.getSoLanThu());
+		soapModel.setSoLanThuDaThu(model.getSoLanThuDaThu());
+		soapModel.setNgayDaThuCuoiTruoc(model.getNgayDaThuCuoiTruoc());
 		soapModel.setNgayXuLy(model.getNgayXuLy());
 		soapModel.setLoai(model.getLoai());
 		soapModel.setTrangThaiPhatVayHienTai(
@@ -216,6 +220,38 @@ public class LichSuThuPhatChiSoap implements Serializable {
 		_tongSoTienLaiTra = tongSoTienLaiTra;
 	}
 
+	public int getSoLanThuDaThuTruoc() {
+		return _soLanThuDaThuTruoc;
+	}
+
+	public void setSoLanThuDaThuTruoc(int soLanThuDaThuTruoc) {
+		_soLanThuDaThuTruoc = soLanThuDaThuTruoc;
+	}
+
+	public int getSoLanThu() {
+		return _soLanThu;
+	}
+
+	public void setSoLanThu(int soLanThu) {
+		_soLanThu = soLanThu;
+	}
+
+	public int getSoLanThuDaThu() {
+		return _soLanThuDaThu;
+	}
+
+	public void setSoLanThuDaThu(int soLanThuDaThu) {
+		_soLanThuDaThu = soLanThuDaThu;
+	}
+
+	public Date getNgayDaThuCuoiTruoc() {
+		return _ngayDaThuCuoiTruoc;
+	}
+
+	public void setNgayDaThuCuoiTruoc(Date ngayDaThuCuoiTruoc) {
+		_ngayDaThuCuoiTruoc = ngayDaThuCuoiTruoc;
+	}
+
 	public Date getNgayXuLy() {
 		return _ngayXuLy;
 	}
@@ -253,6 +289,10 @@ public class LichSuThuPhatChiSoap implements Serializable {
 	private Double _soTien;
 	private Double _tongSoTienVonTra;
 	private Double _tongSoTienLaiTra;
+	private int _soLanThuDaThuTruoc;
+	private int _soLanThu;
+	private int _soLanThuDaThu;
+	private Date _ngayDaThuCuoiTruoc;
 	private Date _ngayXuLy;
 	private int _loai;
 	private int _trangThaiPhatVayHienTai;

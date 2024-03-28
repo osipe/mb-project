@@ -50,6 +50,7 @@ import fr.opensagres.xdocreport.template.formatter.FieldsMetadata;
 import quanly.constants.QuanlyPortletKeys;
 import quanly.constants.TrangThaiPhatVayEnum;
 import quanly.dto.CongTacVienDTO;
+import quanly.portlet.danhmuc.cauhinhthutientruoc.CauHinhThuTienTruocComparator;
 import quanly.portlet.danhmuc.ctv.CongTacVienComparator;
 import quanly.util.DocSo;
 
@@ -93,6 +94,8 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 			kq = thuTienTruocURL(resourceRequest, resourceResponse, serviceContext);
 		} else if (resourceId.equals("printPhieuThuTienTruoc")) {
 			kq = printPhieuThuTienTruoc(resourceRequest, resourceResponse, serviceContext);
+		} else if (resourceId.equals("getDataCTV")) {
+			kq = getDataCTV(resourceRequest, resourceResponse, serviceContext);
 		}
 		PrintWriter writer = resourceResponse.getWriter();
 		writer.print(kq.toString());
@@ -100,7 +103,13 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 		writer.close();
 
 	}
-
+	private JSONObject getDataCTV(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
+			ServiceContext serviceContext) {
+		JSONObject result = JSONFactoryUtil.createJSONObject();
+		long chiNhanhIdSearch = ParamUtil.getLong(resourceRequest, "chiNhanhIdSearch");
+		result.put("ctvs", CongTacVienLocalServiceUtil.getCTVSaoKe(chiNhanhIdSearch, "", null));
+		return result;
+	}
 	private JSONObject getSoNgayPhaiThu(Date ngayThuTien, PhatVay pv) {
 		JSONObject result = JSONFactoryUtil.createJSONObject();
 
@@ -109,7 +118,7 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 		Calendar ngayKetThuc = Calendar.getInstance();
 		ngayKetThuc.setTime(pv.getNgayKetThuc());
 
-		List<CauHinhThuTienTruoc> cauHinhs = CauHinhThuTienTruocLocalServiceUtil.findAll();
+		List<CauHinhThuTienTruoc> cauHinhs = CauHinhThuTienTruocLocalServiceUtil.findBase(0, 1, -1, -1, new CauHinhThuTienTruocComparator("nam",false));
 
 		Calendar ngayThuTienCal = Calendar.getInstance();
 		ngayThuTienCal.setTime(ngayThuTien);
@@ -168,29 +177,45 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 
 		}
 
-		int soNgayPhaiThu = 0;
+		int soNgayThuTam = 0;
 
 		if (CalendarUtil.getLTDate(ngayThuTienCal).getTime() > CalendarUtil.getGTDate(ngayBatDau).getTime()) {
 			if (CalendarUtil.getLTDate(ngayThuTienCal).getTime() <= CalendarUtil.getLTDate(ngayKetThuc).getTime()) {
-				soNgayPhaiThu = (int) ((CalendarUtil.getLTDate(ngayThuTienCal).getTime()
+				soNgayThuTam = (int) ((CalendarUtil.getLTDate(ngayThuTienCal).getTime()
 						- CalendarUtil.getGTDate(ngayBatDau).getTime()) / time1Ngay);
 			} else {
-				soNgayPhaiThu = (int) ((CalendarUtil.getLTDate(ngayKetThuc).getTime()
+				soNgayThuTam = (int) ((CalendarUtil.getLTDate(ngayKetThuc).getTime()
 						- CalendarUtil.getGTDate(ngayBatDau).getTime()) / time1Ngay);
 			}
 		} else {
-			soNgayPhaiThu = 0;
+			soNgayThuTam = 0;
 		}
-		if (soNgayPhaiThu > soNgayKhongThu) {
-			result.put("soNgayThu", soNgayPhaiThu - soNgayKhongThu);
+		if (soNgayThuTam > soNgayKhongThu) {
+			soNgayThuTam = soNgayThuTam - soNgayKhongThu;
 		} else {
-			result.put("soNgayThu", 0);
+			soNgayThuTam = 0;
 		}
-		int tongSoNgayDaThu = soNgayPhaiThu - soNgayKhongThu + pv.getSoNgayThuTruoc();
-
+		Object[] lsTraTien = LichSuThuPhatChiLocalServiceUtil
+				.getTongLichSuTraTien_PhayVayId_ChiNhanhId_Loai(pv.getPhatVayId(), 0, 3);
+		Object[] lsTraTienTraTienTruoc = LichSuThuPhatChiLocalServiceUtil
+				.getTongLichSuTraTien_PhayVayId_ChiNhanhId_Loai(pv.getPhatVayId(), 0, 4);
+		Double tongVonDaThu = GetterUtil.getDouble(lsTraTien[2]);
+		int soNgayDaThu = GetterUtil.getInteger(tongVonDaThu / pv.getGocNgay());
+		Double tongVonDaThuTruoc = GetterUtil.getDouble(lsTraTienTraTienTruoc[2]);
+		int soNgayDaThuTruoc = GetterUtil.getInteger(tongVonDaThuTruoc / pv.getGocNgay());
+		int soNgayThu = soNgayThuTam > soNgayDaThu ? (soNgayThuTam - soNgayDaThu) : 0;
+		result.put("soNgayThuTam", soNgayThuTam);
+		result.put("soNgayThu", soNgayThu);
+		result.put("soNgayDaThu", soNgayDaThu);
+		Double vonTra = soNgayThu * pv.getGocNgay();
+		Double laiTra = soNgayThu * pv.getLaiNgay();
+		int tongSoNgayDaThu = soNgayThuTam + soNgayDaThuTruoc;
 		if (tongSoNgayDaThu == pv.getThoiHan()) {
 			result.put("daThanhToan", true);
+			vonTra = pv.getSoTienVay() - (tongVonDaThu + tongVonDaThuTruoc);
 		}
+		result.put("vonTra", vonTra);
+		result.put("laiTra", laiTra);
 		return result;
 	}
 
@@ -200,45 +225,33 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 		long ngayThuTienTime = ParamUtil.getLong(resourceRequest, "ngayThuTien");
 		Date ngayThuTien = ngayThuTienTime != 0 ? new Date(ngayThuTienTime) : null;
 		String maCTVSearch = ParamUtil.getString(resourceRequest, "maCTVSearch");
+		long chiNhanhIdSearch = ParamUtil.getLong(resourceRequest, "chiNhanhIdSearch");
 		if (Validator.isNotNull(ngayThuTien)) {
 			try {
 				List<CongTacVien> items = CongTacVienLocalServiceUtil.findBase(maCTVSearch, "", "", "", 1, -1, -1,
 						null);
 				for (CongTacVien item : items) {
-					List<PhatVay> phatVays = PhatVayLocalServiceUtil.findCTV_NgayThuTien(item.getMa(), ngayThuTien);
-					Double tongVonTra = GetterUtil.getDouble("0");
-					Double tongLaiTra = GetterUtil.getDouble("0");
+					List<PhatVay> phatVays = PhatVayLocalServiceUtil.findCTV_NgayThuTien(chiNhanhIdSearch,item.getMa(), ngayThuTien);
 					if (CollectionUtils.isNotEmpty(phatVays)) {
 						for (PhatVay pv : phatVays) {
-							Double vonTra = GetterUtil.getDouble("0");
-							Double laiTra = GetterUtil.getDouble("0");
-
 							JSONObject thongTinThanhToan = getSoNgayPhaiThu(ngayThuTien, pv);
+							Double vonTra = thongTinThanhToan.getDouble("vonTra");
+							Double laiTra = thongTinThanhToan.getDouble("laiTra");
 							if (thongTinThanhToan.getBoolean("daThanhToan")) {
 								pv.setTrangThai(TrangThaiPhatVayEnum.DA_THANH_TOAN.getValue());
-								vonTra = pv.getSoTienVay()
-										- ((pv.getSoLanDaThu() + pv.getSoNgayThuTruoc()) * pv.getGocNgay());
-							} else {
-								vonTra = ((thongTinThanhToan.getInt("soNgayThu") - pv.getSoLanDaThu())
-										* pv.getGocNgay());
 							}
-
-							laiTra = ((thongTinThanhToan.getInt("soNgayThu") - pv.getSoLanDaThu()) * pv.getLaiNgay());
 							Calendar calNgayThuTien = Calendar.getInstance();
 							calNgayThuTien.setTime(ngayThuTien);
 							Calendar calKetThuc = Calendar.getInstance();
 							calKetThuc.setTime(pv.getNgayKetThuc());
+							Date ngayDaThuCuoiTruoc = pv.getNgayDaThuCuoi();
 							if (CalendarUtil.getLTDate(calNgayThuTien).getTime() >= CalendarUtil.getLTDate(calKetThuc)
 									.getTime()) {
 								pv.setNgayDaThuCuoi(CalendarUtil.getLTDate(calKetThuc));
 							} else {
 								pv.setNgayDaThuCuoi(CalendarUtil.getLTDate(calNgayThuTien));
 							}
-
-							pv.setSoLanDaThu(thongTinThanhToan.getInt("soNgayThu"));
-							tongVonTra += vonTra;
-							tongLaiTra += laiTra;
-
+							pv.setSoLanDaThu(thongTinThanhToan.getInt("soNgayThuTam"));
 							PhatVayLocalServiceUtil.addOrUpdatePhatVay(pv, serviceContext);
 							LichSuThuPhatChi lichSuThuPhatChi = LichSuThuPhatChiLocalServiceUtil
 									.createLichSuThuPhatChi(0L);
@@ -246,6 +259,10 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 							lichSuThuPhatChi.setPhatVayId(pv.getPhatVayId());
 							lichSuThuPhatChi.setChiNhanhId(pv.getChiNhanhId());
 							lichSuThuPhatChi.setLoai(3);
+							lichSuThuPhatChi.setSoLanThu(thongTinThanhToan.getInt("soNgayThu"));
+							lichSuThuPhatChi.setSoLanThuDaThuTruoc(thongTinThanhToan.getInt("soNgayDaThu"));
+							lichSuThuPhatChi.setSoLanThuDaThu(thongTinThanhToan.getInt("soNgayThuTam"));
+							lichSuThuPhatChi.setNgayDaThuCuoiTruoc(ngayDaThuCuoiTruoc);
 							lichSuThuPhatChi.setSoTien(vonTra + laiTra);
 							lichSuThuPhatChi.setTongSoTienLaiTra(laiTra);
 							lichSuThuPhatChi.setTongSoTienVonTra(vonTra);
@@ -269,6 +286,7 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 		long ngayThuTienTime = ParamUtil.getLong(resourceRequest, "ngayThuTien");
 		Date ngayThuTien = ngayThuTienTime != 0 ? new Date(ngayThuTienTime) : null;
 		String maCTVSearch = ParamUtil.getString(resourceRequest, "maCTVSearch");
+		long chiNhanhIdSearch = ParamUtil.getLong(resourceRequest, "chiNhanhIdSearch");
 		InputStream in = null;
 		OutputStream outStream = resourceResponse.getPortletOutputStream();
 		if (Validator.isNotNull(ngayThuTien)) {
@@ -280,31 +298,20 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 				List<CongTacVien> items = CongTacVienLocalServiceUtil.findBase(maCTVSearch, "", "", "", 1, -1, -1, obc);
 				List<CongTacVienDTO> congTacVienDTOs = new ArrayList<CongTacVienDTO>();
 				for (CongTacVien item : items) {
-					List<PhatVay> phatVays = PhatVayLocalServiceUtil.findCTV_NgayThuTien(item.getMa(), ngayThuTien);
+					List<PhatVay> phatVays = PhatVayLocalServiceUtil.findCTV_NgayThuTien(chiNhanhIdSearch,item.getMa(), ngayThuTien);
 					if (CollectionUtils.isNotEmpty(phatVays)) {
 						Double tongVonTra = GetterUtil.getDouble("0");
 						Double tongLaiTra = GetterUtil.getDouble("0");
 						Double tongduNoGoc = GetterUtil.getDouble("0");
 
 						for (PhatVay pv : phatVays) {
-							Double vonTra = GetterUtil.getDouble("0");
-							Double laiTra = GetterUtil.getDouble("0");
 							JSONObject thongTinThanhToan = getSoNgayPhaiThu(ngayThuTien, pv);
-							int soLanThuDotHienTai = thongTinThanhToan.getInt("soNgayThu") - pv.getSoLanDaThu();
-							if (thongTinThanhToan.getBoolean("daThanhToan")) {
-								vonTra = pv.getSoTienVay()
-										- ((pv.getSoLanDaThu() + pv.getSoNgayThuTruoc()) * pv.getGocNgay());
-							} else {
-								vonTra = soLanThuDotHienTai * pv.getGocNgay();
-							}
-							laiTra = soLanThuDotHienTai * pv.getLaiNgay();
-
+							Double vonTra = thongTinThanhToan.getDouble("vonTra");
+							Double laiTra = thongTinThanhToan.getDouble("laiTra");
 							tongVonTra += vonTra;
 							tongLaiTra += laiTra;
 							tongduNoGoc += (pv.getDuNoGoc() - vonTra);
-
 						}
-
 						congTacVienDTOs.add(new CongTacVienDTO(
 								item.getMa() + "/" + new SimpleDateFormat("ddMMyyyy").format(ngayThuTien), item.getMa(),
 								item.getHoTen(), item.getDiaChi(), df.format(tongVonTra).replaceAll(",", "."),
@@ -484,10 +491,10 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 					Double tongVonTra = GetterUtil.getDouble("0");
 					Double tongLaiTra = GetterUtil.getDouble("0");
 					String ngayThuTienTruoc = sdf.format(ngayThuTienTu) + " - " + sdf.format(ngayThuTienDen);
-					Object[] sums = LichSuThuPhatChiLocalServiceUtil.getTongLichSuTraTien_CTV_TAINGAY(chiNhanhId,maCTVSearch,
-							new Date(), null, 0);
-					Double tongSoTienvay = LichSuThuPhatChiLocalServiceUtil.getSoTienVay_CTV_TAINGAY(chiNhanhId, maCTVSearch,
-							new Date());
+					Object[] sums = LichSuThuPhatChiLocalServiceUtil.getTongLichSuTraTien_CTV_TAINGAY(chiNhanhId,
+							maCTVSearch, new Date(), null, 0);
+					Double tongSoTienvay = LichSuThuPhatChiLocalServiceUtil.getSoTienVay_CTV_TAINGAY(chiNhanhId,
+							maCTVSearch, new Date());
 
 					Double tongduNoGoc = tongSoTienvay - GetterUtil.getDouble(sums[2]);
 
@@ -544,7 +551,6 @@ public class ThuTienHangNgayPortlet extends MVCPortlet {
 									} else {
 										vonTra = soNgayThuTet * pv.getGocNgay();
 									}
-									System.out.println(pv.getSoKU() + " : " + soNgayThuTet + " : " + vonTra);
 									laiTra = soNgayThuTet * pv.getLaiNgay();
 									tongVonTra += vonTra;
 									tongLaiTra += laiTra;

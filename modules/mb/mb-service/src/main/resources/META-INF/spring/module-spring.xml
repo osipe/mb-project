@@ -65,6 +65,7 @@
 	<bean class="com.mb.service.impl.SoKheUocLocalServiceImpl" id="com.mb.service.SoKheUocLocalService" />
 	<bean class="com.mb.service.impl.SoKheUocServiceImpl" id="com.mb.service.SoKheUocService" />
 	<bean class="com.mb.service.persistence.impl.SoKheUocPersistenceImpl" id="com.mb.service.persistence.SoKheUocPersistence" parent="basePersistence" />
+	<bean class="com.mb.service.persistence.impl.SoKheUocFinderImpl" id="com.mb.service.persistence.SoKheUocFinder" parent="basePersistence" />
 	<bean class="com.mb.service.impl.TaiKhoanDoiUngLocalServiceImpl" id="com.mb.service.TaiKhoanDoiUngLocalService" />
 	<bean class="com.mb.service.impl.TaiKhoanDoiUngServiceImpl" id="com.mb.service.TaiKhoanDoiUngService" />
 	<bean class="com.mb.service.persistence.impl.TaiKhoanDoiUngPersistenceImpl" id="com.mb.service.persistence.TaiKhoanDoiUngPersistence" parent="basePersistence" />

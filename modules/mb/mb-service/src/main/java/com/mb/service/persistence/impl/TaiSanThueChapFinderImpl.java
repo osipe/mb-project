@@ -53,7 +53,7 @@ public class TaiSanThueChapFinderImpl extends TaiSanThueChapFinderBaseImpl imple
 	public static final String COUNT_BASE = TaiSanThueChapFinder.class.getName() + ".countBase";
 
 	@SuppressWarnings("unchecked")
-	public List<TaiSanThueChap> findBase(String soKU, String ten, String maKhachHang, long loaiTaiSanId,
+	public List<TaiSanThueChap> findBase(String soKU, String ten, String maKhachHang, long loaiTaiSanId,String thongTinTaiSan,
 			int start, int end, OrderByComparator obc) throws SystemException {
 		Session session = null;
 		try {
@@ -71,6 +71,9 @@ public class TaiSanThueChapFinderImpl extends TaiSanThueChapFinderBaseImpl imple
 			if (Validator.isNull(ten)) {
 				sql = sql.replace("AND (lower(ten) like ?)", "");
 			}
+			if (Validator.isNull(thongTinTaiSan)) {
+				sql = sql.replace("AND (lower(thongTinTaiSan) like ?)", "");
+			}
 			sql = _customSQL.replaceOrderBy(sql, obc);
 			SQLQuery q = session.createSQLQuery(sql);
 			q.addEntity("TaiSanThueChap", TaiSanThueChapImpl.class);
@@ -87,6 +90,9 @@ public class TaiSanThueChapFinderImpl extends TaiSanThueChapFinderBaseImpl imple
 			if (Validator.isNotNull(ten)) {
 				qPos.add("%" + ten.toLowerCase() + "%");
 			}
+			if (Validator.isNotNull(thongTinTaiSan)) {
+				qPos.add("%" + thongTinTaiSan.toLowerCase() + "%");
+			}
 			return (List<TaiSanThueChap>) QueryUtil.list(q, getDialect(), start, end);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -96,7 +102,7 @@ public class TaiSanThueChapFinderImpl extends TaiSanThueChapFinderBaseImpl imple
 		}
 	}
 
-	public int countBase(String soKU, String ten, String maKhachHang, long loaiTaiSanId)
+	public int countBase(String soKU, String ten, String maKhachHang, long loaiTaiSanId,String thongTinTaiSan)
 			throws SystemException {
 		Session session = null;
 		try {
@@ -114,6 +120,9 @@ public class TaiSanThueChapFinderImpl extends TaiSanThueChapFinderBaseImpl imple
 			if (Validator.isNull(ten)) {
 				sql = sql.replace("AND (lower(ten) like ?)", "");
 			}
+			if (Validator.isNull(thongTinTaiSan)) {
+				sql = sql.replace("AND (lower(thongTinTaiSan) like ?)", "");
+			}
 			SQLQuery q = session.createSQLQuery(sql);
 			q.addScalar("COUNT_VALUE", Type.LONG);
 			QueryPos qPos = QueryPos.getInstance(q);
@@ -129,7 +138,9 @@ public class TaiSanThueChapFinderImpl extends TaiSanThueChapFinderBaseImpl imple
 			if (Validator.isNotNull(ten)) {
 				qPos.add("%" + ten.toLowerCase() + "%");
 			}
-
+			if (Validator.isNotNull(thongTinTaiSan)) {
+				qPos.add("%" + thongTinTaiSan.toLowerCase() + "%");
+			}
 			@SuppressWarnings("unchecked")
 			Iterator<Long> iter = q.list().iterator();
 			if (iter.hasNext()) {

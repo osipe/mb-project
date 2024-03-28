@@ -1,3 +1,8 @@
+--18.12.2021
+ALTER TABLE public.mb_lichsuthuphatchi ADD COLUMN soLanThuDaThuTruoc integer default 0;
+ALTER TABLE public.mb_lichsuthuphatchi ADD COLUMN soLanThu integer default 0;
+ALTER TABLE public.mb_lichsuthuphatchi ADD COLUMN soLanThuDaThu integer default 0;
+ALTER TABLE public.mb_lichsuthuphatchi ADD COLUMN ngayDaThuCuoiTruoc timestamp without time zone;
 
 --10.01.2021
 create table dm_chinhanh (

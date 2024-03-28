@@ -17,6 +17,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 	String maCTV = ParamUtil.getString(request, "maCTV");
+	int loai  = ParamUtil.getInteger(request, "loai");
 	long ngayXuLyTime  = ParamUtil.getLong(request, "ngayXuLyTime");
 	long ngayBatDauTuTime  = ParamUtil.getLong(request, "ngayBatDauTu");
 	Date ngayBatDauTu =ngayBatDauTuTime != 0 ? new Date(ngayBatDauTuTime) : null;

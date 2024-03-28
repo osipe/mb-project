@@ -61,6 +61,12 @@ public class SoKheUocLocalServiceUtil {
 		return getService().addSoKheUoc(soKheUoc, serviceContext);
 	}
 
+	public static int countBase(String cauTruc)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return getService().countBase(cauTruc);
+	}
+
 	/**
 	 * Creates a new so khe uoc with the primary key. Does not add the so khe uoc to the database.
 	 *
@@ -201,6 +207,14 @@ public class SoKheUocLocalServiceUtil {
 
 	public static com.mb.model.SoKheUoc fetchSoKheUoc(long soKheUocId) {
 		return getService().fetchSoKheUoc(soKheUocId);
+	}
+
+	public static java.util.List<com.mb.model.SoKheUoc> findBase(
+			String cauTruc, int start, int end,
+			com.liferay.portal.kernel.util.OrderByComparator obc)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return getService().findBase(cauTruc, start, end, obc);
 	}
 
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery

@@ -33,7 +33,9 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.spring.extender.service.ServiceReference;
 import com.mb.model.LichSuThuPhatChi;
+import com.mb.model.PhatVay;
 import com.mb.model.impl.LichSuThuPhatChiImpl;
+import com.mb.model.impl.PhatVayImpl;
 import com.mb.service.persistence.LichSuThuPhatChiFinder;
 
 /**
@@ -70,13 +72,66 @@ public class LichSuThuPhatChiFinderImpl extends LichSuThuPhatChiFinderBaseImpl i
 			+ ".getSoTienVay_CTV_TAINGAY";
 	public static final String GET_SUM_PHATVAY_CTV_TAINGAY = LichSuThuPhatChiFinder.class.getName()
 			+ ".getSumPhatVay_CTV_TAINGAY";
+	public static final String GET_TONG_LICH_SU_TRA_TIEN_PVID_CHINHANHID_LOAI = LichSuThuPhatChiFinder.class.getName()
+			+ ".getTongLichSuTraTien_PhayVayId_ChiNhanhId_Loai";
+	public static final String GET_PHAT_VAY_BY_CTV_CREATEADATE_NGAYXULY = LichSuThuPhatChiFinder.class.getName()
+			+ ".getPhatVayByCTV_Loai_Createdate_NgayXuLy";
+	public static final String DELETE_BY_CTV_CREATEADATE_NGAYXULY = LichSuThuPhatChiFinder.class.getName()
+			+ ".deleteByCTV_Loai_Createdate_NgayXuLy";
+	
 
-	public Object[] getSumPhatVay_CTV_TAINGAY(long chiNhanhId, String maCTV, Date ngay, int loaiPV) throws SystemException {
+	public Object[] getTongLichSuTraTien_PhayVayId_ChiNhanhId_Loai(long phatVayId, long chiNhanhId, int loai)
+			throws SystemException {
+		Session session = null;
+		try {
+			session = openSession();
+			String sql = _customSQL.get(getClass(), GET_TONG_LICH_SU_TRA_TIEN_PVID_CHINHANHID_LOAI);
+			if (loai <= 0) {
+				sql = sql.replace("AND loai = ?", "");
+			}
+			if (phatVayId <= 0) {
+				sql = sql.replace("AND phatvayid = ?", "");
+			}
+			if (chiNhanhId <= 0) {
+				sql = sql.replace("AND chinhanhid = ?", "");
+			}
+			SQLQuery q = session.createSQLQuery(sql);
+			q.addScalar("tongtien", Type.DOUBLE); // 0
+			q.addScalar("laitra", Type.DOUBLE); // 1
+			q.addScalar("vontra", Type.DOUBLE); // 2
+			QueryPos qPos = QueryPos.getInstance(q);
+			if (loai > 0) {
+				qPos.add(loai);
+			}
+			if (phatVayId > 0) {
+				qPos.add(phatVayId);
+			}
+			if (chiNhanhId > 0) {
+				qPos.add(chiNhanhId);
+			}
+			@SuppressWarnings("unchecked")
+			Iterator<Object[]> iter = q.list().iterator();
+			if (iter.hasNext()) {
+				Object[] result = iter.next();
+				if (result != null) {
+					return result;
+				}
+			}
+			return null;
+		} catch (Exception e) {
+			throw new SystemException(e);
+		} finally {
+			closeSession(session);
+		}
+	}
+
+	public Object[] getSumPhatVay_CTV_TAINGAY(long chiNhanhId, String maCTV, Date ngay, int loaiPV)
+			throws SystemException {
 		Session session = null;
 		try {
 			session = openSession();
 			String sql = _customSQL.get(getClass(), GET_SUM_PHATVAY_CTV_TAINGAY);
-			if(chiNhanhId <= 0 ) {
+			if (chiNhanhId <= 0) {
 				sql = sql.replace("AND chinhanhid = ?", "");
 			}
 			if (Validator.isNull(maCTV)) {
@@ -93,7 +148,7 @@ public class LichSuThuPhatChiFinderImpl extends LichSuThuPhatChiFinderBaseImpl i
 			q.addScalar("gocngay", Type.DOUBLE); // 1
 			q.addScalar("laingay", Type.DOUBLE); // 2
 			QueryPos qPos = QueryPos.getInstance(q);
-			if(chiNhanhId > 0 ) {
+			if (chiNhanhId > 0) {
 				qPos.add(chiNhanhId);
 			}
 			if (Validator.isNotNull(maCTV)) {
@@ -123,8 +178,8 @@ public class LichSuThuPhatChiFinderImpl extends LichSuThuPhatChiFinderBaseImpl i
 		}
 	}
 
-	public Object[] getTongLichSuTraTien_CTV_TAINGAY(long chiNhanhId, String maCTV, Date ngay, Date ngayXuLy, int loaiPV)
-			throws SystemException {
+	public Object[] getTongLichSuTraTien_CTV_TAINGAY(long chiNhanhId, String maCTV, Date ngay, Date ngayXuLy,
+			int loaiPV) throws SystemException {
 		Session session = null;
 		try {
 			session = openSession();
@@ -190,7 +245,7 @@ public class LichSuThuPhatChiFinderImpl extends LichSuThuPhatChiFinderBaseImpl i
 		}
 	}
 
-	public Double getSoTienVay_CTV_TAINGAY(long chiNhanhId,String maCTV, Date ngay) throws SystemException {
+	public Double getSoTienVay_CTV_TAINGAY(long chiNhanhId, String maCTV, Date ngay) throws SystemException {
 		Session session = null;
 		try {
 			session = openSession();
@@ -228,6 +283,129 @@ public class LichSuThuPhatChiFinderImpl extends LichSuThuPhatChiFinderBaseImpl i
 			}
 			return 0.0;
 		} catch (Exception e) {
+			throw new SystemException(e);
+		} finally {
+			closeSession(session);
+		}
+	}
+	@SuppressWarnings("unchecked")
+	public void deleteByCTV_Loai_Createdate_NgayXuLy(String maCTV, int loai, Date ngayTaoTu,
+			Date ngayTaoDen, Date ngayXuLyTu, Date ngayXuLyDen) throws SystemException {
+		Session session = null;
+		try {
+			session = openSession();
+			String sql = _customSQL.get(getClass(), DELETE_BY_CTV_CREATEADATE_NGAYXULY);
+			if (Validator.isNull(maCTV)) {
+				sql = sql.replace("AND (ls.maCTV = ?)", "");
+			}
+			if (loai == 0) {
+				sql = sql.replace("AND (ls.loai = ?)", "");
+			}
+			if (ngayTaoDen == null) {
+				sql = sql.replace("AND (ls.createDate <= ?)", "");
+			}
+			if (ngayTaoTu == null) {
+				sql = sql.replace("AND (ls.createDate >= ?)", "");
+			}
+			if (ngayXuLyDen == null) {
+				sql = sql.replace("AND (ls.ngayXuLy <= ?)", "");
+			}
+			if (ngayXuLyTu == null) {
+				sql = sql.replace("AND (ls.ngayXuLy >= ?)", "");
+			}
+			SQLQuery q = session.createSQLQuery(sql);
+			QueryPos qPos = QueryPos.getInstance(q);
+			if (Validator.isNotNull(maCTV)) {
+				qPos.add(maCTV);
+			}
+			if (loai > 0) {
+				qPos.add(loai);
+			}
+			if (Validator.isNotNull(ngayTaoDen)) {
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(ngayTaoDen);
+				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getLTDate(cal)));
+			}
+			if (Validator.isNotNull(ngayTaoTu)) {
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(ngayTaoTu);
+				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getGTDate(cal)));
+			}
+			if (Validator.isNotNull(ngayXuLyDen)) {
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(ngayXuLyDen);
+				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getLTDate(cal)));
+			}
+			if (Validator.isNotNull(ngayXuLyTu)) {
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(ngayXuLyTu);
+				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getGTDate(cal)));
+			}
+			q.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SystemException(e);
+		} finally {
+			closeSession(session);
+		}
+	}
+	@SuppressWarnings("unchecked")
+	public List<PhatVay> getPhatVayByCTV_Loai_Createdate_NgayXuLy(String maCTV, int loai, Date ngayTaoTu,
+			Date ngayTaoDen, Date ngayXuLyTu, Date ngayXuLyDen, int start, int end) throws SystemException {
+		Session session = null;
+		try {
+			session = openSession();
+			String sql = _customSQL.get(getClass(), GET_PHAT_VAY_BY_CTV_CREATEADATE_NGAYXULY);
+			if (Validator.isNull(maCTV)) {
+				sql = sql.replace("AND (ls.maCTV = ?)", "");
+			}
+			if (loai == 0) {
+				sql = sql.replace("AND (ls.loai = ?)", "");
+			}
+			if (ngayTaoDen == null) {
+				sql = sql.replace("AND (ls.createDate <= ?)", "");
+			}
+			if (ngayTaoTu == null) {
+				sql = sql.replace("AND (ls.createDate >= ?)", "");
+			}
+			if (ngayXuLyDen == null) {
+				sql = sql.replace("AND (ls.ngayXuLy <= ?)", "");
+			}
+			if (ngayXuLyTu == null) {
+				sql = sql.replace("AND (ls.ngayXuLy >= ?)", "");
+			}
+			SQLQuery q = session.createSQLQuery(sql);
+			q.addEntity("PhatVay", PhatVayImpl.class);
+			QueryPos qPos = QueryPos.getInstance(q);
+			if (Validator.isNotNull(maCTV)) {
+				qPos.add(maCTV);
+			}
+			if (loai > 0) {
+				qPos.add(loai);
+			}
+			if (Validator.isNotNull(ngayTaoDen)) {
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(ngayTaoDen);
+				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getLTDate(cal)));
+			}
+			if (Validator.isNotNull(ngayTaoTu)) {
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(ngayTaoTu);
+				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getGTDate(cal)));
+			}
+			if (Validator.isNotNull(ngayXuLyDen)) {
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(ngayXuLyDen);
+				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getLTDate(cal)));
+			}
+			if (Validator.isNotNull(ngayXuLyTu)) {
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(ngayXuLyTu);
+				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getGTDate(cal)));
+			}
+			return (List<PhatVay>) QueryUtil.list(q, getDialect(), start, end);
+		} catch (Exception e) {
+			e.printStackTrace();
 			throw new SystemException(e);
 		} finally {
 			closeSession(session);
@@ -341,8 +519,8 @@ public class LichSuThuPhatChiFinderImpl extends LichSuThuPhatChiFinderBaseImpl i
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<LichSuThuPhatChi> findByPhatVay_Createdate_Loai(long chiNhanhId, long phatVayId, Date ngayTaoTu, Date ngayTaoDen,
-			String loai) throws SystemException {
+	public List<LichSuThuPhatChi> findByPhatVay_Createdate_Loai(long chiNhanhId, long phatVayId, Date ngayTaoTu,
+			Date ngayTaoDen, String loai) throws SystemException {
 		Session session = null;
 		try {
 			session = openSession();

@@ -6,17 +6,34 @@
 				SELECT  ketoan_lichsutaikhoandauky.*
 				FROM ketoan_lichsutaikhoandauky
 				WHERE TRUE
-				AND (nam <= ?)
+				AND (nam = ?)
 				AND (thang = ?)
 				AND (taiKhoanDoiUngId = ?)
 			]]>
 	</sql>
+	<sql id="com.mb.service.persistence.LichSuTaiKhoanDauKyFinder.sumByNamThang">
+			<![CDATA[
+				SELECT SUM(sotienton) sotienton,
+				SUM(sotienthu) sotienthu,
+				SUM(sotienchi) sotienchi
+				FROM ketoan_lichsutaikhoandauky ls LEFT JOIN dm_taikhoandoiung dm ON  ls.taikhoandoiungid = dm.taikhoandoiungid
+				WHERE TRUE
+				AND (dm.hoatdong = true)
+				AND (dm.loaitaikhoan = ?)
+				AND (dm.taiKhoanDoiUngChaId = 0 OR dm.taiKhoanDoiUngChaId IS NULL OR dm.taiKhoanDoiUngChaId = ?)
+				AND (ls.nam = ?)
+				AND (ls.thang = ?)
+			]]>
+	</sql>	
+	
+	
+	select  from ketoan_lichsutaikhoandauky where nam = 2021 and thang = 12 and taikhoandoiungid in ( select taikhoandoiungid from dm_taikhoandoiung where loaitaikhoan = 2 )
 	<sql id="com.mb.service.persistence.LichSuTaiKhoanDauKyFinder.countBase">
 			<![CDATA[
 				SELECT  COUNT(1) AS COUNT_VALUE
 				FROM ketoan_lichsutaikhoandauky
 				WHERE TRUE
-				AND (nam <= ?)
+				AND (nam = ?)
 				AND (thang = ?)
 				AND (taiKhoanDoiUngId = ?)
 			]]>
@@ -28,7 +45,7 @@
 				WHERE TRUE
 				AND (ds.hoatdong = ?)
 				AND (ds.maCTV = ?)
-				AND (ds.taiKhoanDoiUngId IN (SELECT taiKhoanDoiUngId FROM dm_taikhoandoiung WHERE taiKhoanDoiUngChaId = ? OR taiKhoanDoiUngId = ?))
+				AND (ds.taiKhoanDoiUngId IN (SELECT taiKhoanDoiUngId FROM dm_taikhoandoiung WHERE hoatdong = true AND taiKhoanDoiUngChaId = ? OR taiKhoanDoiUngId = ?))
 				AND (ds.ngayChungTu >= ?)
 				AND (ds.ngayChungTu <= ?)
 			  	ORDER BY ds.ngaychungtu,CAST(ds.sophieu AS bigint) ASC   

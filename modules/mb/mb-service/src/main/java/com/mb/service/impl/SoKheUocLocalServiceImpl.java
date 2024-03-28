@@ -14,10 +14,19 @@
 
 package com.mb.service.impl;
 
+import java.util.List;
+
+import com.liferay.portal.kernel.dao.orm.QueryPos;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.dao.orm.SQLQuery;
+import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.Validator;
 import com.mb.model.SoKheUoc;
+import com.mb.model.impl.SoKheUocImpl;
 import com.mb.service.base.SoKheUocLocalServiceBaseImpl;
 
 /**
@@ -38,7 +47,7 @@ import com.mb.service.base.SoKheUocLocalServiceBaseImpl;
  * @see SoKheUocLocalServiceBaseImpl
  */
 public class SoKheUocLocalServiceImpl extends SoKheUocLocalServiceBaseImpl {
-	public SoKheUoc tangSoKheUoc(String cauTruc,ServiceContext serviceContext) throws SystemException {
+	public SoKheUoc tangSoKheUoc(String cauTruc, ServiceContext serviceContext) throws SystemException {
 		SoKheUoc soKheUoc = null;
 		try {
 			soKheUoc = fetchByCauTruc(cauTruc);
@@ -68,4 +77,13 @@ public class SoKheUocLocalServiceImpl extends SoKheUocLocalServiceBaseImpl {
 	public SoKheUoc fetchByCauTruc(String cauTruc) throws SystemException, PortalException {
 		return soKheUocPersistence.fetchByCauTruc(cauTruc);
 	}
+
+	public List<SoKheUoc> findBase(String cauTruc, int start, int end, OrderByComparator obc) throws SystemException {
+		return soKheUocFinder.findBase(cauTruc, start, end, obc);
+	}
+
+	public int countBase(String cauTruc) throws SystemException {
+		return soKheUocFinder.countBase(cauTruc);
+	}
+
 }

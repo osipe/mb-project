@@ -210,6 +210,192 @@ public class LichSuTaiKhoanDauKyUtil {
 	}
 
 	/**
+	 * Returns all the lich su tai khoan dau kies where nam = &#63; and thang = &#63;.
+	 *
+	 * @param nam the nam
+	 * @param thang the thang
+	 * @return the matching lich su tai khoan dau kies
+	 */
+	public static List<LichSuTaiKhoanDauKy> findByNam_Thang(
+		int nam, int thang) {
+
+		return getPersistence().findByNam_Thang(nam, thang);
+	}
+
+	/**
+	 * Returns a range of all the lich su tai khoan dau kies where nam = &#63; and thang = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>LichSuTaiKhoanDauKyModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param nam the nam
+	 * @param thang the thang
+	 * @param start the lower bound of the range of lich su tai khoan dau kies
+	 * @param end the upper bound of the range of lich su tai khoan dau kies (not inclusive)
+	 * @return the range of matching lich su tai khoan dau kies
+	 */
+	public static List<LichSuTaiKhoanDauKy> findByNam_Thang(
+		int nam, int thang, int start, int end) {
+
+		return getPersistence().findByNam_Thang(nam, thang, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the lich su tai khoan dau kies where nam = &#63; and thang = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>LichSuTaiKhoanDauKyModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param nam the nam
+	 * @param thang the thang
+	 * @param start the lower bound of the range of lich su tai khoan dau kies
+	 * @param end the upper bound of the range of lich su tai khoan dau kies (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching lich su tai khoan dau kies
+	 */
+	public static List<LichSuTaiKhoanDauKy> findByNam_Thang(
+		int nam, int thang, int start, int end,
+		OrderByComparator<LichSuTaiKhoanDauKy> orderByComparator) {
+
+		return getPersistence().findByNam_Thang(
+			nam, thang, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the lich su tai khoan dau kies where nam = &#63; and thang = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>LichSuTaiKhoanDauKyModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param nam the nam
+	 * @param thang the thang
+	 * @param start the lower bound of the range of lich su tai khoan dau kies
+	 * @param end the upper bound of the range of lich su tai khoan dau kies (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @return the ordered range of matching lich su tai khoan dau kies
+	 */
+	public static List<LichSuTaiKhoanDauKy> findByNam_Thang(
+		int nam, int thang, int start, int end,
+		OrderByComparator<LichSuTaiKhoanDauKy> orderByComparator,
+		boolean retrieveFromCache) {
+
+		return getPersistence().findByNam_Thang(
+			nam, thang, start, end, orderByComparator, retrieveFromCache);
+	}
+
+	/**
+	 * Returns the first lich su tai khoan dau ky in the ordered set where nam = &#63; and thang = &#63;.
+	 *
+	 * @param nam the nam
+	 * @param thang the thang
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching lich su tai khoan dau ky
+	 * @throws NoSuchLichSuTaiKhoanDauKyException if a matching lich su tai khoan dau ky could not be found
+	 */
+	public static LichSuTaiKhoanDauKy findByNam_Thang_First(
+			int nam, int thang,
+			OrderByComparator<LichSuTaiKhoanDauKy> orderByComparator)
+		throws com.mb.exception.NoSuchLichSuTaiKhoanDauKyException {
+
+		return getPersistence().findByNam_Thang_First(
+			nam, thang, orderByComparator);
+	}
+
+	/**
+	 * Returns the first lich su tai khoan dau ky in the ordered set where nam = &#63; and thang = &#63;.
+	 *
+	 * @param nam the nam
+	 * @param thang the thang
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching lich su tai khoan dau ky, or <code>null</code> if a matching lich su tai khoan dau ky could not be found
+	 */
+	public static LichSuTaiKhoanDauKy fetchByNam_Thang_First(
+		int nam, int thang,
+		OrderByComparator<LichSuTaiKhoanDauKy> orderByComparator) {
+
+		return getPersistence().fetchByNam_Thang_First(
+			nam, thang, orderByComparator);
+	}
+
+	/**
+	 * Returns the last lich su tai khoan dau ky in the ordered set where nam = &#63; and thang = &#63;.
+	 *
+	 * @param nam the nam
+	 * @param thang the thang
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching lich su tai khoan dau ky
+	 * @throws NoSuchLichSuTaiKhoanDauKyException if a matching lich su tai khoan dau ky could not be found
+	 */
+	public static LichSuTaiKhoanDauKy findByNam_Thang_Last(
+			int nam, int thang,
+			OrderByComparator<LichSuTaiKhoanDauKy> orderByComparator)
+		throws com.mb.exception.NoSuchLichSuTaiKhoanDauKyException {
+
+		return getPersistence().findByNam_Thang_Last(
+			nam, thang, orderByComparator);
+	}
+
+	/**
+	 * Returns the last lich su tai khoan dau ky in the ordered set where nam = &#63; and thang = &#63;.
+	 *
+	 * @param nam the nam
+	 * @param thang the thang
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching lich su tai khoan dau ky, or <code>null</code> if a matching lich su tai khoan dau ky could not be found
+	 */
+	public static LichSuTaiKhoanDauKy fetchByNam_Thang_Last(
+		int nam, int thang,
+		OrderByComparator<LichSuTaiKhoanDauKy> orderByComparator) {
+
+		return getPersistence().fetchByNam_Thang_Last(
+			nam, thang, orderByComparator);
+	}
+
+	/**
+	 * Returns the lich su tai khoan dau kies before and after the current lich su tai khoan dau ky in the ordered set where nam = &#63; and thang = &#63;.
+	 *
+	 * @param lichSuTaiKhoanDauKyId the primary key of the current lich su tai khoan dau ky
+	 * @param nam the nam
+	 * @param thang the thang
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next lich su tai khoan dau ky
+	 * @throws NoSuchLichSuTaiKhoanDauKyException if a lich su tai khoan dau ky with the primary key could not be found
+	 */
+	public static LichSuTaiKhoanDauKy[] findByNam_Thang_PrevAndNext(
+			long lichSuTaiKhoanDauKyId, int nam, int thang,
+			OrderByComparator<LichSuTaiKhoanDauKy> orderByComparator)
+		throws com.mb.exception.NoSuchLichSuTaiKhoanDauKyException {
+
+		return getPersistence().findByNam_Thang_PrevAndNext(
+			lichSuTaiKhoanDauKyId, nam, thang, orderByComparator);
+	}
+
+	/**
+	 * Removes all the lich su tai khoan dau kies where nam = &#63; and thang = &#63; from the database.
+	 *
+	 * @param nam the nam
+	 * @param thang the thang
+	 */
+	public static void removeByNam_Thang(int nam, int thang) {
+		getPersistence().removeByNam_Thang(nam, thang);
+	}
+
+	/**
+	 * Returns the number of lich su tai khoan dau kies where nam = &#63; and thang = &#63;.
+	 *
+	 * @param nam the nam
+	 * @param thang the thang
+	 * @return the number of matching lich su tai khoan dau kies
+	 */
+	public static int countByNam_Thang(int nam, int thang) {
+		return getPersistence().countByNam_Thang(nam, thang);
+	}
+
+	/**
 	 * Returns all the lich su tai khoan dau kies where taiKhoanDoiUngId = &#63;.
 	 *
 	 * @param taiKhoanDoiUngId the tai khoan doi ung ID

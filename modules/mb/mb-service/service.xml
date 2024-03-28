@@ -55,6 +55,10 @@
 			<finder-column name="nam" />
 			<finder-column name="thang" />
 		</finder>
+		<finder name="Nam_Thang" return-type="Collection">
+			<finder-column name="nam" />
+			<finder-column name="thang" />
+		</finder>
 		<finder name="TaiKhoanDoiUngId" return-type="Collection">
 			<finder-column name="taiKhoanDoiUngId" />
 		</finder>
@@ -111,6 +115,10 @@
 		<column name="soTien" type="Double" />
 		<column name="tongSoTienVonTra" type="Double" />
 		<column name="tongSoTienLaiTra" type="Double" />
+		<column name="soLanThuDaThuTruoc" type="int" />
+		<column name="soLanThu" type="int" />
+		<column name="soLanThuDaThu" type="int" />
+		<column name="ngayDaThuCuoiTruoc" type="Date" />
 		<!-- Thu-chi tiền cho ngày -->
 		<column name="ngayXuLy" type="Date" />
 		<!-- 1 : Phát vay,2 : Tất toán,3: thu hằng ngày,4 : thu trước -->
@@ -478,6 +486,9 @@
 		</order>
 		<finder name="Nam" return-type="CauHinhThuTienTruoc">
 			<finder-column name="nam" />
+		</finder>
+		<finder name="HoatDong" return-type="Collection">
+			<finder-column name="hoatDong" />
 		</finder>
 	</entity>
 	<exceptions>

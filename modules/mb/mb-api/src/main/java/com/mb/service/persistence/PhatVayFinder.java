@@ -41,8 +41,12 @@ public interface PhatVayFinder {
 			String maCTV, java.util.Date ngayThuTienTu)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
+	public int countCTV_NgayThuTien(
+			long chiNhanhId, String maCTV, java.util.Date ngayThuTien)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public java.util.List<com.mb.model.PhatVay> findCTV_NgayThuTien(
-			String maCTV, java.util.Date ngayThuTien)
+			long chiNhanhId, String maCTV, java.util.Date ngayThuTien)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public java.util.List<com.mb.model.PhatVay> findBase(

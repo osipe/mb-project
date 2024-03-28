@@ -14,13 +14,17 @@
 <aui:form name="fmDanhSach">
 	<table class="info table-pa5 aui-w100">
 		<tr>
-			<td>
+			<td class="aui-w50">
 				<aui:select name="maCTVSearch" label="Cộng tác viên" cssClass="input-select2" onchange="showThongTinTatToan();">
 					 <aui:option value=" " label="Chọn" />
 					 <c:forEach items="<%= ctvs%>" var="item">
 					 	<aui:option value="${item.ma}" label="${item.hoTen} - ${item.ma}"/>
 					</c:forEach>
 				</aui:select>
+			</td>
+			<td class="aui-w50">
+				<aui:input cssClass="input-date" name="ngayTatToan" label="Ngày tất toán" placeholder="dd/MM/yyyy" onchange="reloadByDate();">
+				</aui:input>
 			</td>
 		</tr>
 	</table>
@@ -90,6 +94,17 @@ AUI().ready(['aui-base'], function(A) {
 	);
 	var maCTVCu = ' ';
 	var listPhatVayIds = [];
+	Liferay.provide(window,'reloadByDate', function(){
+		if(listPhatVayIds && listPhatVayIds.length > 0){
+			var tableNode = A.one('#<portlet:namespace />tableTatToan');
+			var tbody = tableNode.getElementsByTagName('tbody');
+			tbody.empty();
+			tbody.append('<tr><td colspan="5" class="empty text-center">Không có dữ liệu</td></tr>');
+			var ids  = listPhatVayIds.toString();
+			listPhatVayIds =[];
+			addPhatVayTatToan(ids);
+		}
+	});
 	Liferay.provide(window,'showThongTinTatToan', function(){
 		var maCTV = A.one('#<portlet:namespace />maCTVSearch').val();
 		if(maCTV == ' '){
@@ -118,8 +133,16 @@ AUI().ready(['aui-base'], function(A) {
 		maCTVCu = maCTV;
 	});
 	Liferay.provide(window,'openDialog', function(url,title,dialogId){
+		var ngayTatToan = 0;
+		var pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
+		var ngayTatToanVal = A.one('#<portlet:namespace />ngayTatToan').val();
+		if (('' != ngayTatToanVal && pattern.test(ngayTatToanVal)) && 'dd/MM/yyyy' != ngayTatToanVal) {
+			var date = new Date(ngayTatToanVal.replace(pattern, '$3-$2-$1'));
+			ngayTatToan = date.getTime();
+		}
 		var maCTV = A.one('#<portlet:namespace />maCTVSearch').val();
 		url += '&<portlet:namespace/>maCTV=' + maCTV;
+		url += '&<portlet:namespace/>ngayTatToanTime=' + ngayTatToan;
 		url += '&<portlet:namespace/>phatVayIdAdds=' + listPhatVayIds.toString();
 		Liferay.Util.openWindow({
 			dialog : {
@@ -143,10 +166,18 @@ AUI().ready(['aui-base'], function(A) {
 			}
 	    }
 	    loadingMask.show();
+	    var ngayTatToan = 0;
+		var pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
+		var ngayTatToanVal = A.one('#<portlet:namespace />ngayTatToan').val();
+		if (('' != ngayTatToanVal && pattern.test(ngayTatToanVal)) && 'dd/MM/yyyy' != ngayTatToanVal) {
+			var date = new Date(ngayTatToanVal.replace(pattern, '$3-$2-$1'));
+			ngayTatToan = date.getTime();
+		}
 		A.io.request('${getThongTinTatToan}', {
 	               method: 'post',
 	               data : {
-	               	'<portlet:namespace />phatVayIds' : listAddIds.toString()
+	               	'<portlet:namespace />phatVayIds' : listAddIds.toString(),
+	               	'<portlet:namespace />ngayTatToan' : ngayTatToan
 	               },
 	               on: {
 	                   success: function() {
@@ -215,19 +246,30 @@ AUI().ready(['aui-base'], function(A) {
 	                   }
 	              }
         });
-		var dialog = Liferay.Util.Window.getById('<portlet:namespace />' + dialogId);
-		if(dialog){
-			dialog.destroy();
-		}
+        if(dialogId){
+	        var dialog = Liferay.Util.Window.getById('<portlet:namespace />' + dialogId);
+			if(dialog){
+				dialog.destroy();
+			}
+        }
 	});
 	Liferay.provide(window,'getTongTienTatToan', function(){
 		loadingMask.show();
 		
 		if(listPhatVayIds.length > 0){
+			var ngayTatToan = 0;
+			var pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
+			var ngayTatToanVal = A.one('#<portlet:namespace />ngayTatToan').val();
+			if (('' != ngayTatToanVal && pattern.test(ngayTatToanVal)) && 'dd/MM/yyyy' != ngayTatToanVal) {
+				var date = new Date(ngayTatToanVal.replace(pattern, '$3-$2-$1'));
+				ngayTatToan = date.getTime();
+			}
+			
 			A.io.request('${getTongTienTatToan}', {
 	               method: 'post',
 	               data : {
-	               	'<portlet:namespace />phatVayIds' : listPhatVayIds.toString()
+	               	'<portlet:namespace />phatVayIds' : listPhatVayIds.toString(),
+	               	'<portlet:namespace />ngayTatToan' : ngayTatToan,
 	               },
 	               on: {
 	                   success: function() {
@@ -279,10 +321,21 @@ AUI().ready(['aui-base'], function(A) {
 		var check = confirm('Bạn có chắc thực hiện thao tác này ?');
 		if (check && listPhatVayIds.length > 0) {
 			loadingMask.show();
+		    var ngayTatToan = new Date().getTime();
+		    var pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
+		    var ngayTatToanVal = A.one('#<portlet:namespace />ngayTatToan').val();
+		    if (('' != ngayTatToanVal && pattern.test(ngayTatToanVal)) && 'dd/MM/yyyy' != ngayTatToanVal) {
+				var date = new Date(ngayTatToanVal.replace(pattern, '$3-$2-$1'));
+				ngayTatToan = date.getTime();
+		    }
+			
+			
+			
 			A.io.request('${tatToanURL}', {
 		               method: 'post',
 		               data : {
-		               	'<portlet:namespace />phatVayIds' : listPhatVayIds.toString()
+		               	'<portlet:namespace />phatVayIds' : listPhatVayIds.toString(),
+		               	'<portlet:namespace />ngayTatToan' : ngayTatToan,
 		               },
 		               on: {
 		                   success: function() {
@@ -302,6 +355,14 @@ AUI().ready(['aui-base'], function(A) {
 	});
 	Liferay.provide(window,'printPhieuTatToan', function(){
 		var url = '${printPhieuTatToan}';
+		var ngayTatToan = 0;
+		var pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
+		var ngayTatToanVal = A.one('#<portlet:namespace />ngayTatToan').val();
+		if (('' != ngayTatToanVal && pattern.test(ngayTatToanVal)) && 'dd/MM/yyyy' != ngayTatToanVal) {
+			var date = new Date(ngayTatToanVal.replace(pattern, '$3-$2-$1'));
+			ngayTatToan = date.getTime();
+		}
+		url += '&<portlet:namespace/>ngayTatToan=' + ngayTatToan;
 		url += '&<portlet:namespace/>phatVayIds=' + listPhatVayIds.toString();
 		url += '&<portlet:namespace/>maCTV=' + A.one('#<portlet:namespace />maCTVSearch').val();
 		window.location.href = url;

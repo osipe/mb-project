@@ -353,6 +353,557 @@ public class LichSuTaiKhoanDauKyPersistenceImpl
 		_FINDER_COLUMN_TAIKHOANDOIUNGID_NAM_THANG_THANG_2 =
 			"lichSuTaiKhoanDauKy.thang = ?";
 
+	private FinderPath _finderPathWithPaginationFindByNam_Thang;
+	private FinderPath _finderPathWithoutPaginationFindByNam_Thang;
+	private FinderPath _finderPathCountByNam_Thang;
+
+	/**
+	 * Returns all the lich su tai khoan dau kies where nam = &#63; and thang = &#63;.
+	 *
+	 * @param nam the nam
+	 * @param thang the thang
+	 * @return the matching lich su tai khoan dau kies
+	 */
+	@Override
+	public List<LichSuTaiKhoanDauKy> findByNam_Thang(int nam, int thang) {
+		return findByNam_Thang(
+			nam, thang, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the lich su tai khoan dau kies where nam = &#63; and thang = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>LichSuTaiKhoanDauKyModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param nam the nam
+	 * @param thang the thang
+	 * @param start the lower bound of the range of lich su tai khoan dau kies
+	 * @param end the upper bound of the range of lich su tai khoan dau kies (not inclusive)
+	 * @return the range of matching lich su tai khoan dau kies
+	 */
+	@Override
+	public List<LichSuTaiKhoanDauKy> findByNam_Thang(
+		int nam, int thang, int start, int end) {
+
+		return findByNam_Thang(nam, thang, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the lich su tai khoan dau kies where nam = &#63; and thang = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>LichSuTaiKhoanDauKyModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param nam the nam
+	 * @param thang the thang
+	 * @param start the lower bound of the range of lich su tai khoan dau kies
+	 * @param end the upper bound of the range of lich su tai khoan dau kies (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching lich su tai khoan dau kies
+	 */
+	@Override
+	public List<LichSuTaiKhoanDauKy> findByNam_Thang(
+		int nam, int thang, int start, int end,
+		OrderByComparator<LichSuTaiKhoanDauKy> orderByComparator) {
+
+		return findByNam_Thang(nam, thang, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the lich su tai khoan dau kies where nam = &#63; and thang = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>LichSuTaiKhoanDauKyModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param nam the nam
+	 * @param thang the thang
+	 * @param start the lower bound of the range of lich su tai khoan dau kies
+	 * @param end the upper bound of the range of lich su tai khoan dau kies (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @return the ordered range of matching lich su tai khoan dau kies
+	 */
+	@Override
+	public List<LichSuTaiKhoanDauKy> findByNam_Thang(
+		int nam, int thang, int start, int end,
+		OrderByComparator<LichSuTaiKhoanDauKy> orderByComparator,
+		boolean retrieveFromCache) {
+
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			pagination = false;
+			finderPath = _finderPathWithoutPaginationFindByNam_Thang;
+			finderArgs = new Object[] {nam, thang};
+		}
+		else {
+			finderPath = _finderPathWithPaginationFindByNam_Thang;
+			finderArgs = new Object[] {
+				nam, thang, start, end, orderByComparator
+			};
+		}
+
+		List<LichSuTaiKhoanDauKy> list = null;
+
+		if (retrieveFromCache) {
+			list = (List<LichSuTaiKhoanDauKy>)finderCache.getResult(
+				finderPath, finderArgs, this);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (LichSuTaiKhoanDauKy lichSuTaiKhoanDauKy : list) {
+					if ((nam != lichSuTaiKhoanDauKy.getNam()) ||
+						(thang != lichSuTaiKhoanDauKy.getThang())) {
+
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(
+					4 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_LICHSUTAIKHOANDAUKY_WHERE);
+
+			query.append(_FINDER_COLUMN_NAM_THANG_NAM_2);
+
+			query.append(_FINDER_COLUMN_NAM_THANG_THANG_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					query, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else if (pagination) {
+				query.append(LichSuTaiKhoanDauKyModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(nam);
+
+				qPos.add(thang);
+
+				if (!pagination) {
+					list = (List<LichSuTaiKhoanDauKy>)QueryUtil.list(
+						q, getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = Collections.unmodifiableList(list);
+				}
+				else {
+					list = (List<LichSuTaiKhoanDauKy>)QueryUtil.list(
+						q, getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				finderCache.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				finderCache.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first lich su tai khoan dau ky in the ordered set where nam = &#63; and thang = &#63;.
+	 *
+	 * @param nam the nam
+	 * @param thang the thang
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching lich su tai khoan dau ky
+	 * @throws NoSuchLichSuTaiKhoanDauKyException if a matching lich su tai khoan dau ky could not be found
+	 */
+	@Override
+	public LichSuTaiKhoanDauKy findByNam_Thang_First(
+			int nam, int thang,
+			OrderByComparator<LichSuTaiKhoanDauKy> orderByComparator)
+		throws NoSuchLichSuTaiKhoanDauKyException {
+
+		LichSuTaiKhoanDauKy lichSuTaiKhoanDauKy = fetchByNam_Thang_First(
+			nam, thang, orderByComparator);
+
+		if (lichSuTaiKhoanDauKy != null) {
+			return lichSuTaiKhoanDauKy;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nam=");
+		msg.append(nam);
+
+		msg.append(", thang=");
+		msg.append(thang);
+
+		msg.append("}");
+
+		throw new NoSuchLichSuTaiKhoanDauKyException(msg.toString());
+	}
+
+	/**
+	 * Returns the first lich su tai khoan dau ky in the ordered set where nam = &#63; and thang = &#63;.
+	 *
+	 * @param nam the nam
+	 * @param thang the thang
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching lich su tai khoan dau ky, or <code>null</code> if a matching lich su tai khoan dau ky could not be found
+	 */
+	@Override
+	public LichSuTaiKhoanDauKy fetchByNam_Thang_First(
+		int nam, int thang,
+		OrderByComparator<LichSuTaiKhoanDauKy> orderByComparator) {
+
+		List<LichSuTaiKhoanDauKy> list = findByNam_Thang(
+			nam, thang, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last lich su tai khoan dau ky in the ordered set where nam = &#63; and thang = &#63;.
+	 *
+	 * @param nam the nam
+	 * @param thang the thang
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching lich su tai khoan dau ky
+	 * @throws NoSuchLichSuTaiKhoanDauKyException if a matching lich su tai khoan dau ky could not be found
+	 */
+	@Override
+	public LichSuTaiKhoanDauKy findByNam_Thang_Last(
+			int nam, int thang,
+			OrderByComparator<LichSuTaiKhoanDauKy> orderByComparator)
+		throws NoSuchLichSuTaiKhoanDauKyException {
+
+		LichSuTaiKhoanDauKy lichSuTaiKhoanDauKy = fetchByNam_Thang_Last(
+			nam, thang, orderByComparator);
+
+		if (lichSuTaiKhoanDauKy != null) {
+			return lichSuTaiKhoanDauKy;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nam=");
+		msg.append(nam);
+
+		msg.append(", thang=");
+		msg.append(thang);
+
+		msg.append("}");
+
+		throw new NoSuchLichSuTaiKhoanDauKyException(msg.toString());
+	}
+
+	/**
+	 * Returns the last lich su tai khoan dau ky in the ordered set where nam = &#63; and thang = &#63;.
+	 *
+	 * @param nam the nam
+	 * @param thang the thang
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching lich su tai khoan dau ky, or <code>null</code> if a matching lich su tai khoan dau ky could not be found
+	 */
+	@Override
+	public LichSuTaiKhoanDauKy fetchByNam_Thang_Last(
+		int nam, int thang,
+		OrderByComparator<LichSuTaiKhoanDauKy> orderByComparator) {
+
+		int count = countByNam_Thang(nam, thang);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<LichSuTaiKhoanDauKy> list = findByNam_Thang(
+			nam, thang, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the lich su tai khoan dau kies before and after the current lich su tai khoan dau ky in the ordered set where nam = &#63; and thang = &#63;.
+	 *
+	 * @param lichSuTaiKhoanDauKyId the primary key of the current lich su tai khoan dau ky
+	 * @param nam the nam
+	 * @param thang the thang
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next lich su tai khoan dau ky
+	 * @throws NoSuchLichSuTaiKhoanDauKyException if a lich su tai khoan dau ky with the primary key could not be found
+	 */
+	@Override
+	public LichSuTaiKhoanDauKy[] findByNam_Thang_PrevAndNext(
+			long lichSuTaiKhoanDauKyId, int nam, int thang,
+			OrderByComparator<LichSuTaiKhoanDauKy> orderByComparator)
+		throws NoSuchLichSuTaiKhoanDauKyException {
+
+		LichSuTaiKhoanDauKy lichSuTaiKhoanDauKy = findByPrimaryKey(
+			lichSuTaiKhoanDauKyId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			LichSuTaiKhoanDauKy[] array = new LichSuTaiKhoanDauKyImpl[3];
+
+			array[0] = getByNam_Thang_PrevAndNext(
+				session, lichSuTaiKhoanDauKy, nam, thang, orderByComparator,
+				true);
+
+			array[1] = lichSuTaiKhoanDauKy;
+
+			array[2] = getByNam_Thang_PrevAndNext(
+				session, lichSuTaiKhoanDauKy, nam, thang, orderByComparator,
+				false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected LichSuTaiKhoanDauKy getByNam_Thang_PrevAndNext(
+		Session session, LichSuTaiKhoanDauKy lichSuTaiKhoanDauKy, int nam,
+		int thang, OrderByComparator<LichSuTaiKhoanDauKy> orderByComparator,
+		boolean previous) {
+
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(
+				5 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			query = new StringBundler(4);
+		}
+
+		query.append(_SQL_SELECT_LICHSUTAIKHOANDAUKY_WHERE);
+
+		query.append(_FINDER_COLUMN_NAM_THANG_NAM_2);
+
+		query.append(_FINDER_COLUMN_NAM_THANG_THANG_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(LichSuTaiKhoanDauKyModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(nam);
+
+		qPos.add(thang);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						lichSuTaiKhoanDauKy)) {
+
+				qPos.add(orderByConditionValue);
+			}
+		}
+
+		List<LichSuTaiKhoanDauKy> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the lich su tai khoan dau kies where nam = &#63; and thang = &#63; from the database.
+	 *
+	 * @param nam the nam
+	 * @param thang the thang
+	 */
+	@Override
+	public void removeByNam_Thang(int nam, int thang) {
+		for (LichSuTaiKhoanDauKy lichSuTaiKhoanDauKy :
+				findByNam_Thang(
+					nam, thang, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+
+			remove(lichSuTaiKhoanDauKy);
+		}
+	}
+
+	/**
+	 * Returns the number of lich su tai khoan dau kies where nam = &#63; and thang = &#63;.
+	 *
+	 * @param nam the nam
+	 * @param thang the thang
+	 * @return the number of matching lich su tai khoan dau kies
+	 */
+	@Override
+	public int countByNam_Thang(int nam, int thang) {
+		FinderPath finderPath = _finderPathCountByNam_Thang;
+
+		Object[] finderArgs = new Object[] {nam, thang};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_LICHSUTAIKHOANDAUKY_WHERE);
+
+			query.append(_FINDER_COLUMN_NAM_THANG_NAM_2);
+
+			query.append(_FINDER_COLUMN_NAM_THANG_THANG_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(nam);
+
+				qPos.add(thang);
+
+				count = (Long)q.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				finderCache.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_NAM_THANG_NAM_2 =
+		"lichSuTaiKhoanDauKy.nam = ? AND ";
+
+	private static final String _FINDER_COLUMN_NAM_THANG_THANG_2 =
+		"lichSuTaiKhoanDauKy.thang = ?";
+
 	private FinderPath _finderPathWithPaginationFindByTaiKhoanDoiUngId;
 	private FinderPath _finderPathWithoutPaginationFindByTaiKhoanDoiUngId;
 	private FinderPath _finderPathCountByTaiKhoanDoiUngId;
@@ -1216,6 +1767,15 @@ public class LichSuTaiKhoanDauKyPersistenceImpl
 		}
 		else if (isNew) {
 			Object[] args = new Object[] {
+				lichSuTaiKhoanDauKyModelImpl.getNam(),
+				lichSuTaiKhoanDauKyModelImpl.getThang()
+			};
+
+			finderCache.removeResult(_finderPathCountByNam_Thang, args);
+			finderCache.removeResult(
+				_finderPathWithoutPaginationFindByNam_Thang, args);
+
+			args = new Object[] {
 				lichSuTaiKhoanDauKyModelImpl.getTaiKhoanDoiUngId()
 			};
 
@@ -1228,6 +1788,29 @@ public class LichSuTaiKhoanDauKyPersistenceImpl
 				_finderPathWithoutPaginationFindAll, FINDER_ARGS_EMPTY);
 		}
 		else {
+			if ((lichSuTaiKhoanDauKyModelImpl.getColumnBitmask() &
+				 _finderPathWithoutPaginationFindByNam_Thang.
+					 getColumnBitmask()) != 0) {
+
+				Object[] args = new Object[] {
+					lichSuTaiKhoanDauKyModelImpl.getOriginalNam(),
+					lichSuTaiKhoanDauKyModelImpl.getOriginalThang()
+				};
+
+				finderCache.removeResult(_finderPathCountByNam_Thang, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByNam_Thang, args);
+
+				args = new Object[] {
+					lichSuTaiKhoanDauKyModelImpl.getNam(),
+					lichSuTaiKhoanDauKyModelImpl.getThang()
+				};
+
+				finderCache.removeResult(_finderPathCountByNam_Thang, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByNam_Thang, args);
+			}
+
 			if ((lichSuTaiKhoanDauKyModelImpl.getColumnBitmask() &
 				 _finderPathWithoutPaginationFindByTaiKhoanDoiUngId.
 					 getColumnBitmask()) != 0) {
@@ -1718,6 +2301,32 @@ public class LichSuTaiKhoanDauKyPersistenceImpl
 				Long.class.getName(), Integer.class.getName(),
 				Integer.class.getName()
 			});
+
+		_finderPathWithPaginationFindByNam_Thang = new FinderPath(
+			LichSuTaiKhoanDauKyModelImpl.ENTITY_CACHE_ENABLED,
+			LichSuTaiKhoanDauKyModelImpl.FINDER_CACHE_ENABLED,
+			LichSuTaiKhoanDauKyImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByNam_Thang",
+			new String[] {
+				Integer.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+
+		_finderPathWithoutPaginationFindByNam_Thang = new FinderPath(
+			LichSuTaiKhoanDauKyModelImpl.ENTITY_CACHE_ENABLED,
+			LichSuTaiKhoanDauKyModelImpl.FINDER_CACHE_ENABLED,
+			LichSuTaiKhoanDauKyImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByNam_Thang",
+			new String[] {Integer.class.getName(), Integer.class.getName()},
+			LichSuTaiKhoanDauKyModelImpl.NAM_COLUMN_BITMASK |
+			LichSuTaiKhoanDauKyModelImpl.THANG_COLUMN_BITMASK);
+
+		_finderPathCountByNam_Thang = new FinderPath(
+			LichSuTaiKhoanDauKyModelImpl.ENTITY_CACHE_ENABLED,
+			LichSuTaiKhoanDauKyModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByNam_Thang",
+			new String[] {Integer.class.getName(), Integer.class.getName()});
 
 		_finderPathWithPaginationFindByTaiKhoanDoiUngId = new FinderPath(
 			LichSuTaiKhoanDauKyModelImpl.ENTITY_CACHE_ENABLED,

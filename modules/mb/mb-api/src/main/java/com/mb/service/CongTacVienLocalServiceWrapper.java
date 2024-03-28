@@ -263,6 +263,15 @@ public class CongTacVienLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<com.mb.model.CongTacVien> findChiNhanh_Ma_HoatDong(
+		long chiNhanhId, String ma, int hoatDong, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator obc) {
+
+		return _congTacVienLocalService.findChiNhanh_Ma_HoatDong(
+			chiNhanhId, ma, hoatDong, start, end, obc);
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -281,6 +290,14 @@ public class CongTacVienLocalServiceWrapper
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _congTacVienLocalService.getCongTacVien(congTacVienId);
+	}
+
+	@Override
+	public java.util.List<com.mb.model.CongTacVien>
+			getCongTacVienChuaCoTaiKhoanDU()
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return _congTacVienLocalService.getCongTacVienChuaCoTaiKhoanDU();
 	}
 
 	/**

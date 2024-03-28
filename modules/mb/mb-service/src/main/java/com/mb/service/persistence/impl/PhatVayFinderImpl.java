@@ -198,8 +198,8 @@ public class PhatVayFinderImpl extends PhatVayFinderBaseImpl implements PhatVayF
 			if (Validator.isNotNull(ngayThuTienTu)) {
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(ngayThuTienTu);
-				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getGTDate(cal)));
 				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getLTDate(cal)));
+				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getGTDate(cal)));
 			}
 			return (List<PhatVay>) QueryUtil.list(q, getDialect(), -1, -1);
 		} catch (Exception e) {
@@ -211,11 +211,57 @@ public class PhatVayFinderImpl extends PhatVayFinderBaseImpl implements PhatVayF
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<PhatVay> findCTV_NgayThuTien(String maCTV, Date ngayThuTien) throws SystemException {
+	public int countCTV_NgayThuTien(long chiNhanhId,String maCTV, Date ngayThuTien) throws SystemException {
 		Session session = null;
 		try {
 			session = openSession();
 			String sql = _customSQL.get(getClass(), FINDCTV_NGAYTHUTIEN);
+			if(chiNhanhId > 0) {
+				sql = sql.replace("AND (chinhanhid = ?)", "");
+			}
+			if (Validator.isNull(maCTV)) {
+				sql = sql.replace("AND (maCTV = ?)", "");
+			}
+			if (Validator.isNull(ngayThuTien)) {
+				sql = sql.replace("AND (ngayBatDau <= ?)", "");
+				sql = sql.replace("AND (ngayDaThuCuoi < ? OR ngayDaThuCuoi IS NULL)", "");
+			}
+			SQLQuery q = session.createSQLQuery(sql);
+			q.addScalar("COUNT_VALUE", Type.INTEGER);
+			QueryPos qPos = QueryPos.getInstance(q);
+			if(chiNhanhId > 0) {
+				qPos.add(chiNhanhId);
+			}
+			if (Validator.isNotNull(maCTV)) {
+				qPos.add(maCTV);
+			}
+			if (Validator.isNotNull(ngayThuTien)) {
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(ngayThuTien);
+				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getLTDate(cal)));
+				qPos.add(CalendarUtil.getTimestamp(CalendarUtil.getGTDate(cal)));
+			}
+			Iterator<Integer> iter = q.list().iterator();
+			if (iter.hasNext()) {
+				return iter.next();
+			}
+			return 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SystemException(e);
+		} finally {
+			closeSession(session);
+		}
+	}
+	@SuppressWarnings("unchecked")
+	public List<PhatVay> findCTV_NgayThuTien(long chiNhanhId,String maCTV, Date ngayThuTien) throws SystemException {
+		Session session = null;
+		try {
+			session = openSession();
+			String sql = _customSQL.get(getClass(), FINDCTV_NGAYTHUTIEN);
+			if(chiNhanhId <= 0) {
+				sql = sql.replace("AND (chinhanhid = ?)", "");
+			}
 			if (Validator.isNull(maCTV)) {
 				sql = sql.replace("AND (maCTV = ?)", "");
 			}
@@ -226,6 +272,9 @@ public class PhatVayFinderImpl extends PhatVayFinderBaseImpl implements PhatVayF
 			SQLQuery q = session.createSQLQuery(sql);
 			q.addEntity("PhatVay", PhatVayImpl.class);
 			QueryPos qPos = QueryPos.getInstance(q);
+			if(chiNhanhId > 0) {
+				qPos.add(chiNhanhId);
+			}
 			if (Validator.isNotNull(maCTV)) {
 				qPos.add(maCTV);
 			}

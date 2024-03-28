@@ -1,3 +1,4 @@
+<%@page import="quanly.portlet.danhmuc.cauhinhthutientruoc.CauHinhThuTienTruocComparator"%>
 <%@page import="org.apache.commons.collections.CollectionUtils"%>
 <%@page import="java.util.List"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -18,10 +19,16 @@
 	CongTacVien ctv = CongTacVienLocalServiceUtil.fetchByMa(maCTVSearch);
 	int namNow = Calendar.getInstance().get(Calendar.YEAR);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	List<CauHinhThuTienTruoc> cauHinhs = CauHinhThuTienTruocLocalServiceUtil.findAll();
+	List<CauHinhThuTienTruoc> cauHinhs = CauHinhThuTienTruocLocalServiceUtil.findBase(0, 1, -1, -1, new CauHinhThuTienTruocComparator("nam",false));
 	CauHinhThuTienTruoc cauHinh = CollectionUtils.isNotEmpty(cauHinhs) ? cauHinhs.get(0) : null;
 	if(ctv == null){
 	 	ctv = CongTacVienLocalServiceUtil.createCongTacVien(0L);
+	}
+	String ngayBatDauThuTienCauHinh = PropsUtil.get("config.ngaythutientruocstart") + "/" + namNow;
+	String ngayKetThucThuTienCauHinh = PropsUtil.get("config.ngaythutientruocend") + "/" + namNow;
+	if(sdf.parse(ngayKetThucThuTienCauHinh).getTime() <= Calendar.getInstance().getTimeInMillis()){
+		 ngayBatDauThuTienCauHinh = PropsUtil.get("config.ngaythutientruocstart") + "/" + (namNow + 1);
+		 ngayKetThucThuTienCauHinh = PropsUtil.get("config.ngaythutientruocend") + "/" + (namNow + 1);
 	}
 %>
 <aui:form name="frmThuTienTruoc">
@@ -30,12 +37,12 @@
 	<table class="info table-pa5 aui-w100">
 			<tr>
 				<td>
-					<aui:input readonly ="true" name="ngayThuTienTu" value="<%=cauHinh != null && cauHinh.getNgayTu() != null ? sdf.format(cauHinh.getNgayTu()) : "" %>" label="Ngày thu tiền từ" placeholder="dd/MM/yyyy" onchange="searchURL();">
+					<aui:input readonly ="true" name="ngayThuTienTu" value='<%=cauHinh != null && cauHinh.getNgayTu() != null ? sdf.format(cauHinh.getNgayTu()) : ""%>' label="Ngày thu tiền từ" placeholder="dd/MM/yyyy" onchange="searchURL();">
 						<aui:validator name="required" errorMessage="Ngày thu tiền từ không được bỏ trống!" />
 					</aui:input>
 				</td>
 				<td>
-					<aui:input readonly ="true" name="ngayThuTienDen" value="<%=cauHinh != null && cauHinh.getNgayDen() != null ? sdf.format(cauHinh.getNgayDen()) : "" %>" label="Ngày thu tiền đến" placeholder="dd/MM/yyyy" onchange="searchURL();">
+					<aui:input readonly ="true" name="ngayThuTienDen" value='<%=cauHinh != null && cauHinh.getNgayDen() != null ? sdf.format(cauHinh.getNgayDen()) : ""%>' label="Ngày thu tiền đến" placeholder="dd/MM/yyyy" onchange="searchURL();">
 						<aui:validator name="required" errorMessage="Ngày thu tiền đến không được bỏ trống!" />
 					</aui:input>
 				</td>
@@ -106,8 +113,6 @@ AUI().ready(['aui-base','node-event-simulate'], function(A) {
 				loadingMask.show();
 				formValidator.validate();
 				if(!formValidator.hasErrors()){
-					console.log('getNgayTu ' , <%= cauHinh.getNgayTu().getTime()%>);
-					console.log('getNgayDen ' , <%= cauHinh.getNgayDen().getTime()%>);
 					if(<%= cauHinh.getNgayTu().getTime()%> <=  <%= cauHinh.getNgayDen().getTime()%>){
 						var phatVayIds = Liferay.Util.listCheckedExcept(contentDataTableThuTienTruocNode, '<portlet:namespace />allRowIds');
 						var data = {

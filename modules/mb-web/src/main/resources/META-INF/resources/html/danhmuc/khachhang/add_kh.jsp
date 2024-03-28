@@ -129,6 +129,7 @@ AUI().ready(['aui-base'], function(A) {
 	                   				}else{
 	                   					Liferay.Util.getOpener().search();
 	                   				}
+	                   				console.log("close : ",close);
 	                   				if(close){
 	                   					Liferay.Util.getOpener().dongPopup();
 	                   					Liferay.Util.getOpener().thongBao();
@@ -138,7 +139,7 @@ AUI().ready(['aui-base'], function(A) {
 	                   			}else{
 	                   				if(data.exception.indexOf('class com.dm.exception.TrungMaException') > -1){
 	                   					toastr.warning('Mã khách hàng đã tồn tại', 'Cảnh báo!');
-	                   				}else if(data.exception.indexOf('class com.dm.exception.TrungSoCMNDException') > -1){
+	                   				}else if(data.exception.indexOf('class com.mb.exception.TrungSoCMNDException') > -1){
 	                   					toastr.warning('Số CMND đã tồn tại', 'Cảnh báo!');
 	                   				}else{
 	                   					toastr.error('Yêu cầu thực hiện không thành công', 'Lỗi!');

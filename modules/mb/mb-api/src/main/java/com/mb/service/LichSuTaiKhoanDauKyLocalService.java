@@ -206,6 +206,9 @@ public interface LichSuTaiKhoanDauKyLocalService
 			OrderByComparator obc)
 		throws SystemException;
 
+	public List<LichSuTaiKhoanDauKy> findByNam_Thang(int nam, int thang)
+		throws SystemException;
+
 	public List<LichSuTaiKhoanDauKy> findByTaiKhoanDoiUngId(
 			long taiKhoanDoiUngId)
 		throws SystemException;
@@ -262,6 +265,10 @@ public interface LichSuTaiKhoanDauKyLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
 		throws PortalException;
+
+	public LichSuTaiKhoanDauKy sumByNamThang(
+			long taiKhoanDoiUngChaId, int loaiTaiKhoan, int nam, int thang)
+		throws SystemException;
 
 	/**
 	 * Updates the lich su tai khoan dau ky in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

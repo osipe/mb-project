@@ -12,7 +12,7 @@
 <portlet:renderURL var="thuTienTruocURL"
 	windowState="<%=LiferayWindowState.POP_UP.toString()%>">
 	<portlet:param name="dialogId" value="dialogThuTienTruoc" />
-	<portlet:param name="mvcPath" value="/html/phatvay/thutienhangngay/thutientruoc.jsp" />
+	<portlet:param name="mvcPath" value="/html/phatvay/thutienhangngay_thue/thutientruoc.jsp" />
 </portlet:renderURL>
 <%
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -60,7 +60,7 @@
 </aui:form>
 <portlet:renderURL var="searchURL"
 	windowState="<%=LiferayWindowState.EXCLUSIVE.toString()%>">
-	<portlet:param name="mvcPath" value="/html/phatvay/thutienhangngay/data.jsp" />
+	<portlet:param name="mvcPath" value="/html/phatvay/thutienhangngay_thue/data.jsp" />
 </portlet:renderURL>
 <portlet:resourceURL var="thuTienThueURL" id="thuTienThueURL"></portlet:resourceURL>
 <portlet:resourceURL var="printPhieuThuTienHangNgay" id="printPhieuThuTienHangNgay"></portlet:resourceURL>

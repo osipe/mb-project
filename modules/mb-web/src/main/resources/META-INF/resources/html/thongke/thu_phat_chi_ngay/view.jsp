@@ -36,8 +36,7 @@
 	</tr>
 	<tr>
 		<td  colspan="2">
-			<div class="btn-group">
-			  <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			  <button style="padding-top: unset!important;padding-bottom: unset!important;" type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			  	<span class="btn-label"><i class="glyphicon glyphicon-print "></i></span>In thu phát chi ngày
 			  </button>
 			  <div class="dropdown-menu">
@@ -50,11 +49,9 @@
 			    	XLSX
 			    </a>
 			  </div>
-			  
 			  <button id="<portlet:namespace />inPhieuThuHangNgay" type="button" class="btn btn-labeled btn-info" onclick="printPhieuThuTienHangNgay1();">
 					<span class="btn-label"><i class="glyphicon glyphicon-print "></i></span>In Phiếu Thu
 				</button>
-			</div>
 		</td>
 	</tr>
 </table>

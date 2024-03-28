@@ -1,11 +1,17 @@
 package quanly.portlet.ketoan.lapphieu;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
@@ -23,22 +29,33 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.mb.model.CongTacVien;
 import com.mb.model.DsPhieuTaiKhoan;
 import com.mb.model.MaSoThuChi;
+import com.mb.model.PhatVay;
 import com.mb.model.Phieu;
 import com.mb.model.QuanLyMaSo;
 import com.mb.model.TaiKhoanDoiUng;
 import com.mb.service.CongTacVienLocalServiceUtil;
 import com.mb.service.DsPhieuTaiKhoanLocalServiceUtil;
 import com.mb.service.MaSoThuChiLocalServiceUtil;
+import com.mb.service.PhatVayLocalServiceUtil;
 import com.mb.service.PhieuLocalServiceUtil;
 import com.mb.service.QuanLyMaSoLocalServiceUtil;
 import com.mb.service.TaiKhoanDoiUngLocalServiceUtil;
 
+import fr.opensagres.xdocreport.document.IXDocReport;
+import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
+import fr.opensagres.xdocreport.template.IContext;
+import fr.opensagres.xdocreport.template.TemplateEngineKind;
+import fr.opensagres.xdocreport.template.formatter.FieldsMetadata;
 import quanly.constants.QuanlyPortletKeys;
+import quanly.dto.CongTacVienDTO;
+import quanly.portlet.danhmuc.ctv.CongTacVienComparator;
+import quanly.util.DocSo;
 
 /**
  * @author Annn
@@ -86,6 +103,8 @@ public class PhieuPortlet extends MVCPortlet {
 			kq = getMaSoTheoDoiURL(resourceRequest, resourceResponse, serviceContext);
 		} else if (resourceId.equals("getDienGiaiTheoDoiURL")) {
 			kq = getDienGiaiTheoDoiURL(resourceRequest, resourceResponse, serviceContext);
+		} else if (resourceId.equals("printPhieuThuChi")) {
+			kq = printPhieuThuChi(resourceRequest, resourceResponse, serviceContext);
 		}
 		PrintWriter writer = resourceResponse.getWriter();
 		writer.print(kq.toString());
@@ -93,14 +112,65 @@ public class PhieuPortlet extends MVCPortlet {
 		writer.close();
 
 	}
+
+	public JSONObject printPhieuThuChi(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
+			ServiceContext serviceContext) throws IOException {
+		JSONObject kq = JSONFactoryUtil.createJSONObject();
+		long phieuId = ParamUtil.getLong(resourceRequest, "phieuId");
+		InputStream in = null;
+		OutputStream outStream = resourceResponse.getPortletOutputStream();
+		if (phieuId > 0) {
+			try {
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+				Locale localeEn = new Locale("en", "EN");
+				NumberFormat df = NumberFormat.getInstance(localeEn);
+				Phieu phieu = PhieuLocalServiceUtil.fetchPhieu(phieuId);
+				if (phieu != null) {
+					String nameFile = "PhieuThu_" + phieu.getMaCTV() + "_" + phieu.getSoPhieu() + "_" + new SimpleDateFormat("ddMMyyyy").format(phieu.getNgayChungTu());
+					in = getServletContext().getResourceAsStream("report/PHIEU_THU.docx");
+					if (phieu.getLoai() == 2) {
+						nameFile = "PhieuChi_" + phieu.getMaCTV() + "_" + phieu.getSoPhieu() + "_" + new SimpleDateFormat("ddMMyyyy").format(phieu.getNgayChungTu());
+						in = getServletContext().getResourceAsStream("report/PHIEU_CHI.docx");
+					}
+					resourceResponse.setContentType("application/DOCX");
+					resourceResponse.setProperty("Content-Disposition",
+							"attachment; filename=\"" + nameFile + ".docx\"");
+					IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker);
+					IContext iContext = report.createContext();
+					
+					List<DsPhieuTaiKhoan> ds = DsPhieuTaiKhoanLocalServiceUtil.findByPhieuId(phieuId);
+					
+					Map<String, Object> map = new HashMap<String, Object>();
+					map.put("TRA_CUU", sdf.format(new Date()));
+					map.put("TEN_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.ten")));
+					map.put("DIA_CHI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.diachi")));
+					map.put("SO_DIEN_THOAI_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.sodienthoai")));
+					map.put("NGAY",sdf.format(phieu.getNgayChungTu()));
+					iContext.put("tongTien", df.format(phieu.getSoTien()));
+					iContext.put("tongTienBangChu", DocSo.docSo(GetterUtil.getLong(phieu.getSoTien())));
+					iContext.put("phieu", phieu);
+					iContext.put("ds",CollectionUtils.isEmpty(ds) ? new ArrayList<>() :  ds);
+					iContext.putMap(map);
+					report.process(iContext, outStream);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				kq.putException(e);
+			} finally {
+			}
+		}
+		outStream.flush();
+		return kq;
+	}
+
 	public JSONObject getDienGiaiTheoDoiURL(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
 			ServiceContext serviceContext) {
 		JSONObject kq = JSONFactoryUtil.createJSONObject();
 		try {
 			long taiKhoanDoiUngId = ParamUtil.getLong(resourceRequest, "taiKhoanDoiUngId");
-			if(taiKhoanDoiUngId > 0) {
+			if (taiKhoanDoiUngId > 0) {
 				TaiKhoanDoiUng taikhoan = TaiKhoanDoiUngLocalServiceUtil.fetchTaiKhoanDoiUng(taiKhoanDoiUngId);
-				if(taikhoan != null) {
+				if (taikhoan != null) {
 					kq.put("dienGiaiTheoDoi", taikhoan.getDienGiaiTheoDoi());
 				}
 			}
@@ -256,7 +326,7 @@ public class PhieuPortlet extends MVCPortlet {
 				if (soPhieuDaTonTai > 0) {
 					List<Phieu> phieus = PhieuLocalServiceUtil.findBase("", "", String.valueOf(soPhieu), ngayChungTu,
 							ngayChungTu, loai, 1, -1, -1, null);
-					if(!phieus.contains(phieu)) {
+					if (!phieus.contains(phieu)) {
 						error = true;
 						kq.put("exception", "TonSo");
 					}

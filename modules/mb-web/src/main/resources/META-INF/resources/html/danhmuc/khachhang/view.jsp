@@ -135,8 +135,13 @@ AUI().ready(['aui-base'], function(A) {
 	});
 	Liferay.provide(window,'dongPopup', function(){
 		var dialog = Liferay.Util.Window.getById('<portlet:namespace />dialogAdd');
+		console.log('dialog : ',dialog);
 		if(dialog){
+			console.log('dialog1 : ',dialog);
 			dialog.destroy();
+		}else{
+			console.log('dialog2 : ',dialog);
+			Liferay.Util.getOpener().dongPopupById('dialogAdd');
 		}
 	});
 	Liferay.provide(window,'thongBao', function(){

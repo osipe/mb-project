@@ -95,6 +95,149 @@ public interface CauHinhThuTienTruocPersistence
 	public int countByNam(int nam);
 
 	/**
+	 * Returns all the cau hinh thu tien truocs where hoatDong = &#63;.
+	 *
+	 * @param hoatDong the hoat dong
+	 * @return the matching cau hinh thu tien truocs
+	 */
+	public java.util.List<CauHinhThuTienTruoc> findByHoatDong(Boolean hoatDong);
+
+	/**
+	 * Returns a range of all the cau hinh thu tien truocs where hoatDong = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CauHinhThuTienTruocModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param hoatDong the hoat dong
+	 * @param start the lower bound of the range of cau hinh thu tien truocs
+	 * @param end the upper bound of the range of cau hinh thu tien truocs (not inclusive)
+	 * @return the range of matching cau hinh thu tien truocs
+	 */
+	public java.util.List<CauHinhThuTienTruoc> findByHoatDong(
+		Boolean hoatDong, int start, int end);
+
+	/**
+	 * Returns an ordered range of all the cau hinh thu tien truocs where hoatDong = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CauHinhThuTienTruocModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param hoatDong the hoat dong
+	 * @param start the lower bound of the range of cau hinh thu tien truocs
+	 * @param end the upper bound of the range of cau hinh thu tien truocs (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching cau hinh thu tien truocs
+	 */
+	public java.util.List<CauHinhThuTienTruoc> findByHoatDong(
+		Boolean hoatDong, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<CauHinhThuTienTruoc>
+			orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the cau hinh thu tien truocs where hoatDong = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CauHinhThuTienTruocModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param hoatDong the hoat dong
+	 * @param start the lower bound of the range of cau hinh thu tien truocs
+	 * @param end the upper bound of the range of cau hinh thu tien truocs (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @return the ordered range of matching cau hinh thu tien truocs
+	 */
+	public java.util.List<CauHinhThuTienTruoc> findByHoatDong(
+		Boolean hoatDong, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<CauHinhThuTienTruoc>
+			orderByComparator,
+		boolean retrieveFromCache);
+
+	/**
+	 * Returns the first cau hinh thu tien truoc in the ordered set where hoatDong = &#63;.
+	 *
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching cau hinh thu tien truoc
+	 * @throws NoSuchCauHinhThuTienTruocException if a matching cau hinh thu tien truoc could not be found
+	 */
+	public CauHinhThuTienTruoc findByHoatDong_First(
+			Boolean hoatDong,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<CauHinhThuTienTruoc> orderByComparator)
+		throws NoSuchCauHinhThuTienTruocException;
+
+	/**
+	 * Returns the first cau hinh thu tien truoc in the ordered set where hoatDong = &#63;.
+	 *
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching cau hinh thu tien truoc, or <code>null</code> if a matching cau hinh thu tien truoc could not be found
+	 */
+	public CauHinhThuTienTruoc fetchByHoatDong_First(
+		Boolean hoatDong,
+		com.liferay.portal.kernel.util.OrderByComparator<CauHinhThuTienTruoc>
+			orderByComparator);
+
+	/**
+	 * Returns the last cau hinh thu tien truoc in the ordered set where hoatDong = &#63;.
+	 *
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching cau hinh thu tien truoc
+	 * @throws NoSuchCauHinhThuTienTruocException if a matching cau hinh thu tien truoc could not be found
+	 */
+	public CauHinhThuTienTruoc findByHoatDong_Last(
+			Boolean hoatDong,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<CauHinhThuTienTruoc> orderByComparator)
+		throws NoSuchCauHinhThuTienTruocException;
+
+	/**
+	 * Returns the last cau hinh thu tien truoc in the ordered set where hoatDong = &#63;.
+	 *
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching cau hinh thu tien truoc, or <code>null</code> if a matching cau hinh thu tien truoc could not be found
+	 */
+	public CauHinhThuTienTruoc fetchByHoatDong_Last(
+		Boolean hoatDong,
+		com.liferay.portal.kernel.util.OrderByComparator<CauHinhThuTienTruoc>
+			orderByComparator);
+
+	/**
+	 * Returns the cau hinh thu tien truocs before and after the current cau hinh thu tien truoc in the ordered set where hoatDong = &#63;.
+	 *
+	 * @param cauHinhThuTienTruocId the primary key of the current cau hinh thu tien truoc
+	 * @param hoatDong the hoat dong
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next cau hinh thu tien truoc
+	 * @throws NoSuchCauHinhThuTienTruocException if a cau hinh thu tien truoc with the primary key could not be found
+	 */
+	public CauHinhThuTienTruoc[] findByHoatDong_PrevAndNext(
+			long cauHinhThuTienTruocId, Boolean hoatDong,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<CauHinhThuTienTruoc> orderByComparator)
+		throws NoSuchCauHinhThuTienTruocException;
+
+	/**
+	 * Removes all the cau hinh thu tien truocs where hoatDong = &#63; from the database.
+	 *
+	 * @param hoatDong the hoat dong
+	 */
+	public void removeByHoatDong(Boolean hoatDong);
+
+	/**
+	 * Returns the number of cau hinh thu tien truocs where hoatDong = &#63;.
+	 *
+	 * @param hoatDong the hoat dong
+	 * @return the number of matching cau hinh thu tien truocs
+	 */
+	public int countByHoatDong(Boolean hoatDong);
+
+	/**
 	 * Caches the cau hinh thu tien truoc in the entity cache if it is enabled.
 	 *
 	 * @param cauHinhThuTienTruoc the cau hinh thu tien truoc

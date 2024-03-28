@@ -91,6 +91,9 @@ public interface PhatVayLocalService
 			Date ngayTatToanTu, Date ngayTatToanDen, String trangThai)
 		throws SystemException;
 
+	public int countCTV_NgayThuTien(
+		long chiNhanhId, String maCTV, Date ngayThuTien);
+
 	/**
 	 * Creates a new phat vay with the primary key. Does not add the phat vay to the database.
 	 *
@@ -206,7 +209,8 @@ public interface PhatVayLocalService
 
 	public List<PhatVay> findByMaCTV(String maCTV) throws SystemException;
 
-	public List<PhatVay> findCTV_NgayThuTien(String maCTV, Date ngayThuTien);
+	public List<PhatVay> findCTV_NgayThuTien(
+		long chiNhanhId, String maCTV, Date ngayThuTien);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();

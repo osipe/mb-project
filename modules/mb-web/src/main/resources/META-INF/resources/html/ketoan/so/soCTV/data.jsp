@@ -26,7 +26,7 @@
 	int namSearch = ParamUtil.getInteger(request, "namSearch");
 	int thangSearch = ParamUtil.getInteger(request, "thangSearch");
 	long taiKhoanDoiUngIdSearch = ParamUtil.getLong(request, "taiKhoanDoiUngIdSoCTVSearch");
-	TaiKhoanDoiUng taiKhoanDoiUng = TaiKhoanDoiUngLocalServiceUtil.createTaiKhoanDoiUng(0L);
+	TaiKhoanDoiUng taiKhoanDoiUng = null;
 	TaiKhoanDoiUng taiKhoanThuVon = TaiKhoanDoiUngLocalServiceUtil.createTaiKhoanDoiUng(0L);
 	if(taiKhoanDoiUngIdSearch > 0){ 
 		taiKhoanDoiUng = TaiKhoanDoiUngLocalServiceUtil.fetchTaiKhoanDoiUng(taiKhoanDoiUngIdSearch);
@@ -43,35 +43,45 @@
 	Locale localeEn = new Locale("en", "EN");
     NumberFormat df = NumberFormat.getInstance(localeEn);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	
-	
-	List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanThuVon.getTaiKhoanDoiUngId(),taiKhoanDoiUng.getSoHieu(), ngayChungTuTu, ngayChungTuDen, 1, -1, -1, null);
-	LichSuTaiKhoanDauKy lichSuTaiKhoanDauKy = LichSuTaiKhoanDauKyLocalServiceUtil.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngIdSearch, namSearch, thangSearch);
-	if(lichSuTaiKhoanDauKy == null){
-		lichSuTaiKhoanDauKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
+	List<DsPhieuTaiKhoan> dsPhieuTaiKhoans = DsPhieuTaiKhoanLocalServiceUtil.getDSThuChiByTaiKhoanNgayChungTu(taiKhoanThuVon.getTaiKhoanDoiUngId(),taiKhoanDoiUng != null ? taiKhoanDoiUng.getSoHieu() : "", ngayChungTuTu, ngayChungTuDen, 1, -1, -1, null);
+	LichSuTaiKhoanDauKy dauKy = null;
+	LichSuTaiKhoanDauKy cuoiKy = null;
+	if(taiKhoanDoiUng != null){
+		dauKy = LichSuTaiKhoanDauKyLocalServiceUtil.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngIdSearch, namSearch, thangSearch);
+		cuoiKy = LichSuTaiKhoanDauKyLocalServiceUtil.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngIdSearch,thangSearch == 12 ?  namSearch + 1 : namSearch,thangSearch == 12 ? 1 : thangSearch + 1);
+	}else{
+		dauKy = LichSuTaiKhoanDauKyLocalServiceUtil.sumByNamThang(taiKhoanThuVon.getTaiKhoanDoiUngId(), 2,namSearch, thangSearch);
+		cuoiKy = LichSuTaiKhoanDauKyLocalServiceUtil.sumByNamThang(taiKhoanThuVon.getTaiKhoanDoiUngId(), 2,thangSearch == 12 ?  namSearch + 1 : namSearch,thangSearch == 12 ? 1 : thangSearch + 1);
 	}
-	LichSuTaiKhoanDauKy cuoiKy = LichSuTaiKhoanDauKyLocalServiceUtil.fetchByTaiKhoanDoiUngId_Nam_Thang(taiKhoanDoiUngIdSearch,thangSearch == 12 ?  namSearch + 1 : namSearch,thangSearch == 12 ? 1 : thangSearch + 1);
+	if(dauKy == null){
+		dauKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
+	}
 	if(cuoiKy == null){
 		cuoiKy = LichSuTaiKhoanDauKyLocalServiceUtil.createLichSuTaiKhoanDauKy(0L);
 	}
+	if(taiKhoanDoiUng == null){
+		taiKhoanDoiUng = TaiKhoanDoiUngLocalServiceUtil.createTaiKhoanDoiUng(0L);
+	}
 	cuoiKy.setTaiKhoanDoiUngId(taiKhoanDoiUngIdSearch);
+	dauKy.setNam(namSearch);
+	dauKy.setThang(thangSearch);
 	cuoiKy.setNam(thangSearch == 12 ?  namSearch + 1 : namSearch);
 	cuoiKy.setThang(thangSearch == 12 ? 1 : thangSearch + 1);
-	Double soTien = lichSuTaiKhoanDauKy.getSoTienTon() != null ? lichSuTaiKhoanDauKy.getSoTienTon() : GetterUtil.getDouble("0");
+	Double soTien = dauKy.getSoTienTon() != null ? dauKy.getSoTienTon() : GetterUtil.getDouble("0");
 	Double soTienNo =  GetterUtil.getDouble("0");
 	Double soTienCo =  GetterUtil.getDouble("0");
 
 %>
-<h4 align="center"><b><u>TÊN TÀI KHOẢN :</u></b>   <%=taiKhoanDoiUng.getTen() %></h4>
-<h4 align="center"><b><u>SỐ HIỆU :</u></b>  <%=taiKhoanDoiUng.getSoHieu() %></h4>
+<h4 align="center"><b><u>TÊN TÀI KHOẢN :</u></b>   <%=taiKhoanDoiUng != null ? taiKhoanDoiUng.getTen() : "Tất cả"%></h4>
+<h4 align="center"><b><u>SỐ HIỆU :</u></b>  <%=taiKhoanDoiUng != null ? taiKhoanDoiUng.getSoHieu() : "---"%></h4>
 <div class="btn-group" style="float: right;">
   <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">In Sổ Cái</button>
   <div class="dropdown-menu">
-    <a class="dropdown-item" href="#" onClick="inSoCai(1); return false;">
+    <a class="dropdown-item" href="#" onClick="inSoCTV(1); return false;">
     	<img alt="Không tìm thấy file" width="20" height="20" src='<%=themeDisplay.getPathThemeImages() + "/file_system/small/docx.png"%>'>
     	DOCX
     </a>
-    <a class="dropdown-item" href="#" onClick="inSoCai(2); return false;">
+    <a class="dropdown-item" href="#" onClick="inSoCTV(2); return false;">
     	<img alt="Không tìm thấy file" width="20" height="20" src='<%=themeDisplay.getPathThemeImages() + "/file_system/small/xlsx.png"%>'>
     	XLSX
     </a>
@@ -102,7 +112,7 @@
 	 		<td><b><u>SỐ ĐẦU KỲ</u></b></td>
 	 		<td/>
 	 		<td/>
-	 		<td colspan="2" style="text-align: center;"><b><%=(lichSuTaiKhoanDauKy.getSoTienTon() != null && lichSuTaiKhoanDauKy.getSoTienTon() != 0)  ? df.format(lichSuTaiKhoanDauKy.getSoTienTon()) : ""%></b></td>
+	 		<td colspan="2" style="text-align: center;"><b><%=(dauKy.getSoTienTon() != null && dauKy.getSoTienTon() != 0)  ? df.format(dauKy.getSoTienTon()) : "0"%></b></td>
 	 	</tr>
 	 		<c:choose>
 	 	<c:when test="<%=CollectionUtils.isNotEmpty(dsPhieuTaiKhoans)%>">
@@ -200,7 +210,7 @@
 		</c:choose>
 	</tbody>
 </table>
-<portlet:resourceURL var="inSoCaiURL" id="inSoCaiURL">
+<portlet:resourceURL var="inSoCTVURL" id="inSoCTVURL">
 	<portlet:param name="nam" value="<%=String.valueOf(namSearch)%>" />
 	<portlet:param name="thang" value="<%=String.valueOf(thangSearch)%>" />
 	<portlet:param name="taiKhoanDoiUngId" value="<%=String.valueOf(taiKhoanDoiUngIdSearch)%>" />
@@ -212,8 +222,8 @@ AUI().ready(['aui-base'], function(A) {
 			target: A.getBody()
 		}
 	);
-	Liferay.provide(window,'inSoCai', function(type){
-		var url = '${inSoCaiURL}';
+	Liferay.provide(window,'inSoCTV', function(type){
+		var url = '${inSoCTVURL}';
 		url += '&<portlet:namespace/>typeIn=' + type;
 		window.location.href = url;
 	});

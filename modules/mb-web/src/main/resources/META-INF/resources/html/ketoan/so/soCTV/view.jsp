@@ -41,6 +41,7 @@ windowState="<%=LiferayWindowState.EXCLUSIVE.toString()%>">
 			</td>
 			<td style="width: 10%;">
 				<aui:select name="taiKhoanDoiUngIdSoCTVSearch" label="Tài khoản" onchange="searchSoCTV();" cssClass="input-select2">
+					 <aui:option value="-1" label="Tất cả" />
 					 <c:forEach items="<%= itemCTVs%>" var="item">
 						 	<aui:option value="${item.taiKhoanDoiUngId}" label="${item.ten} - ${item.soHieu}"/>
 					</c:forEach>

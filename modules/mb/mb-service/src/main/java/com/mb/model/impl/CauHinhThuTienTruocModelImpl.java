@@ -132,7 +132,9 @@ public class CauHinhThuTienTruocModelImpl
 			"value.object.column.bitmask.enabled.com.mb.model.CauHinhThuTienTruoc"),
 		true);
 
-	public static final long NAM_COLUMN_BITMASK = 1L;
+	public static final long HOATDONG_COLUMN_BITMASK = 1L;
+
+	public static final long NAM_COLUMN_BITMASK = 2L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -703,7 +705,19 @@ public class CauHinhThuTienTruocModelImpl
 
 	@Override
 	public void setHoatDong(Boolean hoatDong) {
+		_columnBitmask |= HOATDONG_COLUMN_BITMASK;
+
+		if (!_setOriginalHoatDong) {
+			_setOriginalHoatDong = true;
+
+			_originalHoatDong = _hoatDong;
+		}
+
 		_hoatDong = hoatDong;
+	}
+
+	public Boolean getOriginalHoatDong() {
+		return _originalHoatDong;
 	}
 
 	public long getColumnBitmask() {
@@ -828,6 +842,11 @@ public class CauHinhThuTienTruocModelImpl
 			cauHinhThuTienTruocModelImpl._nam;
 
 		cauHinhThuTienTruocModelImpl._setOriginalNam = false;
+
+		cauHinhThuTienTruocModelImpl._originalHoatDong =
+			cauHinhThuTienTruocModelImpl._hoatDong;
+
+		cauHinhThuTienTruocModelImpl._setOriginalHoatDong = false;
 
 		cauHinhThuTienTruocModelImpl._columnBitmask = 0;
 	}
@@ -980,6 +999,8 @@ public class CauHinhThuTienTruocModelImpl
 	private Date _ngayTu;
 	private Date _ngayDen;
 	private Boolean _hoatDong;
+	private Boolean _originalHoatDong;
+	private boolean _setOriginalHoatDong;
 	private long _columnBitmask;
 	private CauHinhThuTienTruoc _escapedModel;
 

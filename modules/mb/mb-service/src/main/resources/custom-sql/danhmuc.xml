@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <custom-sql>
+	<sql id="com.mb.service.persistence.CongTacVienFinder.getCongTacVienChuaCoTaiKhoanDU">
+		<![CDATA[
+			SELECT *
+			FROM dm_congtacvien
+			WHERE hoatdong = true
+			AND ma not in (SELECT sohieu FROM dm_taikhoandoiung)
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.SoKheUocFinder.findBase">
+		<![CDATA[
+			SELECT *
+			FROM dm_sokheuoc
+			WHERE TRUE
+			AND (LOWER(cauTruc) LIKE ?)
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.SoKheUocFinder.countBase">
+		<![CDATA[
+			SELECT  COUNT(1) as COUNT_VALUE
+			FROM dm_sokheuoc
+			WHERE TRUE
+			AND (LOWER(cauTruc) LIKE ?)
+		]]>
+	</sql>
 	<sql id="com.mb.service.persistence.ChiNhanhFinder.findBase">
 		<![CDATA[
 			SELECT *
@@ -21,8 +45,9 @@
 			AND (LOWER(ten) LIKE ?)
 		]]>
 	</sql>
-	
-	<sql id="com.mb.service.persistence.CauHinhThuTienTruocFinder.findBase">
+
+	<sql
+		id="com.mb.service.persistence.CauHinhThuTienTruocFinder.findBase">
 		<![CDATA[
 			SELECT  *
 			FROM dm_cauhinhthutientruoc
@@ -31,7 +56,8 @@
 			AND (nam = ?)
 		]]>
 	</sql>
-	<sql id="com.mb.service.persistence.CauHinhThuTienTruocFinder.countBase">
+	<sql
+		id="com.mb.service.persistence.CauHinhThuTienTruocFinder.countBase">
 		<![CDATA[
 			SELECT  COUNT(1) as COUNT_VALUE
 			FROM dm_cauhinhthutientruoc
@@ -148,6 +174,16 @@
 			AND (thoiHan = ?)
 		]]>
 	</sql>
+	<sql id="com.mb.service.persistence.KhachHangFinder.findChiNhanh_Ma_HoatDong">
+		<![CDATA[
+			SELECT  kh.*
+			FROM dm_khachhang kh
+			WHERE TRUE
+			AND (hoatdong = ?)
+			AND (chinhanhid = ?)
+			AND (ma = ?)
+		]]>
+	</sql>
 	<sql id="com.mb.service.persistence.KhachHangFinder.findBase">
 		<![CDATA[
 			SELECT  kh.*
@@ -184,7 +220,8 @@
 			ORDER BY ma ASC
 		]]>
 	</sql>
-	<sql id="com.mb.service.persistence.CongTacVienFinder.countCTVSaoKe">
+	<sql
+		id="com.mb.service.persistence.CongTacVienFinder.countCTVSaoKe">
 		<![CDATA[
 			select COUNT(1)  as COUNT_VALUE
 			from dm_congtacvien 
@@ -223,6 +260,16 @@
 											)
 						)
 			ORDER BY ma ASC
+		]]>
+	</sql>
+	<sql id="com.mb.service.persistence.CongTacVienFinder.findChiNhanh_Ma_HoatDong">
+		<![CDATA[
+			SELECT  ctv.*
+			FROM dm_congtacvien ctv
+			WHERE TRUE
+			AND (hoatdong = ?)
+			AND (chinhanhid = ?)
+			AND (ma = ?)
 		]]>
 	</sql>
 	<sql id="com.mb.service.persistence.CongTacVienFinder.findBase">

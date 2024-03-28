@@ -76,6 +76,8 @@ public interface SoKheUocLocalService
 			SoKheUoc soKheUoc, ServiceContext serviceContext)
 		throws SystemException;
 
+	public int countBase(String cauTruc) throws SystemException;
+
 	/**
 	 * Creates a new so khe uoc with the primary key. Does not add the so khe uoc to the database.
 	 *
@@ -183,6 +185,10 @@ public interface SoKheUocLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public SoKheUoc fetchSoKheUoc(long soKheUocId);
+
+	public List<SoKheUoc> findBase(
+			String cauTruc, int start, int end, OrderByComparator obc)
+		throws SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();

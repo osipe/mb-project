@@ -194,7 +194,7 @@ public class PhatVayPortlet extends MVCPortlet {
 							"attachment; filename=\"PHIEU_THU_TAT_TOAN.docx\"");
 					in = getServletContext().getResourceAsStream("report/MAU_TAT_TOAN.docx");
 
-					IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Velocity);
+					IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker);
 					IContext iContext = report.createContext();
 					Map<String, Object> map = new HashMap<String, Object>();
 					map.put("TEN_CONG_TY", GetterUtil.getString(PropsUtil.get("thongtin.cty.ten")));

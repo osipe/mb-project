@@ -240,6 +240,13 @@ public class LichSuTaiKhoanDauKyLocalServiceUtil {
 	}
 
 	public static java.util.List<com.mb.model.LichSuTaiKhoanDauKy>
+			findByNam_Thang(int nam, int thang)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return getService().findByNam_Thang(nam, thang);
+	}
+
+	public static java.util.List<com.mb.model.LichSuTaiKhoanDauKy>
 			findByTaiKhoanDoiUngId(long taiKhoanDoiUngId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 
@@ -313,6 +320,14 @@ public class LichSuTaiKhoanDauKyLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return getService().getPersistedModel(primaryKeyObj);
+	}
+
+	public static com.mb.model.LichSuTaiKhoanDauKy sumByNamThang(
+			long taiKhoanDoiUngChaId, int loaiTaiKhoan, int nam, int thang)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return getService().sumByNamThang(
+			taiKhoanDoiUngChaId, loaiTaiKhoan, nam, thang);
 	}
 
 	/**

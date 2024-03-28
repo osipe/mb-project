@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="java.text.NumberFormat"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -61,6 +62,7 @@
 			 <liferay-ui:search-container-row className="com.mb.model.PhatVay" modelVar="phatVay" keyProperty="phatVayId"> 
 			 	<%
 				 	String soLanDaThuStr = String.valueOf(phatVay.getSoLanDaThu());
+			 		
 					if(phatVay.getTrangThai() == 4){
 						soLanDaThuStr =  String.valueOf(phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc()) + " (Thu trước " + phatVay.getSoNgayThuTruoc() + " Ngày)";
 					}
@@ -98,10 +100,11 @@
 				 </liferay-ui:search-container-column-text>
 				 <%
 				 	Double traLai = (phatVay.getThoiHan()  - (phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc())) * phatVay.getLaiNgay();
+				 	Double gocTra = phatVay.getSoTienVay() - ((phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc()) * phatVay.getGocNgay());
 				 %>
 				 
 				 <liferay-ui:search-container-column-text name="Thông tin tất toán" cssClass="aui-w20" orderable="true"  orderableProperty="soLanDaThu">
-					 Trả vốn : <span style="font-style: italic;color:#ff3d00e8;">${phatVay.duNoGoc > 0 ? df.format(phatVay.duNoGoc) : '0'}</span>
+					 Trả vốn : <span style="font-style: italic;color:#ff3d00e8;"><%=gocTra > 0 ? df.format(gocTra) : "0" %></span>
 					 <br/>
 				 	Trả lãi : <span style="font-style: italic;color:#ff3d00e8;"><%=traLai > 0 ? df.format(traLai) : "0" %></span>
 				 </liferay-ui:search-container-column-text>

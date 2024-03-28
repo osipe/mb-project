@@ -1,5 +1,6 @@
 create index IX_3C5078C4 on dm_cauhinhthutientet (nam);
 
+create index IX_FD5A0440 on dm_cauhinhthutientruoc (hoatDong);
 create index IX_20BD795C on dm_cauhinhthutientruoc (nam);
 
 create index IX_8B11A80B on dm_chinhanh (hoatDong);
@@ -35,6 +36,7 @@ create index IX_B54D00B7 on dm_taikhoandoiung (taiKhoanDoiUngChaId, hoatDong);
 create index IX_20EE0820 on ketoan_dsphieutaikhoan (phieuId, hoatDong);
 create index IX_85FF8992 on ketoan_dsphieutaikhoan (taiKhoanDoiUngId, hoatDong);
 
+create index IX_1604274 on ketoan_lichsutaikhoandauky (nam, thang);
 create index IX_85F7F836 on ketoan_lichsutaikhoandauky (taiKhoanDoiUngId, nam, thang);
 
 create index IX_8735CCB5 on mb_lichsuthuphatchi (maCTV[$COLUMN_LENGTH:75$]);

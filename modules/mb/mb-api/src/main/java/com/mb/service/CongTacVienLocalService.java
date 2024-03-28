@@ -208,6 +208,10 @@ public interface CongTacVienLocalService
 			int start, int end, OrderByComparator obc)
 		throws SystemException;
 
+	public List<CongTacVien> findChiNhanh_Ma_HoatDong(
+		long chiNhanhId, String ma, int hoatDong, int start, int end,
+		OrderByComparator obc);
+
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
@@ -221,6 +225,10 @@ public interface CongTacVienLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CongTacVien getCongTacVien(long congTacVienId)
 		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<CongTacVien> getCongTacVienChuaCoTaiKhoanDU()
+		throws SystemException;
 
 	/**
 	 * Returns a range of all the cong tac viens.

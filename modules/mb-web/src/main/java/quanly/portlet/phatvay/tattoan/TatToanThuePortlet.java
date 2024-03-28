@@ -120,7 +120,7 @@ public class TatToanThuePortlet extends MVCPortlet {
 							jsonPhatVay.put("tongLaiTatToanStr", df.format(tongLaiTatToan));
 							jsonPhatVay.put("tongVonTatToanStr",  df.format(tongVonTatToan));
 							jsonPhatVay.put("soTienVayStr",  df.format(phatVay.getSoTienVay()));
-							jsonPhatVay.put("laiNgayStr",  df.format(phatVay.getLaiNgay()));
+							jsonPhatVay.put("laiNgayStr",  df.format(0));
 							jsonPhatVay.put("gocNgayStr",  df.format(phatVay.getGocNgay()));
 							jsonPhatVay.put("gocNgayCuoiStr",  df.format(phatVay.getGocNgayCuoi()));
 							jsonPhatVay.put("duNoGocStr",  df.format(phatVay.getDuNoGoc()));
@@ -155,8 +155,8 @@ public class TatToanThuePortlet extends MVCPortlet {
 						if (phatVayId > 0) {
 							PhatVay phatVay = PhatVayLocalServiceUtil.fetchPhatVay(phatVayId);
 							if(phatVay != null) {
-								int tongSoLanDaThu = phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc();
-								tongLaiTatToan +=  ((phatVay.getThoiHan() - tongSoLanDaThu) * phatVay.getLaiNgay());
+								//int tongSoLanDaThu = phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc();
+								//tongLaiTatToan +=  ((phatVay.getThoiHan() - tongSoLanDaThu) * phatVay.getLaiNgay());
 								tongVonTatToan += phatVay.getDuNoGoc();
 							}
 						}
@@ -256,11 +256,11 @@ public class TatToanThuePortlet extends MVCPortlet {
 							if (phatVay != null) {
 								maCTV = phatVay.getMaCTV();
 								soTienGocPhaiThu += phatVay.getDuNoGoc();
-								soTienLaiPhaiThu += ((phatVay.getThoiHan()
-										- (phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc())) * phatVay.getLaiNgay());
+//								soTienLaiPhaiThu += ((phatVay.getThoiHan()
+//										- (phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc())) * phatVay.getLaiNgay());
 								Double gocPhaithu = phatVay.getDuNoGoc();
-								Double laiPhaiThu = ((phatVay.getThoiHan()
-										- (phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc())) * phatVay.getLaiNgay());
+//								Double laiPhaiThu = ((phatVay.getThoiHan()
+//										- (phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc())) * phatVay.getLaiNgay());
 								phatVay.setNgayTatToan(new Date());
 								phatVay.setTrangThai(TrangThaiPhatVayEnum.DA_TAT_TOAN.getValue());
 								PhatVayLocalServiceUtil.updatePhatVay(phatVay, serviceContext);
@@ -271,8 +271,8 @@ public class TatToanThuePortlet extends MVCPortlet {
 								lichSuThuPhatChi.setLoai(2);
 								lichSuThuPhatChi.setPhatVayId(phatVayId);
 								lichSuThuPhatChi.setChiNhanhId(phatVay.getChiNhanhId());
-								lichSuThuPhatChi.setSoTien(gocPhaithu + laiPhaiThu);
-								lichSuThuPhatChi.setTongSoTienLaiTra(laiPhaiThu);
+								lichSuThuPhatChi.setSoTien(gocPhaithu );
+								lichSuThuPhatChi.setTongSoTienLaiTra(GetterUtil.getDouble(0));
 								lichSuThuPhatChi.setTrangThaiPhatVayHienTai(TrangThaiPhatVayEnum.DA_TAT_TOAN.getValue());
 								lichSuThuPhatChi.setTongSoTienVonTra(gocPhaithu);
 								LichSuThuPhatChiLocalServiceUtil.addLichSuThuPhatChi(lichSuThuPhatChi, serviceContext);

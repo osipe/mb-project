@@ -1,3 +1,6 @@
+<%@page import="quanly.portlet.danhmuc.cauhinhthutientruoc.CauHinhThuTienTruocComparator"%>
+<%@page import="java.util.Calendar"%>
+<%@page import="com.liferay.portal.kernel.util.PropsUtil"%>
 <%@page import="org.apache.commons.collections.CollectionUtils"%>
 <%@page import="com.mb.service.CauHinhThuTienTruocLocalServiceUtil"%>
 <%@page import="com.mb.model.CauHinhThuTienTruoc"%>
@@ -8,6 +11,7 @@
 <%@page import="com.mb.model.CongTacVien"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
+<%@page import="com.liferay.portal.kernel.util.PropsUtil"%>
 <%@page import="quanly.portlet.phatvay.phatvay.PhatVayChecker"%>
 <%@page import="com.liferay.portal.kernel.util.StringUtil"%>
 <%@page import="com.liferay.portal.kernel.util.Validator"%>
@@ -21,17 +25,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%	
-	List<CauHinhThuTienTruoc> cauHinhs = CauHinhThuTienTruocLocalServiceUtil.findAll();
+	List<CauHinhThuTienTruoc> cauHinhs = CauHinhThuTienTruocLocalServiceUtil.findBase(0, 1, -1, -1, new CauHinhThuTienTruocComparator("nam",false));
 	CauHinhThuTienTruoc cauHinh = CollectionUtils.isNotEmpty(cauHinhs) ? cauHinhs.get(0) : null;
-	Date ngayThuTienTu = cauHinh != null  ? cauHinh.getNgayTu() : null;
-	Date ngayThuTienDen = cauHinh != null ? cauHinh.getNgayDen() : null;
+	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	
 	String maCTVSearch = ParamUtil.getString(request, "maCTVSearch");
-	List<PhatVay> phatVays = PhatVayLocalServiceUtil.getPhatVayDeThuTienTruoc(maCTVSearch, ngayThuTienTu);
+	List<PhatVay> phatVays = PhatVayLocalServiceUtil.getPhatVayDeThuTienTruoc(maCTVSearch, cauHinh.getNgayTu());
 
 	Locale localeEn = new Locale("en", "EN");
     NumberFormat df = NumberFormat.getInstance(localeEn);
-	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	
 	
 	String arrayChecked = ParamUtil.getString(request, "phatVayIdAdds");
 	String[] checked = StringUtil.split(arrayChecked, ",");

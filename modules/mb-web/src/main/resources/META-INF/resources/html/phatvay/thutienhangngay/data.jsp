@@ -23,7 +23,8 @@
 	long ngayThuTienTime = ParamUtil.getLong(request, "ngayThuTien");
 	Date ngayThuTienSearch = ngayThuTienTime != 0 ? new Date(ngayThuTienTime) : null;
 	String maCTVSearch = ParamUtil.getString(request, "maCTVSearch");
-	int count = CongTacVienLocalServiceUtil.countBase(maCTVSearch, "", "", "", 1);
+	long chiNhanhIdSearch = ParamUtil.getLong(request, "chiNhanhIdSearch");
+	int count = CongTacVienLocalServiceUtil.countCTVSaoKe(chiNhanhIdSearch, maCTVSearch, null);
 	Locale localeEn = new Locale("en", "EN");
     NumberFormat df = NumberFormat.getInstance(localeEn);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -59,7 +60,7 @@
 		 	searchContainer.setOrderByType(orderByType);
 		 	searchContainer.setOrderByComparator(obc);
 		 
-			List<CongTacVien> items = CongTacVienLocalServiceUtil.findBase( maCTVSearch, "", "", "", 1, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
+			List<CongTacVien> items = CongTacVienLocalServiceUtil.findChiNhanh_Ma_HoatDong(chiNhanhIdSearch, maCTVSearch, 1, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 		 %>
 		 <liferay-ui:search-container-results results="<%= items %>" />
 		<liferay-ui:search-container-row className="com.mb.model.CongTacVien" modelVar="congTacVien" keyProperty="congTacVienId" indexVar="index"> 
@@ -69,7 +70,7 @@
 				Double tongLaiNgay = GetterUtil.getDouble("0");
 				Double tongDuNoGoc = GetterUtil.getDouble("0");
 				PhatVayComparator obcPhatVay = new PhatVayComparator("createdate",true);
-		 		List<PhatVay> phatVays = PhatVayLocalServiceUtil.findCTV_NgayThuTien(congTacVien.getMa(),ngayThuTienSearch);
+		 		List<PhatVay> phatVays = PhatVayLocalServiceUtil.findCTV_NgayThuTien(chiNhanhIdSearch,congTacVien.getMa(),ngayThuTienSearch);
 			 %>
 			 <liferay-ui:search-container-column-text cssClass="aui-w3" name="STT">
 			 	<span style="color:#ff3d00e8;font-weight: bold;"><%=index + 1 %></span>
@@ -167,7 +168,7 @@
 			 	%>
 			 </liferay-ui:search-container-column-text>
 		 	 <liferay-ui:search-container-column-text cssClass="aui-w7" name="NGÀY ĐÃ THU CUỐI">
-			 		<span style="color:#ff3d00e8;font-weight: bold;">&nbsp;</span>
+		 		<span style="color:#ff3d00e8;font-weight: bold;">&nbsp;</span>
 			 	<%
 			 		for(PhatVay item : phatVays){
 			 	%>
@@ -178,7 +179,7 @@
 			 	%>
 			 </liferay-ui:search-container-column-text>
 			 <liferay-ui:search-container-column-text cssClass="aui-w20" name="THU TIỀN TẾT">
-			 		<span style="color:#ff3d00e8;font-weight: bold;">&nbsp;</span>
+		 		<span style="color:#ff3d00e8;font-weight: bold;">&nbsp;</span>
 			 	<%
 			 		for(PhatVay item : phatVays){
 			 			String ngayThuTruoc = "";
@@ -187,7 +188,7 @@
 			 			}
 			 	%>
 			 		<br/>
-			 		<span title="<%=ngayThuTruoc%>" style="font-style: italic;">Đã thu tết</span>
+			 		<span title="<%=ngayThuTruoc%>" style="font-style: italic;"><%=Validator.isNotNull(ngayThuTruoc) ? "Đã có thu trước" : "Không có thu trước"%></span>
 			 	<%
 			 		}
 			 	%>

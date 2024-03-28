@@ -112,7 +112,7 @@ public class SoScheduler extends BaseMessageListener {
 								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), nam, month);
 						int mounthCuoiKy = month + 1;
 						int namCuoiKy = nam;
-						if(month == 12) {
+						if (month == 12) {
 							mounthCuoiKy = 1;
 							namCuoiKy = nam + 1;
 						}
@@ -170,7 +170,7 @@ public class SoScheduler extends BaseMessageListener {
 								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), nam, month);
 						int mounthCuoiKy = month + 1;
 						int namCuoiKy = nam;
-						if(month == 12) {
+						if (month == 12) {
 							mounthCuoiKy = 1;
 							namCuoiKy = nam + 1;
 						}
@@ -223,7 +223,7 @@ public class SoScheduler extends BaseMessageListener {
 								.fetchByTaiKhoanDoiUngId_Nam_Thang(item.getTaiKhoanDoiUngId(), nam, month);
 						int mounthCuoiKy = month + 1;
 						int namCuoiKy = nam;
-						if(month == 12) {
+						if (month == 12) {
 							mounthCuoiKy = 1;
 							namCuoiKy = nam + 1;
 						}
@@ -278,15 +278,27 @@ public class SoScheduler extends BaseMessageListener {
 	}
 
 	private void capNhatDuLieu() {
+		int namDauKy = GetterUtil.getInteger(PropsUtil.get("config.so.namdauky"));
+		int thangDauKy = GetterUtil.getInteger(PropsUtil.get("config.so.thangdauky"));
 		Calendar cal = Calendar.getInstance();
 		int namNow = cal.get(Calendar.YEAR);
 		int monthNow = cal.get(Calendar.MONTH) + 1;
-		for (int i = 1; i <= monthNow; i++) {
-			if(i == 1) {
-				capNhatDuLieu(namNow - 1, 12);
+		if (namNow >= namDauKy) {
+			if (namNow == namDauKy) {
+				for (int i = thangDauKy; i <= monthNow; i++) {
+					capNhatDuLieu(namNow, i);
+				}
+			} else {
+				if(namNow - 1 >= namDauKy) {
+					capNhatDuLieu(namNow - 1, 12);
+				}
+				for (int i = 1; i <= monthNow; i++) {
+					capNhatDuLieu(namNow, i);
+
+				}
 			}
-			capNhatDuLieu(namNow, i);
 		}
+
 	}
 
 	@Activate
@@ -294,7 +306,7 @@ public class SoScheduler extends BaseMessageListener {
 	protected void activate(Map<String, Object> properties) throws SchedulerException {
 		Class<?> clazz = getClass();
 		String className = clazz.getName();
-		Trigger trigger = _triggerFactory.createTrigger(className, className, null, null, 10, TimeUnit.SECOND);
+		Trigger trigger = _triggerFactory.createTrigger(className, className, null, null, 30, TimeUnit.SECOND);
 		SchedulerEntry schedulerEntry = new SchedulerEntryImpl(className, trigger);
 		_schedulerEngineHelper.register(this, schedulerEntry, DestinationNames.SCHEDULER_DISPATCH);
 	}

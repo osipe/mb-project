@@ -137,4 +137,11 @@ public class CongTacVienLocalServiceImpl
 	public List<CongTacVien> getCTVThuPhatChi(String maCTV,Date ngayTaoTu,Date ngayTaoDen) throws SystemException {
 		return congTacVienFinder.getCTVThuPhatChi(maCTV,ngayTaoTu, ngayTaoDen);
 	}
+	public List<CongTacVien> getCongTacVienChuaCoTaiKhoanDU() throws SystemException {
+		return congTacVienFinder.getCongTacVienChuaCoTaiKhoanDU();
+	}
+	public List<CongTacVien> findChiNhanh_Ma_HoatDong(long chiNhanhId,String ma, int hoatDong, int start,
+			int end, OrderByComparator obc){
+		return congTacVienFinder.findChiNhanh_Ma_HoatDong(chiNhanhId, ma, hoatDong, start, end, obc);
+	}
 }

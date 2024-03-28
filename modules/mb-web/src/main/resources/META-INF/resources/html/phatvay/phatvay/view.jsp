@@ -15,7 +15,7 @@
 %>
 <portlet:renderURL var="addURL"
 	windowState="<%=LiferayWindowState.POP_UP.toString()%>">
-	<portlet:param name="dialogId" value="dialogAdd" />
+	<portlet:param name="dialogId" value="dialogAddPV" />
 	<portlet:param name="mvcPath" value="/html/phatvay/phatvay/add.jsp" />
 </portlet:renderURL>
 <portlet:renderURL var="searchURL"
@@ -24,7 +24,7 @@
 </portlet:renderURL>
 <aui:form name="frm">
 <%
-	String oppenDialogAdd = "openDialog('"+addURL.toString() + "','Thêm phát vay','dialogAdd');";
+	String oppenDialogAdd = "openDialog('"+addURL.toString() + "','Thêm phát vay','dialogAddPV');";
 %>
 <button type="button" class="btn btn-labeled btn-danger"
 	onclick="<%=oppenDialogAdd%>">

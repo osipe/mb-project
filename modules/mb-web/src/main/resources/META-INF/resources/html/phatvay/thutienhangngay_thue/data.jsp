@@ -23,9 +23,10 @@
 	long ngayThuTienTime = ParamUtil.getLong(request, "ngayThuTien");
 	Date ngayThuTienSearch = ngayThuTienTime != 0 ? new Date(ngayThuTienTime) : null;
 	String maCTVSearch = ParamUtil.getString(request, "maCTVSearch");
-	int count = CongTacVienLocalServiceUtil.countBase(maCTVSearch, "", "", "", 1);
+	long chiNhanhIdSearch = ParamUtil.getLong(request, "chiNhanhIdSearch");
+	int count = CongTacVienLocalServiceUtil.countCTVSaoKe(chiNhanhIdSearch, maCTVSearch, null);
 	Locale localeEn = new Locale("en", "EN");
-    NumberFormat df = NumberFormat.getInstance(localeEn);
+	NumberFormat df = NumberFormat.getInstance(localeEn);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	Double tongTienVayAll = GetterUtil.getDouble("0");
 	Double tongGocNgayAll = GetterUtil.getDouble("0");
@@ -37,7 +38,7 @@
 	<liferay-portlet:renderURL varImpl="iteratorURL">
 		<portlet:param name="ngayThuTien" value="<%= String.valueOf(ngayThuTienTime) %>" />
 		<portlet:param name="maCTVSearch" value="<%= String.valueOf(maCTVSearch) %>" />
-		<portlet:param name="mvcPath" value="/html/phatvay/thutienhangngay/data.jsp" />
+		<portlet:param name="mvcPath" value="/html/phatvay/thutienhangngay_thue/data.jsp" />
 	</liferay-portlet:renderURL>
 	<div style="text-align: right;"><span class="note-span">(Đơn vị : VND)</span></div>
 	<liferay-ui:search-container  delta="20"  emptyResultsMessage="Không có kết quả nào được tìm thấy!" iteratorURL="<%=iteratorURL %>" total="<%=count %>" >
@@ -59,7 +60,7 @@
 		 	searchContainer.setOrderByType(orderByType);
 		 	searchContainer.setOrderByComparator(obc);
 		 
-			List<CongTacVien> items = CongTacVienLocalServiceUtil.findBase( maCTVSearch, "", "", "", 1, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
+		 	List<CongTacVien> items = CongTacVienLocalServiceUtil.findChiNhanh_Ma_HoatDong(chiNhanhIdSearch, maCTVSearch, 1, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 		 %>
 		 <liferay-ui:search-container-results results="<%= items %>" />
 		 <liferay-ui:search-container-row className="com.mb.model.CongTacVien" modelVar="congTacVien" keyProperty="congTacVienId" indexVar="index"> 
@@ -69,7 +70,7 @@
 				Double tongLaiNgay = GetterUtil.getDouble("0");
 				Double tongDuNoGoc = GetterUtil.getDouble("0");
 				PhatVayComparator obcPhatVay = new PhatVayComparator("createdate",true);
-		 		List<PhatVay> phatVays = PhatVayLocalServiceUtil.findCTV_NgayThuTien(congTacVien.getMa(),ngayThuTienSearch);
+				List<PhatVay> phatVays = PhatVayLocalServiceUtil.findCTV_NgayThuTien(chiNhanhIdSearch,congTacVien.getMa(),ngayThuTienSearch);
 			 %>
 			 <liferay-ui:search-container-column-text cssClass="aui-w3" name="STT">
 			 	<span style="color:#ff3d00e8;font-weight: bold;"><%=index + 1 %></span>
@@ -177,21 +178,6 @@
 			 		}
 			 	%>
 			 </liferay-ui:search-container-column-text>
-			 <liferay-ui:search-container-column-text cssClass="aui-w20" name="THU TIỀN TẾT">
-			 		<span style="color:#ff3d00e8;font-weight: bold;">&nbsp;</span>
-			 	<%
-			 		for(PhatVay item : phatVays){
-			 			String ngayThuTruoc = "";
-			 			if(item.getTrangThai() == TrangThaiPhatVayEnum.CO_THU_TIEN_TRUOC.getValue() && item.getNgayThuTruocTu() != null && item.getNgayThuTruocDen() != null){
-			 				ngayThuTruoc = "Đã thu tết" + "( " + sdf.format(item.getNgayThuTruocTu()) + " - " + sdf.format(item.getNgayThuTruocDen()) + " )";
-			 			}
-			 	%>
-			 		<br/>
-			 		<span title="<%=ngayThuTruoc%>" style="font-style: italic;">Đã thu tết</span>
-			 	<%
-			 		}
-			 	%>
-			 </liferay-ui:search-container-column-text>
 		 </liferay-ui:search-container-row >
 		 <liferay-ui:search-iterator />
 	</liferay-ui:search-container >
@@ -251,8 +237,6 @@ AUI().ready(['aui-base'], function(A) {
     	var td6Node = A.Node.create('<td class="table-cell text-right"/>');
     	td6Node.append(A.Node.create('<span style="color:#ff3d00e8;font-weight: bold;"></span>'));
     	
-    	var td7Node = A.Node.create('<td class="table-cell text-right last"/>');
-    	td7Node.append(A.Node.create('<span style="color:#ff3d00e8;font-weight: bold;"></span>'));
     	
     	trNode.append(td1Node);
     	trNode.append(td2Node);
@@ -260,7 +244,6 @@ AUI().ready(['aui-base'], function(A) {
     	trNode.append(td4Node);
     	trNode.append(td5Node);
     	trNode.append(td6Node);
-    	trNode.append(td7Node);
     	tbody.append(trNode);
     }
 });	

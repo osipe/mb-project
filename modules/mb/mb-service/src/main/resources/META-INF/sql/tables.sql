@@ -228,6 +228,10 @@ create table mb_lichsuthuphatchi (
 	soTien DOUBLE,
 	tongSoTienVonTra DOUBLE,
 	tongSoTienLaiTra DOUBLE,
+	soLanThuDaThuTruoc INTEGER,
+	soLanThu INTEGER,
+	soLanThuDaThu INTEGER,
+	ngayDaThuCuoiTruoc DATE null,
 	ngayXuLy DATE null,
 	loai INTEGER,
 	trangThaiPhatVayHienTai INTEGER

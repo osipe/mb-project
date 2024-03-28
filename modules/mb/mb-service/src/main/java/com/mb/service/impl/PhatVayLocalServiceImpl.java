@@ -91,6 +91,7 @@ public class PhatVayLocalServiceImpl extends PhatVayLocalServiceBaseImpl {
 		lichSuThuPhatChi.setPhatVayId(phatVay.getPhatVayId());
 		lichSuThuPhatChi.setMaCTV(phatVay.getMaCTV());
 		lichSuThuPhatChi.setLoai(1);
+		lichSuThuPhatChi.setNgayXuLy(phatVay.getCreateDate());
 		lichSuThuPhatChi.setChiNhanhId(phatVay.getChiNhanhId());
 		lichSuThuPhatChi.setSoTien(phatVay.getSoTienVay());
 		lichSuThuPhatChi.setTongSoTienLaiTra(Double.valueOf(0));
@@ -137,8 +138,11 @@ public class PhatVayLocalServiceImpl extends PhatVayLocalServiceBaseImpl {
 				ngayTatToanDen, trangThai, start, end, obc);
 	}
 
-	public List<PhatVay> findCTV_NgayThuTien(String maCTV, Date ngayThuTien) {
-		return phatVayFinder.findCTV_NgayThuTien(maCTV, ngayThuTien);
+	public List<PhatVay> findCTV_NgayThuTien(long chiNhanhId,String maCTV, Date ngayThuTien) {
+		return phatVayFinder.findCTV_NgayThuTien(chiNhanhId,maCTV, ngayThuTien);
+	}
+	public int countCTV_NgayThuTien(long chiNhanhId,String maCTV, Date ngayThuTien) {
+		return phatVayFinder.countCTV_NgayThuTien(chiNhanhId,maCTV, ngayThuTien);
 	}
 
 	public List<PhatVay> getPhatVayDeThuTienTruoc(String maCTV, Date ngayThuTienTu) {

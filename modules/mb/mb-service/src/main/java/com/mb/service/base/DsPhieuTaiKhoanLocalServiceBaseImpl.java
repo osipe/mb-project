@@ -71,6 +71,7 @@ import com.mb.service.persistence.PhatVayPersistence;
 import com.mb.service.persistence.PhieuFinder;
 import com.mb.service.persistence.PhieuPersistence;
 import com.mb.service.persistence.QuanLyMaSoPersistence;
+import com.mb.service.persistence.SoKheUocFinder;
 import com.mb.service.persistence.SoKheUocPersistence;
 import com.mb.service.persistence.TaiKhoanDoiUngFinder;
 import com.mb.service.persistence.TaiKhoanDoiUngPersistence;
@@ -1212,6 +1213,24 @@ public abstract class DsPhieuTaiKhoanLocalServiceBaseImpl
 	}
 
 	/**
+	 * Returns the so khe uoc finder.
+	 *
+	 * @return the so khe uoc finder
+	 */
+	public SoKheUocFinder getSoKheUocFinder() {
+		return soKheUocFinder;
+	}
+
+	/**
+	 * Sets the so khe uoc finder.
+	 *
+	 * @param soKheUocFinder the so khe uoc finder
+	 */
+	public void setSoKheUocFinder(SoKheUocFinder soKheUocFinder) {
+		this.soKheUocFinder = soKheUocFinder;
+	}
+
+	/**
 	 * Returns the tai khoan doi ung local service.
 	 *
 	 * @return the tai khoan doi ung local service
@@ -1647,6 +1666,9 @@ public abstract class DsPhieuTaiKhoanLocalServiceBaseImpl
 
 	@BeanReference(type = SoKheUocPersistence.class)
 	protected SoKheUocPersistence soKheUocPersistence;
+
+	@BeanReference(type = SoKheUocFinder.class)
+	protected SoKheUocFinder soKheUocFinder;
 
 	@BeanReference(type = com.mb.service.TaiKhoanDoiUngLocalService.class)
 	protected com.mb.service.TaiKhoanDoiUngLocalService

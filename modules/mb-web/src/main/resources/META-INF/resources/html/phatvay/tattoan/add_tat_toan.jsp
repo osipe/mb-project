@@ -1,3 +1,4 @@
+<%@page import="java.util.Date"%>
 <%@page import="java.text.NumberFormat"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -12,6 +13,8 @@
 	NumberFormat df = NumberFormat.getInstance(localeEn);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	String maCTV = ParamUtil.getString(request, "maCTV");
+	long ngayTatToanTime = ParamUtil.getLong(request, "ngayTatToanTime");
+	Date ngayTatToan = ngayTatToanTime != 0 ? new Date(ngayTatToanTime) : null;
 	String dialogId = ParamUtil.getString(request, "dialogId");
 	String phatVayIdAdds = ParamUtil.getString(request, "phatVayIdAdds");
 %>
@@ -23,6 +26,8 @@
 					</aui:input>
 				</td>
 				<td class="aui-w50">
+					<aui:input readonly ="true" cssClass="input-date" name="ngayTatToan" label="Ngày tất toán" placeholder="dd/MM/yyyy" value='<%=ngayTatToan != null ? sdf.format(ngayTatToan) : ""%>'>
+					</aui:input>	
 				</td>
 			</tr>
 			<tr>
@@ -68,6 +73,7 @@ AUI().ready(['aui-base'], function(A) {
 			var data = {
 				'<portlet:namespace/>soKUSearch' : A.one('#<portlet:namespace />soKUSearch').val(),
 	        	'<portlet:namespace/>maCTVSearch' : '<%=maCTV %>',
+	        	'<portlet:namespace/>ngayTatToanTime' : '<%=ngayTatToanTime %>',
 	        	'<portlet:namespace/>phatVayIdAdds' : '<%=phatVayIdAdds %>'
 	        }
 			divContent.plug(A.Plugin.IO,{

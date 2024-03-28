@@ -1,3 +1,6 @@
+<%@page import="java.util.Date"%>
+<%@page import="com.liferay.portal.kernel.json.JSONObject"%>
+<%@page import="quanly.portlet.phatvay.tattoan.TatToanPortlet"%>
 <%@page import="java.text.NumberFormat"%>
 <%@page import="java.util.Locale"%>
 <%@page import="quanly.portlet.phatvay.phatvay.PhatVayChecker"%>
@@ -14,9 +17,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%	
+	TatToanPortlet  tatToanPortlet = new TatToanPortlet();
 	String maCTVSearch = ParamUtil.getString(request, "maCTVSearch");
 	String soKUSearch = ParamUtil.getString(request, "soKUSearch");
-	int count = PhatVayLocalServiceUtil.countBase(soKUSearch, maCTVSearch, "", null,null,null, null,null,null, "1,4");
+	long ngayTatToanTime = ParamUtil.getLong(request, "ngayTatToanTime");
+	Date ngayTatToan = ngayTatToanTime != 0 ? new Date(ngayTatToanTime) : null;
+	int count = PhatVayLocalServiceUtil.countBase(soKUSearch, maCTVSearch, "", null,null, null,null,null,null, "1,4");
 	Locale localeEn = new Locale("en", "EN");
     NumberFormat df = NumberFormat.getInstance(localeEn);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -30,6 +36,7 @@
 	<liferay-portlet:renderURL varImpl="iteratorURL">
 		<portlet:param name="soKUSearch" value="<%= String.valueOf(soKUSearch) %>" />
 		<portlet:param name="maCTVSearch" value="<%= String.valueOf(maCTVSearch) %>" />
+		<portlet:param name="ngayTatToanTime" value="<%= String.valueOf(ngayTatToanTime) %>" />
 		<portlet:param name="phatVayIdAdds" value="<%= arrayChecked%>" />
 		<portlet:param name="mvcPath" value="/html/phatvay/tattoan/danh_sach_phat_vay_chua_thanh_toan.jsp" />
 	</liferay-portlet:renderURL>
@@ -79,11 +86,22 @@
 				 	Số ngày đã thu : <span style="font-style: italic;color:blue;"><%=soLanDaThuStr %></span>
 				 </liferay-ui:search-container-column-text>
 				 <%
-				 Double traLai = (phatVay.getThoiHan()  - (phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc())) * phatVay.getLaiNgay();
+				 	Double traLai = Double.valueOf("0");
+				 	Double von = Double.valueOf("0");
+				 	if (ngayTatToan != null) {
+						JSONObject thongTin = tatToanPortlet.getSoNgayPhaiThu(ngayTatToan, phatVay);
+						int soNgayConLaiPhaiThu = thongTin.getInt("soNgayConLaiPhaiThu");
+						traLai = (soNgayConLaiPhaiThu * phatVay.getLaiNgay());
+						von = (soNgayConLaiPhaiThu * phatVay.getGocNgay());
+					} else {
+						int tongSoLanDaThu = phatVay.getSoLanDaThu() + phatVay.getSoNgayThuTruoc();
+						traLai = ((phatVay.getThoiHan() - tongSoLanDaThu) * phatVay.getLaiNgay());
+						von = phatVay.getDuNoGoc();
+					}
 				 %>
 				 
 				 <liferay-ui:search-container-column-text name="Thông tin tất toán" cssClass="aui-w20" orderable="true"  orderableProperty="soLanDaThu">
-					 Trả vốn : <span style="font-style: italic;color:#ff3d00e8;">${phatVay.duNoGoc > 0 ? df.format(phatVay.duNoGoc) : '0'}</span>
+					 Trả vốn : <span style="font-style: italic;color:#ff3d00e8;"><%=von > 0 ? df.format(von) : "0" %></span>
 					 <br/>
 				 	Trả lãi : <span style="font-style: italic;color:#ff3d00e8;"><%=traLai > 0 ? df.format(traLai) : "0" %></span>
 				 </liferay-ui:search-container-column-text>

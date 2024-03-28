@@ -8,6 +8,26 @@ function _formatNumber(e) {
 		clearOnEmpty : true
 	});
 }
+
+function _formatMoney(e) {
+	var value = $('#' + event.target.id).val();
+	var valueMoney = "";
+	console.log('value : ',value);
+    if (value) {
+    	//valueMoney = value.toString().replace(/\D/g, '');
+    	valueMoney = value.toString().replace(/[,]/g, '');
+    	if(parseFloat(valueMoney) > 0){
+    		var valueMoneyNumber = value.toString().replace(/\D/g, '');
+    		console.log('valueMoneyNumber : ',valueMoneyNumber);
+    		$('#' + event.target.id).val(valueMoneyNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+    	}else{
+    		var valueMoneyNumber = value.toString().replace(/\D/g, '');
+    		console.log('valueMoneyNumber : ',valueMoneyNumber);
+    		$('#' + event.target.id).val("-" + valueMoneyNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+    	}
+    }
+    
+}
 function isNumber(e) {
 	var event = (e) ? e : window.event;
 	var charCode = (event.which) ? event.which : event.keyCode;

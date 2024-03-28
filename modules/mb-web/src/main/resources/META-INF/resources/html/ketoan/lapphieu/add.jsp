@@ -197,17 +197,28 @@
 					class="btn btn-labeled btn-default" onclick="save(true);">
 					<span class="btn-label"><i
 						class="glyphicon glyphicon-floppy-disk"></i></span><%=phieuId == 0 ? "Lưu" : "Cập nhật"%>
-				</button> <%
- 	if (phieuId == 0) {
- %>
+				</button> 
+				<%
+				 	if (phieuId == 0) {
+				 %>
 				<button id="<portlet:namespace />luuvanhaptiep"
 					onclick="save(false);" type="button"
 					class="btn btn-labeled btn-primary">
 					<span class="btn-label"><i class="glyphicon glyphicon-copy"></i></span>Lưu
 					và nhập tiếp
-				</button> <%
- 	}
- %>
+				</button> 
+				<%
+ 				}
+ 				%>
+ 				<%
+				 	if (phieuId > 0) {
+				 %>
+ 				<button type="button" class="btn btn-labeled btn-info" onclick="printPhieuThuChi();">
+						<span class="btn-label"><i class="glyphicon glyphicon-print "></i></span>In phiếu
+				</button>
+				<%
+ 					}
+ 				%>
 				<button id="<portlet:namespace />dong"
 					onclick="Liferay.Util.getOpener().dongPopup();" type="button"
 					class="btn btn-labeled btn-danger">
@@ -226,6 +237,7 @@
 	id="getTaiKhoanDoiUngURL"></portlet:resourceURL>
 <portlet:resourceURL var="getMaSoTheoDoiURL" id="getMaSoTheoDoiURL"></portlet:resourceURL>
 <portlet:resourceURL var="getDienGiaiTheoDoiURL" id="getDienGiaiTheoDoiURL"></portlet:resourceURL>
+<portlet:resourceURL var="printPhieuThuChi" id="printPhieuThuChi"></portlet:resourceURL>
 <aui:script
 	use="aui-base,aui-io-plugin-deprecated,aui-loading-mask-deprecated">
 AUI().ready(['aui-base'], function(A) {
@@ -253,6 +265,11 @@ AUI().ready(['aui-base'], function(A) {
 		var tbody = tableNode.getElementsByTagName('tbody');
 		tbody.empty();
 		tbody.append('<tr><td colspan="5" class="empty text-center">Không có dữ liệu</td></tr>');
+	});
+	Liferay.provide(window,'printPhieuThuChi', function(){
+		var url = '${printPhieuThuChi}';
+		url += '&<portlet:namespace/>phieuId=' + '<%=phieuId %>';
+		window.location.href = url;
 	});
 	<!-- Lấy dữ liệu danh mục -->
 	Liferay.provide(window,'getSoPhieu', function(){

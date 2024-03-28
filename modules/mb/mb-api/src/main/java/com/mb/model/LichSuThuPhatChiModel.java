@@ -276,6 +276,62 @@ public interface LichSuThuPhatChiModel
 	public void setTongSoTienLaiTra(Double tongSoTienLaiTra);
 
 	/**
+	 * Returns the so lan thu da thu truoc of this lich su thu phat chi.
+	 *
+	 * @return the so lan thu da thu truoc of this lich su thu phat chi
+	 */
+	public int getSoLanThuDaThuTruoc();
+
+	/**
+	 * Sets the so lan thu da thu truoc of this lich su thu phat chi.
+	 *
+	 * @param soLanThuDaThuTruoc the so lan thu da thu truoc of this lich su thu phat chi
+	 */
+	public void setSoLanThuDaThuTruoc(int soLanThuDaThuTruoc);
+
+	/**
+	 * Returns the so lan thu of this lich su thu phat chi.
+	 *
+	 * @return the so lan thu of this lich su thu phat chi
+	 */
+	public int getSoLanThu();
+
+	/**
+	 * Sets the so lan thu of this lich su thu phat chi.
+	 *
+	 * @param soLanThu the so lan thu of this lich su thu phat chi
+	 */
+	public void setSoLanThu(int soLanThu);
+
+	/**
+	 * Returns the so lan thu da thu of this lich su thu phat chi.
+	 *
+	 * @return the so lan thu da thu of this lich su thu phat chi
+	 */
+	public int getSoLanThuDaThu();
+
+	/**
+	 * Sets the so lan thu da thu of this lich su thu phat chi.
+	 *
+	 * @param soLanThuDaThu the so lan thu da thu of this lich su thu phat chi
+	 */
+	public void setSoLanThuDaThu(int soLanThuDaThu);
+
+	/**
+	 * Returns the ngay da thu cuoi truoc of this lich su thu phat chi.
+	 *
+	 * @return the ngay da thu cuoi truoc of this lich su thu phat chi
+	 */
+	public Date getNgayDaThuCuoiTruoc();
+
+	/**
+	 * Sets the ngay da thu cuoi truoc of this lich su thu phat chi.
+	 *
+	 * @param ngayDaThuCuoiTruoc the ngay da thu cuoi truoc of this lich su thu phat chi
+	 */
+	public void setNgayDaThuCuoiTruoc(Date ngayDaThuCuoiTruoc);
+
+	/**
 	 * Returns the ngay xu ly of this lich su thu phat chi.
 	 *
 	 * @return the ngay xu ly of this lich su thu phat chi

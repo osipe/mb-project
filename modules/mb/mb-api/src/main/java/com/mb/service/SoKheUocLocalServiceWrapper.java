@@ -55,6 +55,13 @@ public class SoKheUocLocalServiceWrapper
 		return _soKheUocLocalService.addSoKheUoc(soKheUoc, serviceContext);
 	}
 
+	@Override
+	public int countBase(String cauTruc)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return _soKheUocLocalService.countBase(cauTruc);
+	}
+
 	/**
 	 * Creates a new so khe uoc with the primary key. Does not add the so khe uoc to the database.
 	 *
@@ -205,6 +212,15 @@ public class SoKheUocLocalServiceWrapper
 	@Override
 	public com.mb.model.SoKheUoc fetchSoKheUoc(long soKheUocId) {
 		return _soKheUocLocalService.fetchSoKheUoc(soKheUocId);
+	}
+
+	@Override
+	public java.util.List<com.mb.model.SoKheUoc> findBase(
+			String cauTruc, int start, int end,
+			com.liferay.portal.kernel.util.OrderByComparator obc)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return _soKheUocLocalService.findBase(cauTruc, start, end, obc);
 	}
 
 	@Override

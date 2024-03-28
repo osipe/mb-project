@@ -68,7 +68,7 @@ public class LichSuThuPhatChiCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(33);
+		StringBundler sb = new StringBundler(41);
 
 		sb.append("{lichSuThuPhatChiId=");
 		sb.append(lichSuThuPhatChiId);
@@ -96,6 +96,14 @@ public class LichSuThuPhatChiCacheModel
 		sb.append(tongSoTienVonTra);
 		sb.append(", tongSoTienLaiTra=");
 		sb.append(tongSoTienLaiTra);
+		sb.append(", soLanThuDaThuTruoc=");
+		sb.append(soLanThuDaThuTruoc);
+		sb.append(", soLanThu=");
+		sb.append(soLanThu);
+		sb.append(", soLanThuDaThu=");
+		sb.append(soLanThuDaThu);
+		sb.append(", ngayDaThuCuoiTruoc=");
+		sb.append(ngayDaThuCuoiTruoc);
 		sb.append(", ngayXuLy=");
 		sb.append(ngayXuLy);
 		sb.append(", loai=");
@@ -150,6 +158,17 @@ public class LichSuThuPhatChiCacheModel
 		lichSuThuPhatChiImpl.setSoTien(soTien);
 		lichSuThuPhatChiImpl.setTongSoTienVonTra(tongSoTienVonTra);
 		lichSuThuPhatChiImpl.setTongSoTienLaiTra(tongSoTienLaiTra);
+		lichSuThuPhatChiImpl.setSoLanThuDaThuTruoc(soLanThuDaThuTruoc);
+		lichSuThuPhatChiImpl.setSoLanThu(soLanThu);
+		lichSuThuPhatChiImpl.setSoLanThuDaThu(soLanThuDaThu);
+
+		if (ngayDaThuCuoiTruoc == Long.MIN_VALUE) {
+			lichSuThuPhatChiImpl.setNgayDaThuCuoiTruoc(null);
+		}
+		else {
+			lichSuThuPhatChiImpl.setNgayDaThuCuoiTruoc(
+				new Date(ngayDaThuCuoiTruoc));
+		}
 
 		if (ngayXuLy == Long.MIN_VALUE) {
 			lichSuThuPhatChiImpl.setNgayXuLy(null);
@@ -190,6 +209,13 @@ public class LichSuThuPhatChiCacheModel
 		tongSoTienVonTra = objectInput.readDouble();
 
 		tongSoTienLaiTra = objectInput.readDouble();
+
+		soLanThuDaThuTruoc = objectInput.readInt();
+
+		soLanThu = objectInput.readInt();
+
+		soLanThuDaThu = objectInput.readInt();
+		ngayDaThuCuoiTruoc = objectInput.readLong();
 		ngayXuLy = objectInput.readLong();
 
 		loai = objectInput.readInt();
@@ -233,6 +259,13 @@ public class LichSuThuPhatChiCacheModel
 		objectOutput.writeDouble(tongSoTienVonTra);
 
 		objectOutput.writeDouble(tongSoTienLaiTra);
+
+		objectOutput.writeInt(soLanThuDaThuTruoc);
+
+		objectOutput.writeInt(soLanThu);
+
+		objectOutput.writeInt(soLanThuDaThu);
+		objectOutput.writeLong(ngayDaThuCuoiTruoc);
 		objectOutput.writeLong(ngayXuLy);
 
 		objectOutput.writeInt(loai);
@@ -253,6 +286,10 @@ public class LichSuThuPhatChiCacheModel
 	public double soTien;
 	public double tongSoTienVonTra;
 	public double tongSoTienLaiTra;
+	public int soLanThuDaThuTruoc;
+	public int soLanThu;
+	public int soLanThuDaThu;
+	public long ngayDaThuCuoiTruoc;
 	public long ngayXuLy;
 	public int loai;
 	public int trangThaiPhatVayHienTai;

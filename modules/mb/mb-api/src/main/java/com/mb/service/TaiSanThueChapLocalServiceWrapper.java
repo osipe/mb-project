@@ -73,11 +73,12 @@ public class TaiSanThueChapLocalServiceWrapper
 
 	@Override
 	public int countBase(
-			String soKU, String ten, String maKhachHang, long loaiTaiSanId)
+			String soKU, String ten, String maKhachHang, long loaiTaiSanId,
+			String thongTinTaiSan)
 		throws com.liferay.portal.kernel.exception.SystemException {
 
 		return _taiSanThueChapLocalService.countBase(
-			soKU, ten, maKhachHang, loaiTaiSanId);
+			soKU, ten, maKhachHang, loaiTaiSanId, thongTinTaiSan);
 	}
 
 	/**
@@ -236,12 +237,13 @@ public class TaiSanThueChapLocalServiceWrapper
 	@Override
 	public java.util.List<com.mb.model.TaiSanThueChap> findBase(
 			String soKU, String ten, String maKhachHang, long loaiTaiSanId,
-			int start, int end,
+			String thongTinTaiSan, int start, int end,
 			com.liferay.portal.kernel.util.OrderByComparator obc)
 		throws com.liferay.portal.kernel.exception.SystemException {
 
 		return _taiSanThueChapLocalService.findBase(
-			soKU, ten, maKhachHang, loaiTaiSanId, start, end, obc);
+			soKU, ten, maKhachHang, loaiTaiSanId, thongTinTaiSan, start, end,
+			obc);
 	}
 
 	@Override

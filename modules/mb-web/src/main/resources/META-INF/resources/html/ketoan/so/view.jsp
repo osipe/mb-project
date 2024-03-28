@@ -17,6 +17,9 @@
 			<a class="nav-link active" id="tongSo-tab" data-toggle="tab" href="#<portlet:namespace />tongSo" role="tab" aria-controls="<portlet:namespace />tongSo" aria-selected="false">Tổng Sổ</a>
 		</li>
 		<li class="nav-item">
+			<a class="nav-link" id="tongSoCTV-tab" data-toggle="tab" href="#<portlet:namespace />tongSoCTV" role="tab" aria-controls="<portlet:namespace />tongSoCTV" aria-selected="false">Tổng Sổ CTV</a>
+		</li>
+		<li class="nav-item">
 			<a class="nav-link" id="soCai-tab" data-toggle="tab" href="#<portlet:namespace />soCai" role="tab" aria-controls="<portlet:namespace />soCai" aria-selected="false">Sổ cái</a>
 		</li>
 		<li class="nav-item">
@@ -29,6 +32,9 @@
 	<div class="tab-content" id="myTabContent">
 		<div class="tab-pane fade show active" id="<portlet:namespace />tongSo" role="tabpanel" aria-labelledby="tongSo-tab">
 			<%@ include file="/html/ketoan/so/tongSo/view.jsp"%>
+		</div>
+		<div class="tab-pane" id="<portlet:namespace />tongSoCTV" role="tabpanel" aria-labelledby="tongSoCTV-tab">
+			<%@ include file="/html/ketoan/so/tongsoctv/view.jsp"%>
 		</div>
 		<div class="tab-pane" id="<portlet:namespace />soCai" role="tabpanel" aria-labelledby="soCai-tab">
 			<%@ include file="/html/ketoan/so/socai/view.jsp"%>

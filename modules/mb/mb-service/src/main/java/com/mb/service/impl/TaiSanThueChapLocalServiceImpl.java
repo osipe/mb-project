@@ -107,14 +107,14 @@ public class TaiSanThueChapLocalServiceImpl extends TaiSanThueChapLocalServiceBa
 		taiSanThueChapPersistence.removeByPhatVayId(phatVayId);
 	}
 
-	public List<TaiSanThueChap> findBase( String soKU, String ten, String maKhachHang, long loaiTaiSanId,
+	public List<TaiSanThueChap> findBase( String soKU, String ten, String maKhachHang, long loaiTaiSanId,String thongTinTaiSan,
 			int start, int end, OrderByComparator obc) throws SystemException {
-		return taiSanThueChapFinder.findBase( soKU, ten, maKhachHang, loaiTaiSanId, start, end, obc);
+		return taiSanThueChapFinder.findBase( soKU, ten, maKhachHang, loaiTaiSanId,thongTinTaiSan, start, end, obc);
 	}
 
-	public int countBase( String soKU, String ten, String maKhachHang, long loaiTaiSanId)
+	public int countBase( String soKU, String ten, String maKhachHang, long loaiTaiSanId,String thongTinTaiSan)
 			throws SystemException {
-		return taiSanThueChapFinder.countBase( soKU, ten, maKhachHang, loaiTaiSanId);
+		return taiSanThueChapFinder.countBase( soKU, ten, maKhachHang, loaiTaiSanId,thongTinTaiSan );
 	}
 
 }

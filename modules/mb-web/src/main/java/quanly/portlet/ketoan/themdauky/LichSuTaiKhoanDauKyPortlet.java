@@ -55,12 +55,28 @@ public class LichSuTaiKhoanDauKyPortlet extends MVCPortlet {
 		serviceContext.setUserId(themeDisplay.getUserId());
 		if (resourceId.equals("addURL")) {
 			kq = addURL(resourceRequest, resourceResponse, serviceContext);
+		} else if (resourceId.equals("xoaDauKyURL")) {
+			kq = xoaDauKyURL(resourceRequest, resourceResponse, serviceContext);
 		}
 		PrintWriter writer = resourceResponse.getWriter();
 		writer.print(kq.toString());
 		writer.flush();
 		writer.close();
 
+	}
+	public JSONObject xoaDauKyURL(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
+			ServiceContext serviceContext) {
+		JSONObject kq = JSONFactoryUtil.createJSONObject();
+		try {
+			long lichSuTaiKhoanDauKyId = ParamUtil.getLong(resourceRequest, "lichSuTaiKhoanDauKyId");
+			LichSuTaiKhoanDauKyLocalServiceUtil.deleteLichSuTaiKhoanDauKy(lichSuTaiKhoanDauKyId);
+		} catch (TrungDuLieuDauKyException e) {
+			kq.putException(e);
+		} catch (Exception e) {
+			e.printStackTrace();
+			kq.putException(e);
+		}
+		return kq;
 	}
 
 	public JSONObject addURL(ResourceRequest resourceRequest, ResourceResponse resourceResponse,
@@ -85,6 +101,8 @@ public class LichSuTaiKhoanDauKyPortlet extends MVCPortlet {
 			lichSuTaiKhoanDauKy.setThang(thang);
 			lichSuTaiKhoanDauKy.setTaiKhoanDoiUngId(taiKhoanDoiUngId);
 			lichSuTaiKhoanDauKy.setSoTienTon(soTienTon);
+			lichSuTaiKhoanDauKy.setSoTienChi(0.0);
+			lichSuTaiKhoanDauKy.setSoTienThu(0.0);
 			LichSuTaiKhoanDauKyLocalServiceUtil.addOrUpdateLichSuTaiKhoanDauKy(lichSuTaiKhoanDauKy, serviceContext);
 		} catch (TrungDuLieuDauKyException e) {
 			kq.putException(e);

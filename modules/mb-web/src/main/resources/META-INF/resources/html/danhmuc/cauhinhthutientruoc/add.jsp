@@ -94,7 +94,9 @@ AUI().ready(['aui-base'], function(A) {
 			var data = {
 				<portlet:namespace />cauHinhThuTienTruocId : '<%=cauHinhThuTienTruocId %>',
 				<portlet:namespace />ngayTuTime : ngayTuTime,
-				<portlet:namespace />ngayDenTime : ngayDenTime
+				<portlet:namespace />ngayDenTime : ngayDenTime,
+				<portlet:namespace />nam : '<%=nam %>'
+				
 			}
 			A.io.request('${addURL}', {
 	               method: 'post',
@@ -113,7 +115,7 @@ AUI().ready(['aui-base'], function(A) {
 	                   				}
 	                   			}else{
 	                   				if(data.TrungNam){
-	                   					toastr.error('Năm ' + form.one('#<portlet:namespace />nam').val() + ' đã được cấu hình', 'Lỗi!');
+	                   					toastr.error('Năm vừa chọn đã được cấu hình', 'Lỗi!');
 	                   				}else{
 	                   					toastr.error('Yêu cầu thực hiện không thành công', 'Lỗi!');
 	                   				}

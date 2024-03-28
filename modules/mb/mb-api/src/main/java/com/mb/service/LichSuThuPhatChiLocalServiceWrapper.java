@@ -86,6 +86,17 @@ public class LichSuThuPhatChiLocalServiceWrapper
 			lichSuThuPhatChiId);
 	}
 
+	@Override
+	public void deleteByCTV_Loai_Createdate_NgayXuLy(
+			String maCTV, int loai, java.util.Date ngayTaoTu,
+			java.util.Date ngayTaoDen, java.util.Date ngayXuLyTu,
+			java.util.Date ngayXuLyDen)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		_lichSuThuPhatChiLocalService.deleteByCTV_Loai_Createdate_NgayXuLy(
+			maCTV, loai, ngayTaoTu, ngayTaoDen, ngayXuLyTu, ngayXuLyDen);
+	}
+
 	/**
 	 * Deletes the lich su thu phat chi from the database. Also notifies the appropriate model listeners.
 	 *
@@ -360,6 +371,20 @@ public class LichSuThuPhatChiLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<com.mb.model.PhatVay>
+			getPhatVayByCTV_Loai_Createdate_NgayXuLy(
+				String maCTV, int loai, java.util.Date ngayTaoTu,
+				java.util.Date ngayTaoDen, java.util.Date ngayXuLyTu,
+				java.util.Date ngayXuLyDen, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return _lichSuThuPhatChiLocalService.
+			getPhatVayByCTV_Loai_Createdate_NgayXuLy(
+				maCTV, loai, ngayTaoTu, ngayTaoDen, ngayXuLyTu, ngayXuLyDen,
+				start, end);
+	}
+
+	@Override
 	public Double getSoTienVay_CTV_TAINGAY(
 			long chiNhanhId, String maCTV, java.util.Date ngay)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -385,6 +410,16 @@ public class LichSuThuPhatChiLocalServiceWrapper
 
 		return _lichSuThuPhatChiLocalService.getTongLichSuTraTien_CTV_TAINGAY(
 			chiNhanhId, maCTV, ngay, ngayXuLy, loaiPV);
+	}
+
+	@Override
+	public Object[] getTongLichSuTraTien_PhayVayId_ChiNhanhId_Loai(
+			long phatVayId, long chiNhanhId, int loai)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return _lichSuThuPhatChiLocalService.
+			getTongLichSuTraTien_PhayVayId_ChiNhanhId_Loai(
+				phatVayId, chiNhanhId, loai);
 	}
 
 	@Override
